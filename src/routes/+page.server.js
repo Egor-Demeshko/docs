@@ -1,4 +1,4 @@
-export function load({ event }){
-    //if(event.locals) return event.locals;
+export function load({ locals }){
+    if(locals) return {locals};
     return {}
 }

@@ -3,24 +3,22 @@
     import VarField from "$lib/components/CntrElem/VarField.svelte";
     //TODO ADD FUNCTION TO BUTTON, labelname, name
 
-    let vars = [{
-        name: "test name",
-        content: "test content"
-    }];
+    export let graph;
+
 </script>
 
 
 <section class="root">
 
     <div class="element">
-        <Button name={"Создать переменную"} label={"Создайте переменную"}/>
+        <Button name={"Создать переменную"} labelName={"Создайте переменную"}/>
     </div>
     
     <form>
         <ul class="variables_list">
-            {#each vars as {name, content} }
+            {#each graph as {name, content, id} }
                 <li>
-                    <VarField {name} {content}/>
+                    <VarField {name} {content} {id}/>
                 </li>
             {/each}
         </ul>
@@ -35,6 +33,8 @@
         flex-flow: column;
         justify-content: flex-start;
         align-items: center;
+        height: 100%;
+        overflow: scroll;
     }
 
     .element{
@@ -54,5 +54,6 @@
         inline-size: 100%;
         padding: 0 1rem;
         margin-top: 2rem;
+        height: 100%;
     }
 </style>

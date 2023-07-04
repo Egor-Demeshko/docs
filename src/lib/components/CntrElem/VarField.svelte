@@ -1,14 +1,24 @@
 <script>
+    import { blockVars } from "$lib/scripts/stores.js";
     /**ELEMENT TO SHOW VARIBLES PRESENTATION*/
     export let name;
     export let content;
+    export let id = 1;
+
+
+    /**@description функция валидирует кнопки и отправляет значения в документ*/
+    function inputHandler(e){
+        //в input что ввели можно считать в свойстве {data
+        //после этого изменением значение в сторе
+        blockVars.set({ ...$blockVars, id: e.data });
+    }
     
 </script>
 
 
 <label>
-    <input name={name} value="{content}" placeholder="Укажите значение"/>
-    <span>Введите значение переменной</span>
+    <input name={name} value="{content}" placeholder="Укажите значение" on:input={inputHandler}/>
+    <span>{name}</span>
 </label>
 
 
