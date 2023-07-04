@@ -2,12 +2,17 @@
     import InterectiveElements from "$lib/components/InterectiveElements.svelte";
     import DocWriter  from "$lib/components/DocWriter.svelte";
 
+    //receiving data from load function
+    export let data;
+
 </script>
 
 <main>
     <div class="element">
         <InterectiveElements />
     </div>
+
+    <div class="devider"></div>
 
     <div class="element">
         <DocWriter />
@@ -28,5 +33,14 @@
 
     .element{
         flex: 1;
+    }
+
+    .devider{
+        width: 4px;
+        height: 100%;
+        background-color: black;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 </style>
