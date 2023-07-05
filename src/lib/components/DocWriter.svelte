@@ -1,42 +1,20 @@
 <script>
-    import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
 	import { onMount } from "svelte";
     import { storeForSimpleTexts } from "$lib/scripts/stores";
 
     /** @description разметка документа */
     export let html = '';
 
-    /**@description массив обьектов, описывающие переменные */
-    export let graph;
 
     /** @description корневой элемент документа*/
     let root;
-    let cleanHtml = '';
 
-    /*console.log("HTML on doc write: ", html);*/
- 
-    html = html.trim() + '';
-    cleanHtml = html.match(/<body>[\s\S]*<\/body>/)[0];
-    cleanHtml = cleanHtml.replace(/<body>/, "<div>")
-                        .replace(/<\/body>/, "</div>");   
-    /*console.log("DocWriter", cleanHtml);*/
-
-    /**
-     * проходим по массиву обьектов. находим айди, индекс. берем ближайший p
-     * берем иннерHTML и меняем в строке айди на span с айди.
-     * получаем этот элемент по айди и создаем класс.
-     * в классе будет логика для получения значений из переменных, а также если там меняется что-то
-     * чтобы менялось сразу в тексте.
-    */
-    {   
-        cleanHtml = generateTextElements(graph, cleanHtml);
-    }
 
     onMount( () => {
         /**objects of text elements should be connected with there representinal elements*/
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
 
-        /*console.log("$storeForSimpleTexts: ", $storeForSimpleTexts[0].domLinks);*/
+        /*console.log("$storeForSimpleTexts: ", $storeForSimpleTexts);*/
     });
 
 </script>
@@ -44,7 +22,7 @@
 
 <section bind:this={root}>
     <div class="document">
-        {@html cleanHtml}
+        {@html html}
     </div>
 </section>
 
@@ -64,5 +42,37 @@
         border-radius: 10px;
         padding: 1rem;
         overflow-y: scroll;
+    }
+
+
+    :global(.doc_elements){
+        position: relative;
+        display: inline-block;
+    }
+
+    :global(.doc_elements:before){
+        content: " ";
+        position: absolute;
+        display: block;
+        top: 0;
+        left: -.4rem;
+        transform: scaleY(130%);
+        width: 6px;
+        height: 100%;
+        border-radius: 6px;
+        border-left: 4px solid aqua;
+    }
+
+    :global(.doc_elements:after){
+        content: " ";
+        position: absolute;
+        display: block;
+        top: 0;
+        right: -.4rem;
+        transform: scaleY(130%);
+        width: 6px;
+        height: 100%;
+        border-radius: 6px;
+        border-right: 3px solid aqua;
     }
 </style>

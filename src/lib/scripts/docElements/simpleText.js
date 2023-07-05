@@ -1,5 +1,5 @@
 export default class SimpleText{
-    domLinks = [];
+    #domLinks = [];
 
     constructor(id, name, content){
         this.id = id;
@@ -8,16 +8,63 @@ export default class SimpleText{
     }
 
     connect(root){
-        /**every element receive linl to it's holding element */
+        /**every element receive link to it's holding element */
         this.root = root;
         // debugger;
         /*console.log("SIMPLE TEXT", {id: this.id, name: this.name, content: this.content, root: this.root});*/
         let links = root.querySelectorAll(`span[data-simpleText="${this.id}"]`);
 
         if(links instanceof NodeList){
-            this.domLinks = Array.from(links);
+            this.#domLinks = Array.from(links);
+            this.#populateFields();
         } else {
             throw new Error("text elements: couldn't connect elements with document");
+        }     
+    }
+
+
+    /**On mount we populate fields with data */
+    #populateFields(){
+        let links = this.#domLinks;
+
+        if(links.length > 0){
+            links.forEach( (element) => {
+                element.textContent = this.content ?? '';
+            });
+        }
+
+        links = null;
+    }
+
+    /**функция запускается после валидации данных */
+    #update(name, content){
+        this.name = name;
+        this.content = content;
+
+        this.#domLinks.forEach( (domElement) => {
+            domElement.textContent = content;
+        });
+    }
+
+/*
+    get id(){
+        return this.id;
+    }
+
+    set id(id){
+
+        /**проводить валидацию *//*
+        if(typeof id === "number"){   
+            console.log("simple Text setter: ", this.id);        
+            this.id = id;
+
+        }
+    }*/
+
+
+    setTextData({name, content}){
+        if(typeof name === "string" && typeof content === "string"){
+            this.#update(name, content);
         }
     }
 }    

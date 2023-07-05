@@ -1,21 +1,38 @@
 <script>
     import InterectiveElements from "$lib/components/InterectiveElements.svelte";
+    import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
     import DocWriter  from "$lib/components/DocWriter.svelte";
+    import populateTextDataStore from "$lib/scripts/populateTextDataStore"
 
     //receiving data from load function
     export let data;
 
     let { locals } = data;
     let { html, graph } = locals.data;
+    let cleanHtml = '';
+
     /*console.log("HTML: ", html);
     console.log("GRAPH: ", graph);*/
 
     if(locals.error){
         prompt(locals.error.message);
-    } else {
-        /*console.log("data on PAGE:", locals);*/
     }
+    
+    /*console.log("HTML on doc write: ", html);*/
+    html = html.trim() + '';
+    cleanHtml = html.match(/<body>[\s\S]*<\/body>/)[0];
+    cleanHtml = cleanHtml.replace(/<body>/, "<div>")
+                        .replace(/<\/body>/, "</div>");   
+    /*console.log("DocWriter", cleanHtml);*/
+    
+    
+    {   
+        /** заполняем стор текстовых обьектов*/
+        populateTextDataStore(graph);
 
+        /** генерируем span элементы в строчном виде и вставляем их в разметку*/
+        cleanHtml = generateTextElements(graph, cleanHtml);
+    }
 </script>
 
 <main>
@@ -26,7 +43,7 @@
     <!--<div class="devider"></div>-->
 
     <div class="element">
-        <DocWriter {html} {graph}/>
+        <DocWriter html={cleanHtml} {graph}/>
     </div>
 </main>
 

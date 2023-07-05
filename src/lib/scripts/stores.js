@@ -5,7 +5,7 @@ import { writable } from "svelte/store";
  * структура айди блока: значение
  * транспорт данных из блока переменных в блок размещенный на документе
 */
-export const blockVars = writable([]);
+export const textElementsData = writable([]);
 
 /**
  * стор простых элементов

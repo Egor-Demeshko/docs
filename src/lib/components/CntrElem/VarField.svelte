@@ -1,5 +1,6 @@
 <script>
-    import { blockVars } from "$lib/scripts/stores.js";
+    import { textElementsData } from "$lib/scripts/stores.js";
+    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     /**ELEMENT TO SHOW VARIBLES PRESENTATION*/
     export let name;
     export let content;
@@ -10,17 +11,19 @@
     function inputHandler(e){
         //в input что ввели можно считать в свойстве {data
         //после этого изменением значение в сторе
-        blockVars.set([ ...$blockVars, {
+        /*textElementsData.set([ ...$textElementsData, {
                                         id: id,
-                                        value: e.data
-                                    }]);
+                                        content: e.data,
+                                        name: name
+                                    }]);*/
+
+        elementsDataUpdate({ id, name, content: e.target.value });                                                                 
     }
-    
 </script>
 
 
 <label>
-    <input name={name} value="{content}" placeholder="Укажите значение" on:input={inputHandler}/>
+    <input name={name} value={content} placeholder="Укажите значение" on:input={inputHandler}/>
     <span>{name}</span>
 </label>
 
