@@ -10,7 +10,10 @@
     function inputHandler(e){
         //в input что ввели можно считать в свойстве {data
         //после этого изменением значение в сторе
-        blockVars.set({ ...$blockVars, id: e.data });
+        blockVars.set([ ...$blockVars, {
+                                        id: id,
+                                        value: e.data
+                                    }]);
     }
     
 </script>

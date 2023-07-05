@@ -13,7 +13,7 @@
     if(locals.error){
         prompt(locals.error.message);
     } else {
-        console.log("data on PAGE:", locals);
+        /*console.log("data on PAGE:", locals);*/
     }
 
 </script>
@@ -23,10 +23,10 @@
         <InterectiveElements {graph}/>
     </div>
 
-    <div class="devider"></div>
+    <!--<div class="devider"></div>-->
 
     <div class="element">
-        <DocWriter />
+        <DocWriter {html} {graph}/>
     </div>
 </main>
 

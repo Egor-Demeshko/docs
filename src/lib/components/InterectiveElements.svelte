@@ -5,6 +5,7 @@
 
     export let graph;
 
+
 </script>
 
 
@@ -35,6 +36,8 @@
         align-items: center;
         height: 100%;
         overflow: scroll;
+        min-width: 600px;
+        border-right: 2px solid var(--black);
     }
 
     .element{
