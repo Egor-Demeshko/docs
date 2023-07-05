@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from "svelte";
-    import { storeForSimpleTexts } from "$lib/scripts/stores";
+    import { storeForSimpleTexts, docRoot } from "$lib/scripts/stores";
 
     /** @description разметка документа */
     export let html = '';
@@ -13,7 +13,7 @@
     onMount( () => {
         /**objects of text elements should be connected with there representinal elements*/
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
-
+        docRoot.set(root);
         /*console.log("$storeForSimpleTexts: ", $storeForSimpleTexts);*/
     });
 

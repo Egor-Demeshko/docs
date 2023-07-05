@@ -11,3 +11,6 @@ export const textElementsData = writable([]);
  * стор простых элементов
  */
 export const storeForSimpleTexts = writable([]);
+
+/**document root element */
+export const docRoot = writable();
