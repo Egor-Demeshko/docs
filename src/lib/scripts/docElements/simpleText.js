@@ -67,4 +67,9 @@ export default class SimpleText{
             this.#update(name, content);
         }
     }
+
+    updateDomLink(elem){
+        this.#domLinks.push(elem);
+    }
+
 }    

@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from "svelte";
     import { storeForSimpleTexts, docRoot } from "$lib/scripts/stores";
+    import Modal from "$lib/components/Modal.svelte";
 
     /** @description разметка документа */
     export let html = '';
@@ -10,20 +11,25 @@
     let root;
 
 
+
     onMount( () => {
-        /**objects of text elements should be connected with there representinal elements*/
+        /**objects of text elements should be connected with there representing elements*/
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
         docRoot.set(root);
         /*console.log("$storeForSimpleTexts: ", $storeForSimpleTexts);*/
     });
 
+
+
 </script>
 
 
 <section bind:this={root}>
-    <div class="document">
+    <div class="document" >
         {@html html}
     </div>
+
+    <Modal />
 </section>
 
 
@@ -31,8 +37,10 @@
     section{
         padding:2rem 2rem;
         height: 100%;
+        width: 100%;
         min-width: 600px;
         border-left: 2px solid var(--black);
+        position: relative;
     }
 
     .document{

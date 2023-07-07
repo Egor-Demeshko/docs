@@ -37,13 +37,13 @@
 
 <main>
     <div class="element">
-        <InterectiveElements {graph}/>
+        <InterectiveElements/>
     </div>
 
     <!--<div class="devider"></div>-->
 
     <div class="element">
-        <DocWriter html={cleanHtml} {graph}/>
+        <DocWriter html={cleanHtml}/>
     </div>
 </main>
 
@@ -61,6 +61,7 @@
 
     .element{
         flex: 1;
+        width: 100%;
     }
 
     .devider{

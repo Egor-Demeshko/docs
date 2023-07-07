@@ -2,36 +2,35 @@
     import Button from "$lib/components/CntrElem/Button.svelte";
     import VarField from "$lib/components/CntrElem/VarField.svelte";
     import { fade } from "svelte/transition"; 
-    import { docRoot } from "$lib/scripts/stores";
-    //TODO ADD FUNCTION TO BUTTON, labelname, name
-
-    export let graph;
-    let interectiveRoot;
-    let active = false;
+    import { docRoot, interectiveOverlapShow, textElementsData } from "$lib/scripts/stores";
+    import onDocClick from '$lib/scripts/docWriter/onDocClick';
 
 
     function fnToRunOnClick(){
         //при клике мы на документ вышаем один слушатель на элемент 
         //при этом ссылка тогда будет храниться в store
         //работать с selection event changed
-        active = true;
-        $docRoot.addEventListener("selectionchange", (e) => console.log("selectstart", e));
-        
+        $interectiveOverlapShow = true;
+        /*$docRoot.addEventListener("selectionchange", (e) => {
+            console.log("selectstart", e)});*/
+        let document = $docRoot.querySelector(".document");
+        document.addEventListener("pointerdown", onDocClick, {once: true});     
     }
 
+    let graph;
 
     function cancelCreation(){
-        active = false;
+        $interectiveOverlapShow = false;
     }
 
-    $: active;
+    $:{ graph = $textElementsData }
 
 </script>
 
 
 <section class="root">
 
-    {#if active}
+    {#if $interectiveOverlapShow}
         <div class="overlap" in:fade={{duration: 600}}
         out:fade={{duration: 600}}>
             <p>для создания переменной выберете место в тексте</p>
@@ -46,7 +45,7 @@
     
     <form>
         <ul class="variables_list">
-            {#each graph as {name, content, id} }
+            {#each graph as {name, content, id}}
                 <li>
                     <VarField {name} {content} {id}/>
                 </li>

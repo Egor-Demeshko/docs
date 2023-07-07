@@ -12,5 +12,21 @@ export const textElementsData = writable([]);
  */
 export const storeForSimpleTexts = writable([]);
 
+
 /**document root element */
 export const docRoot = writable();
+
+
+/**Interective left field, overlap show control */
+export const interectiveOverlapShow = writable(false);
+
+
+/** modal visual conrol, when show=true, modal is visible*/
+export const modalFieldsStore = writable({
+    show: false,
+    name: "имя",
+    description: "описание",
+    placeholder: 'плейсхолдер',
+    inputValue: "",
+    nameInput: ""
+});
