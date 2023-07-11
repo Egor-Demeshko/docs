@@ -1,74 +1,77 @@
-import { interectiveOverlapShow, modalFieldsStore, storeForSimpleTexts, textElementsData } from "$lib/scripts/stores";
+import { interectiveOverlapShow, modalFieldsStore, storeForSimpleTexts, textElementsData, docRoot } from "$lib/scripts/stores";
 import SimpleText from "$lib/scripts/docElements/simpleText";
 
 export default function onDocClick(e){
     e.stopPropagation();
-    let target = e.target;
-    let savedInner = target.innerHTML;
-    let textContent = target.textContent;
+    //console.log("[onDocClick]: startselect event: ", e);
+    let doc;
 
-
-    target.addEventListener("pointerup", async function pointerUp(e){
-        let innerTarget = e.target;
-
-        console.log("[pointerup start]innerTarget: ", innerTarget);
-        /**
-         * 1. показать модалку
-         * 2. хорошо бы чтобы элемент уже был вставлен
-         * 3. пользователь может отредактировать
-         * 4. сохранять переменную и значение только после кнопки ок.
-         */
-        modalFieldsStore.update( (obj) => {
-            obj.show = true;
-            console.log("[onDocClick]: modalFieldsStore update: ", obj);
-
-            return obj;
-        });
-
-        {
-            //поидеи генерация айди, но пока не делаем.
-            //и задавать имя переменной
-            let newElementObj = new SimpleText(999, 'name', '');
-            let newElement = document.createElement("span"); 
-            newElement.classList.add("doc_elements");
-            innerTarget.after(" ", newElement);     
+    docRoot.update( (elem) => doc = elem);
+ 
     
-            /**as input changed */
-            let unsubscribe = modalFieldsStore.subscribe( (obj) => {
-                if(!obj.inputValue) return;
-              
-                console.log("[POinterUP]: [subscrive]: newElementOBJ: ", {newElementObj});       
-                newElement.textContent = obj.inputValue;
-                
-                if(!obj.show && obj.inputValue){
-                    /**обновляем сторы , если модалка уже не показывается*/      
-                    setTimeout( () => interectiveOverlapShow.set(false), 600);  
-                   
-                    storeForSimpleTexts.update( (simpleTextElements) => simpleTextElements.push(newElement));
-                    textElementsData.update( function updateDatastore(data){
-                        data.push({
-                        "name": "test",
-                        "id": 999,
-                        "content": obj.inputValue
-                        });
-                        return data;
-                    });
-                    newElementObj.updateDomLink(newElement);
+    if(doc){
+        doc.addEventListener("pointerup", async function pointerUp(e){
+            e.stopPropagation();
+            const range = document.getSelection().getRangeAt(0);
+            //console.log("[onDocClick]: range: ", range);
 
-                    unsubscribe();
-                } else if(!obj.show && !obj.inputValue){
-                    /**Если у модального окна не был заполнен инпут, то сохранять нечего, удаляем элемент из дума */
-                    newElement.remove();
-                    unsubscribe();
-                }
+
+            /**Show modal, and then logic to save state*/
+            modalFieldsStore.update( (obj) => {
+                obj.show = true;
+                obj.inputValue = range.extractContents().textContent;
+
+                //console.log("[onDocClick]: modalFieldsStore update: ", obj);               
+                return obj;
             });
+            
 
-        }
-    }, {once: true});
+            {
+                //TODO генерация ID и задавать имя переменной
+                // greating DOM element, and JS class to rule
+                let newElementClass = new SimpleText(999, 'test', '');
+                let newElement = document.createElement("span"); 
 
-    let newInner = textContent.split(" ")
-                .map( (text) => `<span>${text}</span>`)
-                .join('<span> </span>');
-    
-    target.innerHTML = newInner;
+                
+                newElement.classList.add("doc_elements");
+                range.insertNode(newElement);
+                
+                      
+                /** subscribing with store, to handle data change */
+                let unsubscribe = modalFieldsStore.subscribe( (obj) => {
+                    if(!obj.inputValue) return;
+                    
+                    //console.log("[POinterUP]: [subscribe]: newElementOBJ: ", {newElementClass});       
+                    newElement.textContent = obj.inputValue;
+                    
+                    if(!obj.show && obj.inputValue){
+                        /**обновляем сторы , если модалка уже не показывается*/      
+                        setTimeout( () => interectiveOverlapShow.set(false), 600);  
+
+                        newElementClass.updateDomLink(newElement);
+                        newElementClass.setTextData({ name: "test", content: obj.inputValue });
+                        storeForSimpleTexts.update( (simpleTextElements) => simpleTextElements.push(newElementClass));
+
+                        textElementsData.update( function updateDatastore(data){
+                            data.push({
+                                "name": "test",
+                                "id": 999,
+                                "content": obj.inputValue
+                            });
+                            return data;
+                        });
+                        
+                        unsubscribe();
+                    } else if(!obj.show && !obj.inputValue){
+                        /**Если у модального окна не был заполнен инпут, то сохранять нечего, удаляем элемент из дума */
+                        newElement.remove();
+                        range.insertNode(range.extractContents().textContent);
+
+                        unsubscribe();
+                    }
+                });
+
+            }
+        }, {once: true});
+    }
 }

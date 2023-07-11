@@ -13,8 +13,8 @@
         $interectiveOverlapShow = true;
         /*$docRoot.addEventListener("selectionchange", (e) => {
             console.log("selectstart", e)});*/
-        let document = $docRoot.querySelector(".document");
-        document.addEventListener("pointerdown", onDocClick, {once: true});     
+        //let document = $docRoot.querySelector(".document");
+        $docRoot.addEventListener("selectstart", onDocClick, {once: true});     
     }
 
     let graph;
