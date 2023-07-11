@@ -1,10 +1,11 @@
 <script>
-    import { textElementsData } from "$lib/scripts/stores.js";
+    import { storeForSimpleTexts } from "$lib/scripts/stores.js";
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     /**ELEMENT TO SHOW VARIBLES PRESENTATION*/
     export let name;
     export let content;
     export let id = 1;
+    let active;
 
 
     /**@description функция валидирует кнопки и отправляет значения в документ*/
@@ -19,11 +20,33 @@
 
         elementsDataUpdate({ id, name, content: e.target.value });                                                                 
     }
+
+    /** @description show active styles on input, and on document elements*/
+    function focusinHandler(){
+        active = "active";
+
+        $storeForSimpleTexts.forEach( (elObj) => {
+            elObj.setActive(id);
+        });
+    }
+
+    /** @description stop showing active elements on this element */
+    function focusoutHandler(){
+        active = "";
+
+        $storeForSimpleTexts.forEach( (elObj) => {
+            elObj.setInactive(id);
+        });
+    }
 </script>
 
 
 <label>
-    <input name={name} value={content} placeholder="Укажите значение" on:input={inputHandler}/>
+    <input name={name} value={content} placeholder="Укажите значение" 
+    on:input={inputHandler}
+    on:focusin={focusinHandler}
+    on:focusout={focusoutHandler}
+    class={active}/>
     <span>{name}</span>
 </label>
 
@@ -53,5 +76,11 @@
         border-radius: 10px;
         font-size: 1.5rem;
         inline-size: 100%;
+        transition: background 400ms ease;
+    }
+
+    .active{
+        outline: 2px solid var(--active-node-bg);
+        background-color: var(--active-node-bg);
     }
 </style>

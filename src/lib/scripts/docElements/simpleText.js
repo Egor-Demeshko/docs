@@ -72,4 +72,20 @@ export default class SimpleText{
         this.#domLinks.push(elem);
     }
 
+    setActive(id){
+        if(this.id !== id) return;
+
+        this.#domLinks.forEach( (domElem, i) => {
+            domElem.classList.add("doc_active");
+            if(i === 0) domElem.focus();
+        });
+    }
+
+    setInactive(id){
+        if(this.id !== id) return;
+
+        this.#domLinks.forEach( (domElem) => {
+            domElem.classList.remove("doc_active");
+        });
+    }
 }    

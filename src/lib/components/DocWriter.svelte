@@ -48,7 +48,8 @@
     :global(.doc_elements){
         position: relative;
         display: inline-block;
-        background-color: aqua;
+        background-color: var(--node-bg);
+        transition: background 400ms ease;
     }
 
     :global(.doc_elements:before){
@@ -61,7 +62,7 @@
         width: 6px;
         height: 100%;
         border-radius: 6px;
-        border-left: 4px solid aqua;
+        border-left: 4px solid var(--node-bg);
     }
 
     :global(.doc_elements:after){
@@ -74,7 +75,12 @@
         width: 6px;
         height: 100%;
         border-radius: 6px;
-        border-right: 3px solid aqua;
+        border-right: 3px solid var(--node-bg);
+    }
+
+
+    :global(.doc_active){
+        background-color: var(--active-node-bg);
     }
 
 

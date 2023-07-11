@@ -1,6 +1,8 @@
 :root{
     --black: #0F0F0F;
     --white: #FFFFFF;
+    --orange: #FF9F1C;
+    --blue: #526D82;
 
 
 
@@ -10,8 +12,13 @@
     --transparent-bg: #1C191990;
 
 
+
     /** Цвета элементов */
     --elem-bg: #B0B0B0;
     --elem-bg-hover: var(--black);
     --elem-color: var(--white);
+
+
+    --active-node-bg: var(--orange);
+    --node-bg: var(--blue);
 }
