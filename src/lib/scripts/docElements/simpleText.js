@@ -77,7 +77,10 @@ export default class SimpleText{
 
         this.#domLinks.forEach( (domElem, i) => {
             domElem.classList.add("doc_active");
-            if(i === 0) domElem.focus();
+            if(i === 0) domElem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         });
     }
 
