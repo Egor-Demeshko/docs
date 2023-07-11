@@ -12,7 +12,7 @@
         if (!window.jQuery) window.jQuery = jQuery;
         await import('trumbowyg');
 
-        window.jQuery.trumbowyg.svgPath = 'node_modules/trumbowyg/dist/ui/icons.svg';
+        window.jQuery.trumbowyg.svgPath = '/assets/icons/troumbone.svg';
         window.jQuery(container).trumbowyg({
             tagsToKeep: ['span']
         });
