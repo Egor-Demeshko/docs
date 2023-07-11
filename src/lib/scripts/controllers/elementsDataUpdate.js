@@ -10,7 +10,6 @@ export default async function elementsDataUpdate({id, name, content}){
     storeForSimpleTexts.update( (textElements) => {
         /*console.log("elementsDataUpdate: ", textElements);*/
         if(!textElements || textElements.length == 0) return textElements;
-
         textElements = textElements.map( (element) => {
             if(element.id === id){
                 element.setTextData({name, content});

@@ -50,7 +50,10 @@ export default function onDocClick(e){
 
                         newElementClass.updateDomLink(newElement);
                         newElementClass.setTextData({ name: "test", content: obj.inputValue });
-                        storeForSimpleTexts.update( (simpleTextElements) => simpleTextElements.push(newElementClass));
+                        storeForSimpleTexts.update( (simpleTextElements) => {
+                            simpleTextElements.push(newElementClass);
+                            return simpleTextElements;
+                        });
 
                         textElementsData.update( function updateDatastore(data){
                             data.push({
