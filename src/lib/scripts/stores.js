@@ -7,6 +7,7 @@ import { writable } from "svelte/store";
 */
 export const textElementsData = writable([]);
 
+
 /**
  * стор простых элементов
  */
@@ -30,3 +31,27 @@ export const modalFieldsStore = writable({
     inputValue: "",
     nameInput: ""
 });
+
+/* ____  DRAWERS STORES _____  */
+/**saves data about all block's chain and it's data */
+export const connections = writable();
+
+/**Drawer root */
+export const drawRoot = writable('');
+
+/**
+ * created lines, obj with two ids.start and end block
+ */
+export const linesStore = writable([]);
+
+
+/**
+ * store saves info/controll to show active blocks
+*/
+export const activeBlocks = writable(new Map());
+
+/**
+ * айди блоков из поля редактирования, которые были кликнуты
+ */
+export const blockClickedId = writable();
+/* ___ END DRAWERS ____ */
