@@ -47,8 +47,9 @@ export const linesStore = writable([]);
 
 /**
  * store saves info/controll to show active blocks
+ * contains blocks IDS
 */
-export const activeBlocks = writable(new Map());
+export const activeBlocks = writable(new Set());
 
 /**
  * айди блоков из поля редактирования, которые были кликнуты

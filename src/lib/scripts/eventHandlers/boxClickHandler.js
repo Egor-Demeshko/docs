@@ -18,12 +18,12 @@ export default function boxClickHandler(endforLineId){
     });
 
     
-    activeBlocks.update( (map) => {
+    activeBlocks.update( (set) => {
         idsToHighlight.forEach( (id) => {
-            map.set(id, true);
+            set.add(id);
         });
 
-        return map;
+        return set;
     });
 
 
@@ -40,7 +40,6 @@ export default function boxClickHandler(endforLineId){
 
 
                 blockClickedId.update( (id) => {
-                    
                     startBlockForLineID = id;
                     return id;
                 });
@@ -60,7 +59,8 @@ export default function boxClickHandler(endforLineId){
                     return blocks;
                 } );
                 
-                
+
+                /**when store updated, new lines will be drawn reactivly */
                 linesStore.update( (lines) => {
                     
                     return [ ...lines, {
@@ -69,22 +69,22 @@ export default function boxClickHandler(endforLineId){
                 }]});
 
 
-                activeBlocks.update( (map) => {
+                activeBlocks.update( (set) => {
                     idsToHighlight.forEach( (id) => {
-                        map.set(id, false);
+                        set.add(id);
                     });
                 
-                    return map;
+                    return set;
                 });
 
             } catch {
 
-            activeBlocks.update( (map) => {
-                idsToHighlight.forEach( (id) => {
-                    map.set(id, false);
+            activeBlocks.update( (set) => {
+                idsToHighlight.forEach( (set) => {
+                    set.delete(id);
                 });
             
-                return map;
+                return set;
             });
 
             return;

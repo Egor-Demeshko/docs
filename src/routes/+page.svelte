@@ -1,11 +1,10 @@
 <script>
-    import InterectiveElements from "$lib/components/InterectiveElements.svelte";
     import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
     import DocWriter  from "$lib/components/DocWriter.svelte";
     import populateTextDataStore from "$lib/scripts/controllers/populateTextDataStore";
     import populateSvgBlocksStore from "$lib/scripts/controllers/populateSvgBlocksStore";
     import SVGMain from "$lib/components/draws/SVGMain.svelte";
-    import { connections } from "$lib/scripts/stores";
+	import BlockRedactor from "$lib/components/BlockRedactor.svelte";
 
     //receiving data from load function
     export let data;
@@ -168,9 +167,12 @@
         //connections.set(graph);
 </script>
 
+
+
 <main>
-    <div class="element">
+    <div class="element element__left">
         <SVGMain />
+        <BlockRedactor />
     </div>
 
     <!--<div class="devider"></div>-->
@@ -179,6 +181,8 @@
         <DocWriter html={cleanHtml}/>
     </div>
 </main>
+
+
 
 <style>
     main{
@@ -197,12 +201,18 @@
         width: 100%;
     }
 
-    .devider{
+    .element__left{
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+   /* .devider{
         width: 4px;
         height: 100%;
         background-color: black;
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-    }
+    }*/
 </style>

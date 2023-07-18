@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { drawRoot, connections } from "$lib/scripts/stores"
-  import { linesStore, activeBlocks, blockClickedId } from "$lib/scripts/stores";
+  import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId } from "$lib/scripts/stores";
   import boxClickHandler from "$lib/scripts/eventHandlers/boxClickHandler";
   
   export let id; 
@@ -25,8 +25,11 @@
   let strokeWidth = 4;
   let stroke = "black";
   let root;
+  let focusActive = ""; // отображении стилей блока при активной элемента. 
+                        //совместная подствека с блоками текста.
   
-  $: active = ($activeBlocks.has(id)) ? $activeBlocks.get(id) : false;
+  $: active = ($activeBlocks.has(id)) ? true : false;
+
   
 
   /** обновляются данные в случае перетаскивания блока*/
@@ -126,6 +129,36 @@ function centerText(){
       textHeight = height;
 }
 
+
+function focusIn(){
+  //console.log("[BOX]: focusin handler");
+    focusActive = "active";
+
+    activeBlocks.update( (set) => {
+        set.add(id);
+        return set;
+    });
+
+    $storeForSimpleTexts.forEach( (elObj) => {
+        elObj.setActive(id);
+    });
+}
+
+
+function focusOut(){
+    focusActive = "";
+
+    console.log("[BOX.FOCUSOUT]: block id, delete: ", id);
+
+    activeBlocks.update( ( set ) => {
+        set.delete(id);
+        return set;
+    });
+
+    $storeForSimpleTexts.forEach( (elObj) => {
+        elObj.setInactive(id);
+    });
+}
 </script>
 
 
@@ -135,22 +168,29 @@ function centerText(){
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <rect {x} {y} {width} {height} {fill} stroke-width={strokeWidth} {stroke} rx="6" 
-      on:pointerdown={startDraging}
+      class:focusActive
+      on:pointerdown={ startDraging }
       on:click={ () => blockClickedId.set(id) }
-      />
+      on:focus={ focusIn }
+      on:blur={ focusOut }
+      tabindex=0
+      role="tab">      
+    </rect>
 
-      <text x={x + width / 2 - textWidth / 2} 
+
+    <text x={x + width / 2 - textWidth / 2} 
       y={y + height / 2 + textHeight / 2} 
       bind:this={text} 
-      >{name}</text>
-      
-      {#if pointDown}
-          <circle class:pointDown cx={(x + width - width / 2)} cy={y + height} r="8" on:click={addConnection}/>
-      {/if}
+    >{name}</text>
 
-      {#if pointUp}
-          <circle class:pointUp cx={(x + width - width / 2)} cy={y} r="8"/>
-      {/if}
+      
+    {#if pointDown}
+        <circle class:pointDown cx={(x + width - width / 2)} cy={y + height} r="8" on:click={addConnection}/>
+    {/if}
+
+    {#if pointUp}
+        <circle class:pointUp cx={(x + width - width / 2)} cy={y} r="8"/>
+    {/if}
   </g>
 
 <style>
@@ -159,7 +199,6 @@ function centerText(){
         fill: red;
         stroke: grey;
         stroke-width: 2px;
-
     }
 
     g{
@@ -172,8 +211,21 @@ function centerText(){
       filter: drop-shadow(0 0 4px #ff3434);
     }
 
+    rect{
+      fill: grey;
+      transition: fill 600ms ease;
+    }
+
+    rect:hover{
+      fill: #fccd75;
+    }
+
     .active{
         filter: drop-shadow(0 0 4px orange);
+    }
+
+    .focusActive{
+        fill: orange;
     }
 
     text{

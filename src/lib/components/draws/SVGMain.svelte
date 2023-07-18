@@ -44,7 +44,8 @@ $: lines = $linesStore;
     .svg_wrapper{
         overflow: scroll;
         width: 100%;
-        height: 600px;
+        height: 100%;
+        flex: 1;
     }
 
     #playground{
