@@ -1,0 +1,14 @@
+@font-face {
+    font-family: Rubik;
+    src: url("/assets/fonts/Rubik.ttf");
+    font-display: swap;
+}
+
+
+*{
+    font-family: Rubik, sans-serif;
+}
+
+:root{
+    --padding: 0.8rem 1.25rem;
+}

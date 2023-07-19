@@ -1,24 +1,31 @@
 :root{
-    --black: #0F0F0F;
-    --white: #FFFFFF;
+    --white-blue: #F0F4F7;
+    --light-blue: #DDE6ED;
+    --gray-blue: #9DB2BF;
+    --middle-blue: #526d82;
+    --deep-blue: #27374D;
     --orange: #FF9F1C;
-    --blue: #526D82;
+    --white: #FFFFFF;
+    --faded-middle-blue: #627B8F;
+    --faded-gray-blue: #97A7B4;
+    --light-slate-gray: #7890A1 
 
 
 
 
 
+/*
     --main-bg: #D9D9D9;
     --transparent-bg: #1C191990;
 
 
 
     /** Цвета элементов */
-    --elem-bg: #B0B0B0;
+    /*--elem-bg: #B0B0B0;
     --elem-bg-hover: var(--black);
     --elem-color: var(--white);
 
 
     --active-node-bg: var(--orange);
-    --node-bg: var(--blue);
+    --node-bg: var(--blue);*/
 }
