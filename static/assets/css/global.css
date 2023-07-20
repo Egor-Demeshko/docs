@@ -7,8 +7,9 @@
 
 *{
     font-family: Rubik, sans-serif;
+    color: var(--light-blue);
 }
 
 :root{
-    --padding: 0.8rem 1.25rem;
+    --padding: 0.6rem 1.25rem;
 }

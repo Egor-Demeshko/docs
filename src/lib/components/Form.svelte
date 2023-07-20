@@ -29,7 +29,7 @@
         font-weight: 500;
         font-size: 1.5rem;
         text-align: center;
-        color: inherit;
+        color: var(--middle-blue);
         margin: 0;
         margin-bottom: 2.5rem; 
     }

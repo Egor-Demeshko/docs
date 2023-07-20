@@ -56,3 +56,7 @@ export const activeBlocks = writable(new Set());
  */
 export const blockClickedId = writable();
 /* ___ END DRAWERS ____ */
+
+
+/* ____  doc redactor ____ */
+export const activeTabId = writable(0);

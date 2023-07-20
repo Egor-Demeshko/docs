@@ -2,6 +2,9 @@
     import Input from "$lib/components/CntrElem/Input.svelte";
     import Button from "$lib/components/CntrElem/Button.svelte";
     import Form from "$lib/components/Form.svelte";
+	import SerachInput from "../../lib/components/CntrElem/SerachInput.svelte";
+	import InputwithLabel from "../../lib/components/CntrElem/InputwithLabel.svelte";
+    import Tabs from "$lib/components/Tabs/Tabs.svelte";
 </script>
 
 <main>
@@ -18,10 +21,21 @@
                 --border="3px solid var(--middle-blue)"
                 --border-hover="3px solid var(--white-blue)"/>
         </div>
+
+        <div style="background-color: var(--middle-blue)">
+            <SerachInput />
+        </div>
+
+        <div style="color: var(--light-blue); background-color: var(--middle-blue)">
+            <InputwithLabel />
+        </div>
     </div>
 
     <aside>
         <Form />
+        <div style="max-width: 600px">
+            <Tabs />
+        </div>
     </aside>
 </main>
 

@@ -43,7 +43,9 @@
     }
 </script>    
 
-<input {placeholder} {id} name={id} {required} {pattern} {type} />
+<input {placeholder} {id} name={id} {required} {pattern} {type} 
+on:blur={blurHandler}
+/>
 
 <style>
     input{
