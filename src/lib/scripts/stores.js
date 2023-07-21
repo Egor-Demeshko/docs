@@ -59,4 +59,8 @@ export const blockClickedId = writable();
 
 
 /* ____  doc redactor ____ */
+/**current active tab id */
 export const activeTabId = writable(0);
+
+/**tabs quantity, [array.lenght] */
+export const tabsQuantity = writable(0);

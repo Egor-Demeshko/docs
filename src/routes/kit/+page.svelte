@@ -33,7 +33,7 @@
 
     <aside>
         <Form />
-        <div style="max-width: 600px">
+        <div style="max-width: 800px">
             <Tabs />
         </div>
     </aside>

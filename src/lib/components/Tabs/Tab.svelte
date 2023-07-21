@@ -1,5 +1,5 @@
 <script>
-    import { activeTabId } from "$lib/scripts/stores";
+    import { activeTabId, tabsQuantity } from "$lib/scripts/stores";
     export let name = "Имя";
     export let active = false;
     export let id;
@@ -7,7 +7,12 @@
     $: active = ( id === $activeTabId ) ? true : false;
     $: activeTab =  (active) ? "activeTab" : "ordinary";
     $: activeSvg = (active) ? "activeSvg" : "ordinarySvg";
-    $: activeWrapper = (active) ? "activeWrapper" : '';
+    $: svgShadow =  (id > $activeTabId) ? "rightShadow" : 
+                    (id < $activeTabId) ? "leftShadow" : 
+                    (id === $activeTabId && id === 0) ? "rightShadow" : "leftShadow";
+    $: zIndex = (id === $activeTabId) ? $tabsQuantity :
+                (id > $activeTabId) ? $tabsQuantity - id : id;
+    
 
     function handelClick(){
         activeTabId.set(id);
@@ -17,9 +22,11 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="wrapper {activeWrapper}" on:click={handelClick}>
-    <svg class="border-curve {activeSvg}" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M40 32H0C12.2219 32 18.7403 27.8258 21.9995 16.1894C23.6304 6.96624 31.0695 0 40 0V32Z"/>
+<div class="wrapper" style="z-index: {zIndex}" on:click={handelClick}>
+    <svg class="border-curve {activeSvg} {(id === 0 || svgShadow === "rightShadow") ? '' : svgShadow}" 
+        viewBox="0 0 40 32" 
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="" fill-rule="evenodd" clip-rule="evenodd" d="M40 32H0C12.2219 32 18.7403 27.8258 21.9995 16.1894C23.6304 6.96624 31.0695 0 40 0V32Z"/>
     </svg>
 
 
@@ -39,7 +46,9 @@
     </li>
 
 
-    <svg class="border-curve {activeSvg}" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="border-curve {activeSvg} {(id === $tabsQuantity - 1 || svgShadow === "leftShadow") ? '' : svgShadow}" 
+        viewBox="0 0 40 32" 
+        fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>
     </svg> 
 </div>
@@ -54,41 +63,55 @@
         width: var(--curve-width);
     }
 
+    
+
     .border-curve.activeSvg{
         fill: var(--middle-blue);
     }
-
-
+    
     .border-curve.ordinarySvg{
         fill: var(--faded-middle-blue);
     }
+
+    .activeSvg.leftShadow{
+        filter: drop-shadow(-2px 0 0 var(--deep-blue));
+    }
+
+    .activeSvg.rightShadow{
+        filter: drop-shadow(2px 0 0 var(--deep-blue));
+    }
+
+    .ordinarySvg.leftShadow{
+        filter: drop-shadow(-2px 0 0 var(--middle-blue));
+    }
+
+    .ordinarySvg.rightShadow{
+        filter: drop-shadow(2px 0 0 var(--middle-blue));
+    }
+
+
 
 
     .wrapper{
         height: 100%;
         display: inline-flex;
-        z-index: 0;
-    }
-
-
-    .wrapper:nth-child(1){
-        margin-right: -3rem;
-    }
-
-
-    .activeWrapper{
         z-index: 1;
     }
 
 
+    .wrapper:nth-child(n + 1){
+        margin-right: -4.5rem;
+    }
+
+
     li{
-        display: inline-flex;
+        display: flex;
         position: relative;
         justify-content: start;
         align-items: center;
-        gap: 0;
-        gap: 0.55rem;
+        gap: 0.5rem;
         font-size: 0.875rem;
+        line-height: 1.1rem;
         height: 100%;
         padding: .5rem .5rem .5rem 1rem;
         white-space: nowrap;
@@ -98,14 +121,14 @@
 
     .ordinary{
         background-color: var(--faded-middle-blue);
-
+        padding: 0.5rem  1rem .5rem 1rem;
     }
 
     
     .activeTab{
         width: 250px;
         background-color: var(--middle-blue);
-        padding: 0.5rem  2.5rem .5rem 1rem;
+        padding: 0.5rem  1.3rem .5rem 1rem;
     }
 
 
@@ -113,17 +136,17 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        font-size: 0.875rem;
-        line-height: 1.1rem;
+    }
+
+    .ordinary>span{
+        cursor: default;
     }
 
 
-
-
     .icons{
-        display: inline;
+        display: block;
         height: 100%;
-        width: 1.2rem;  
+        flex: 0 0 1.2rem;
     }
 
 
@@ -136,12 +159,12 @@
     }
 
 
-    #close{
+    .close{
         transition: filter 600ms ease;
     }
 
 
-    #close:hover{
+    .close:hover{
         filter: drop-shadow(0 0 4px var(--orange));
     }
 </style>
