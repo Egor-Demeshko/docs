@@ -64,3 +64,24 @@ export const activeTabId = writable(0);
 
 /**tabs quantity, [array.lenght] */
 export const tabsQuantity = writable(0);
+
+/**nodes options store */
+export const nodeOptions = writable([
+    {
+        text: "поле ввода",
+        value: "entry",
+        selected: true
+    }, {
+        text: "текст/число",
+        value: "text" ,
+        selected: false
+    }, {
+        text: "чекбокс",
+        value: "checkbox",
+        selected: false
+    }, {
+        text: "радиокнопка",
+        value: "radiobutton",
+        selected: false
+    }
+]);
