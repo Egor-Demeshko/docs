@@ -46,7 +46,7 @@
 
 <label>
     <span>{label}</span>
-    <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off"></textarea>
+    <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off" rows="3"></textarea>
 </label>
 
 <style>
@@ -56,6 +56,7 @@
         align-items: start;
         gap: 0.25rem;
         font-weight: 400;
+        width: 100%;
     }
 
     span{
@@ -71,6 +72,7 @@
         resize: vertical;
         scrollbar-width: 8px;
         scrollbar-color: var(--middle-blue) transparent;
+        width: 100%;
     }
 
     textarea::-webkit-scrollbar{

@@ -9,12 +9,30 @@
     $: rotate = (isOpened) ? true : false;
 
 
-    function handleClick(e){
+    function handleClick(){
         //console.log("[DropDown] click event target: ", e.target);
         isOpened = !isOpened;
     }
 
+
+    function handleKeyPressed(e){
+        if(e.key === "Enter" || e.key === " "){
+            isOpened = !isOpened;  
+        }
+    }
+
+
+    function releasePopUp(e){
+        if(e.target.closest(".dropdown")) return;
+        if(isOpened) isOpened = false;
+    }
+
+
 </script>
+
+
+
+<svelte:document on:click={releasePopUp}></svelte:document>
 
 
 
@@ -22,12 +40,13 @@
 <div class="dropdown">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-    <div class="main_view" on:click={handleClick} role="button" tabindex="0">
+    <div class="main_view" on:click={handleClick} on:keydown={handleKeyPressed} role="button" tabindex="0">
 
         {#each $options as {text, value, selected}}
             {#if selected}
             <div class="main_label">
-                <input {id} class="main_input" type="radio" {value} {name} checked={selected}/>
+                <input {id} class="main_input" type="radio" {value} {name} checked={selected}
+                tabindex="-1"/>
                 {#if isWithIcon}
                     <svg class="icon">
                         <use href="/assets/icons/all.svg#{value}"></use>
@@ -53,8 +72,7 @@
                 
                 {:else}
                 <label class="main_label option-in-drop"
-                transition:blur
-                >
+                transition:blur tabindex="0">
                     <input class="main_input" type="radio" {value} {name} checked={selected}/>
                     {#if isWithIcon}
                         <svg class="icon">
@@ -93,7 +111,7 @@
         border-radius: 30px;
         align-items: center;
         position: relative;
-        z-index: 5;
+        z-index: 2;
     }
 
 
@@ -161,7 +179,7 @@
         width: 100%;
         border: var(--border);
         border-top: none;
-        z-index: 0;
+        z-index: 1;
         border-radius: 0 0 12px 12px;
     }
 

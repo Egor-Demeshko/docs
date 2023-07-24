@@ -12,6 +12,7 @@
 	import Arrow from "../../lib/components/nodeRedactor/Arrow.svelte";
 	import ContentRedactor from "../../lib/components/nodeRedactor/ContentRedactor.svelte";
     import Compare from "$lib/components/nodeRedactor/Compare.svelte";
+	import NodeRedactor from "../../lib/components/nodeRedactor/NodeRedactor.svelte";
 </script>
 
 <main>
@@ -44,7 +45,7 @@
         </div>
 
         <div style="background-color: var(--middle-blue)">
-            <DropDown options={nodeOptions} name="node_type"
+            <DropDown options={nodeOptions} name="node_type_test"
             --padding=".4rem 1.8rem .4rem .875rem"/>
         </div>
 
@@ -65,7 +66,7 @@
         </div>
 
         <div style="background-color: var(--middle-blue)">
-            <DropDown options={compareOptions} name="condition" isWithIcon={false}
+            <DropDown options={compareOptions} name="condition_test" isWithIcon={false}
             --padding=".4rem 1.8rem .4rem .875rem"/>
         </div>
     </div>
@@ -77,7 +78,11 @@
         </div>
 
         <div style="max-width: 400px; padding: 1rem 1.25rem; background-color: var(--middle-blue)">
-            <Compare />
+            <Compare forId={"condition_test"}/>
+        </div>
+
+        <div style="width: 50vw">
+            <NodeRedactor />
         </div>
     </aside>
 </main>

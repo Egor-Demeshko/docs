@@ -56,6 +56,7 @@
         align-items: start;
         gap: 0.25rem;
         font-weight: 400;
+        
     }
 
     span{
@@ -68,6 +69,7 @@
         border-radius: 15px;
         color: var(--deep-blue);
         padding: 0.5rem 1rem;
+        width: 100%;
     }
 
     input::placeholder{

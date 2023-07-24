@@ -3,15 +3,17 @@
     import Input from "$lib/components/CntrElem/Input.svelte";
     import { compareOptions } from "$lib/scripts/stores"; 
 
+    export let forId = "condition_rule"
+
 </script>
 
 
 <div class="wrapper">
-    <label id="condition_label" for="condition_rule">Активен, если родительский блок ...</label>
+    <label id="condition_label" for={forId}>Активен, если родительский блок ...</label>
 
 
     <div class="line">
-        <DropDown id={"condition_rule"} isWithIcon={false} name="condition" options={compareOptions}
+        <DropDown id={forId} isWithIcon={false} name="condition" options={compareOptions}
         --padding=".125rem 1.8rem .125rem 1rem"/>
 
         <!--<div style="width: 100%">-->
@@ -33,11 +35,14 @@
     .wrapper{
         background-color: transparent;
         width: 100%;
+        transform: translateZ(0);
     }
 
     label{
         display: block;
         margin-bottom: .25rem;
+        font-size: .875rem;
+        cursor: pointer;
     }
 
     .line{
