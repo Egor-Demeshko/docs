@@ -85,3 +85,27 @@ export const nodeOptions = writable([
         selected: false
     }
 ]);
+
+/**compare dropdown options */
+export const compareOptions = writable([
+    {
+        text: "условия",
+        value: "no value",
+        selected: true,
+    },
+    {
+        text: "больше/равно",
+        value: "more-equal",
+        selected: false
+    },
+    {
+        text: "равно",
+        value: "equal",
+        selected: false
+    },
+    {
+        text: "больше",
+        value: "more",
+        selected: false
+    }
+]);

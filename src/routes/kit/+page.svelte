@@ -6,16 +6,22 @@
 	import InputwithLabel from "../../lib/components/CntrElem/InputwithLabel.svelte";
     import Tabs from "$lib/components/Tabs/Tabs.svelte";
     import DropDown from "../../lib/components/CntrElem/DropDown.svelte";
-    import { nodeOptions } from "$lib/scripts/stores";
+    import { nodeOptions, compareOptions } from "$lib/scripts/stores";
 	import AddButton from "../../lib/components/CntrElem/AddButton.svelte";
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
 	import Arrow from "../../lib/components/nodeRedactor/Arrow.svelte";
+	import ContentRedactor from "../../lib/components/nodeRedactor/ContentRedactor.svelte";
+    import Compare from "$lib/components/nodeRedactor/Compare.svelte";
 </script>
 
 <main>
     <div class="wrapper">
         <div>
-            <Input/>
+            <Input --border-color="var(--middle-blue)"
+            --color="var(--deep-blue)"
+            --background="var(--light-blue)"
+            --border-width="3px"
+            --font-size="1.125rem"/>
         </div>
     
         <div>
@@ -38,7 +44,8 @@
         </div>
 
         <div style="background-color: var(--middle-blue)">
-            <DropDown options={nodeOptions} name="node_type"/>
+            <DropDown options={nodeOptions} name="node_type"
+            --padding=".4rem 1.8rem .4rem .875rem"/>
         </div>
 
         <div style="--width: 3.375rem; --height: 3.375rem;">
@@ -52,12 +59,25 @@
         <div style="width: 3.375rem; height: 3.375rem;">
             <Arrow />
         </div>
+
+        <div style="background-color: var(--middle-blue);">
+            <ContentRedactor placeholder={"Введите содержание блока"}/>
+        </div>
+
+        <div style="background-color: var(--middle-blue)">
+            <DropDown options={compareOptions} name="condition" isWithIcon={false}
+            --padding=".4rem 1.8rem .4rem .875rem"/>
+        </div>
     </div>
 
     <aside>
         <Form />
         <div style="max-width: 800px">
             <Tabs />
+        </div>
+
+        <div style="max-width: 400px; padding: 1rem 1.25rem; background-color: var(--middle-blue)">
+            <Compare />
         </div>
     </aside>
 </main>

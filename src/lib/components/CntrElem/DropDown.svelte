@@ -1,7 +1,9 @@
 <script>
     import { fly } from "svelte/transition";
     export let options;    
-    export let name;
+    export let name = 'dropdown default';
+    export let isWithIcon = true;
+    export let id = 'none';
 
     $: isOpened = false;
     $: rotate = (isOpened) ? true : false;
@@ -25,10 +27,12 @@
         {#each $options as {text, value, selected}}
             {#if selected}
             <div class="main_label">
-                <input class="main_input" type="radio" {value} {name} checked={selected}/>
-                <svg class="icon">
-                    <use href="/assets/icons/all.svg#{value}"></use>
-                </svg>
+                <input {id} class="main_input" type="radio" {value} {name} checked={selected}/>
+                {#if isWithIcon}
+                    <svg class="icon">
+                        <use href="/assets/icons/all.svg#{value}"></use>
+                    </svg>
+                {/if}
                 <span class="main_name">
                     {text}
                 </span>
@@ -52,9 +56,11 @@
                 transition:blur
                 >
                     <input class="main_input" type="radio" {value} {name} checked={selected}/>
-                    <svg class="icon">
-                        <use href="/assets/icons/all.svg#{value}"></use>
-                    </svg>
+                    {#if isWithIcon}
+                        <svg class="icon">
+                            <use href="/assets/icons/all.svg#{value}"></use>
+                        </svg>
+                    {/if}
                     <span class="main_name">
                         {text}
                     </span>
@@ -71,7 +77,6 @@
 <style>
     :root{
         --border: 2px solid var(--light-blue);
-        --padding: .4rem 1.8rem .4rem .875rem;
     }
 
 

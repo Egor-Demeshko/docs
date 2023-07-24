@@ -46,7 +46,7 @@
 
 <label>
     <span>{label}</span>
-    <input {placeholder} {id} name={id} {type} {required} {pattern}>
+    <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off"></textarea>
 </label>
 
 <style>
@@ -62,15 +62,39 @@
         font-size: 0.8rem;
     }
 
-    input{
+    textarea{
         border: none;
         background-color: var(--light-blue);
         border-radius: 15px;
         color: var(--deep-blue);
         padding: 0.5rem 1rem;
+        resize: vertical;
+        scrollbar-width: 8px;
+        scrollbar-color: var(--middle-blue) transparent;
     }
 
-    input::placeholder{
+    textarea::-webkit-scrollbar{
+       width: .5rem;
+    }
+
+    textarea::-webkit-scrollbar-track{
+        display: none;
+    }
+
+
+    textarea::-webkit-scrollbar-thumb {
+        background-color: var(--gray-blue); 
+        border-radius: 10px;
+        transition: background 400ms ease;
+        cursor: pointer;
+
+    }
+
+    textarea::-webkit-scrollbar-thumb:hover{
+        background-color: var(--middle-blue);
+    }
+
+    textarea::placeholder{
         color: var(--faded-gray-blue);
     }
 </style>

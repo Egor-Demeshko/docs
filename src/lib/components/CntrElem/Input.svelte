@@ -49,17 +49,18 @@ on:blur={blurHandler}
 
 <style>
     input{
-        border: 3px solid var(--middle-blue);
+        border: var(--border-width) solid var(--border-color);
         padding: var(--padding);
         border-radius: 30px;
-        font-size: 1.125rem;
+        font-size: var(--font-size);
         width: 100%;
-        color: var(--middle-blue);
+        color: var(--color);
+        background-color: var(--background);
     }
 
 
     input::placeholder{
-        color: var(--faded-middle-blue);
+        color: var(--faded-gray-blue);
         font-style: italic;
     }
 
