@@ -5,6 +5,8 @@
     export let pattern = '.*';
     export let type = "text";
     export let label ="Название блока";
+    export let view_type = '';
+    export let value = '';
 
     let valid = '';
     let invalid = '';
@@ -46,33 +48,37 @@
 
 <label>
     <span>{label}</span>
-    <input {placeholder} {id} name={id} {type} {required} {pattern}>
+    <input {placeholder} {id} name={id} {type} {required} {pattern} {value}>
 </label>
 
 <style>
+    *{
+        font-size: .875rem;
+    }
+    
     label{
         display: flex;
         flex-flow: column;
         align-items: start;
         gap: 0.25rem;
-        font-weight: 400;
-        
+        font-weight: 400;      
     }
 
     span{
-        font-size: 0.8rem;
+        color: var(--label-color);
     }
 
     input{
-        border: none;
-        background-color: var(--light-blue);
+        border: var(--border);
+        background-color: var(--background);
         border-radius: 15px;
-        color: var(--deep-blue);
-        padding: 0.5rem 1rem;
+        color: var(--color);
+        padding: var(--padding);
         width: 100%;
+        height: 100%;
     }
 
     input::placeholder{
-        color: var(--faded-gray-blue);
+        color: var(--placeholder);
     }
 </style>

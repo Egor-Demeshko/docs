@@ -14,7 +14,8 @@
 
     <div class="line">
         <DropDown id={forId} isWithIcon={false} name="condition" options={compareOptions}
-        --padding=".125rem 1.8rem .125rem 1rem"/>
+        --padding=".125rem 1.8rem .125rem 1rem"
+        --padding-options=".125rem 1rem"/>
 
         <!--<div style="width: 100%">-->
 

@@ -12,8 +12,8 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div on:click={clickHandle} role="button" tabindex="0">
-    <svg viewBox="0 0 14 7" class={(isOpen) ? "open" : ""} aria-disabled="true">
-        <path d="M1 6L7 1L13 6" stroke="#526d82" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <svg viewBox="0 0 9 6"  aria-disabled="true">
+        <path class={(isOpen) ? "open" : ""} d="M8.3375 4.8075C8.1875 4.9575 7.9975 5.0275 7.8075 5.0275C7.6175 5.0275 7.4275 4.9575 7.2775 4.8075L4.2775 1.8075L1.2775 4.8075C0.9875 5.0975 0.5075 5.0975 0.2175 4.8075C-0.0725 4.5175 -0.0725 4.0375 0.2175 3.7475L3.7475 0.2175C4.0375 -0.0725 4.5175 -0.0725 4.8075 0.2175L8.3375 3.7475C8.6275 4.0475 8.6275 4.5175 8.3375 4.8075Z" fill="currentColor"/>
     </svg>
 
 </div>
@@ -32,6 +32,13 @@
     }
 
     svg{
+        width: .8rem;
+        height: .5rem;
+    }
+
+    path{
+        transform-origin: 50% 50%;
+        fill: var(--middle-blue);
         animation-name: rotate-back;
         animation-timing-function: ease-out;
         animation-duration: 400ms;
@@ -43,13 +50,6 @@
         animation-timing-function: ease-out;
         animation-duration: 400ms;
         animation-fill-mode: forwards;
-    }
-
-    svg{
-        width: .8rem;
-        height: .6rem;
-        /*fill: none;*/
-        stroke: var(--middle-blue);
     }
 
 

@@ -6,7 +6,8 @@
 <div>
     <label for="block_type_picker">Тип блока</label>
     <DropDown id={"block_type_picker"} options={nodeOptions} name="node_type"
-    --padding=".125rem 1.8rem .125rem 1rem"/>
+    --padding=".125rem 1.8rem .125rem 1rem"
+    --padding-options=".125rem 1rem"/>
 </div>
 
 <style>

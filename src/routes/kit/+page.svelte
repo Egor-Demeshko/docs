@@ -13,6 +13,14 @@
 	import ContentRedactor from "../../lib/components/nodeRedactor/ContentRedactor.svelte";
     import Compare from "$lib/components/nodeRedactor/Compare.svelte";
 	import NodeRedactor from "../../lib/components/nodeRedactor/NodeRedactor.svelte";
+	import CheckBoxWithLabel from "../../lib/components/nodeRedactor/CheckBoxWithLabel.svelte";
+    import ToggleWhite from "$lib/components/nodeRedactor/ToggleWhite.svelte";
+	import List from "../../lib/components/nodeRedactor/List.svelte";
+
+    let node_type;
+
+    $: node_type;
+    $: console.log("[PAGE]: selected: ", node_type);
 </script>
 
 <main>
@@ -57,6 +65,10 @@
             <Toggle />
         </div>
 
+        <div style="background-color: var(--middle-blue)">
+            <ToggleWhite />
+        </div>
+
         <div style="width: 3.375rem; height: 3.375rem;">
             <Arrow />
         </div>
@@ -68,6 +80,14 @@
         <div style="background-color: var(--middle-blue)">
             <DropDown options={compareOptions} name="condition_test" isWithIcon={false}
             --padding=".4rem 1.8rem .4rem .875rem"/>
+        </div>
+
+        <div style="background-color: var(--middle-blue)">
+            <CheckBoxWithLabel/>
+        </div>
+
+        <div style="background-color: var(--middle-blue)">
+            <List />
         </div>
     </div>
 
@@ -81,8 +101,15 @@
             <Compare forId={"condition_test"}/>
         </div>
 
-        <div style="width: 50vw">
-            <NodeRedactor />
+        <div style="width: 50vw; position: relative">
+            <select bind:value={node_type} class="node-type__selector">
+                <option value="" selected>Выбрать тип блока</option>
+                <option value="entry">entry</option>
+                <option value="text">text</option>
+                <option value="checkbox">checkbox</option>
+                <option value="radiobutton">radiobutton</option>
+            </select>
+            <NodeRedactor {node_type}/>
         </div>
     </aside>
 </main>
@@ -90,6 +117,17 @@
 
 
 <style>
+
+    .node-type__selector{
+        color: var(--middle-blue);
+        padding: .5rem;
+        position: absolute;
+        left: 0;
+        top: 1rem;
+        transform: translateX(-100%);
+    }
+
+
     main{
         display: flex;
         flex-flow: column;

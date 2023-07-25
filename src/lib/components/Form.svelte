@@ -6,8 +6,20 @@
 <form>
     <h1>Вход в личный кабинет</h1>
     <div class="controls">
-        <Input id={"login"} placeholder={"Введите ваш логин"}/>
-        <Input id={"password"} placeholder={"Введите ваш пароль"}/>
+        <Input id={"login"} placeholder={"Введите ваш логин"}
+        --border-width="2px"
+        --border-color="var(--middle-blue)"
+        --font-size="1.125rem"
+        --color="var(--middle-blue)"
+        --background="var(--white-blue)"/>
+        
+        <Input id={"password"} placeholder={"Введите ваш пароль"}
+        --border-width="2px"
+        --border-color="var(--middle-blue)"
+        --font-size="1.125rem"
+        --color="var(--middle-blue)"
+        --background="var(--white-blue)"/>
+
         <Button name={"Тест"} --bg="var(--middle-blue)" --color="var(--white-blue)"
         --bg-hover="var(--white-blue)"
         --color-hover="var(--middle-blue)"

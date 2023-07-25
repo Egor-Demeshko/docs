@@ -1,12 +1,20 @@
 <script>
     import { fly } from "svelte/transition";
-    export let options;    
-    export let name = 'dropdown default';
+    export let options;    //стор типа узлов
+    export let name = 'dropdown default';   //по нему определяем тип для которого отображается дроб даун
     export let isWithIcon = true;
     export let id = 'none';
 
+   // let optionsArray = $options;
+   /**
+    * по событию находим инпут
+    * ставим чекед тру
+    * меняем стор
+    */
+
     $: isOpened = false;
     $: rotate = (isOpened) ? true : false;
+    //$: console.log("[DropDown]: options state:  ", $options);
 
 
     function handleClick(){
@@ -28,6 +36,32 @@
     }
 
 
+    /** update store, changing selected element*/
+    function changeHandle(e){
+        let target = e.target;
+        let type = target.value;
+
+        options.update( (array) => {
+            array.forEach( (elem) => {
+                if(elem.value === type) {
+                    
+                    elem.selected = true;
+                } else {
+                    elem.selected = false;
+                }
+            });
+            return array;
+        });
+
+        isOpened = false;
+
+        /*console.log("[DropDown]: change event: ", {
+            target,
+            type
+        });*/
+    }
+    
+
 </script>
 
 
@@ -37,7 +71,7 @@
 
 
 
-<div class="dropdown">
+<div class="dropdown" on:change={changeHandle}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <div class="main_view" on:click={handleClick} on:keydown={handleKeyPressed} role="button" tabindex="0">
@@ -71,7 +105,7 @@
                 {#if selected}
                 
                 {:else}
-                <label class="main_label option-in-drop"
+                <label class="options__label option-in-drop"
                 transition:blur tabindex="0">
                     <input class="main_input" type="radio" {value} {name} checked={selected}/>
                     {#if isWithIcon}
@@ -125,6 +159,16 @@
     }
 
 
+    .options__label{
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: .4rem;
+        padding: var(--padding-options);
+        cursor: pointer;
+    }
+
+
     .main_input{
         appearance: none;
         position: absolute;
@@ -136,6 +180,8 @@
 
     .main_name{
         font-size: .875rem;
+        text-overflow: clip;
+        overflow: hidden;
     }
 
 

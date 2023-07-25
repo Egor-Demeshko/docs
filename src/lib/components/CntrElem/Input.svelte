@@ -4,6 +4,7 @@
     export let placeholder = "Логин";
     export let required = false;
     export let pattern = '.*';
+    export let value = '';
 
     let valid = '';
     let invalid = '';
@@ -43,7 +44,7 @@
     }
 </script>    
 
-<input {placeholder} {id} name={id} {required} {pattern} {type} 
+<input {placeholder} {id} name={id} {required} {pattern} {type} {value}
 on:blur={blurHandler}
 />
 

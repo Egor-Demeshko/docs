@@ -21,10 +21,12 @@
 <style>
     label{
         width: 100%;
+        display: block;
         border-radius: 10px;
         border: 2px solid var(--middle-blue);
         position: relative;
         height: 1.125rem;
+        background-color: var(--white-blue);
     }
 
     input{
