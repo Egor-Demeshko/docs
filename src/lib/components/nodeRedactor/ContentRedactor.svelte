@@ -50,13 +50,21 @@
 
 <label class={ (node_type === "checkbox" || node_type === "radiobutton") ? "height_100" : "" }>
     <span>{label}</span>
+
     <div class="textarea__wrapper">
-        <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off" {rows}></textarea>
+
+        <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
+        там где он есть сделан больший паддинг справа. это регулируется классом -->
+        <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off" {rows}
+        class={ (node_type === "checkbox" || node_type === "radiobutton") ? "normal_padding" : "big_padding" }></textarea>
+
+        <!-- Некоторые текстовые поля имеют переключатели -->
         {#if id === "content"}
             <div class="toggle__position">
                 <Toggle />
             </div>
         {/if}
+
     </div>
 </label>
 
@@ -86,18 +94,29 @@
         position: relative;
     }
 
+
     textarea{
         border: none;
         background-color: var(--light-blue);
         border-radius: 15px;
         color: var(--deep-blue);
-        padding: .5rem 5.5rem .5rem 1rem;
         resize: vertical;
         scrollbar-width: 8px;
         scrollbar-color: var(--middle-blue) transparent;
         width: 100%;
         height: 100%;
     }
+
+
+    textarea.big_padding{
+        padding: .5rem 5.5rem .5rem 1rem;
+    }
+
+
+    textarea.normal_padding{
+        padding: .5rem 1rem;
+    }
+
 
     .toggle__position{
         position: absolute;

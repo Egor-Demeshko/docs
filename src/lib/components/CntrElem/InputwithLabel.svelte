@@ -5,7 +5,6 @@
     export let pattern = '.*';
     export let type = "text";
     export let label ="Название блока";
-    export let view_type = '';
     export let value = '';
 
     let valid = '';

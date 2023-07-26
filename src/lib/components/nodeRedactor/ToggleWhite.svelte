@@ -27,6 +27,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        font-size: .875rem;
         gap: .25rem;
         border-radius: 10px;
         position: relative;
@@ -79,7 +80,6 @@
 
     .toggle__element span{
         display: block;
-        font-size: .875rem;
         line-height: .875rem;
     }
 

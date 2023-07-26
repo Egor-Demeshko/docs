@@ -1,6 +1,11 @@
 <script>
     import DropDown from "../CntrElem/DropDown.svelte";
     import { nodeOptions } from "$lib/scripts/stores";
+
+    /*
+    *  компонент создает отображение элемента для выбора типа узла
+    *  
+    */
 </script>
 
 <div>

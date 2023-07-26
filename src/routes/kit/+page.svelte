@@ -16,15 +16,18 @@
 	import CheckBoxWithLabel from "../../lib/components/nodeRedactor/CheckBoxWithLabel.svelte";
     import ToggleWhite from "$lib/components/nodeRedactor/ToggleWhite.svelte";
 	import List from "../../lib/components/nodeRedactor/List.svelte";
+    import Box from "$lib/components/draws/Box.svelte";
 
     let node_type;
 
     $: node_type;
     $: console.log("[PAGE]: selected: ", node_type);
+
 </script>
 
 <main>
     <div class="wrapper">
+        <!-- Блок простых компонентов -->
         <div>
             <Input --border-color="var(--middle-blue)"
             --color="var(--deep-blue)"
@@ -89,9 +92,17 @@
         <div style="background-color: var(--middle-blue)">
             <List />
         </div>
+
+        <div style="width: 100%">
+            <svg style="width: 100%;">
+                    <Box x={10} y={10}/>
+
+            </svg>
+        </div>
     </div>
 
     <aside>
+        <!-- Блок составных компонентов -->
         <Form />
         <div style="max-width: 800px">
             <Tabs />
@@ -109,7 +120,7 @@
                 <option value="checkbox">checkbox</option>
                 <option value="radiobutton">radiobutton</option>
             </select>
-            <NodeRedactor {node_type}/>
+            <NodeRedactor />
         </div>
     </aside>
 </main>

@@ -3,43 +3,54 @@
   import { drawRoot, connections } from "$lib/scripts/stores"
   import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId } from "$lib/scripts/stores";
   import boxClickHandler from "$lib/scripts/eventHandlers/boxClickHandler";
+	import BoxInner from "./BoxInner.svelte";
+  import BoxPoint from "./BoxPoint.svelte";
+
+
+  /**
+   * Компонент визуализации узла в виде интерактивного прямоугольника на канве.
+   * имеет 4 состояния для визуализации
+   * при клике открывает блок редактирования узла. <NodeRedactor/>
+   * плюс есть кнопочки добавить связь
+   */
   
-  export let id; 
-  export let name;
-  let text; // var for text element
-  $: textWidth = 0;
-  $: textHeight = 0;
+  export let id = ''; 
+  export let name = 'Текст из данных';
+  export let node_type = "entry";
+  export let active = "active";
   
   /**block coordinates and sizes data*/
-  let x = 0;
-  let y = 0;
+  export let x = 0;  //TODO убедиться что координаты нужны открытыми. были открыты для разработки
+  export let y = 0;
   let parent = undefined;
-  let width = 200;
-  let height = 100;
+  let width = 204;
+  let height = 40;
   /****/
 
-  let fill = "grey";
-  let pointDown = true;
-  let pointUp = true;
-  let boxRootElement;
-  let strokeWidth = 4;
-  let stroke = "black";
+
+  let pointDown = true; // отображать ли кнопку подключения связи вниху
+  let pointUp = true;  // отображать ли кнопку подключения связи вверху
+  //let boxRootElement;
   let root;
-  let focusActive = ""; // отображении стилей блока при активной элемента. 
+  let focusActive = ""; // отображении стилей блока при активном элемента. 
                         //совместная подствека с блоками текста.
+                        //TODO проверить возможно перемеенная active и эта выполняют одно и тоже
   
-  $: active = ($activeBlocks.has(id)) ? true : false;
+  $: isBlockChoosen = ($activeBlocks.has(id)) ? "isBlockChoosen" : ''; // управляет подствекой элемента, елси блок или связанная переменная выбраны.кликнуты
 
   
 
   /** обновляются данные в случае перетаскивания блока*/
   connections.subscribe( (allBlocksValues) => {
+    console.log("[BOX]: WARNING! DRUG CANCELLED");
+    /*
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
         x = obj.x;
         y = obj.y;
         parent = obj.parent;
     });
+    */
   });
 
   /** если при первоначальное загрузке есть связь с блоком родителя, 
@@ -59,7 +70,6 @@
 
 
   onMount( () => {
-    centerText();
     try{
       root = $drawRoot;
     } catch {
@@ -120,19 +130,8 @@ function addConnection(e){
 }
 
 
-/**
- * центруем текст в svg элементе
-*/
-function centerText(){
-      let { width, height } = text.getBoundingClientRect();
-      textWidth = width;
-      textHeight = height;
-}
-
-
 function focusIn(){
-  //console.log("[BOX]: focusin handler");
-    focusActive = "active";
+    console.log("[BOX]: focusin handler");
 
     activeBlocks.update( (set) => {
         set.add(id);
@@ -146,7 +145,6 @@ function focusIn(){
 
 
 function focusOut(){
-    focusActive = "";
 
     console.log("[BOX.FOCUSOUT]: block id, delete: ", id);
 
@@ -159,80 +157,90 @@ function focusOut(){
         elObj.setInactive(id);
     });
 }
+
 </script>
 
 
 
-  <g bind:this={boxRootElement} class:active {width} {height} viewport>
 
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <rect {x} {y} {width} {height} {fill} stroke-width={strokeWidth} {stroke} rx="6" 
-      class:focusActive
+<!-- bind:this={boxRootElement} -->
+  <g  {x} {y} {width} {height}>
+
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <foreignObject {x} {y} {width} {height} 
+      class:isBlockChoosen 
+      tabindex=0
+      role="tab"
       on:pointerdown={ startDraging }
-      on:click={ () => blockClickedId.set(id) }
+      on:click={ () => blockClickedId.set(id)}
       on:focus={ focusIn }
       on:blur={ focusOut }
-      tabindex=0
-      role="tab">      
-    </rect>
-
-
-    <text x={x + width / 2 - textWidth / 2} 
-      y={y + height / 2 + textHeight / 2} 
-      bind:this={text} 
-    >{name}</text>
+      class="box">
+          <BoxInner {name} {node_type} />
+    </foreignObject>
 
       
-    {#if pointDown}
-        <circle class:pointDown cx={(x + width - width / 2)} cy={y + height} r="8" on:click={addConnection}/>
+    {#if isBlockChoosen}
+        {#if pointDown}
+        <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
+          <foreignObject width="12" height="12" x={x + width / 2 - 6} y={y - 6}
+          class="point">
+            <BoxPoint {active} {focusActive}/>
+          </foreignObject>
+        {/if}
+
+
+        {#if pointUp}
+        <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
+          <foreignObject width="12" height="12" x={x + width / 2 - 6} y={y + height - 6}
+          class="point">
+            <BoxPoint {active} {focusActive}/>
+          </foreignObject>
+        {/if}
     {/if}
 
-    {#if pointUp}
-        <circle class:pointUp cx={(x + width - width / 2)} cy={y} r="8"/>
-    {/if}
   </g>
 
-<style>
-    .pointDown,
-    .pointUp{
-        fill: red;
-        stroke: grey;
-        stroke-width: 2px;
-    }
 
+
+<style>
     g{
       transition: filter 600ms ease;
       z-index: 10;
       position: relative;
     }
 
-    g:hover{
-      filter: drop-shadow(0 0 4px #ff3434);
+    .box{
+        background-color: var(--light-blue);
+        color: var(--middle-blue);
+        fill: var(--middle-blue);
+        transition: color 600ms ease-in-out, background 600ms ease-in-out, fill 600ms ease-in-out;
     }
 
-    rect{
-      fill: grey;
-      transition: fill 600ms ease;
+    .box:hover{
+        color: var(--orange);
+        fill: var(--orange);
     }
 
-    rect:hover{
-      fill: #fccd75;
+    .isBlockChoosen{
+        color: var(--deep-blue);
+        background-color: var(--orange);
     }
 
-    .active{
-        filter: drop-shadow(0 0 4px orange);
+    .isBlockChoosen:hover{
+        background-color: var(--pale-orange);
+        fill: var(--deep-blue);
+        color: var(--deep-blue);
     }
 
-    .focusActive{
-        fill: orange;
+    .point{
+        color: var(--orange);
+        transition: color 600ms ease-in-out;
     }
 
-    text{
-      font-size: 20px;
-      text-align: center;
+    .isBlockChoosen:hover~.point{
+        color: var(--pale-orange);
     }
 
-
-
+    
 </style>

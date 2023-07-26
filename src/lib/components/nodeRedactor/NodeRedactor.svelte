@@ -9,6 +9,15 @@
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
 
+    //TODO сохранение состояния по комбинации cntl + S
+
+    /* компонент формирует интерфейс редактирования узла 
+     * имеет несколько вариантов отрисовки, вариант выбирается на основе 
+     * выбранного node_type и управляется коллекцией из svelte/stores = nodeOptions
+     * этот стор хранится в stores.js папке scripts
+    */
+
+    /**получаем текущий активный node_type. выбирается на <FiledTypePicker> это дропдаун*/
     $: node_type = gainNodeType($nodeOptions);
     /*$: console.log("[NodeRedactor]: node_type changed: ", node_type);*/
 
@@ -44,15 +53,20 @@
     </div>
 
     <div class="redactors">
+        <!--Реадктор по умолчанию имеет три различных визуализации. 
+            выбор, что показывать, основан на типе узла который выбран-->
+
         {#if node_type === "text" || node_type === "entry"}
-            <ContentRedactor id={"content"} {node_type} label={"Содержание блока"} rows={5}
+            <ContentRedactor id={"content"} {node_type} label={"Содержание блока"} rows={4}
             placeholder={"Содержание отображается в тексте документа"}/>
             <ContentRedactor id={"description"} {node_type} label={"Описание блока"} 
             placeholder={"Описание будет отображаться в анкете"}/>
         {/if}
+
         {#if node_type === "checkbox"}
             <ContentRedactor id={"description"} {node_type} label={"Описание блока"}/>
         {/if}
+
         {#if node_type === "radiobutton"}
             <div class="radiobutton__wrapper">
                 <List />
@@ -70,7 +84,7 @@
         padding: 2rem 1.5rem 2rem 2rem;
         background-color: var(--middle-blue);
         width: 100%;
-        gap: 2.5rem;
+        gap: 2.6rem;
         justify-content: space-between;
     }
 
@@ -95,14 +109,13 @@
     .controls,
     .redactors{
         gap: 1rem;
-        width: 100%;
     }
 
     .arrow__position{
         position: absolute;
         top: 0;
         left: 50%;
-        transform: translate(-50%, -40%);
+        transform: translate(-50%, -35%);
     }
 
     .radiobutton__wrapper{
