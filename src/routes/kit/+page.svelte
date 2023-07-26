@@ -95,7 +95,8 @@
 
         <div style="width: 100%">
             <svg style="width: 100%;">
-                    <Box x={10} y={10}/>
+                    <Box x={10} y={10} />
+                    <Box x={250} y={10} id={2} active = {false}/>
 
             </svg>
         </div>

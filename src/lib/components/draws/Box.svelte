@@ -17,7 +17,7 @@
   export let id = ''; 
   export let name = 'Текст из данных';
   export let node_type = "entry";
-  export let active = "active";
+  export let active = true;
   
   /**block coordinates and sizes data*/
   export let x = 0;  //TODO убедиться что координаты нужны открытыми. были открыты для разработки
@@ -37,12 +37,12 @@
                         //TODO проверить возможно перемеенная active и эта выполняют одно и тоже
   
   $: isBlockChoosen = ($activeBlocks.has(id)) ? "isBlockChoosen" : ''; // управляет подствекой элемента, елси блок или связанная переменная выбраны.кликнуты
-
-  
+/**переопределние класс отображение не активного блока, если флаг актив false*/
+  $: box_inactive = (active) ? "" : "box_inactive";
 
   /** обновляются данные в случае перетаскивания блока*/
   connections.subscribe( (allBlocksValues) => {
-    console.log("[BOX]: WARNING! DRUG CANCELLED");
+    console.log("[BOX]: WARNING! DRUG TRUNED OFF");
     /*
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
@@ -169,6 +169,7 @@ function focusOut(){
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <foreignObject {x} {y} {width} {height} 
       class:isBlockChoosen 
+      class:box_inactive
       tabindex=0
       role="tab"
       on:pointerdown={ startDraging }
@@ -185,7 +186,7 @@ function focusOut(){
         <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
           <foreignObject width="12" height="12" x={x + width / 2 - 6} y={y - 6}
           class="point">
-            <BoxPoint {active} {focusActive}/>
+            <BoxPoint />
           </foreignObject>
         {/if}
 
@@ -194,7 +195,7 @@ function focusOut(){
         <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
           <foreignObject width="12" height="12" x={x + width / 2 - 6} y={y + height - 6}
           class="point">
-            <BoxPoint {active} {focusActive}/>
+            <BoxPoint />
           </foreignObject>
         {/if}
     {/if}
@@ -210,6 +211,7 @@ function focusOut(){
       position: relative;
     }
 
+    /** стандартное отображение */
     .box{
         background-color: var(--light-blue);
         color: var(--middle-blue);
@@ -221,10 +223,27 @@ function focusOut(){
         color: var(--orange);
         fill: var(--orange);
     }
+    /**********/
 
+    /** неактивные блоки */
+    .box_inactive{
+        background-color: var(--light-blue);
+        color: var(--gray-blue);
+        fill: var(--gray-blue);
+    }
+
+
+    .box_inactive:hover{
+        fill: var(--pale-orange);
+        color: var(--pale-orange);
+    }
+
+
+    /** выбранные блок */
     .isBlockChoosen{
         color: var(--deep-blue);
         background-color: var(--orange);
+        fill: var(--deep-blue);
     }
 
     .isBlockChoosen:hover{
@@ -232,12 +251,15 @@ function focusOut(){
         fill: var(--deep-blue);
         color: var(--deep-blue);
     }
+    /***********/
+
 
     .point{
         color: var(--orange);
         transition: color 600ms ease-in-out;
     }
 
+    
     .isBlockChoosen:hover~.point{
         color: var(--pale-orange);
     }
