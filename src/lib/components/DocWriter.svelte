@@ -37,7 +37,6 @@
 
 <style>
     section{
-        padding:2rem 2rem;
         height: 100%;
         width: 100%;
         min-width: 600px;

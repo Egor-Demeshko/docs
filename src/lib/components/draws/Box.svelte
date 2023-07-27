@@ -15,7 +15,19 @@
    */
   export let node;
 
-  let { id = "", name = "Имя блока", node_type = "entry", active = true, x = 0, y = 0, parent_id: parent = undefined, width = 204, height = 40} = node;
+  let { 
+    id = "", 
+    name = "Имя блока", 
+    node_type = "entry", 
+    active = true, 
+    x = 0, 
+    y = 0, 
+    parent_id: parent = undefined, 
+    width = 204, 
+    height = 40,
+    condition = "",
+    trigger = ""
+  } = node;
   /****/
   let pointDown = true; // отображать ли кнопку подключения связи вниху
   let pointUp = true;  // отображать ли кнопку подключения связи вверху
@@ -34,6 +46,8 @@
 
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
+       /* console.log("[BOX]: nodes.subsdcrive obj.x: ", obj.x);
+        console.log("[BOX]: nodes.subscribe x: ", x);*/
         if(x != obj.x) x = obj.x;
         if(y != obj.y) y = obj.y;
         
@@ -80,25 +94,27 @@ function startDraging(e){
 
     if(e.target.tagName === "DIV"){
         root.addEventListener("pointerup", () => {
-          root.removeEventListener("mousemove", coordinate);
-          
+          root.removeEventListener("mousemove", coordinate);       
         });
         root.addEventListener("mousemove", coordinate);
     }
 
 
     function coordinate(e){
-        x = e.layerX - width / 2;
-        y = e.layerY - height / 2;
+        let target = e.target.closest('div');
+        let newX = e.pageX - root.scrollLeft - width / 2;
+        let newY = e.pageY - root.scrollTop - height / 2 - 88;
+
+        console.log("[BOX]: root: ", root.scrollTop);
 
         nodes.update( (allBlocks) => {
             for(let i = 0; i < allBlocks.length; i++){
               let obj = allBlocks[i];
               
               if(obj.id === id){
-                console.log({x, y});
-                  obj.x = x;
-                  obj.y = y;
+                
+                  obj.x = newX;
+                  obj.y = newY;
                   allBlocks[i] = obj;
                   break;
               }
@@ -171,7 +187,7 @@ function focusOut(){
       on:focus={ focusIn }
       on:blur={ focusOut }
       class="box">
-          <BoxInner {name} {node_type} isLinked={ (parent) ? true : false }/>
+          <BoxInner {name} {node_type} isLinked={ (condition && trigger) ? true : false }/>
     </foreignObject>
 
       

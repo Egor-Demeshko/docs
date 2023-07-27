@@ -46,9 +46,13 @@ $: lines = $linesStore;
         width: 100%;
         height: 100%;
         flex: 1;
+        background-image: url("/assets/images/block_background.svg");
+        background-repeat: repeat;
+        background-color: var(--white-blue);
+        background-origin: border-box;
     }
 
     #playground{
-        background-color: lightgray;
+        /*background-color: transparent;*/
     }
 </style>

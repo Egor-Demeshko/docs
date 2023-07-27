@@ -120,15 +120,17 @@
 
 
 <main>
-    <div class="element element__left">
-        <SVGMain />
-        <!--<BlockRedactor />-->
-    </div>
+    <div class="redactors">
+        <div class="element element__left">
+            <SVGMain />
+            <!--<BlockRedactor />-->
+        </div>
 
-    <!--<div class="devider"></div>-->
+        <!--<div class="devider"></div>-->
 
-    <div class="element">
-        <DocWriter html={cleanHtml}/>
+        <div class="element">
+            <DocWriter html={cleanHtml}/>
+        </div>
     </div>
 </main>
 
@@ -136,12 +138,12 @@
 
 <style>
     main{
-        display: flex;
+
         background-color: var(--main-bg);
         position: absolute;
         top: 0;
         left: 0;
-        overflow-y: scroll;
+
         height: 100vh;
         width: 100vw;
     }
@@ -155,6 +157,15 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
+
+    }
+
+    .redactors{
+        display: flex;
+        position: absolute;
+        top: 5.5rem;
+        left: 0;
+        gap: 1.5rem;
     }
 
    /* .devider{

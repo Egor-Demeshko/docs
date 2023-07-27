@@ -35,6 +35,12 @@
                 startWidth = obj.width;
                 parentToFind = obj.parent_id
                 
+                /*console.log("[LINE]: nodes.subscribe", {
+                    startX,
+                    startY,
+                    startHeight,
+                    startWidth
+                });*/
                 break;
             }
         }
@@ -47,12 +53,7 @@
                 endY = obj.y;
                 endHeight = obj.height;
                 endWidth = obj.width;
-                console.log("[LINE]: nodes.subscribe", {
-                    endX,
-                    endY,
-                    endHeight,
-                    endWidth
-                });
+
                 break;
             }
         }

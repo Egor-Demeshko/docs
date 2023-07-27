@@ -43,4 +43,8 @@
         border-radius: 4px;
         overflow-y: scroll;
     }
+
+    .editor *{
+        color: var(--deep-blue);
+    }
 </style>
