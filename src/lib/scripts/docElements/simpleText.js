@@ -1,7 +1,7 @@
 export default class SimpleText{
     #domLinks = [];
 
-    constructor(id, name, content){
+    constructor({id, name, content}){
         this.id = id;
         this.name = name;
         this.content = content;

@@ -1,9 +1,9 @@
 <script>
     import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import populateTextDataStore from "$lib/scripts/controllers/populateTextDataStore";
-    import populateSvgBlocksStore from "$lib/scripts/controllers/populateSvgBlocksStore";
+    import { nodes } from "$lib/scripts/stores";
     import SVGMain from "$lib/components/draws/SVGMain.svelte";
+    import createMassive from "$lib/scripts/createMassive";
 	import BlockRedactor from "$lib/components/BlockRedactor.svelte";
 
     //receiving data from load function
@@ -103,18 +103,16 @@
     
     
     {   
-        /**разделяем блочно/визуальную и текстовые составляющие графа*/
-        /** заполняем стор текстовых обьектов*/
-        populateTextDataStore(graph);
-        populateSvgBlocksStore(graph);
+        /**делаем из графа массив*/
+        graph = createMassive(graph);
+
+        /* сохраняем граф в стор*/
+        nodes.set(graph);
+
 
         /** генерируем span элементы в строчном виде и вставляем их в разметку*/
         cleanHtml = generateTextElements(graph, cleanHtml);
     }
-
-
-        /**TODO receive from graph*/
-        //connections.set(graph);
 </script>
 
 

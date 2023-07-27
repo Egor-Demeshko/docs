@@ -1,6 +1,10 @@
 import { writable } from "svelte/store";
 
 
+
+export const nodes = writable([]);
+
+
 /** стор для передачи переменными/блоками переменных
  * структура айди блока: значение
  * транспорт данных из блока переменных в блок размещенный на документе
@@ -33,8 +37,6 @@ export const modalFieldsStore = writable({
 });
 
 /* ____  DRAWERS STORES _____  */
-/**saves data about all block's chain and it's data */
-export const connections = writable();
 
 /**Drawer root */
 export const drawRoot = writable('');
