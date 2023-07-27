@@ -35,7 +35,7 @@ $: lines = $linesStore;
             {/each} 
         </g>
         {#each $connections as {id, name}}
-            <Box {id} {name}/>
+            <Box {id} {name} />
         {/each}
     </svg>
 </div>

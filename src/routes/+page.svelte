@@ -17,128 +17,78 @@
     /*console.log("GRAPH: ", graph);*/
 
     //TODO убрать тестовую реализацию графа
-    graph = [
-        {   
-            id: 1,
-            x: 10,
-            y: 50,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "город",
-            content: "Буржуйск"
-        },
-        {   
-            id: 2,
-            x: 10,
-            y: 300,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "дата",
-            content: "10.01.2035"
-        },
-        {   
-            id: 3,
-            x: 140,
-            y: 300,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Сторона договора 1",
-            content: "Иванов Иван Иваныч"
-        },
-        {   
-            id: 4,
-            x: 300,
-            y: 300,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Сторона договора 2",
-            content: "Сергеев Сергей Сергеевич"
-        },
-        {   
-            id: 5,
-            x: 10,
-            y: 450,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Предмет договора",
-            content: "Сыча"
-        },
-        {   
-            id: 6,
-            x: 300,
-            y: 450,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Адрес обьекта",
-            content: "г. Буржуйск, ул. Строителей из себя, д.315, кв.73",
-        },
-        {   
-            id: 7,
-            x: 600,
-            y: 450,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Площадь обьекта",
-            content: "573",
-        },
-        {   
-            id: 8,
-            x: 10,
-            y: 600,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Порядок сдачи объекта",
-            content: "2.1.5. Письменно сообщить Арендодателю (не поздее чем за один месяц) о предстоящем освобождении Обьекта как в связи с окончанием срока действия договора, так и при досрочном освобождении и сдать Обьект по акту приемапередачи Арендодателю",
-        },
-        {   
-            id: 9,
-            x: 300,
-            y: 600,
-            parent: 1,
-            height: 100,
-            width: 200,
-            name: "Арендная плата",
-            content: "100500.00",
-        },
-        {   
-            id: 10,
-            x: 600,
-            y: 600,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Дата оплаты",
-            content: "29",
-        },
-        {   
-            id: 11,
-            x: 10,
-            y: 850,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Раздел доп. условия",
-            content: "4. Дополнительные условия",
-        },
-        {   
-            id: 12,
-            x: 140,
-            y: 850,
-            parent: undefined,
-            height: 100,
-            width: 200,
-            name: "Доп. условие 4.1",
-            content: "4.1 Арендатор обязан вернуть 2х сычей",
-        }
-]
+    graph = {
+        "1": {
+		"parent_id": null,
+		"name": "Имя узла",
+		"description": "узел с текстом",
+		"data_type": "string",
+		"node_type": "text",
+		"content": "Рандомный текст",
+		"condition": null,
+		"trigger": null,
+		"x": 10,
+		"y": 50,
+		"activ": true
+	},	
+	
+	"2": {
+		"parent_id": 1,
+		"name": "Имя узла",
+		"description": "узел c полем ввода",
+		"data_type": "string",
+		"node_type": "entry",
+		"content": "fghfhf",
+		"condition": null,
+		"trigger": null,
+		"x": 250,
+		"y": 50,
+		"activ": true
+	},
+	
+	"3": {
+		"parent_id": 1,
+		"name": "Имя узла",
+		"description": "узел c чекбоксом",
+		"data_type": "bool",
+		"node_type": "checkbox",
+		"content": true,
+		"condition": null,
+		"trigger": null,
+		"x": 10,
+		"y": 300,
+		"activ": true
+	},
+	
+	"4": {
+		"parent_id": 1,
+		"name": "Имя узла",
+		"description": "узел c радиобатоном - единственный выбор. При выборе добавляем в content одно из значений options (в дочерних узлах должны быть соответствующие зависимости)",	
+		"data_type": "string",
+		"node_type": "radiobutton",
+		"options": ["красный","зелёный","синий"],
+		"content": "зелёный",
+		"condition": null,
+		"trigger": null,
+		"x": 300,
+		"y": 300,
+		"activ": true
+	},
+	
+	"5": {
+		"parent_id": 2,
+		"name": "Имя узла",
+		"description": "узел с зависимостями, condition сравнивает content верхнего узла со своим trigger (операторы: gt, lt, gte, lte, equal, not_equal, in, not_in, in_range, not_in_range)",	
+		"data_type": "integer",
+		"node_type": "text",
+		"content": "Рандомный текст",
+		"condition": "equal", 
+		"trigger": 2500.00,
+		"x": 10,
+		"y": 450,
+		"activ": true
+	}
+}
 
     if(locals.error){
         prompt(locals.error.message);
@@ -172,7 +122,7 @@
 <main>
     <div class="element element__left">
         <SVGMain />
-        <BlockRedactor />
+        <!--<BlockRedactor />-->
     </div>
 
     <!--<div class="devider"></div>-->

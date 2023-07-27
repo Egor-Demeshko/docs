@@ -15,6 +15,8 @@
     let endWidth;
     let endHeight;
 
+    let markerHeight = 8;
+
 
     connections.subscribe( (allBlocks) => {
         /*console.log("[LINE]: ", allBlocks);*/
@@ -64,29 +66,29 @@
      */
    function drawLine(){   
         /*console.log("[Draw Line]");*/
-        let startBlockCenter = startX + (startWidth / 2);
-        let endBlockCenter = endX + (endWidth / 2);
+        let startBlockCenter = startX  + (startWidth / 4);
+        let endBlockX = endX + (endWidth / 4);
         let halfOfYBetweenBlocks = (startY - ( endY + endHeight)) / 2;
-        let sign = (startBlockCenter - endBlockCenter > 0) ? 1 : -1;
-
-
+        let sign = (startBlockCenter - endBlockX > 0) ? 1 : -1;
+        
+        
         //console.log(`[obj.id checker] : `,);
 
         d=`
-            M ${ startBlockCenter } ${ startY }
-            S ${ endBlockCenter } ${endY + endHeight + 52} ${endBlockCenter} ${ endY + endHeight + 8 }
+            M ${ startBlockCenter } ${ startY - (markerHeight / 2)}
+            S ${ endBlockX } ${endY + endHeight + 52} ${endBlockX} ${ endY + endHeight }
         `
         
        /* d = `
             M ${startBlockCenter} ${ startY }
             l ${0} ${-halfOfYBetweenBlocks + 30}
             q 0 -30 ${20 * sign} ${-halfOfYBetweenBlocks + 30}
-            Q ${endBlockCenter } ${(endY + endHeight) + 40} ${endBlockCenter} ${endY + endHeight + 10}
+            Q ${endBlockX } ${(endY + endHeight) + 40} ${endBlockX} ${endY + endHeight + 10}
         `*/
         //console.log(`[LINE]: DRAWLINE: startId: ${startId} parentId: ${parentId}`, d);
         /*d=`
             M ${startBlockCenter} ${ startY + startHeight }
-            t ${endBlockCenter - startBlockCenter} ${halfOfYBetweenBlocks * 2}
+            t ${endBlockX - startBlockCenter} ${halfOfYBetweenBlocks * 2}
         `*/
     return d;
 }
@@ -95,16 +97,33 @@
 
 </script>
 
-
+<!--   -->
 <g use:drawLine>
-    <path {d}/>
+    <defs>
+        <!-- A marker to be used as an arrowhead -->
+        <marker
+          id="arrow"
+          viewBox="0 0 8 8"
+          refX="4"
+          refY="4"
+          markerWidth="8"
+          markerHeight={markerHeight}
+          orient="auto-start-reverse">
+          <path d="M 0 0 L 8 4 L 0 8 z" />
+        </marker>
+      </defs>
+    <path {d} marker-start="url(#arrow)"/>
 </g>
 
 <style>
+    marker path{
+        fill: var(--middle-blue);
+    }
+
     path{
         fill: none;
-        stroke: rgb(89, 0, 255);
-        stroke-width: 4;
+        stroke: var(--middle-blue);
+        stroke-width: 1;
         stroke-linecap: round;
         z-index: 0;
     }

@@ -43,8 +43,8 @@
 <style>
     .wrapper{
         color: inherit;
-        height: 100%;
-        width: 100%;
+        height: 99%;
+        width: 99%;
         display: flex;
         align-items: center;
         justify-content: start;

@@ -42,15 +42,17 @@
 
   /** обновляются данные в случае перетаскивания блока*/
   connections.subscribe( (allBlocksValues) => {
-    console.log("[BOX]: WARNING! DRUG TRUNED OFF");
-    /*
+
+
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
-        x = obj.x;
-        y = obj.y;
+        if(x != obj.x) x = obj.x;
+        if(y != obj.y) y = obj.y;
+        
         parent = obj.parent;
+        width = obj.width;
+        height = obj.height;
     });
-    */
   });
 
   /** если при первоначальное загрузке есть связь с блоком родителя, 
@@ -87,7 +89,7 @@
 function startDraging(e){
     e.stopPropagation();
 
-    if(e.target.tagName === "rect"){
+    if(e.target.tagName === "DIV"){
         root.addEventListener("pointerup", () => {
           root.removeEventListener("mousemove", coordinate);
           
@@ -105,6 +107,7 @@ function startDraging(e){
               let obj = allBlocks[i];
               
               if(obj.id === id){
+                console.log({x, y});
                   obj.x = x;
                   obj.y = y;
                   allBlocks[i] = obj;
@@ -164,7 +167,7 @@ function focusOut(){
 
 
 <!-- bind:this={boxRootElement} -->
-  <g  {x} {y} {width} {height}>
+  
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <foreignObject {x} {y} {width} {height} 
@@ -177,7 +180,7 @@ function focusOut(){
       on:focus={ focusIn }
       on:blur={ focusOut }
       class="box">
-          <BoxInner {name} {node_type} />
+          <BoxInner {name} {node_type} isLinked={ (parent) ? true : false }/>
     </foreignObject>
 
       
@@ -200,7 +203,7 @@ function focusOut(){
         {/if}
     {/if}
 
-  </g>
+  
 
 
 
@@ -216,7 +219,12 @@ function focusOut(){
         background-color: var(--light-blue);
         color: var(--middle-blue);
         fill: var(--middle-blue);
+        border-radius: 8px;
         transition: color 600ms ease-in-out, background 600ms ease-in-out, fill 600ms ease-in-out;
+        outline: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .box:hover{
