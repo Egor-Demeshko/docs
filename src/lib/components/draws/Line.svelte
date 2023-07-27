@@ -1,5 +1,5 @@
 <script>
-  import { connections } from "$lib/scripts/stores";
+  import { nodes } from "$lib/scripts/stores";
 
     export let startId = "";  //айди текущего блока
     export let parentId = "";   //айди родителя куда надо рисовать связь
@@ -18,7 +18,7 @@
     let markerHeight = 8;
 
 
-    connections.subscribe( (allBlocks) => {
+    nodes.subscribe( (allBlocks) => {
         /*console.log("[LINE]: ", allBlocks);*/
         let parentToFind;
        

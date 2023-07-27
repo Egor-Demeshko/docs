@@ -1,9 +1,9 @@
 <script>
-    import { drawRoot, linesStore, connections } from "$lib/scripts/stores";
+    import { drawRoot, linesStore, nodes } from "$lib/scripts/stores";
     import Line from "$lib/components/draws/Line.svelte";
     import Box from "$lib/components/draws/Box.svelte";
 
-let height=3000;
+let height = 3000;
 let width = "100%";
 
 
@@ -34,8 +34,8 @@ $: lines = $linesStore;
                 <Line {startId} parentId={endId}/>
             {/each} 
         </g>
-        {#each $connections as {id, name}}
-            <Box {id} {name} />
+        {#each $nodes as node}
+            <Box {node} />
         {/each}
     </svg>
 </div>

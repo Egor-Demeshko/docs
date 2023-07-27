@@ -11,7 +11,7 @@
      * неактуально на 26-07-23
      */
 
-
+/*
     function fnToRunOnClick(){
         //при клике мы на документ вышаем один слушатель на элемент 
         //при этом ссылка тогда будет храниться в store
@@ -20,7 +20,7 @@
         /*$docRoot.addEventListener("selectionchange", (e) => {
             console.log("selectstart", e)});*/
         //let document = $docRoot.querySelector(".document");
-        $docRoot.addEventListener("selectstart", onDocClick, {once: true});     
+     /*   $docRoot.addEventListener("selectstart", onDocClick, {once: true});     
     }
 
     let graph;
@@ -30,10 +30,10 @@
     }
 
     $:{ graph = $textElementsData }
-
+*/
 </script>
 
-
+<!--
 <section class="root">
 
     {#if $interectiveOverlapShow}
@@ -60,10 +60,10 @@
     </form>
 
 </section>
-
+-->
 
 <style>
-    .root{
+   /* .root{
         display: flex;
         flex-flow: column;
         justify-content: flex-start;
@@ -105,7 +105,7 @@
         display: flex;
     }
 
-*/
+*//*
     .element{
         margin: 1rem auto;
     }
@@ -124,5 +124,5 @@
         padding: 0 1rem;
         margin-top: 2rem;
         height: 100%;
-    }
+    }*/
 </style>

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { drawRoot, connections } from "$lib/scripts/stores"
+  import { drawRoot, nodes } from "$lib/scripts/stores"
   import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId } from "$lib/scripts/stores";
   import boxClickHandler from "$lib/scripts/eventHandlers/boxClickHandler";
 	import BoxInner from "./BoxInner.svelte";
@@ -13,19 +13,11 @@
    * при клике открывает блок редактирования узла. <NodeRedactor/>
    * плюс есть кнопочки добавить связь
    */
-  
-  export let id = ''; 
-  export let name = 'Текст из данных';
-  export let node_type = "entry";
-  export let active = true;
-  
-  /**block coordinates and sizes data*/
-  export let x = 0;  //TODO убедиться что координаты нужны открытыми. были открыты для разработки
-  export let y = 0;
-  let parent = undefined;
-  let width = 204;
-  let height = 40;
+  export let node;
+
+  let { id = "", name = "Имя блока", node_type = "entry", active = true, x = 0, y = 0, parent = undefined, width = 204, height = 40} = node;
   /****/
+
 
 
   let pointDown = true; // отображать ли кнопку подключения связи вниху
@@ -41,7 +33,7 @@
   $: box_inactive = (active) ? "" : "box_inactive";
 
   /** обновляются данные в случае перетаскивания блока*/
-  connections.subscribe( (allBlocksValues) => {
+  nodes.subscribe( (allBlocksValues) => {
 
 
     allBlocksValues.forEach( ( obj )=> {
@@ -102,7 +94,7 @@ function startDraging(e){
         x = e.layerX - width / 2;
         y = e.layerY - height / 2;
 
-        connections.update( (allBlocks) => {
+        nodes.update( (allBlocks) => {
             for(let i = 0; i < allBlocks.length; i++){
               let obj = allBlocks[i];
               
@@ -161,6 +153,8 @@ function focusOut(){
     });
 }
 
+$: console.log("[BOX]: width: ", width);
+
 </script>
 
 
@@ -208,11 +202,6 @@ function focusOut(){
 
 
 <style>
-    g{
-      transition: filter 600ms ease;
-      z-index: 10;
-      position: relative;
-    }
 
     /** стандартное отображение */
     .box{

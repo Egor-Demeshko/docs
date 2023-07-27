@@ -1,4 +1,4 @@
-import { activeBlocks, connections, linesStore, blockClickedId } from "../stores";
+import { activeBlocks, nodes, linesStore, blockClickedId } from "../stores";
 
 export default function boxClickHandler(endforLineId){
     console.log(`[boxClickHandler]`);
@@ -7,7 +7,7 @@ export default function boxClickHandler(endforLineId){
     
     /** сохранить айди элементов которые надо подсветить */
     let idsToHighlight = [];
-    connections.update( (allBlocks) => {
+    nodes.update( (allBlocks) => {
         allBlocks.forEach( (obj) => {
             if(!obj.parent && obj.id != endforLineId){
                 idsToHighlight.push(obj.id);
@@ -45,7 +45,7 @@ export default function boxClickHandler(endforLineId){
                 });
 
                 
-                connections.update( (blocks) => {
+                nodes.update( (blocks) => {
                     
                     /**сохранить айди парента, куда идет линия. это endId */
                     blocks.forEach( (obj) => {
@@ -96,7 +96,7 @@ export default function boxClickHandler(endforLineId){
     function isBlockInstore(){
         let status = false;
 
-        connections.update( (blocks) => {
+        nodes.update( (blocks) => {
             for(let i = 0; i < blocks.length; i++) {
                 if(blocks[i].id === endforLineId) {
                     status = true;
