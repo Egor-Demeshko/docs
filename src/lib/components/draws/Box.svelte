@@ -15,11 +15,8 @@
    */
   export let node;
 
-  let { id = "", name = "Имя блока", node_type = "entry", active = true, x = 0, y = 0, parent = undefined, width = 204, height = 40} = node;
+  let { id = "", name = "Имя блока", node_type = "entry", active = true, x = 0, y = 0, parent_id: parent = undefined, width = 204, height = 40} = node;
   /****/
-
-
-
   let pointDown = true; // отображать ли кнопку подключения связи вниху
   let pointUp = true;  // отображать ли кнопку подключения связи вверху
   //let boxRootElement;
@@ -35,15 +32,14 @@
   /** обновляются данные в случае перетаскивания блока*/
   nodes.subscribe( (allBlocksValues) => {
 
-
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
         if(x != obj.x) x = obj.x;
         if(y != obj.y) y = obj.y;
         
-        parent = obj.parent;
-        width = obj.width;
-        height = obj.height;
+        parent = obj.parent || parent;
+        width = obj.width  || width;
+        height = obj.height || height;
     });
   });
 
@@ -53,6 +49,7 @@
   if(parent){
     linesStore.update( (arrayOfDataObj) => {
       //console.log("[BOX]: saving lines data: ", arrayOfDataObj);
+
       arrayOfDataObj.push({
         startId: id,
         endId: parent
@@ -153,7 +150,7 @@ function focusOut(){
     });
 }
 
-$: console.log("[BOX]: width: ", width);
+
 
 </script>
 

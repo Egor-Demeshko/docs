@@ -25,7 +25,7 @@
         for(let i = 0; i < allBlocks.length; i++){
             let obj = allBlocks[i];
 
-            if(obj.id != startId || obj.parent != parentId) continue;
+            if(obj.id != startId || obj.parent_id != parentId) continue;
             
             if(obj.id){
                 
@@ -33,7 +33,7 @@
                 startY = obj.y;
                 startHeight = obj.height;
                 startWidth = obj.width;
-                parentToFind = obj.parent
+                parentToFind = obj.parent_id
                 
                 break;
             }
@@ -47,7 +47,12 @@
                 endY = obj.y;
                 endHeight = obj.height;
                 endWidth = obj.width;
-
+                console.log("[LINE]: nodes.subscribe", {
+                    endX,
+                    endY,
+                    endHeight,
+                    endWidth
+                });
                 break;
             }
         }
