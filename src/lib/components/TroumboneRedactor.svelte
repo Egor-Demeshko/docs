@@ -13,6 +13,7 @@
         await import('trumbowyg');
 
         window.jQuery.trumbowyg.svgPath = '/assets/icons/troumbone.svg';
+        console.log(window.jQuery.trumbowyg);
         window.jQuery(container).trumbowyg({
             tagsToKeep: ['span']
         });
@@ -26,7 +27,7 @@
 </script>
 
 <svelte:head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css">
+    <link rel="stylesheet" href="/assets/css/trumbowyg.css">
 </svelte:head>
 
 <div class="editor" bind:this={root}>
@@ -40,7 +41,7 @@
         background-color: var(--white);
         box-shadow: 0 0 4px var(--black);
         height: 100%;
-        border-radius: 4px;
+        border-radius: 18px 0 0 0;
         overflow-y: scroll;
     }
 

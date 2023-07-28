@@ -7,7 +7,7 @@
 
 <style>
     div{
-        width: 100%;
+        max-width: 15rem;
         position: relative;
     }
 
@@ -17,6 +17,7 @@
         border-bottom: 1px solid var(--light-blue);
         background-color: var(--middle-blue);
         padding: 0.09rem 0 0.22rem;
+        width: 100%;
     }
 
 

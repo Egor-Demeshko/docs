@@ -4,7 +4,11 @@
     import { nodes } from "$lib/scripts/stores";
     import SVGMain from "$lib/components/draws/SVGMain.svelte";
     import createMassive from "$lib/scripts/createMassive";
-	import BlockRedactor from "$lib/components/BlockRedactor.svelte";
+	import NodeRedactor from "$lib/components/nodeRedactor/NodeRedactor.svelte";
+	import TopControllBar from "../lib/components/TopControllBar.svelte";
+	import Tabs from "../lib/components/Tabs/Tabs.svelte";
+    import LogoAndName from "$lib/components/LogoAndName.svelte";
+	import AddButton from "$lib/components/CntrElem/AddButton.svelte";
 
     //receiving data from load function
     export let data;
@@ -120,41 +124,67 @@
 
 
 <main>
-    <div class="redactors">
-        <div class="element element__left">
-            <SVGMain />
-            <!--<BlockRedactor />-->
+    <div class="background">
+    </div>     
+        <div class="logo_position">
+            <LogoAndName/>
         </div>
+        <div class="redactors">
+            <div class="element element__left">
+                <Tabs />
+                <TopControllBar />
+                <AddButton --width="3.4rem" --height="3.4rem"/>
+                <SVGMain />
+                <NodeRedactor />
+            </div>
 
-        <!--<div class="devider"></div>-->
+            <!--<div class="devider"></div>-->
 
-        <div class="element">
-            <DocWriter html={cleanHtml}/>
-        </div>
-    </div>
+            <div class="element">
+                <Tabs />
+                <DocWriter html={cleanHtml}/>
+            </div>
+    </div>  
 </main>
 
 
 
 <style>
     main{
-
         background-color: var(--main-bg);
-        position: absolute;
+        position: relative;
         top: 0;
         left: 0;
-
+        background: url('/assets/images/background.svg');        
         height: 100vh;
         width: 100vw;
+    }
+
+    .background{
+        background: url('/assets/images/noise.svg');
+        mix-blend-mode: soft-light;  
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .logo_position{
+        padding: 1.5rem;
+        background-color: transparent;
+        position: relative;
+
     }
 
     .element{
         flex: 1;
         width: 100%;
+        position: relative;
     }
 
     .element__left{
-        height: 100vh;
+        height: 100%;
         display: flex;
         flex-direction: column;
 
@@ -166,6 +196,7 @@
         top: 5.5rem;
         left: 0;
         gap: 1.5rem;
+        height: calc(100% - 5.5rem);
     }
 
    /* .devider{

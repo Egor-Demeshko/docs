@@ -2,7 +2,7 @@
     import Input from "$lib/components/CntrElem/Input.svelte";
     import Button from "$lib/components/CntrElem/Button.svelte";
     import Form from "$lib/components/Form.svelte";
-	import SerachInput from "../../lib/components/CntrElem/SerachInput.svelte";
+	import SearchInput from "../../lib/components/CntrElem/SearchInput.svelte";
 	import InputwithLabel from "../../lib/components/CntrElem/InputwithLabel.svelte";
     import Tabs from "$lib/components/Tabs/Tabs.svelte";
     import DropDown from "../../lib/components/CntrElem/DropDown.svelte";
@@ -48,7 +48,7 @@
         </div>
 
         <div style="background-color: var(--middle-blue)">
-            <SerachInput />
+            <SearchInput />
         </div>
 
         <div style="color: var(--light-blue); background-color: var(--middle-blue)">
@@ -60,7 +60,7 @@
             --padding=".4rem 1.8rem .4rem .875rem"/>
         </div>
 
-        <div style="--width: 3.375rem; --height: 3.375rem;">
+        <div style="--width: 3.375rem; --height: 3.375rem; position: relative;">
             <AddButton />
         </div>
 

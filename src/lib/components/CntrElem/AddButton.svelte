@@ -12,6 +12,9 @@
         height: var(--height);
         border-radius: 25%;
         transition: box-shadow 600ms ease, background 600ms ease;
+        position: absolute;
+        top: 3.9rem;
+        right: .825rem;
     }
 
     svg{

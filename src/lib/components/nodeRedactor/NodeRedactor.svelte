@@ -80,7 +80,9 @@
 <style>
     form{
         display: flex;
-        position: relative;
+        position: absolute;
+        bottom: 0;
+        left: 0;
         padding: 2rem 1.5rem 2rem 2rem;
         background-color: var(--middle-blue);
         width: 100%;

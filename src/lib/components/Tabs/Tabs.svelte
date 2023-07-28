@@ -35,6 +35,9 @@
 <style>
     .tab_bar{
         height: 2rem;
+        position: absolute;
+        top: -2rem;
+        left: 3.5rem;
     }
 
     ul{

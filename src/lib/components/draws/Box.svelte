@@ -92,7 +92,7 @@
 function startDraging(e){
     e.stopPropagation();
 
-    if(e.target.tagName === "DIV"){
+    if(e.target.tagName === "DIV" || e.target.tagName === "SPAN"){
         root.addEventListener("pointerup", () => {
           root.removeEventListener("mousemove", coordinate);       
         });
@@ -102,10 +102,8 @@ function startDraging(e){
 
     function coordinate(e){
         let target = e.target.closest('div');
-        let newX = e.pageX - root.scrollLeft - width / 2;
-        let newY = e.pageY - root.scrollTop - height / 2 - 88;
-
-        console.log("[BOX]: root: ", root.scrollTop);
+        let newX = x + e.movementX;
+        let newY = y + e.movementY;
 
         nodes.update( (allBlocks) => {
             for(let i = 0; i < allBlocks.length; i++){
