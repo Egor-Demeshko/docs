@@ -850,3 +850,19 @@ body.trumbowyg-body-fullscreen {
 .trumbowyg-dark .trumbowyg-overlay {
   background-color: rgba(15, 15, 15, 0.6);
 }
+
+
+@media print{
+  .trumbowyg-textarea{
+    display: none;
+  }
+
+  .trumbowyg-button-pane{
+    display: none;
+  }
+
+  @page{
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

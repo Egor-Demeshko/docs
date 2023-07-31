@@ -1,9 +1,10 @@
 <script>
     import Tab from "./Tab.svelte";
     import { tabsQuantity } from "$lib/scripts/stores";
-    export let tabNames = ["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"];
+    export let tabNames = [];
+    export let id = '';
 
-    tabsQuantity.set(tabNames.length);
+    tabsQuantity.update( (obj) => ({ ...obj, [id]: tabNames.length}));
 
     let active = false;
     let activeTab = "activeTab";
@@ -13,9 +14,9 @@
     <ul>
         {#each tabNames as name, i}
             {#if i == 0}
-                <Tab {name} active={true} id={i}/>
+                <Tab {name} active={true} id={i} parentId={id}/>
             {:else}
-                <Tab {name} id={i}/>
+                <Tab {name} id={i} parentId={id}/>
             {/if}
         {/each}
             <li>
@@ -83,6 +84,12 @@
         top: 50%;
         right: -10%;
         transform: translateY(-50%);
+    }
+
+    @media print{
+        .tab_bar{
+            display: none;
+        }
     }
 
 </style>

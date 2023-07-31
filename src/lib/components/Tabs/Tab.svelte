@@ -3,19 +3,22 @@
     export let name = "Имя";
     export let active = false;
     export let id;
+    export let parentId = '';
+    //TODO id должно быть уникальным для все табов на странице.
 
-    $: active = ( id === $activeTabId ) ? true : false;
+    $: active = ( id === $activeTabId[parentId] ) ? true : false;
     $: activeTab =  (active) ? "activeTab" : "ordinary";
     $: activeSvg = (active) ? "activeSvg" : "ordinarySvg";
-    $: svgShadow =  (id > $activeTabId) ? "rightShadow" : 
-                    (id < $activeTabId) ? "leftShadow" : 
-                    (id === $activeTabId && id === 0) ? "rightShadow" : "leftShadow";
-    $: zIndex = (id === $activeTabId) ? $tabsQuantity :
-                (id > $activeTabId) ? $tabsQuantity - id : id;
+    $: svgShadow =  (id > $activeTabId[parentId]) ? "rightShadow" : 
+                    (id < $activeTabId[parentId]) ? "leftShadow" : 
+                    (id === $activeTabId[parentId] && id === 0) ? "rightShadow" : "leftShadow";
+    $: zIndex = (id === $activeTabId[parentId]) ? $tabsQuantity[parentId] :
+                (id > $activeTabId[parentId]) ? $tabsQuantity[parentId] - id : id;
+    $: console.log(`activetab, ${parentId}`, { "activeTab id": $activeTabId[parentId], "current id": id, "quantity": $tabsQuantity[parentId]});
     
 
     function handelClick(){
-        activeTabId.set(id);
+        activeTabId.update( (obj) => ({...obj, [parentId]: id}));
     }
 </script>
 
@@ -46,7 +49,7 @@
     </li>
 
 
-    <svg class="border-curve {activeSvg} {(id === $tabsQuantity - 1 || svgShadow === "leftShadow") ? '' : svgShadow}" 
+    <svg class="border-curve {activeSvg} {(id === $tabsQuantity[parentId] - 1 || svgShadow === "leftShadow") ? '' : svgShadow}" 
         viewBox="0 0 40 32" 
         fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>
@@ -62,8 +65,7 @@
     .border-curve{
         width: var(--curve-width);
     }
-
-    
+  
 
     .border-curve.activeSvg{
         fill: var(--middle-blue);

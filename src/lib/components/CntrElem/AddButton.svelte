@@ -27,4 +27,10 @@
         box-shadow: 0 0 6px var(--gray-blue);
         background-color: var(--orange);
     }
+
+    @media print{
+        div{
+            display: none;
+        }
+    }
 </style>

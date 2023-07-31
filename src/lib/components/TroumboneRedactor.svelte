@@ -13,9 +13,34 @@
         await import('trumbowyg');
 
         window.jQuery.trumbowyg.svgPath = '/assets/icons/troumbone.svg';
-        console.log(window.jQuery.trumbowyg);
+        //console.log(window.jQuery.trumbowyg);
         window.jQuery(container).trumbowyg({
-            tagsToKeep: ['span']
+            tagsToKeep: ['span'],
+            btnsDef: {
+                print: {
+                    fn: () => window.print(),
+                    title: 'Напечатать',
+                    text: 'Print',
+                    class: '',
+                    hasIcon: true,
+                    ico: "print"
+                },
+            },
+            btns: [
+                ['viewHTML'],
+                ['undo', 'redo'], 
+                ['formatting'],
+                ['strong', 'em', 'del'],
+                ['superscript', 'subscript'],
+                ['link'],
+                ['insertImage'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['unorderedList', 'orderedList'],
+                ['horizontalRule'],
+                ['removeformat'],
+                ['print'],
+                ['fullscreen']
+            ]
         });
 
         editor = window.jQuery(container).trumbowyg('html', html);

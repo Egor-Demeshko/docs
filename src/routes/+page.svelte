@@ -18,7 +18,7 @@
     let cleanHtml = '';
 
     /*console.log("HTML: ", html);*/
-    /*console.log("GRAPH: ", graph);*/
+    console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
     graph = {
@@ -131,7 +131,7 @@
         </div>
         <div class="redactors">
             <div class="element element__left">
-                <Tabs />
+                <Tabs id={"left"} tabNames={["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"]}/>
                 <TopControllBar />
                 <AddButton --width="3.4rem" --height="3.4rem"/>
                 <SVGMain />
@@ -141,7 +141,7 @@
             <!--<div class="devider"></div>-->
 
             <div class="element">
-                <Tabs />
+                <Tabs id={"right"} tabNames={["Схема 1", "Схема 2"]}/>
                 <DocWriter html={cleanHtml}/>
             </div>
     </div>  
@@ -197,6 +197,7 @@
         left: 0;
         gap: 1.5rem;
         height: calc(100% - 5.5rem);
+        width: 100%;
     }
 
    /* .devider{
@@ -207,4 +208,18 @@
         left: 50%;
         transform: translateX(-50%);
     }*/
+
+    @media print{
+        .logo_position{
+            display: none;
+        }
+
+        .element__left{
+            display: none;
+        }
+
+        .background{
+            display: none;
+        }
+    }
 </style>

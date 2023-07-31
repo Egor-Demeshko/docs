@@ -1,0 +1,6 @@
+1. button-pane  ---  стили контейнера кнопок
+2. button-group  ---  стили групп кнопок
+3. button-pane button  ---  стили кнопока
+4. editor-box  ---  стили текстового поля
+- можно добавить марджины.
+5. box - container redactora целиком

@@ -62,10 +62,10 @@ export const blockClickedId = writable();
 
 /* ____  doc redactor ____ */
 /**current active tab id */
-export const activeTabId = writable(0);
+export const activeTabId = writable({});
 
 /**tabs quantity, [array.lenght] */
-export const tabsQuantity = writable(0);
+export const tabsQuantity = writable({});
 
 /**nodes options store */
 export const nodeOptions = writable([
