@@ -1,9 +1,12 @@
 <script>
     import { fly } from "svelte/transition";
+    import { nodes } from "$lib/scripts/stores";
+    import syncDataInNodesStore from "$lib/scripts/controllers/syncDataInNodesStores.js";
     export let options;    //стор типа узлов
     export let name = 'dropdown default';   //по нему определяем тип для которого отображается дроб даун
     export let isWithIcon = true;
-    export let id = 'none';
+    export let buildTypeid = 'none';
+    export let id = '';
 
    /*
         Компонент отображается выпадающие меню опций в зависимости от переданного массива
@@ -18,6 +21,39 @@
 
     $: isOpened = false;
     $: rotate = (isOpened) ? true : false;
+    $: if(id){
+        //по name получаем имя поля, которое считаем в data.
+        //а затем по нему считаем значение этого поля из даты.
+        let activeOption = '';
+        for(let i = 0; i < $nodes.length; i++){
+            if($nodes[i]["id"] !== id) continue;
+
+            activeOption = $nodes[i][name];
+            break;
+        }
+
+        //теперь из стора опций для дропдауна, делаем нашу опцию активной.
+        options.update( (options) => {
+            for(let i = 0; i < options.length; i++){
+
+                /** при старте программы, есть значения по умолчанию, если
+                 * убрать эту проверку, то далее они будут перезаписаны на false
+                */
+                if(!activeOption) return options;
+                
+                if(options[i]["value"] !== activeOption ){
+                    options[i].selected = false;
+                    continue;
+                };
+
+                options[i].selected = true;
+            }
+
+            return options;
+        });
+    }
+
+
     //$: console.log("[DropDown]: options state:  ", $options);
 
 
@@ -43,17 +79,20 @@
     /** update store, changing selected element*/
     function changeHandle(e){
         let target = e.target;
-        let type = target.value;
+        let type = target.value;  //значение выбранной опции
 
         options.update( (array) => {
             array.forEach( (elem) => {
                 if(elem.value === type) {
                     
                     elem.selected = true;
+                    syncDataInNodesStore(id, name, elem.value);
                 } else {
                     elem.selected = false;
                 }
             });
+
+
             return array;
         });
 
@@ -83,7 +122,7 @@
         {#each $options as {text, value, selected}}
             {#if selected}
             <div class="main_label">
-                <input {id} class="main_input" type="radio" {value} {name} checked={selected}
+                <input id={buildTypeid} class="main_input" type="radio" {value} {name} checked={selected}
                 tabindex="-1"/>
                 {#if isWithIcon}
                     <svg class="icon">
@@ -142,6 +181,7 @@
         font-size: 0.875rem;
         position: relative;
         width: 100%;
+        flex: 1 0;
     }
 
 

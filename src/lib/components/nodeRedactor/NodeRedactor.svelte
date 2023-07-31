@@ -4,7 +4,7 @@
 	import Compare from "./Compare.svelte";
 	import ContentRedactor from "./ContentRedactor.svelte";
     import FieldTypePicker from "./FieldTypePicker.svelte";
-    import { nodeOptions } from "$lib/scripts/stores";
+    import { nodeOptions, blockClickedId, nodes } from "$lib/scripts/stores";
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
@@ -19,13 +19,56 @@
 
     /**получаем текущий активный node_type. выбирается на <FiledTypePicker> это дропдаун*/
     $: node_type = gainNodeType($nodeOptions);
+    //$: activeBlockId = $blockClickedId;
+
+    /** получаем data выбранного сейчас блока, для получения данных и перерисовки интерфейса*/
+    $: data = getBlockObj($blockClickedId);
+    $: if(data){
+        nodes.update( (arrOfBlocksData) => {
+            for(let i = 0; i < arrOfBlocksData.length; i++){
+                if( data.id === arrOfBlocksData[i]["id"]){
+                    arrOfBlocksData[i] = data;
+
+                    break;
+                }
+            }
+            console.log("[NodeRedactor]: data updater, $: data: arrOfBlocksData", arrOfBlocksData);
+            return arrOfBlocksData;
+        });
+    }
+
+
+    /*$: console.log("[NodeRedactor]: updated ", $nodes);*/
     /*$: console.log("[NodeRedactor]: node_type changed: ", node_type);*/
+    /*$: console.log('[NodeRedactor]: data for active block: ', {
+                                                                data,
+                                                                "blockclickedId": $blockClickedId
+                                                            });*/
+
+
+
+    function getBlockObj(activeBlockId){
+        //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
+        //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
+        for(let i = 0; i < $nodes.length; i++){
+            if($nodes[i]["id"] === activeBlockId){
+                return $nodes[i];
+            }
+        }
+    }
+
 
     function gainNodeType(array){
         for(let i = 0; i < array.length; i++){
             if(array[i].selected === true) return array[i].value;
         }
     }
+
+
+    /*function inputNameChanged(e){
+        console.log("[NodeRedactor]: changed: ", e);
+        on:input_name_changed={inputNameChanged}
+    }*/
 
 
 </script>
@@ -36,20 +79,26 @@
     </div>
 
     <div class="controls">
-        <FieldTypePicker />
-        <Compare />
-        <InputwithLabel id={"name"}
+        <FieldTypePicker id={data.id}/>
+
+        <Compare id={data.id} 
+        trigger={(data.trigger) ? data.trigger : ''}/>
+
+        <InputwithLabel bind:value={data.name} id={data.id}
         --background = "var(--light-blue)"
         --color ="var(--deep-blue)"
         --placeholder="var(--faded-gray-blue)"
         --border="none"
-        --padding="0.5rem 1rem"/>
+        --padding="0.5rem 1rem"
+        />
+
         {#if node_type === "checkbox"}
             <CheckBoxWithLabel />
         {/if}
         {#if node_type === "radiobutton"}
             <ToggleWhite />
         {/if}
+
     </div>
 
     <div class="redactors">
@@ -58,19 +107,21 @@
 
         {#if node_type === "text" || node_type === "entry"}
             <ContentRedactor id={"content"} {node_type} label={"Содержание блока"} rows={4}
-            placeholder={"Содержание отображается в тексте документа"}/>
+            placeholder={"Содержание отображается в тексте документа"} value={data.content}/>
             <ContentRedactor id={"description"} {node_type} label={"Описание блока"} 
-            placeholder={"Описание будет отображаться в анкете"}/>
+            placeholder={"Описание будет отображаться в анкете"} 
+            value={data.description}/>
         {/if}
 
         {#if node_type === "checkbox"}
-            <ContentRedactor id={"description"} {node_type} label={"Описание блока"}/>
+            <ContentRedactor id={"description"} {node_type} label={"Описание блока"} 
+            value={data.description}/>
         {/if}
 
         {#if node_type === "radiobutton"}
             <div class="radiobutton__wrapper">
                 <List />
-                <ContentRedactor id={"description"} {node_type} label={"Описание блока"}/>
+                <ContentRedactor id={"description"} {node_type} label={"Описание блока"} value={data.description}/>
             </div>
         {/if}
     </div>

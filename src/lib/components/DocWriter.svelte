@@ -15,7 +15,7 @@
     onMount( async () => {
        
 
-        console.log("[DOC WRITER]: HTML: ", html);
+        //console.log("[DOC WRITER]: HTML: ", html);
     });
 
 
@@ -79,7 +79,7 @@
 
 
     :global(.doc_active){
-        background-color: var(--active-node-bg);
+        background-color: var(--orange);
     }
 
 

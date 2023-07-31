@@ -56,7 +56,7 @@ export const activeBlocks = writable(new Set());
 /**
  * айди блоков из поля редактирования, которые были кликнуты
  */
-export const blockClickedId = writable();
+export const blockClickedId = writable(1);
 /* ___ END DRAWERS ____ */
 
 
@@ -90,14 +90,29 @@ export const nodeOptions = writable([
 
 /**compare dropdown options */
 export const compareOptions = writable([
-    {
+    /*{
         text: "условия",
-        value: "no value",
+        value: null,
         selected: true,
+    },*/
+    {
+        text: "больше чем",
+        value: "gt",
+        selected: true
+    },
+    {
+        text: "меньше чем",
+        value: "lt",
+        selected: false
     },
     {
         text: "больше/равно",
-        value: "more-equal",
+        value: "gte",
+        selected: false
+    },
+    {
+        text: "меньше/равно",
+        value: "lte",
         selected: false
     },
     {
@@ -106,8 +121,9 @@ export const compareOptions = writable([
         selected: false
     },
     {
-        text: "больше",
-        value: "more",
+        text: "не равно",
+        value: "not_equal",
         selected: false
     }
+
 ]);

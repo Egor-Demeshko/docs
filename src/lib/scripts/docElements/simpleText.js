@@ -17,6 +17,7 @@ export default class SimpleText{
         if(links instanceof NodeList){
             this.#domLinks = Array.from(links);
             this.#populateFields();
+            
         } else {
             throw new Error("text elements: couldn't connect elements with document");
         }     
@@ -74,7 +75,7 @@ export default class SimpleText{
 
     setActive(id){
         if(this.id !== id) return;
-
+        //console.log("[simpleText]: setting active: id=", id);
         this.#domLinks.forEach( (domElem, i) => {
             domElem.classList.add("doc_active");
             if(i === 0) domElem.scrollIntoView({

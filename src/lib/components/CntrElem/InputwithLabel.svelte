@@ -1,4 +1,5 @@
 <script>
+    import { createEventDispatcher } from "svelte";
     export let id = "id";
     export let placeholder = "Введите данные";
     export let required = false;
@@ -10,6 +11,7 @@
     let valid = '';
     let invalid = '';
     let input;
+    const dispatch = createEventDispatcher();
 
 
     function startValidation(){
@@ -43,11 +45,24 @@
     function blurHandler(){
         startValidation();
     }
+
+
+    /*function changeHandle({data}){
+        dispatch("input_name_changed", data);
+        on:input={changeHandle}
+    }*/
 </script>
 
 <label>
     <span>{label}</span>
-    <input {placeholder} {id} name={id} {type} {required} {pattern} {value}>
+
+    {#if type === "text"}
+        <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
+        type = "text">
+    {:else if type === "number"}
+        <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
+        type = "tel">
+    {/if}
 </label>
 
 <style>

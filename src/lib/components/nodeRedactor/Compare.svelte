@@ -3,7 +3,9 @@
     import Input from "$lib/components/CntrElem/Input.svelte";
     import { compareOptions } from "$lib/scripts/stores"; 
 
-    export let forId = "condition_rule"
+    export let forId = "condition_rule";
+    export let id;
+    export let trigger;
 
 </script>
 
@@ -13,13 +15,14 @@
 
 
     <div class="line">
-        <DropDown id={forId} isWithIcon={false} name="condition" options={compareOptions}
+        <DropDown {id} buildTypeid={forId} isWithIcon={false} name="condition" options={compareOptions}
         --padding=".125rem 1.8rem .125rem 1rem"
         --padding-options=".125rem 1rem"/>
 
         <!--<div style="width: 100%">-->
 
-            <Input id={"condition_value"} placeholder={"значение"}
+            <Input {id} placeholder={"значение"}
+            value={trigger} name="trigger"
             --border-color="var(--light-blue)"
             --padding=".1rem 1rem"
             --color="inherit"

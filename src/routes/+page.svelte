@@ -18,7 +18,7 @@
     let cleanHtml = '';
 
     /*console.log("HTML: ", html);*/
-    console.log("GRAPH: ", graph);
+    /*console.log("GRAPH: ", graph);*/
 
     //TODO убрать тестовую реализацию графа
     graph = {
@@ -91,7 +91,21 @@
 		"x": 10,
 		"y": 450,
 		"activ": true
-	}
+	},
+
+    "6": {
+        "parent_id": null,
+		"name": "Не привязанный узел",
+		"description": "узел с зависимостями, condition сравнивает content верхнего узла со своим trigger (операторы: gt, lt, gte, lte, equal, not_equal, in, not_in, in_range, not_in_range)",	
+		"data_type": "string",
+		"node_type": "text",
+		"content": "Текст не привязанного блока",
+		"condition": null, 
+		"trigger": null,
+		"x": 300,
+		"y": 450,
+		"activ": true
+    }
 }
 
     if(locals.error){
@@ -131,7 +145,7 @@
         </div>
         <div class="redactors">
             <div class="element element__left">
-                <Tabs id={"left"} tabNames={["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"]}/>
+                <Tabs id={"left"} tabNames={["Схема 1", "Схема 2"]}/>
                 <TopControllBar />
                 <AddButton --width="3.4rem" --height="3.4rem"/>
                 <SVGMain />
@@ -141,7 +155,7 @@
             <!--<div class="devider"></div>-->
 
             <div class="element">
-                <Tabs id={"right"} tabNames={["Схема 1", "Схема 2"]}/>
+                <Tabs id={"right"} tabNames={["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"]}/>
                 <DocWriter html={cleanHtml}/>
             </div>
     </div>  

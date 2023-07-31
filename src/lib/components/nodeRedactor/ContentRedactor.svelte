@@ -7,6 +7,7 @@
     export let label ="Название блока";
     export let rows = 1;
     export let node_type;
+    export let value = '';
 
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
 
@@ -46,6 +47,11 @@
     function blurHandler(){
         startValidation();
     }
+
+
+    function inputHandle(e){
+        
+    }
 </script>
 
 <label class={ (node_type === "checkbox" || node_type === "radiobutton") ? "height_100" : "" }>
@@ -56,7 +62,9 @@
         <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
         там где он есть сделан больший паддинг справа. это регулируется классом -->
         <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off" {rows}
-        class={ (node_type === "checkbox" || node_type === "radiobutton") ? "normal_padding" : "big_padding" }></textarea>
+        {value}
+        class={ (node_type === "checkbox" || node_type === "radiobutton") ? "normal_padding" : "big_padding" }
+        on:input={inputHandle}></textarea>
 
         <!-- Некоторые текстовые поля имеют переключатели -->
         {#if id === "content"}

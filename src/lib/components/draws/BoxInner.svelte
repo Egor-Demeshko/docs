@@ -1,9 +1,10 @@
 <script>
     export let name = "ТЕСТ";
     export let node_type = "text";
-    export let isLinked = true;
+    export let isLinked = false;
+    export let gotConditions = false;
 
-    $: dashed_border = (isLinked) ? true : false;
+    $: dashed_border = (gotConditions) ? true : false;
 
     /*
         Компонент используется для отображения внутренних элементов в блоке на канве

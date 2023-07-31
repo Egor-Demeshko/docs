@@ -37,11 +37,15 @@
                         //совместная подствека с блоками текста.
                         //TODO проверить возможно перемеенная active и эта выполняют одно и тоже
   
-  $: isBlockChoosen = ($activeBlocks.has(id)) ? "isBlockChoosen" : ''; // управляет подствекой элемента, елси блок или связанная переменная выбраны.кликнуты
+  $: isBlockChoosen = ($activeBlocks.has(id)) ? "isBlockChoosen" : 
+                      ($blockClickedId === id)? "isBlockChoosen" : ""; 
+  
+  
+  // управляет подствекой элемента, елси блок или связанная переменная выбраны.кликнуты
 /**переопределние класс отображение не активного блока, если флаг актив false*/
   $: box_inactive = (active) ? "" : "box_inactive";
 
-  /** обновляются данные в случае перетаскивания блока*/
+  /** обновляются данные в случае перетаскивания блока, и других изменений*/
   nodes.subscribe( (allBlocksValues) => {
 
     allBlocksValues.forEach( ( obj )=> {
@@ -50,6 +54,8 @@
         console.log("[BOX]: nodes.subscribe x: ", x);*/
         if(x != obj.x) x = obj.x;
         if(y != obj.y) y = obj.y;
+        if(name !== obj.name) name = obj.name;
+        if(node_type !== obj.node_type) node_type = obj.node_type;
         
         parent = obj.parent || parent;
         width = obj.width  || width;
@@ -137,7 +143,7 @@ function addConnection(e){
 
 
 function focusIn(){
-    console.log("[BOX]: focusin handler");
+    //console.log("[BOX]: focusin handler: id", id);
 
     activeBlocks.update( (set) => {
         set.add(id);
@@ -145,6 +151,7 @@ function focusIn(){
     });
 
     $storeForSimpleTexts.forEach( (elObj) => {
+        //console.log("[BOX]: trying to set active");
         elObj.setActive(id);
     });
 }
@@ -152,7 +159,7 @@ function focusIn(){
 
 function focusOut(){
 
-    console.log("[BOX.FOCUSOUT]: block id, delete: ", id);
+    //console.log("[BOX.FOCUSOUT]: block id, delete: ", id);
 
     activeBlocks.update( ( set ) => {
         set.delete(id);
@@ -185,10 +192,14 @@ function focusOut(){
       on:focus={ focusIn }
       on:blur={ focusOut }
       class="box">
-          <BoxInner {name} {node_type} isLinked={ (condition && trigger) ? true : false }/>
+          <BoxInner {name} {node_type} 
+              gotConditions={ (condition && trigger) ? true : false}
+              isLinked={ (parent) ? true : false }
+              />
     </foreignObject>
 
-      
+
+          
     {#if isBlockChoosen}
         {#if pointDown}
         <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
@@ -207,8 +218,6 @@ function focusOut(){
           </foreignObject>
         {/if}
     {/if}
-
-  
 
 
 

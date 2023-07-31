@@ -5,6 +5,8 @@
     export let required = false;
     export let pattern = '.*';
     export let value = '';
+    export let name = '';
+    import syncDataInNodesStores from "$lib/scripts/controllers/syncDataInNodesStores.js";
 
     let valid = '';
     let invalid = '';
@@ -42,10 +44,17 @@
     function blurHandler(){
         startValidation();
     }
+
+
+    function changeHandle(e){
+        syncDataInNodesStores(id, name, +e.target.value);
+    }
 </script>    
 
-<input {placeholder} {id} name={id} {required} {pattern} {type} {value}
+<input {placeholder} {id} {name} {required} {pattern} {type} {value}
 on:blur={blurHandler}
+on:change={changeHandle}
+bind:this={input}
 />
 
 <style>
@@ -57,6 +66,7 @@ on:blur={blurHandler}
         width: 100%;
         color: var(--color);
         background-color: var(--background);
+        flex: 1 0;
     }
 
 
@@ -64,6 +74,7 @@ on:blur={blurHandler}
         color: var(--faded-gray-blue);
         font-style: italic;
     }
+
 
 
 </style>

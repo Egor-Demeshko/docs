@@ -4,7 +4,9 @@
     export let active = false;
     export let id;
     export let parentId = '';
-    //TODO id должно быть уникальным для все табов на странице.
+    
+    //при первой отрисовке, первые вкладки сдева и справа делаем активными.
+    if(active) activeTabId.update( (obj) => ({...obj, [parentId]: id}));
 
     $: active = ( id === $activeTabId[parentId] ) ? true : false;
     $: activeTab =  (active) ? "activeTab" : "ordinary";
@@ -14,7 +16,11 @@
                     (id === $activeTabId[parentId] && id === 0) ? "rightShadow" : "leftShadow";
     $: zIndex = (id === $activeTabId[parentId]) ? $tabsQuantity[parentId] :
                 (id > $activeTabId[parentId]) ? $tabsQuantity[parentId] - id : id;
-    $: console.log(`activetab, ${parentId}`, { "activeTab id": $activeTabId[parentId], "current id": id, "quantity": $tabsQuantity[parentId]});
+    /*$: console.log(`activetab, ${parentId}`, { 
+                                                "parent_ID": parentId,
+                                                "activeTab id": $activeTabId[parentId], 
+                                                "current id": id, 
+                                                "quantity": $tabsQuantity[parentId]});*/
     
 
     function handelClick(){
