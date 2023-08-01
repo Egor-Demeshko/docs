@@ -9,10 +9,10 @@
     --white: #FFFFFF;
     --faded-middle-blue: #627B8F;
     --faded-gray-blue: #97A7B4;
-    --light-slate-gray: #7890A1 
+    --light-slate-gray: #7890A1;
 
 
-
+    --doc-element-bg: var(--light-blue);
 
 
 /*
@@ -24,9 +24,9 @@
     /** Цвета элементов */
     /*--elem-bg: #B0B0B0;
     --elem-bg-hover: var(--black);
-    --elem-color: var(--white);
+    --elem-color: var(--white);*/
 
 
-    --active-node-bg: var(--orange);
-    --node-bg: var(--blue);*/
+    /*--active-node-bg: var(--orange);*/
+   /* */
 }

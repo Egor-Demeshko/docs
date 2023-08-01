@@ -1,3 +1,5 @@
+import { blockClickedId } from "/src/lib/scripts/stores";
+
 export default class SimpleText{
     #domLinks = [];
 
@@ -20,7 +22,16 @@ export default class SimpleText{
             
         } else {
             throw new Error("text elements: couldn't connect elements with document");
-        }     
+        }
+
+
+        this.#createListeners();
+        
+        /*this.#domLinks.forEach( (el) => {
+            el.addEventListener("pointerenter", (event) => {
+                console.log("[DocWriter]: focus event");
+            });
+        });*/
     }
 
 
@@ -91,5 +102,34 @@ export default class SimpleText{
         this.#domLinks.forEach( (domElem) => {
             domElem.classList.remove("doc_active");
         });
+    }
+
+
+/**добавляем слушатели событий */
+    #createListeners(){
+        //создать focus nobubles обрабатывает для визуализации таб в основном
+        //blur    blur nobubles  работает для визуализации таб в основном
+        //pointerenter    имитация hover. нужно для одновременного подсвечивания всех элементов
+        //pointerleave     имитация hover. нужно для одновременного подсвечивания всех элементов
+        this.#domLinks.forEach( (domLink) => {
+            domLink.addEventListener("focus", this.#focusHandle.bind(this));
+            domLink.addEventListener("blur", this.#blurHandle.bind(this));
+
+            /**mouse enter будем обрабатывать на root */
+        });
+
+
+    }
+
+
+    #focusHandle(){
+
+        blockClickedId.set(this.id);
+        this.setActive(this.id);
+    }
+
+
+    #blurHandle(){
+        this.setInactive(this.id);
     }
 }    

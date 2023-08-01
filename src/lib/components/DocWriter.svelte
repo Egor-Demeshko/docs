@@ -47,10 +47,16 @@
     :global(.doc_elements){
         position: relative;
         display: inline-block;
-        background-color: var(--node-bg);
+        background-color: var(--doc-element-bg);
         transition: background 400ms ease;
     }
 
+
+    :global(.doc_elements:hover){
+        background-color: var(--pale-orange);
+    }
+
+    /*
     :global(.doc_elements:before){
         content: " ";
         position: absolute;
@@ -61,7 +67,7 @@
         width: 6px;
         height: 100%;
         border-radius: 6px;
-        border-left: 4px solid var(--node-bg);
+        border-left: 4px solid var(--doc-element-bg);
     }
 
     :global(.doc_elements:after){
@@ -76,7 +82,7 @@
         border-radius: 6px;
         border-right: 3px solid var(--node-bg);
     }
-
+*/
 
     :global(.doc_active){
         background-color: var(--orange);

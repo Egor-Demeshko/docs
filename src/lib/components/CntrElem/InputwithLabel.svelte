@@ -75,7 +75,8 @@
         flex-flow: column;
         align-items: start;
         gap: 0.25rem;
-        font-weight: 400;      
+        font-weight: 400;    
+        width: 100%;  
     }
 
     span{

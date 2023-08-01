@@ -1,7 +1,10 @@
 <script>
     export let id;
+    export let node_type = '';
 
-    $: isText = true;
+    $: isText = false;
+    $: node_type = (isText) ? "droplist" : "radiobutton";
+
 
     function clickHandle(){
         isText = !isText;

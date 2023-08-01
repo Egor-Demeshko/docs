@@ -54,7 +54,7 @@ export const linesStore = writable([]);
 export const activeBlocks = writable(new Set());
 
 /**
- * айди блоков из поля редактирования, которые были кликнуты
+ * айди блока из поля редактирования, которое было кликнуто
  */
 export const blockClickedId = writable(1);
 /* ___ END DRAWERS ____ */

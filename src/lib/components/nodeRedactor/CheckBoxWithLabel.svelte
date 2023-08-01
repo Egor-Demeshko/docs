@@ -1,5 +1,5 @@
 <script>
-    let isChecked = true;
+    export let isChecked = true;
 </script>
 
 <label>

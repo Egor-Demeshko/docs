@@ -93,10 +93,10 @@
         />
 
         {#if node_type === "checkbox"}
-            <CheckBoxWithLabel />
+            <CheckBoxWithLabel bind:isChecked={data.content}/>
         {/if}
-        {#if node_type === "radiobutton"}
-            <ToggleWhite />
+        {#if node_type === "radiobutton" || node_type === "droplist"}
+            <ToggleWhite id={data.id} bind:node_type={data.node_type}/>
         {/if}
 
     </div>
@@ -106,11 +106,11 @@
             выбор, что показывать, основан на типе узла который выбран-->
 
         {#if node_type === "text" || node_type === "entry"}
-            <ContentRedactor id={"content"} {node_type} label={"Содержание блока"} rows={4}
+            <ContentRedactor id={"content"} {node_type} label={"Содержание блока"} rows={6}
             placeholder={"Содержание отображается в тексте документа"} value={data.content}/>
             <ContentRedactor id={"description"} {node_type} label={"Описание блока"} 
             placeholder={"Описание будет отображаться в анкете"} 
-            value={data.description}/>
+            value={data.description} rows={3}/>
         {/if}
 
         {#if node_type === "checkbox"}
@@ -118,9 +118,9 @@
             value={data.description}/>
         {/if}
 
-        {#if node_type === "radiobutton"}
+        {#if node_type === "radiobutton" || node_type === "droplist"}
             <div class="radiobutton__wrapper">
-                <List />
+                <List id={data.id}/>
                 <ContentRedactor id={"description"} {node_type} label={"Описание блока"} value={data.description}/>
             </div>
         {/if}
@@ -137,6 +137,7 @@
         padding: 2rem 1.5rem 2rem 2rem;
         background-color: var(--middle-blue);
         width: 100%;
+        min-height: 22.75rem;
         gap: 2.6rem;
         justify-content: space-between;
     }
@@ -146,7 +147,7 @@
         display: flex;
         flex: 1;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: start;
         align-items: start;
     }
 
@@ -154,7 +155,7 @@
     .redactors{
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: start;
         width: 100%;
         flex: 3;
     }

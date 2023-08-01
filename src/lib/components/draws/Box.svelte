@@ -29,7 +29,7 @@
     trigger = ""
   } = node;
   /****/
-  let pointDown = true; // отображать ли кнопку подключения связи вниху
+  $: pointDown = (parent) ? false : true; // отображать ли кнопку подключения связи вниху
   let pointUp = true;  // отображать ли кнопку подключения связи вверху
   //let boxRootElement;
   let root;

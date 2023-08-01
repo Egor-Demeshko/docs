@@ -4,11 +4,11 @@ import { nodes } from "$lib/scripts/stores";
  * конкретного поля под именем, по айди блока.
  */
 export default function syncDataInNodesStore(id, fieldName, value){
-    console.log("[syncDataInNodesStore]: arguments: ",  {
+    /*console.log("[syncDataInNodesStore]: arguments: ",  {
                                                             id,
                                                             fieldName,
                                                             value
-                                                        });
+                                                        });*/
 
     nodes.update( (nodesData) => {
 
