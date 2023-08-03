@@ -76,6 +76,30 @@ export default class SimpleText{
         this.#domLinks.push(elem);
     }
 
+/**функция для обновления всех полей класса */
+    updateFromGraph(){
+        //бежим по графу. если данные отлчичаютя меняем
+        //если актив false ставим класс, no visible
+        //если актив visible то убираем этот класс.
+        nodes.update( (graph) => {
+            graph.forEach( ({id, name, content, active}) => {
+                if(id === this.#id){
+                    if(name && this.#name !== name) this.#name = name;
+                    if(content && this.#content !== content) this.#content = content;
+                    
+                    if(active){
+                        this.#domLinks.forEach( (domElem) => domElem.classList.remove("no_display"));
+                    } else {
+                        this.#domLinks.forEach( (domElem) => domElem.classList.add("no_display"));
+                    }
+                }
+            });
+
+            return graph;
+        });
+    }
+
+
     setActive(id){
         if(this.#id !== id) return;
         //console.log("[simpleText]: setting active: id=", id);

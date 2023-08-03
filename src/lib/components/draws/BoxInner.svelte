@@ -5,6 +5,7 @@
     export let gotConditions = false;
 
     $: dashed_border = (gotConditions) ? true : false;
+    $: console.log("[BoxInner]: gotCondition: ", gotConditions);
 
     /*
         Компонент используется для отображения внутренних элементов в блоке на канве

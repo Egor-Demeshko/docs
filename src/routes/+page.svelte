@@ -33,7 +33,7 @@
 		"trigger": null,
 		"x": 10,
 		"y": 50,
-		"activ": true
+		"active": true
 	},	
 	
 	"2": {
@@ -47,7 +47,7 @@
 		"trigger": null,
 		"x": 250,
 		"y": 50,
-		"activ": true
+		"active": true
 	},
 	
 	"3": {
@@ -61,7 +61,7 @@
 		"trigger": null,
 		"x": 10,
 		"y": 300,
-		"activ": true
+		"active": true
 	},
 	
 	"4": {
@@ -77,7 +77,7 @@
 		"trigger": null,
 		"x": 300,
 		"y": 300,
-		"activ": true
+		"active": true
 	},
 	
 	"5": {
@@ -91,7 +91,7 @@
 		"trigger": 2500.00,
 		"x": 10,
 		"y": 450,
-		"activ": true
+		"active": true
 	},
 
     "6": {
@@ -105,7 +105,34 @@
 		"trigger": null,
 		"x": 300,
 		"y": 450,
-		"activ": true
+		"active": true
+    },
+
+    "7": {
+        "parent_id": null,
+		"name": "НЕАКТИВНЫЙ",
+		"description": "вариант неактивного узла",	
+		"data_type": "string",
+		"node_type": "text",
+		"content": "Очень важный текст в договоре",
+		"condition": null, 
+		"trigger": null,
+		"x": 550,
+		"y": 350,
+		"active": false
+    },
+    "8": {
+        "parent_id": 1,
+		"name": "НЕАКТИВНЫЙ",
+		"description": "вариант неактивного узла со связью",	
+		"data_type": "string",
+		"node_type": "text",
+		"content": "Очень важный текст в договоре",
+		"condition": "equal", 
+		"trigger": "строка триггер",
+		"x": 50,
+		"y": 550,
+		"active": false
     }
 }
 

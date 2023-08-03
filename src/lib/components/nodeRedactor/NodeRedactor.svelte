@@ -107,7 +107,7 @@
         <FieldTypePicker id={data.id}/>
 
         <Compare id={data.id} 
-        trigger={(data.trigger) ? data.trigger : ''}/>
+        bind:trigger={data.trigger}/>
 
         <InputwithLabel bind:value={data.name} id={data.id}
         --background = "var(--light-blue)"

@@ -63,6 +63,11 @@
         background-color: var(--pale-orange);
     }
 
+
+    :global(.no_display){
+        display: none;
+    }
+
     /*
     :global(.doc_elements:before){
         content: " ";

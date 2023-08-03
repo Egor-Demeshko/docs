@@ -47,7 +47,7 @@
 
 
     function changeHandle(e){
-        syncDataInNodesStores(id, name, +e.target.value);
+        syncDataInNodesStores(id, name, e.target.value);
     }
 </script>    
 

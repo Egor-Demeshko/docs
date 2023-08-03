@@ -33,19 +33,20 @@
   let pointUp = true;  // отображать ли кнопку подключения связи вверху
   //let boxRootElement;
   let root;
-  let focusActive = ""; // отображении стилей блока при активном элемента. 
-                        //совместная подствека с блоками текста.
-                        //TODO проверить возможно перемеенная active и эта выполняют одно и тоже
   
   $: isBlockChoosen = ($blockClickedId === id)? "isBlockChoosen" : ""; 
   $: hoverLike = ($activeBlocks.has(id)) ? "isBlockChoosen" : "";
+
+  /**определяем какого вида границу блока рисовать. зависит от наличия условия триггера и condition в data <= $nodes
+  */
+  $: gotConditions = (condition && !(trigger == undefined || trigger == '' || trigger === null)) ? true : false;
   
   
-  // управляет подствекой элемента, елси блок или связанная переменная выбраны.кликнуты
 /**переопределние класс отображение не активного блока, если флаг актив false*/
   $: box_inactive = (active) ? "" : "box_inactive";
 
-  /** обновляются данные в случае перетаскивания блока, и других изменений*/
+
+  /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
   nodes.subscribe( (allBlocksValues) => {
 
     allBlocksValues.forEach( ( obj )=> {
@@ -56,12 +57,15 @@
         if(y != obj.y) y = obj.y;
         if(name !== obj.name) name = obj.name;
         if(node_type !== obj.node_type) node_type = obj.node_type;
+        if(condition !== obj.condition) condition = obj.condition;
+        if(trigger !== obj.trigger) trigger = obj.trigger;
         
         parent = obj.parent || parent;
         width = obj.width  || width;
         height = obj.height || height;
     });
   });
+
 
   /** если при первоначальное загрузке есть связь с блоком родителя, 
    * то рисуем линию, рисуется через стор
@@ -233,7 +237,7 @@ function pointerLeave(){
       on:pointerleave={ pointerLeave }
       class="box">
           <BoxInner {name} {node_type} 
-              gotConditions={ (condition && trigger) ? true : false}
+              {gotConditions}
               isLinked={ (parent) ? true : false }
               />
     </foreignObject>

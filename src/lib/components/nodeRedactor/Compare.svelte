@@ -22,7 +22,7 @@
         <!--<div style="width: 100%">-->
 
             <Input {id} placeholder={"значение"}
-            value={trigger} name="trigger"
+            bind:value={trigger} name={"trigger"}
             --border-color="var(--light-blue)"
             --padding=".1rem 1rem"
             --color="inherit"
