@@ -83,7 +83,7 @@ export const nodeOptions = writable([
         selected: false
     }, {
         text: "радиокнопка",
-        value: "radiobutton",
+        value: "select",
         selected: false
     }
 ]);

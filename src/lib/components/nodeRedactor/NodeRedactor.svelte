@@ -4,26 +4,39 @@
 	import Compare from "./Compare.svelte";
 	import ContentRedactor from "./ContentRedactor.svelte";
     import FieldTypePicker from "./FieldTypePicker.svelte";
-    import { nodeOptions, blockClickedId, nodes } from "$lib/scripts/stores";
+    import { nodeOptions, blockClickedId, nodes, storeForSimpleTexts } from "$lib/scripts/stores";
+    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
 
+
     //TODO сохранение состояния по комбинации cntl + S
 
-    /* компонент формирует интерфейс редактирования узла 
-     * имеет несколько вариантов отрисовки, вариант выбирается на основе 
-     * выбранного node_type и управляется коллекцией из svelte/stores = nodeOptions
-     * этот стор хранится в stores.js папке scripts
-    */
 
     /**получаем текущий активный node_type. выбирается на <FiledTypePicker> это дропдаун*/
     $: node_type = gainNodeType($nodeOptions);
-    //$: activeBlockId = $blockClickedId;
-
-    /** получаем data выбранного сейчас блока, для получения данных и перерисовки интерфейса*/
+    
+    /** получаем обьект data выбранного сейчас блока, для получения данных и перерисовки интерфейса
+     * фактически мы выдераем прямую ссылку на обьект данных, конкретного элемента.
+     */
     $: data = getBlockObj($blockClickedId);
+    
+
     $: if(data){
+        console.log("[NodeRedactor]: before elementsDataUpdate call. check data state", data);
+        console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        elementsDataUpdate(data);
+    } 
+
+
+    /**этот блок тригерритсся когда мы меняем что-то в DOM компонета. на*/
+   /* $: if(data){
+        console.log("[NodeRedactor]: if data BLOCK. EMPTY BLOCK" , data);
+        /**
+         * обновляем узел в списке узлов
+        */
+       /*
         nodes.update( (arrOfBlocksData) => {
             for(let i = 0; i < arrOfBlocksData.length; i++){
                 if( data.id === arrOfBlocksData[i]["id"]){
@@ -33,9 +46,21 @@
                 }
             }
             console.log("[NodeRedactor]: data updater, $: data: arrOfBlocksData", arrOfBlocksData);
+
             return arrOfBlocksData;
-        });
+        });*/
+   /* }*/
+
+
+    /**
+     * когда меняется вцелом состояния стора $nodes мы просто перерисовываем состояние компонента
+     *  через data = data. так как сам по себе data это прямая ссылка на нужные обьект в сторе.
+    */
+    $: if($nodes){
+        data = data;
+        console.log("[NodeRedactor]: if($NODES): NOW IT's empty block", $nodes);
     }
+    
 
 
     /*$: console.log("[NodeRedactor]: updated ", $nodes);*/
@@ -48,7 +73,7 @@
 
 
     function getBlockObj(activeBlockId){
-        //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
+        console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
         for(let i = 0; i < $nodes.length; i++){
             if($nodes[i]["id"] === activeBlockId){
@@ -95,8 +120,8 @@
         {#if node_type === "checkbox"}
             <CheckBoxWithLabel bind:isChecked={data.content}/>
         {/if}
-        {#if node_type === "radiobutton" || node_type === "droplist"}
-            <ToggleWhite id={data.id} bind:node_type={data.node_type}/>
+        {#if node_type === "select"}
+            <ToggleWhite id={data.id} bind:view_type={data.view_type}/>
         {/if}
 
     </div>
@@ -106,27 +131,28 @@
             выбор, что показывать, основан на типе узла который выбран-->
 
         {#if node_type === "text" || node_type === "entry"}
-            <ContentRedactor id={"content"} {node_type} label={"Содержание блока"} rows={6}
-            placeholder={"Содержание отображается в тексте документа"} value={data.content}/>
-            <ContentRedactor id={"description"} {node_type} label={"Описание блока"} 
+            <ContentRedactor id={data.id} display={"content"} {node_type} label={"Содержание блока"} rows={6}
+            placeholder={"Содержание отображается в тексте документа"} bind:value={data.content} bind:data_type={data.data_type}/>
+            <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
             placeholder={"Описание будет отображаться в анкете"} 
-            value={data.description} rows={3}/>
+            bind:value={data.description} rows={3}/>
         {/if}
 
         {#if node_type === "checkbox"}
-            <ContentRedactor id={"description"} {node_type} label={"Описание блока"} 
-            value={data.description}/>
+            <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
+            bind:value={data.description}/>
         {/if}
 
-        {#if node_type === "radiobutton" || node_type === "droplist"}
-            <div class="radiobutton__wrapper">
+        {#if node_type === "select"}
+            <div class="select__wrapper">
                 <List id={data.id}/>
-                <ContentRedactor id={"description"} {node_type} label={"Описание блока"} value={data.description}/>
+                <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} bind:value={data.description}/>
             </div>
         {/if}
     </div>
 
 </form>
+
 
 <style>
     form{
@@ -172,7 +198,7 @@
         transform: translate(-50%, -35%);
     }
 
-    .radiobutton__wrapper{
+    .select__wrapper{
         display: flex;
         justify-content: center;
         width: 100%;

@@ -96,7 +96,7 @@
         <div style="width: 100%">
             <svg style="width: 100%;">
                     <Box node={{ x: 10, y: 10 }}  />
-                    <Box node={{ x: 250, y: 10, id: 2, active: false,  node_type: "radiobutton" }}  />
+                    <Box node={{ x: 250, y: 10, id: 2, active: false,  node_type: "select" }}  />
             </svg>
         </div>
     </div>
@@ -118,7 +118,7 @@
                 <option value="entry">entry</option>
                 <option value="text">text</option>
                 <option value="checkbox">checkbox</option>
-                <option value="radiobutton">radiobutton</option>
+                <option value="select">select</option>
             </select>
             <NodeRedactor />
         </div>

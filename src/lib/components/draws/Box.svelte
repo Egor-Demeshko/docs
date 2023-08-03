@@ -37,8 +37,8 @@
                         //совместная подствека с блоками текста.
                         //TODO проверить возможно перемеенная active и эта выполняют одно и тоже
   
-  $: isBlockChoosen = ($activeBlocks.has(id)) ? "isBlockChoosen" : 
-                      ($blockClickedId === id)? "isBlockChoosen" : ""; 
+  $: isBlockChoosen = ($blockClickedId === id)? "isBlockChoosen" : ""; 
+  $: hoverLike = ($activeBlocks.has(id)) ? "isBlockChoosen" : "";
   
   
   // управляет подствекой элемента, елси блок или связанная переменная выбраны.кликнуты
@@ -145,10 +145,11 @@ function addConnection(e){
 function focusIn(){
     //console.log("[BOX]: focusin handler: id", id);
 
-    activeBlocks.update( (set) => {
+    /*activeBlocks.update( (set) => {
         set.add(id);
         return set;
-    });
+    });*/
+    blockClickedId.set(id);
 
     $storeForSimpleTexts.forEach( (elObj) => {
         //console.log("[BOX]: trying to set active");
@@ -161,14 +162,50 @@ function focusOut(){
 
     //console.log("[BOX.FOCUSOUT]: block id, delete: ", id);
 
-    activeBlocks.update( ( set ) => {
+    /*activeBlocks.update( ( set ) => {
         set.delete(id);
         return set;
-    });
+    });*/
+    blockClickedId.set(id);
 
     $storeForSimpleTexts.forEach( (elObj) => {
         elObj.setInactive(id);
     });
+}
+
+
+
+function pointerEnter(){
+    //тут возможно даже не надо блок активным типо делать.
+    //только для симпл классов сделать вызовз метода hoverLike
+
+    let elements = $storeForSimpleTexts;
+
+    for(let i = 0; i < elements.length; i++){
+        if(elements[i]["id"] !== id) continue;
+
+        elements[i].setHoverLike();
+        break;
+    }
+
+    elements = null;
+}
+
+
+function pointerLeave(){
+    //тут возможно даже не надо блок активным типо делать.
+    //только для симпл классов сделать вызовз метода inactive hoverlike
+
+    let elements = $storeForSimpleTexts;
+
+    for(let i = 0; i < elements.length; i++){
+        if(elements[i]["id"] !== id) continue;
+
+        elements[i].removeHoverLike();
+        break;
+    }
+
+    elements = null;
 }
 
 
@@ -184,6 +221,7 @@ function focusOut(){
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <foreignObject {x} {y} {width} {height} 
       class:isBlockChoosen 
+      class:hoverLike
       class:box_inactive
       tabindex=0
       role="tab"
@@ -191,6 +229,8 @@ function focusOut(){
       on:click={ () => blockClickedId.set(id)}
       on:focus={ focusIn }
       on:blur={ focusOut }
+      on:pointerenter={ pointerEnter }
+      on:pointerleave={ pointerLeave }
       class="box">
           <BoxInner {name} {node_type} 
               gotConditions={ (condition && trigger) ? true : false}
@@ -250,7 +290,8 @@ function focusOut(){
     }
 
 
-    .box_inactive:hover{
+    .box_inactive:hover,
+    .hoverLike{
         fill: var(--pale-orange);
         color: var(--pale-orange);
     }

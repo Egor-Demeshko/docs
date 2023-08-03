@@ -1,9 +1,10 @@
 <script>
     export let id;
-    export let node_type = '';
+    export let view_type = '';
 
     $: isText = false;
-    $: node_type = (isText) ? "droplist" : "radiobutton";
+    $: view_type = (isText) ? "radiobutton" : "drop_list";
+    
 
 
     function clickHandle(){
@@ -14,13 +15,14 @@
 
 <label>
     <span>Отображать элементы в анкете...</span>
-    <input {id} type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} on:click={clickHandle}>
+    <input {id} type="checkbox" name="view_type" value={ (isText) ? "radiobutton" : "drop_list"}
+        on:click={clickHandle}>
     <div class="toggle__tray">
         <div class="toggle__element">
     
                 <span class="toggle__text">{(isText) ? "группой радиокнопок" : "выпадающим списком"}</span>
     
-        </div>
+        </div>      
     </div>
 </label>
 

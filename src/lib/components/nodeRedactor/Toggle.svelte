@@ -1,7 +1,9 @@
 <script>
     export let id;
+    export let data_type = "";
 
     $: isText = true;
+    $: data_type = (isText) ? "string" : "integer";
 
     function clickHandle(){
         isText = !isText;

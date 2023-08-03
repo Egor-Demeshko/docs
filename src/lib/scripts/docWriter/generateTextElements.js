@@ -8,7 +8,7 @@ export default function generateTextElements(graph, html){
 
     graph.forEach( (obj) => {
         let id = obj.id;
-        html = html.replaceAll(`%id=(${id})%`, `<span class="doc_elements" data-simpleText="${id}" tabindex="0"></span>`);
+        html = html.replaceAll(`%id=(${id})%`, `<span class="doc_elements" data-element="${id}" tabindex="0"></span>`);
         arr.push(new SimpleText(obj));
     });
 

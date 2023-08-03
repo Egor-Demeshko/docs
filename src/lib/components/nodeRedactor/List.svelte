@@ -1,24 +1,31 @@
 <script>
     import DynamicInput from "$lib/components/CntrElem/DynamicInput.svelte";
     import InputwithLabel from "../CntrElem/InputwithLabel.svelte";
-    import { nodes } from "$lib/scripts/stores";
-    import syncDataInNodesStores from "$lib/scripts/controllers/syncDataInNodesStores.js";
-    import radioContentAndValuesChecker from "$lib/scripts/controllers/radioContentAndValuesChecker.js"
+    import { nodes, blockClickedId } from "$lib/scripts/stores";
+    import syncSeveralDatasInNodeStore from "$lib/scripts/controllers/syncSeveralDatasInNodeStore.js";
+    import radioContentAndValuesChecker from "$lib/scripts/controllers/radioContentAndValuesChecker.js";
+    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
 
     export let id = '';
+    
 
-    /**из графа это options. участвует в отображении элементов инпут, их количества*/
-    $: syncDataInNodesStores(id, "options", listElements);
-    $: listElements = gainDataFromNodes($nodes);
+    $: listElements = gainDataFromNodes($blockClickedId);
+    
+    /**обновляем NODES пакетом по нескольким значениям*/
+    $: if(listElements) syncSeveralDatasInNodeStore(id, { "options": listElements, "content": listElements[0]});
+
     $: console.log("[List]: listElements: ", listElements);
+    $: if($nodes){
+        listElements = listElements;
+    }
 
-    function gainDataFromNodes(nodes){
-        for(let i = 0; i < nodes.length; i++){
-            if(nodes[i]['id'] !== id) continue;
 
-            if(nodes[i]["id"] === id){
-                return nodes[i]["options"];
-            }
+    function gainDataFromNodes(blockId){
+        for(let i = 0; i < $nodes.length; i++){
+            if($nodes[i]['id'] !== blockId) continue;
+
+            
+            return $nodes[i]["options"];         
         }
     }
 
@@ -43,7 +50,7 @@
     */
     function deleteItem(e){
         //у каждого элемента есть айди. айди фактически порядковый номер в массиве.
-        let valueOfElementToBeDeleted = '';
+        /*let valueOfElementToBeDeleted = '';*/
         
         if(e.target.tagName === "path" || e.target.tagName == "svg"){
             let div = e.target.closest("div[id*=list]");
@@ -51,7 +58,7 @@
 
             listElements = listElements.filter( ( v, i) => {
                 if(i === id){ 
-                    valueOfElementToBeDeleted = v;
+                    /*valueOfElementToBeDeleted = v;*/
                     //console.log("[LIST]: deleteItem, click handle in filter function, valueOfElementToBeDeleted: ", valueOfElementToBeDeleted);
                     return false;
                 }
@@ -67,9 +74,9 @@
          * setTimeout использован для правильного реактивного потока данных.
          * без него не успевает обновится реактивно поле options
         */
-        if(valueOfElementToBeDeleted){
+        /*if(valueOfElementToBeDeleted){
             setTimeout( () => radioContentAndValuesChecker(valueOfElementToBeDeleted, id), 0);
-        }     
+        }*/     
     }
 </script>
 

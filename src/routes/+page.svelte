@@ -18,7 +18,7 @@
     let cleanHtml = '';
 
     /*console.log("HTML: ", html);*/
-    /*console.log("GRAPH: ", graph);*/
+    console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
     graph = {
@@ -69,8 +69,9 @@
 		"name": "Имя узла",
 		"description": "узел c радиобатоном - единственный выбор. При выборе добавляем в content одно из значений options (в дочерних узлах должны быть соответствующие зависимости)",	
 		"data_type": "string",
-		"node_type": "radiobutton",
+		"node_type": "select",
 		"options": ["красный","зелёный","синий"],
+        "view_type": "select",
 		"content": "зелёный",
 		"condition": null,
 		"trigger": null,

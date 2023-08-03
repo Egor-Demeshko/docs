@@ -1,7 +1,7 @@
 import { nodes } from "$lib/scripts/stores";
 
 /** @description функция используется для обновления данных в nodes сторе. тоесть обновление
- * конкретного поля под именем, по айди блока.
+ * конкретного поля под именем, по айди блока. по одному значению
  */
 export default function syncDataInNodesStore(id, fieldName, value){
     /*console.log("[syncDataInNodesStore]: arguments: ",  {

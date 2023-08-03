@@ -1,15 +1,17 @@
 <script>
-    export let id = "id";
+    export let display = "content";
     export let placeholder = "Описание будет отбражаться в анкете";
     export let required = false;
     export let pattern = '.*';
-    export let type = "text";
     export let label ="Название блока";
     export let rows = 1;
     export let node_type;
     export let value = '';
+    export let id = '';
+    export let data_type = '';
 
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
+    import { storeForSimpleTexts } from "$lib/scripts/stores";
 
     let valid = '';
     let invalid = '';
@@ -52,24 +54,54 @@
     function inputHandle(e){
         
     }
+
+
+    function focusTextArea(){        
+        let elements = $storeForSimpleTexts;
+
+        for(let i = 0; i < elements.length; i++){
+            if(elements[i]["id"] !== id) continue;
+            elements[i].setActive(id);
+
+            break;
+        }
+
+        elements = null;
+    }
+
+    
+    function blurTextArea(){
+        
+        let elements = $storeForSimpleTexts;
+        for(let i = 0; i < elements.length; i++){
+            if(elements[i]["id"] !== id) continue;
+            elements[i].setInactive(id);
+
+            break;
+        }
+
+        elements = null;
+    }
 </script>
 
-<label class={ (node_type === "checkbox" || node_type === "radiobutton") ? "height_100" : "" }>
+<label class={ (node_type === "checkbox" || node_type === "select") ? "height_100" : "" }>
     <span>{label}</span>
 
     <div class="textarea__wrapper">
 
         <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
         там где он есть сделан больший паддинг справа. это регулируется классом -->
-        <textarea {placeholder} {id} name={id} {type} {required} {pattern} autocomplete="off" {rows}
-        {value}
-        class={ (node_type === "checkbox" || node_type === "radiobutton") ? "normal_padding" : "big_padding" }
-        on:input={inputHandle}></textarea>
+        <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
+        bind:value={value}
+        class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
+        on:input={inputHandle}
+        on:focus={focusTextArea}
+        on:blur={blurTextArea}></textarea>
 
         <!-- Некоторые текстовые поля имеют переключатели -->
-        {#if id === "content"}
+        {#if display === "content"}
             <div class="toggle__position">
-                <Toggle />
+                <Toggle bind:data_type={data_type}/>
             </div>
         {/if}
 

@@ -9,7 +9,7 @@ export default function radioContentAndValuesChecker(deletedValue, id){
 
             if(dataObj.content === deletedValue){
                 dataObj.content = dataObj.options[0];
-                console.log("[radioContentAndValuesChecker] dataObj: ", dataObj);
+                /*console.log("[radioContentAndValuesChecker] dataObj: ", dataObj);*/
                 return arr;
             }
         

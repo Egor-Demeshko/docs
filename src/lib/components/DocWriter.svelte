@@ -20,6 +20,8 @@
 
 
 
+
+
 </script>
 
 
@@ -44,6 +46,7 @@
         position: relative;
     }
 
+    /* не удалять этот класс. на него валидируемся при событии*/
     :global(.doc_elements){
         position: relative;
         display: inline-block;
@@ -53,6 +56,10 @@
 
 
     :global(.doc_elements:hover){
+        background-color: var(--pale-orange);
+    }
+
+    :global(.documents_hoverlike){
         background-color: var(--pale-orange);
     }
 
@@ -87,7 +94,6 @@
     :global(.doc_active){
         background-color: var(--orange);
     }
-
 
     /**doc redactor*/
     :global(.ql-snow){
