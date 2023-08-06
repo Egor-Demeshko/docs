@@ -68,6 +68,7 @@
         height: 100%;
         border-radius: 18px 0 0 0;
         overflow-y: scroll;
+        caret-color: red;
     }
 
     .editor *{

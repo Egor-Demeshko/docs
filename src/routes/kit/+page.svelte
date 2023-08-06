@@ -17,6 +17,7 @@
     import ToggleWhite from "$lib/components/nodeRedactor/ToggleWhite.svelte";
 	import List from "../../lib/components/nodeRedactor/List.svelte";
     import Box from "$lib/components/draws/Box.svelte";
+    import Message from "$lib/components/Message.svelte";
 
     let node_type;
 
@@ -24,6 +25,11 @@
     $: console.log("[PAGE]: selected: ", node_type);
 
 </script>
+
+<svelte:document>
+    <script>
+    </script>
+</svelte:document>
 
 <main>
     <div class="wrapper">
@@ -98,6 +104,10 @@
                     <Box node={{ x: 10, y: 10 }}  />
                     <Box node={{ x: 250, y: 10, id: 2, active: false,  node_type: "select" }}  />
             </svg>
+        </div>
+
+        <div>
+            <Message message={`Содержание блока является текстом при выбранном типе содержания “число”`}/>
         </div>
     </div>
 

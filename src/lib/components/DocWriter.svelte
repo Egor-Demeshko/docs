@@ -46,6 +46,8 @@
         position: relative;
     }
 
+    
+
     /* не удалять этот класс. на него валидируемся при событии*/
     :global(.doc_elements){
         position: relative;
@@ -60,6 +62,14 @@
     }
 
     :global(.documents_hoverlike){
+        background-color: var(--pale-orange);
+    }
+
+    :global(.doc_elements.not_valid){
+        background-color: var(--peach);
+    }
+
+    :global(.doc_elements.not_valid:hover){
         background-color: var(--pale-orange);
     }
 

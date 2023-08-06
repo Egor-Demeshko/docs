@@ -9,6 +9,7 @@
     export let value = '';
     export let id = '';
     export let data_type = '';
+    export let validity;
 
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
     import { storeForSimpleTexts } from "$lib/scripts/stores";
@@ -16,6 +17,12 @@
     let valid = '';
     let invalid = '';
     let input;
+
+    $: not_valid = (validity?.status === "invalid" && validity?.err_data[0].field_name === display) ? true : false; 
+    /*$: console.log("[NODERedacto]: validity and disaply prop:  ", {
+        validity,
+        display
+    });*/
 
 
     function startValidation(){
@@ -87,7 +94,13 @@
 <label class={ (node_type === "checkbox" || node_type === "select") ? "height_100" : "" }>
     <span>{label}</span>
 
-    <div class="textarea__wrapper">
+    <div class="textarea__wrapper" class:not_valid>
+
+        <div class="error_mark">
+            <svg>
+                <use href="/assets/icons/all.svg#ex_mark"></use>
+            </svg>
+        </div>
 
         <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
         там где он есть сделан больший паддинг справа. это регулируется классом -->
@@ -96,7 +109,8 @@
         class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
         on:input={inputHandle}
         on:focus={focusTextArea}
-        on:blur={blurTextArea}></textarea>
+        on:blur={blurTextArea}
+        ></textarea>
 
         <!-- Некоторые текстовые поля имеют переключатели -->
         {#if display === "content"}
@@ -109,6 +123,10 @@
 </label>
 
 <style>
+    :root{
+        --border-radius: 15px;
+    }
+
     label{
         display: flex;
         flex-flow: column;
@@ -135,26 +153,64 @@
     }
 
 
+    /**отрисовка восклицательного знака*/
+    .error_mark{
+        width: calc(var(--border-radius) * 1.125);
+        height: 100%;
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+        background-color: var(--pumpkin);
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: none;
+        justify-content: start;
+        align-items: start;
+        padding: .75rem 0 0 .625rem;
+    }
+
+    .error_mark svg{
+        fill: var(--light-blue);
+        width: 2px;
+        max-height: 11px;
+    }
+
+
+    .not_valid .error_mark{
+        display: flex;
+    }
+    /********/
+
+
     textarea{
         border: none;
         background-color: var(--light-blue);
-        border-radius: 15px;
+        border-radius: var(--border-radius);
         color: var(--deep-blue);
         resize: vertical;
         scrollbar-width: 8px;
         scrollbar-color: var(--middle-blue) transparent;
         width: 100%;
         height: 100%;
+        transition: outline 600ms ease-in-out;
+        outline: 1px solid transparent;
+    }
+
+    textarea:hover{
+        outline: 1px solid var(--pale-orange);
+    }
+
+    .not_valid textarea{
+        outline: 1px solid var(--pumpkin);;
     }
 
 
     textarea.big_padding{
-        padding: .5rem 5.5rem .5rem 1rem;
+        padding: .5rem 5.5rem .5rem 1.75rem;
     }
 
 
     textarea.normal_padding{
-        padding: .5rem 1rem;
+        padding: .5rem 1rem .5rem 1.75rem;
     }
 
 
@@ -183,9 +239,11 @@
 
     }
 
+
     textarea::-webkit-scrollbar-thumb:hover{
         background-color: var(--middle-blue);
     }
+
 
     textarea::placeholder{
         color: var(--faded-gray-blue);

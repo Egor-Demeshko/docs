@@ -26,7 +26,8 @@
     width = 204, 
     height = 40,
     condition = "",
-    trigger = ""
+    trigger = "",
+    validity
   } = node;
   /****/
   $: pointDown = (parent) ? false : true; // отображать ли кнопку подключения связи вниху
@@ -44,6 +45,7 @@
   
 /**переопределние класс отображение не активного блока, если флаг актив false*/
   $: box_inactive = (active) ? "" : "box_inactive";
+  $: not_valid = (validity?.status === "invalid") ? true : false; 
 
 
   /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
@@ -63,6 +65,7 @@
         parent = obj.parent || parent;
         width = obj.width  || width;
         height = obj.height || height;
+        validity = obj.validity || validity;
     });
   });
 
@@ -227,6 +230,7 @@ function pointerLeave(){
       class:isBlockChoosen 
       class:hoverLike
       class:box_inactive
+      class:not_valid
       tabindex=0
       role="tab"
       on:pointerdown={ startDraging }
@@ -324,6 +328,19 @@ function pointerLeave(){
     
     .isBlockChoosen:hover~.point{
         color: var(--pale-orange);
+    }
+
+    .not_valid{
+      background-color: var(--pumpkin);
+    }
+
+    .not_valid.box{
+        fill: var(--deep-blue);
+        color: var(--deep-blue);
+    }
+
+    .not_valid.box:hover{
+        background-color: var(--peach);
     }
 
     

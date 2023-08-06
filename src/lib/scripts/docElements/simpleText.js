@@ -7,10 +7,13 @@ export default class SimpleText{
     #name = "";
     #focusUpdateEvent = false;
 
+
     constructor({id, name, content}){
         this.#id = id;
         this.#name = name;
         this.#content = content;
+
+
     }
 
     connect(root){
@@ -22,14 +25,19 @@ export default class SimpleText{
 
         if(links instanceof NodeList){
             this.#domLinks = Array.from(links);
-            this.#populateFields();
-            
+            this.#populateFields();            
         } else {
             throw new Error("text elements: couldn't connect elements with document");
         }
 
 
         this.#createListeners();
+        nodes.subscribe( this.validityStatusChanger.bind(this) );
+    }
+
+
+    isThisBlock(){
+
     }
 
 
@@ -129,6 +137,39 @@ export default class SimpleText{
     removeHoverLike(){
         this.#domLinks.forEach( (elem) => elem.classList.remove("documents_hoverlike"));
     }
+
+
+    /**считывает статус validity, меняет свой стиль */
+    validityStatusChanger(nodes){
+        for(let i = 0; i < nodes.length; i++){
+            let node = nodes[i];
+            if(node["id"] !== this.#id) continue;
+
+
+            try{
+                if(node?.validity.status === "valid") this.setValidState();
+                if(node?.validity.status === "invalid") {
+                    console.log("[simpletexts]: validityStatusChanger");
+                    this.setInvalidState();
+                }    
+            } catch {
+
+                break;
+            }
+
+        }        
+    }
+
+
+    setInvalidState(){
+        this.#domLinks.forEach( (elem) => elem.classList.add("not_valid"));
+    }
+
+
+    setValidState(){
+        this.#domLinks.forEach( (elem) => elem.classList.remove("not_valid"));
+    }
+
 
 
 /**добавляем слушатели событий */

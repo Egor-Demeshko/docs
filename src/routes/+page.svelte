@@ -9,6 +9,7 @@
 	import Tabs from "../lib/components/Tabs/Tabs.svelte";
     import LogoAndName from "$lib/components/LogoAndName.svelte";
 	import AddButton from "$lib/components/CntrElem/AddButton.svelte";
+    import MessagesContainer from "$lib/components/MessagesContainer.svelte";
 
     //receiving data from load function
     export let data;
@@ -105,7 +106,16 @@
 		"trigger": null,
 		"x": 300,
 		"y": 450,
-		"active": true
+		"active": true,
+        "validity": {
+            "status": "invalid",
+            "err_data": [
+                {
+                    "field_name": "content",
+                    "message": "Выбран тип данных число, а введены текстовые символы."
+                }
+            ]
+        }
     },
 
     "7": {
@@ -132,7 +142,7 @@
 		"trigger": "строка триггер",
 		"x": 50,
 		"y": 550,
-		"active": false
+		"active": false,
     }
 }
 
@@ -164,7 +174,6 @@
 </script>
 
 
-
 <main>
     <div class="background">
     </div>     
@@ -172,7 +181,9 @@
             <LogoAndName/>
         </div>
         <div class="redactors">
+
             <div class="element element__left">
+                <MessagesContainer />
                 <Tabs id={"left"} tabNames={["Схема 1", "Схема 2"]}/>
                 <TopControllBar />
                 <AddButton --width="3.4rem" --height="3.4rem"/>
@@ -229,8 +240,10 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        display: relative;
 
     }
+
 
     .redactors{
         display: flex;
@@ -241,6 +254,9 @@
         height: calc(100% - 5.5rem);
         width: 100%;
     }
+
+
+
 
    /* .devider{
         width: 4px;

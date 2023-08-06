@@ -11,6 +11,9 @@
     import List from "./List.svelte";
 
 
+
+
+
     //TODO сохранение состояния по комбинации cntl + S
 
 
@@ -98,7 +101,8 @@
 
 </script>
 
-<form>
+<form data-elements="node_redactor">
+
     <div class="arrow__position">
         <Arrow />
     </div>
@@ -132,7 +136,8 @@
 
         {#if node_type === "text" || node_type === "entry"}
             <ContentRedactor id={data.id} display={"content"} {node_type} label={"Содержание блока"} rows={6}
-            placeholder={"Содержание отображается в тексте документа"} bind:value={data.content} bind:data_type={data.data_type}/>
+            placeholder={"Содержание отображается в тексте документа"} bind:value={data.content} bind:data_type={data.data_type}
+            validity={data.validity}/>
             <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
             placeholder={"Описание будет отображаться в анкете"} 
             bind:value={data.description} rows={3}/>
@@ -166,6 +171,7 @@
         min-height: 22.75rem;
         gap: 2.6rem;
         justify-content: space-between;
+        z-index: 5;
     }
 
 
@@ -205,4 +211,6 @@
         height: 100%;
         gap: 2.5rem;
     }
+
+
 </style>

@@ -1,0 +1,108 @@
+<script>
+    import Message from "$lib/components/Message.svelte";
+    import { onMount } from "svelte";
+
+    /**reveived error messages*/
+    let messages = [];
+    let nodeRedactor;
+    let nodeCordinates;
+    let bottomCor;
+
+    onMount( () => {
+        nodeRedactor = document.querySelector("form[data-elements='node_redactor']");
+        nodeCordinates = nodeRedactor.getBoundingClientRect();
+        bottomCor = nodeCordinates.height + 8;
+
+    });
+
+    function errorHandle({ detail }){
+        let data = detail.err_data;
+        //console.log("[MessagesContainer]: errorHandel before push: ", data);
+
+        for(let i = 0; i < data.length; i++){
+            let {blockId, message} = data[i];
+            messages.push( {
+                blockId,
+                message
+            } );
+
+            messages = messages;
+        }
+
+        console.log("[MessagesContainer]: errorHandle: all error messages: ", messages);
+    }
+
+
+    function deleteMessageFromList(id, inMessage){
+        messages = messages.filter( (errObj) => {
+            if(errObj.message === inMessage && errObj.blockId === id)return false;
+            
+            return true;
+        });
+        
+        console.log("[MessagesContainer]: delete elements from messages: ", messages);
+    }
+</script>
+
+
+<svelte:head>
+    <script>
+        
+        setInterval(() => {
+            let event = new CustomEvent("error", {
+                detail: {
+                    status: "invalid",
+                    err_data: [ {
+                        field_name: "content",
+                        message: "тестовое сообщение для ошибки ДВА",
+                        blockId: 7
+                    }
+                    ],
+
+                }
+            });
+
+            console.log("[MeesagesContaier]: dispatching err event two: ", event);
+            window.document.dispatchEvent(event);
+        }, 15000);
+
+        setInterval(() => {
+            let event = new CustomEvent("error", {
+                detail: {
+                    status: "invalid",
+                    err_data: [ {
+                        field_name: "content",
+                        message: "первое тестовое сообщение для ошибки один.",
+                        blockId: 7
+                    }
+                    ],
+
+                }
+            });
+
+            console.log("[MeesagesContaier]: dispatching err event one: ", event);
+            window.document.dispatchEvent(event);
+        }, 11000);
+    </script>
+</svelte:head>
+
+<svelte:document on:error={errorHandle}></svelte:document>
+
+
+<div class="messages" style="bottom: {bottomCor}px">
+    {#each messages as {blockId, message}}
+        <Message {blockId} {message} closeMessageCallback={ deleteMessageFromList }/>
+    {/each}
+</div>
+
+<style>
+    .messages{
+        position: absolute;
+        right: 8px;
+        z-index: 1;    
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: end;
+    }
+</style>
