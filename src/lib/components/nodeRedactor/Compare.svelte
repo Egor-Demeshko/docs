@@ -6,6 +6,7 @@
     export let forId = "condition_rule";
     export let id;
     export let trigger;
+    export let validity;
 
 </script>
 
@@ -23,8 +24,9 @@
 
             <Input {id} placeholder={"значение"}
             bind:value={trigger} name={"trigger"}
+            {validity}
             --border-color="var(--light-blue)"
-            --padding=".1rem 1rem"
+            --padding=".1rem .1rem .1rem 1.125rem"
             --color="inherit"
             --background="transparent"
             --border-width="2px"

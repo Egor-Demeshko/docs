@@ -9,6 +9,7 @@
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
+    import validation from "$lib/scripts/controllers/validation";
 
 
 
@@ -27,8 +28,9 @@
     
 
     $: if(data){
-        console.log("[NodeRedactor]: before elementsDataUpdate call. check data state", data);
-        console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        validation(data);
+        console.log("[NodeRedactor]: after {validation} check data", data);
         elementsDataUpdate(data);
     } 
 
@@ -61,7 +63,7 @@
     */
     $: if($nodes){
         data = data;
-        console.log("[NodeRedactor]: if($NODES): NOW IT's empty block", $nodes);
+        console.log("[NodeRedactor]: {$NODES} store changed, trigger", $nodes);
     }
     
 
@@ -111,7 +113,7 @@
         <FieldTypePicker id={data.id}/>
 
         <Compare id={data.id} 
-        bind:trigger={data.trigger}/>
+        bind:trigger={data.trigger} validity={data.validity}/>
 
         <InputwithLabel bind:value={data.name} id={data.id}
         --background = "var(--light-blue)"
@@ -140,18 +142,18 @@
             validity={data.validity}/>
             <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
             placeholder={"Описание будет отображаться в анкете"} 
-            bind:value={data.description} rows={3}/>
+            bind:value={data.description} rows={3} validity={data.validity}/>
         {/if}
 
         {#if node_type === "checkbox"}
             <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-            bind:value={data.description}/>
+            bind:value={data.description} validity={data.validity}/>
         {/if}
 
         {#if node_type === "select"}
             <div class="select__wrapper">
                 <List id={data.id}/>
-                <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} bind:value={data.description}/>
+                <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} bind:value={data.description} validity={data.validity}/>
             </div>
         {/if}
     </div>

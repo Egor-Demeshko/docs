@@ -73,6 +73,10 @@
         background-color: var(--pale-orange);
     }
 
+    :global(.documents_hoverlike.not_valid){
+        background-color: var(--pale-orange);
+    }
+
 
     :global(.no_display){
         display: none;

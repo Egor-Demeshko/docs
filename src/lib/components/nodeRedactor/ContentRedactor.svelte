@@ -18,11 +18,22 @@
     let invalid = '';
     let input;
 
-    $: not_valid = (validity?.status === "invalid" && validity?.err_data[0].field_name === display) ? true : false; 
+    $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
     /*$: console.log("[NODERedacto]: validity and disaply prop:  ", {
         validity,
         display
     });*/
+
+    /**проверяем поля ошибок*/
+    function isCurrentField(){
+        let data = validity.err_data;
+
+        for(let i=0; i < data.length; i++){
+            if(data[i]?.field === display) return true;
+        }
+
+        return false;
+    }
 
 
     function startValidation(){
@@ -200,7 +211,7 @@
     }
 
     .not_valid textarea{
-        outline: 1px solid var(--pumpkin);;
+        outline: 1px solid var(--pumpkin);
     }
 
 

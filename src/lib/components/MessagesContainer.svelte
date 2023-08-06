@@ -29,7 +29,7 @@
             messages = messages;
         }
 
-        console.log("[MessagesContainer]: errorHandle: all error messages: ", messages);
+        console.log("[MessagesContainer]: {errorHandle}: all error messages: ", messages);
     }
 
 
@@ -47,7 +47,7 @@
 
 <svelte:head>
     <script>
-        
+        /*
         setInterval(() => {
             let event = new CustomEvent("error", {
                 detail: {
@@ -82,7 +82,7 @@
 
             console.log("[MeesagesContaier]: dispatching err event one: ", event);
             window.document.dispatchEvent(event);
-        }, 11000);
+        }, 11000);*/
     </script>
 </svelte:head>
 

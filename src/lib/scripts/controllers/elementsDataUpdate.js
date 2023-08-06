@@ -5,15 +5,15 @@ export default async function elementsDataUpdate({id, name, content}){
 
     /**обновляем данные самих элементов дом, а также классы которые ими управляют */
     storeForSimpleTexts.update( (arrayOfElementsObj) => {
-        console.log("[elementsDataUpdate]: ");
+        //console.log("[elementsDataUpdate]: ");
         for(let i = 0; i < arrayOfElementsObj.length; i++){
             if(arrayOfElementsObj[i]["id"] !== id) continue;
 
             arrayOfElementsObj[i].setTextData({name, content});
 
-            console.log("[ElementsDataUpdate]: $storeForSimpleTexts {name, content}: ", {
+           /* console.log("[ElementsDataUpdate]: $storeForSimpleTexts {name, content}: ", {
                 name, content
-            })
+            })*/
             break;
         }
 
