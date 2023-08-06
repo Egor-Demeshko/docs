@@ -20,16 +20,26 @@
         //console.log("[MessagesContainer]: errorHandel before push: ", data);
 
         for(let i = 0; i < data.length; i++){
-            let {blockId, message} = data[i];
+            let {blockId, message, err_id} = data[i];
+
+            //проблема. при первой валидации, если две ошибки сразу, то вторая не добавляется
+            for(let i = 0; i < messages.length; i++){
+                if(messages[i]["err_id"] !== err_id) continue;
+
+                if(messages[i]["err_id"] === err_id) return;
+            }
+
+
             messages.push( {
                 blockId,
-                message
+                message,
+                err_id
             } );
 
             messages = messages;
         }
 
-        console.log("[MessagesContainer]: {errorHandle}: all error messages: ", messages);
+        //console.log("[MessagesContainer]: {errorHandle}: all error messages: ", messages);
     }
 
 

@@ -27,7 +27,8 @@ export default function validation(data){
                 status: "invalid",
                 err_data: [ ...data.validity.err_data, {
                     field_name: key,
-                    message: "Поле обязательно для заполнения!"
+                    message: "Поле обязательно для заполнения!",
+                    err_id: 800
                 }]
             }
         }
@@ -45,7 +46,8 @@ export default function validation(data){
                 err_data: [...data.validity.err_data, {
                     field: "content",
                     message: "Выбран тип данных число, а введены буквенные символы.",
-                    blockId: data.id
+                    blockId: data.id,
+                    err_id: 801
                 }
                 ],
             }
@@ -78,7 +80,8 @@ export default function validation(data){
                 err_data: [...data.validity.err_data, {
                     field: "",
                     message: "Не указан родительский блок, нет связи",
-                    blockId: data.id
+                    blockId: data.id,
+                    err_id: 802
                 }
                 ],
             }
@@ -87,6 +90,7 @@ export default function validation(data){
 
         if(data.trigger && data.condition){
             let condition = data.condition;
+            debugger;
 
             console.log("[validation]: {trigger} wrong type for CONDITION");
 
@@ -96,7 +100,8 @@ export default function validation(data){
                                             err_data: [...data.validity.err_data, {
                                                 field: "trigger",
                                                 message: "Логические условия больше/меньше работают только с числами",
-                                                blockId: data.id
+                                                blockId: data.id,
+                                                err_id: 803
                                             }
                                             ],
                                         }
@@ -126,7 +131,8 @@ export default function validation(data){
                                 err_data: [...data.validity.err_data, {
                                     field: "trigger",
                                     message: "Значение родительского блока и значение условия сравнения дочернего блока должны быть одновременно или строкой (с числами) или только числами",
-                                    blockId: data.id
+                                    blockId: data.id,
+                                    err_id: 804
                                 }
                                 ],
                             }

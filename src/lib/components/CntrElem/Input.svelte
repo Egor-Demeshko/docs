@@ -17,7 +17,6 @@
 
     function isCurrentField(){
         let data = validity.err_data;
-        debugger;
 
         for(let i=0; i < data.length; i++){
             if(data[i]?.field === name) return true;
@@ -120,13 +119,18 @@
         display: none;
         justify-content: start;
         align-items: start;
-        padding: .75rem 0 0 .625rem;
+       
     }
 
     .error_mark svg{
         fill: var(--light-blue);
         width: 2px;
         max-height: 11px;
+        transform: translate(50%, -50%);  
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 
 
