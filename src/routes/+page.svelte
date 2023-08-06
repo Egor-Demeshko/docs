@@ -231,12 +231,13 @@
     }
 
     .element{
-        flex: 1;
+        flex: 2;
         width: 100%;
         position: relative;
     }
 
     .element__left{
+        flex: 3;
         height: 100%;
         display: flex;
         flex-direction: column;
