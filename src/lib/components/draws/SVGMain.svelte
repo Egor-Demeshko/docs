@@ -2,6 +2,7 @@
     import { drawRoot, linesStore, nodes } from "$lib/scripts/stores";
     import Line from "$lib/components/draws/Line.svelte";
     import Box from "$lib/components/draws/Box.svelte";
+	import PresentationLine from "$lib/components/draws/PresentationLine.svelte";
 
 let height = 3000;
 let width = "100%";
@@ -31,6 +32,7 @@ $: console.log("[SVGMAIN]: lines: ", lines);
 
 <div class="svg_wrapper">
     <svg id="playground" {width} {height} viewBox={`0 0 ${width} ${height}`} use:svgLoaded>
+        <PresentationLine />
         <g id=lines>
             {#each lines as {startId, endId}, i (i)}
                 <Line {startId} parentId={endId} />

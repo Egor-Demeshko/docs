@@ -1,7 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { drawRoot, nodes } from "$lib/scripts/stores"
-  import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId, parentConnection, childConnection } from "$lib/scripts/stores";
+  import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId, parentConnection, childConnection,
+  mouseLine } from "$lib/scripts/stores";
   import connectCreationReset from "$lib/scripts/eventHandlers/connectCreationReset.js";
   import boxClickHandler from "$lib/scripts/eventHandlers/boxClickHandler";
 	import BoxInner from "./BoxInner.svelte";
@@ -38,9 +39,6 @@
   let boxElement;
 
   $: parent = updateParent($nodes);
-
-  /**используется для визуализации создания связи между блоками*/
-  let initialBlock = false;
 
   /**отвечает за включение подстветки блока через тени
    * смысл основной такой. стор parentConnection при первом клике
@@ -89,7 +87,7 @@
   $: gotConditions = (condition && !(trigger == undefined || trigger == '' || trigger === null)) ? true : false;
   
   
-/**переопределние класс отображение не активного блока, если флаг актив false*/
+/**переопределние класс отображение неактивного блока, если флаг актив false*/
   $: box_inactive = (active) ? "" : "box_inactive";
   $: not_valid = (validity?.status === "invalid") ? true : false; 
 
@@ -406,6 +404,7 @@ function connectParentBlock(){
     end: null  
   } );
   setTimeout( () => document.addEventListener("click", connectCreationReset, {once: true}), 50);
+  mouseLine.set({x, y, width, height, sign: "parent"});
 }
 
 /**создаем в сторе childConnection обьект
@@ -433,6 +432,7 @@ function connectChildBlock(){
      });
      
     setTimeout( () => document.addEventListener("click", connectCreationReset, {once: true}), 50);
+    mouseLine.set({x, y, width, height, sign: "child"});
 
 
     function searchForTopBlock(blockId){
@@ -457,7 +457,6 @@ function connectChildBlock(){
 
 /**функция для улавливания второго клика при создании связи*/
 function secondStepOnParentConnect(e){
-  e.stopPropagation();
 
   /**если второй клик сам на себя, но до этого мы делаем проверкой и так это невозможным*/
   if($parentConnection.start === id){
@@ -511,7 +510,6 @@ function secondStepOnParentConnect(e){
 
 
 function secondStepOnChildConnect(e){
-    e.stopPropagation();
 
     childConnection.update( (connectObj) => {
         connectObj.end = id;
