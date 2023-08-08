@@ -157,7 +157,6 @@ export const childConnection = writable(false);
 /** отвечает за передачу данных и контроль линии, которая отрисовывается в момент создания связи
  * {
  *      x, y - блока
- *      mx, my - мышки
  * }
  */
 export const mouseLine = writable(false);

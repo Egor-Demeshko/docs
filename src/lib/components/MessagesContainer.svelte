@@ -5,15 +5,21 @@
     /**reveived error messages*/
     let messages = [];
     let nodeRedactor;
-    let nodeCordinates;
+    let nodeCordinates = '';
     let bottomCor;
 
     onMount( () => {
         nodeRedactor = document.querySelector("form[data-elements='node_redactor']");
+        updateCors();
+        document.addEventListener("redactor-сhanged", updateCors);
+    });
+
+
+    function updateCors(){
         nodeCordinates = nodeRedactor.getBoundingClientRect();
         bottomCor = nodeCordinates.height + 8;
+    }
 
-    });
 
     function errorHandle({ detail }){
         let data = detail.err_data;
