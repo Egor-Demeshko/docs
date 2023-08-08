@@ -1,7 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { drawRoot, nodes } from "$lib/scripts/stores"
-  import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId } from "$lib/scripts/stores";
+  import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId, parentConnection, childConnection } from "$lib/scripts/stores";
+  import connectCreationReset from "$lib/scripts/eventHandlers/connectCreationReset.js";
   import boxClickHandler from "$lib/scripts/eventHandlers/boxClickHandler";
 	import BoxInner from "./BoxInner.svelte";
   import BoxPoint from "./BoxPoint.svelte";
@@ -30,11 +31,56 @@
     validity
   } = node;
   /****/
-  $: pointDown = (parent) ? false : true; // отображать ли кнопку подключения связи вниху
-  let pointUp = true;  // отображать ли кнопку подключения связи вверху
-  //let boxRootElement;
+  $: pointUp = (parent) ? false : true; // отображать ли кнопку подключения связи вниху
+  let pointDown = true;  // отображать ли кнопку подключения связи вверху
   let root;
-  
+  let glow;
+  let boxElement;
+
+  $: parent = updateParent($nodes);
+
+  /**используется для визуализации создания связи между блоками*/
+  let initialBlock = false;
+
+  /**отвечает за включение подстветки блока через тени
+   * смысл основной такой. стор parentConnection при первом клике
+   * получается стартовое айди. Весь этот блок это для проверки 
+   * родительского подключения
+  */
+  $: if($parentConnection && $parentConnection.end === null){
+      let connectInfo = $parentConnection;
+
+      if(connectInfo.start !== id && isParentConnectionPossible(connectInfo)){
+            //console.log("[BOX]: {$parentConnection} create listener ", id);
+
+            glow = true;
+            boxElement.addEventListener("click", secondStepOnParentConnect, {once: true});
+      }
+
+  } else {
+            glow = false;
+            if(boxElement) {
+              //console.log("[BOX]: reset click lisneres");
+              boxElement.removeEventListener("click", secondStepOnParentConnect);      
+            }
+  }
+
+  $: if($childConnection && $childConnection.end === null){
+      let connectInfo = $childConnection;
+    
+      if(connectInfo.start !== id && isChildConnectionPossible(connectInfo)){
+          glow = true;
+          boxElement.addEventListener("click", secondStepOnChildConnect, {once: true});
+      } 
+  } else {
+      glow = false;
+      if(boxElement){
+        boxElement.removeEventListener("click", secondStepOnChildConnect);
+      }
+  }
+
+
+  /**ссылка на этот элемент Box в Dom*/
   $: isBlockChoosen = ($blockClickedId === id)? "isBlockChoosen" : ""; 
   $: hoverLike = ($activeBlocks.has(id)) ? "isBlockChoosen" : "";
 
@@ -93,7 +139,77 @@
     } catch {
       console.log('[BOX]: no root to draw');
     }
+/*
+    document.addEventListener("parent_connection", () => processNewParentConnection());
+    document.addEventListener("bottom_connection", () => processBottomConnection());
+    document.addEventListener("remove_answer", () => removeAnswer());*/
   });
+
+
+  /**обновляет свойство parent, так как оно не динамическое*/
+  function updateParent(nodes){
+      
+      for (let i = 0; i < nodes.length; i++) {
+        const element = nodes[i];
+
+        if(element["id"] !== id) continue;
+
+        return element["parent_id"];      
+      }
+      
+      return parent  ;  
+  }
+
+
+    //проверяем дополнительные параметры, при создании связи
+  function isParentConnectionPossible(connectInfo){
+    const data = $nodes;
+    var start = connectInfo.start;
+
+    //  - блок не может подключится к блоку, у которого блок на который можно отправить связь
+    //    который уже является дочерним
+
+    //ищем узел по цепочке со значением стартового узла
+    if(isStartInChain(id)) return false;
+
+
+    if(start === parent) return false;
+
+    return true;
+
+    function isStartInChain(currentblockId){
+
+      console.log('[BOX]: {isStartInChain} currentBlockId: ', currentblockId);
+        for(let i=0; i<data.length; i++){
+            if(data[i]["id"] !== currentblockId) continue;
+            
+            let nextParentId = data[i]["parent_id"];
+            if(!nextParentId) return false;
+            
+            if(nextParentId === start) {
+              return true;
+            };
+
+            return isStartInChain(nextParentId);
+        }
+    }
+  }
+
+  /**функция, при попытки создать дочернюю связь, проверяет блоки к которым можно подключиться*/
+  function isChildConnectionPossible(connectionInfo){
+      if(!connectionInfo.start) return false;
+      
+      /**topblockchain определяется прик клике и является самым верхним блоком в цепочке.
+       * к нему нельзя подключится, блоку который находится внизу той же цепи
+      */
+      if(connectionInfo.chainTopBlock === id)return false;
+
+      if(parent) return false;
+
+      return true;
+  }
+   
+
 
 
 /**
@@ -114,7 +230,6 @@ function startDraging(e){
 
 
     function coordinate(e){
-        let target = e.target.closest('div');
         let newX = x + e.movementX;
         let newY = y + e.movementY;
 
@@ -199,6 +314,7 @@ function pointerEnter(){
 }
 
 
+
 function pointerLeave(){
     //тут возможно даже не надо блок активным типо делать.
     //только для симпл классов сделать вызовз метода inactive hoverlike
@@ -215,6 +331,218 @@ function pointerLeave(){
     elements = null;
 }
 
+{
+  /********** ФУНКЦИИ СОЗДАНИЯ СВЯЗЕЙ ****************/
+
+  /** создаем "родительское соединение". у нас может быть родитель один, а детей у блока сколько угодно
+   * поэтому верхняя кнопка плюс, позволяет присоединиться к любым блокам, но один раз.
+   * генерируем слушательно которые будет слушать ответное событие о том что связь возможна.
+   * событие create_connection
+  *//*
+  function createParentConnection(){
+      console.log("[BOX]: {createParentConnection}");
+      document.addEventListener("create_connection", createConnection, {once: true});
+      initialBlock = true;
+
+
+      document.dispatchEvent(new CustomEvent("parent_connection"));
+  }
+  */
+  /**начинает процесс bottom*/
+  /*function createBottomConnection(){
+      document.addEventListener("create_connection", createConnection, {once: true});
+
+      document.dispatchEvent(new CustomEvent("bottom_connection"));
+  }*/
+
+
+
+  /** функция срабатывает при входящем событии добавления связи
+   * ее задача включить визуализацию на блоке что к нему можно подключиться
+   * зарегистрировать одноразовое событие клик на блоке.
+  */
+  /*function processNewParentConnection(){
+      //console.log("[BOX]: {proccessNewParentConnection}");
+      parentGlow.set(true);
+      boxElement.addEventListener("click", sendAnswer, {once: true});  
+  }
+
+  function processBottomConnection(){
+      bottomGlow.set(true);
+  }
+
+
+
+  function sendAnswer(){
+          //console.log("[BOX]: {sendAnswer}");
+          document.dispatchEvent( new CustomEvent("create_connection", {
+              detail: id
+          }) );
+
+          document.dispatchEvent(new CustomEvent("remove_answer"));  
+  }
+
+
+  function removeAnswer(){
+      //console.log('[BOX]: {removeAnswer}');
+      initialBlock = false;
+      boxElement.removeEventListener("click", sendAnswer);
+  }
+  */
+
+  /**функция работает после попытки создать связь. отвечает за получения айди блока из ответа.
+   * 
+  *//*
+  function createConnection(e){
+      console.log("[BOX]: {createConnection} runs, detail.id == ", e.detail);
+      parentGlow.set(false);
+  }*/
+}
+
+function connectParentBlock(){
+  //console.log("[BOX]: {connectParentBlock}");
+  parentConnection.set( {
+    start: id,
+    end: null  
+  } );
+  setTimeout( () => document.addEventListener("click", connectCreationReset, {once: true}), 50);
+}
+
+/**создаем в сторе childConnection обьект
+ * для старта отрисовки подстветки блоков которые можно подключить
+ * их предварительно валидации
+ * и продложения процесса подключения
+*/
+function connectChildBlock(){
+    //перед создание обьекта в сторе 
+    //необходимой найти самый верхний блок в цепочке.
+    //его айди и пометим в chainTopBlock
+    let chainTopBlock = undefined;
+    let allNodes = $nodes;
+
+    if(!parent) chainTopBlock = null;
+
+    if(parent){
+        chainTopBlock = searchForTopBlock(parent);
+    }
+
+    childConnection.set({
+        start: id,
+        end: null,
+        chainTopBlock
+     });
+     
+    setTimeout( () => document.addEventListener("click", connectCreationReset, {once: true}), 50);
+
+
+    function searchForTopBlock(blockId){
+        //ищем блок с ай как parentId
+        //смотри родителя этого блока
+        //если родитель есть запускаем рекурсию с айди родителя
+        //если нет родителя выходим из рекурсии с айди текущего блока
+
+        for (let i = 0; i < allNodes.length; i++) {
+            const element = allNodes[i];
+
+            if(element['id'] !== blockId) continue;
+
+            if(element["parent_id"]) return searchForTopBlock(element["parent_id"]);
+            break;            
+        }
+
+        return blockId;
+    }   
+}
+
+
+/**функция для улавливания второго клика при создании связи*/
+function secondStepOnParentConnect(e){
+  e.stopPropagation();
+
+  /**если второй клик сам на себя, но до этого мы делаем проверкой и так это невозможным*/
+  if($parentConnection.start === id){
+    parentConnection.set(false);
+    return;
+  }
+
+  parentConnection.update( (connectObj) => {
+      connectObj.end = id;
+      //console.log('[BOX]: {secondStep}, setting end id. received object', connectObj)
+      return connectObj;
+  });
+
+  nodes.update( (nodes) => {
+      for (let i = 0; i < nodes.length; i++) {
+          const element = nodes[i];
+
+          /**secondStepOnParentConnect функция работает при создании связи,
+           * срабатывает на втором кликнутом блоке. тоесть на блоке который мы выбираем как родитель.
+           * чтобы установить правильного родителя, мы теперь должны найти блок, с которого начинался
+           * процесс. стартовый блок.
+          */
+          if(element["id"] != $parentConnection.start) continue;
+
+          if(!element.parent_id){
+            element.parent_id = $parentConnection.end;
+          } else {
+            console.log("[Line creation error]: родитель уже назначен");
+          }
+          
+          /*console.log('[BOX]: nodes update ', {
+            element,
+          });*/
+
+          break;
+      } 
+
+    return nodes;
+  });
+
+  linesStore.update( ( lines ) => {
+    lines.push({
+        startId: $parentConnection.start,
+        endId: $parentConnection.end
+      });
+    return lines;
+  });
+
+  parentConnection.set(false);
+}
+
+
+function secondStepOnChildConnect(e){
+    e.stopPropagation();
+
+    childConnection.update( (connectObj) => {
+        connectObj.end = id;
+        console.log('[BOX]: {secondStep}, setting end id. received object', connectObj)
+        return connectObj;
+    });
+
+
+    /**обновляем данные в графе nodes*/
+    nodes.update( (nodes) => {
+        for (let i = 0; i < nodes.length; i++) {
+            const element = nodes[i];
+
+            if(element['id'] !== id) continue;
+
+            element.parent_id = $childConnection.start;
+            return nodes;
+        }
+    });
+
+    linesStore.update( ( lines ) => {
+      lines.push({
+          startId: $childConnection.end,
+          endId: $childConnection.start
+        });
+      return lines;
+    });
+
+    childConnection.set(false);
+}
+
 
 
 </script>
@@ -223,6 +551,7 @@ function pointerLeave(){
 
 
 <!-- bind:this={boxRootElement} -->
+<!-- bind:this={boxElement} -->
   
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -231,6 +560,8 @@ function pointerLeave(){
       class:hoverLike
       class:box_inactive
       class:not_valid
+      class:glow
+      bind:this={boxElement}
       tabindex=0
       role="tab"
       on:pointerdown={ startDraging }
@@ -249,26 +580,31 @@ function pointerLeave(){
 
           
     {#if isBlockChoosen}
-        {#if pointDown}
+        {#if pointUp}
         <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
           <foreignObject width="12" height="12" x={x + width / 2 - 6} y={y - 6}
-          class="point">
+          class="point" 
+          role="button"
+          on:click={connectParentBlock}>
             <BoxPoint />
           </foreignObject>
         {/if}
 
 
-        {#if pointUp}
+        {#if pointDown}
         <!--  Расчет центра точки квадрата считаем, координата икс(начало блока) + ширина блока/2 - ширина самой кнопки -->
           <foreignObject width="12" height="12" x={x + width / 2 - 6} y={y + height - 6}
-          class="point">
+          class="point" 
+          role="button"
+          on:click={connectChildBlock}
+          >
             <BoxPoint />
           </foreignObject>
         {/if}
     {/if}
 
 
-
+<!-- СТИЛИ  -->
 <style>
 
     /** стандартное отображение */
@@ -341,6 +677,11 @@ function pointerLeave(){
 
     .not_valid.box:hover{
         background-color: var(--peach);
+    }
+
+
+    .glow{
+      filter: drop-shadow(0 0 6px var(--orange));
     }
 
     

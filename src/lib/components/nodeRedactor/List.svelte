@@ -14,7 +14,7 @@
     /**обновляем NODES пакетом по нескольким значениям*/
     $: if(listElements) syncSeveralDatasInNodeStore(id, { "options": listElements, "content": listElements[0]});
 
-    $: console.log("[List]: listElements: ", listElements);
+    //$: console.log("[List]: listElements: ", listElements);
     $: if($nodes){
         listElements = listElements;
     }

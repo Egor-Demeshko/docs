@@ -50,7 +50,7 @@
             return true;
         });
         
-        console.log("[MessagesContainer]: delete elements from messages: ", messages);
+        //console.log("[MessagesContainer]: delete elements from messages: ", messages);
     }
 </script>
 

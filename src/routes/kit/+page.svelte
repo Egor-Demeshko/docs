@@ -22,7 +22,7 @@
     let node_type;
 
     $: node_type;
-    $: console.log("[PAGE]: selected: ", node_type);
+    //$: console.log("[PAGE]: selected: ", node_type);
 
 </script>
 

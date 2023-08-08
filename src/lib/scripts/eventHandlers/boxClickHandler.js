@@ -1,7 +1,7 @@
 import { activeBlocks, nodes, linesStore, blockClickedId } from "../stores";
 
 export default function boxClickHandler(endforLineId){
-    console.log(`[boxClickHandler]`);
+    //console.log(`[boxClickHandler]`);
     if(!endforLineId) return;
     if(!isBlockInstore()) return;
     

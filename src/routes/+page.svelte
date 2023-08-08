@@ -19,7 +19,7 @@
     let cleanHtml = '';
 
     /*console.log("HTML: ", html);*/
-    console.log("GRAPH: ", graph);
+    //console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
     graph = {

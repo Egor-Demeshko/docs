@@ -23,6 +23,8 @@ function svgLoaded(...args){
 }
 
 $: lines = $linesStore;
+$: if(lines) lines = lines;
+$: console.log("[SVGMAIN]: lines: ", lines);
 
 </script>
 
@@ -30,8 +32,8 @@ $: lines = $linesStore;
 <div class="svg_wrapper">
     <svg id="playground" {width} {height} viewBox={`0 0 ${width} ${height}`} use:svgLoaded>
         <g id=lines>
-            {#each lines as {startId, endId}}
-                <Line {startId} parentId={endId}/>
+            {#each lines as {startId, endId}, i (i)}
+                <Line {startId} parentId={endId} />
             {/each} 
         </g>
         {#each $nodes as node}

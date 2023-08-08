@@ -68,12 +68,12 @@ export default function validation(data){
         //проверить соотвествие данных в trigger и в родительском content
         //проверить чтобы было число-число или строка строка
         // определенному опоератору могут соотвествовать только строка-строка
-        console.log("[validation]: {trigger} start");
+        //console.log("[validation]: {trigger} start");
         if(!data.trigger && !data.parent_id) break trigger;
         
 
         if(data.trigger && data.condition && !data.parent_id){
-            console.log("[validation]: {trigger} NO PARENT BLOCK");
+           // console.log("[validation]: {trigger} NO PARENT BLOCK");
 
             data.validity = {
                 status: "invalid",
@@ -90,9 +90,9 @@ export default function validation(data){
 
         if(data.trigger && data.condition){
             let condition = data.condition;
-            debugger;
+            //debugger;
 
-            console.log("[validation]: {trigger} wrong type for CONDITION");
+            //console.log("[validation]: {trigger} wrong type for CONDITION");
 
             if(condition === "gt" || condition === "lt" || condition === "gte" || condition === "lte"){
                 if(isNaN(+data.trigger)) data.validity = {
@@ -124,7 +124,7 @@ export default function validation(data){
                         let parentData = node;
 
                         if(isNaN(+parentData.content) !== isNaN(+data.trigger) ){
-                            console.log("[validation]: {trigger} wrong type for PARENT AND CHILD");
+                            //console.log("[validation]: {trigger} wrong type for PARENT AND CHILD");
 
                             data.validity = {
                                 status: "invalid",
@@ -150,7 +150,7 @@ export default function validation(data){
 
     }
 
-    console.log('[VALIDATION.js FUNCTION]: custing event: ', data.validity);
+    //console.log('[VALIDATION.js FUNCTION]: custing event: ', data.validity);
 
     
     if(data.validity.status === "invalid") document.dispatchEvent(new CustomEvent("error", {

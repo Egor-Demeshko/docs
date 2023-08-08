@@ -19,8 +19,9 @@
 
 
     nodes.subscribe( (allBlocks) => {
-        /*console.log("[LINE]: ", allBlocks);*/
-        let parentToFind;
+                                    
+
+        let parentToFind;   
        
         for(let i = 0; i < allBlocks.length; i++){
             let obj = allBlocks[i];
@@ -28,14 +29,14 @@
             if(obj.id != startId || obj.parent_id != parentId) continue;
             
             if(obj.id){
-                
+                //console.log("[LINE]: subscribe");
                 startX = obj.x;
                 startY = obj.y;
                 startHeight = obj.height;
                 startWidth = obj.width;
                 parentToFind = obj.parent_id
-                
-                /*console.log("[LINE]: nodes.subscribe", {
+                /*
+                console.log("[LINE]: nodes.subscribe", {
                     startX,
                     startY,
                     startHeight,
@@ -59,7 +60,7 @@
         }
 
         d = drawLine()
-        //console.log(`[LINE]:  insubscribe: `, allBlocks);  
+        //console.log(`[LINE]:  in subscribe: `, allBlocks);  
     });
 
 
@@ -71,14 +72,18 @@
      * @param endBlock
      */
    function drawLine(){   
-        /*console.log("[Draw Line]");*/
+    
+        //console.log("[Draw Line]");
         let startBlockCenter = startX  + (startWidth / 4);
         let endBlockX = endX + (endWidth / 4);
         let halfOfYBetweenBlocks = (startY - ( endY + endHeight)) / 2;
         let sign = (startBlockCenter - endBlockX > 0) ? 1 : -1;
         
         
-        //console.log(`[obj.id checker] : `,);
+        /*console.log(`[obj.id checker] : `, {
+            startBlockCenter,
+            endBlockX
+        });*/
 
         d=`
             M ${ startBlockCenter } ${ startY - (markerHeight / 2)}
@@ -104,7 +109,7 @@
 </script>
 
 <!--   -->
-<g use:drawLine>
+<g use:drawLine >
     <defs>
         <!-- A marker to be used as an arrowhead -->
         <marker

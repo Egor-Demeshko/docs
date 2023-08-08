@@ -30,7 +30,7 @@
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         validation(data);
-        console.log("[NodeRedactor]: after {validation} check data", data);
+        //console.log("[NodeRedactor]: after {validation} check data", data);
         elementsDataUpdate(data);
     } 
 
@@ -78,7 +78,7 @@
 
 
     function getBlockObj(activeBlockId){
-        console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
+        //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
         for(let i = 0; i < $nodes.length; i++){
             if($nodes[i]["id"] === activeBlockId){
@@ -163,7 +163,7 @@
 
 <style>
     form{
-        display: flex;
+        display: none;
         position: absolute;
         bottom: 0;
         left: 0;

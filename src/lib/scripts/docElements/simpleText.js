@@ -75,7 +75,7 @@ export default class SimpleText{
     setTextData({name, content}){
         if(this.#content === content && this.#name === name) return;
         if((typeof name === "string" || !name)  && typeof content === "string"){
-            console.log("[simpleText Obj]: setTextData method before this.#update ", {name, content});
+            //console.log("[simpleText Obj]: setTextData method before this.#update ", {name, content});
             this.#update(name, content);
         }
     }
