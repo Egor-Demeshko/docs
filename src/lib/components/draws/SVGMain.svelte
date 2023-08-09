@@ -25,7 +25,6 @@ function svgLoaded(...args){
 
 $: lines = $linesStore;
 $: if(lines) lines = lines;
-$: console.log("[SVGMAIN]: lines: ", lines);
 
 </script>
 
@@ -34,8 +33,8 @@ $: console.log("[SVGMAIN]: lines: ", lines);
     <svg id="playground" {width} {height} viewBox={`0 0 ${width} ${height}`} use:svgLoaded>
         <PresentationLine />
         <g id=lines>
-            {#each lines as {startId, endId}, i (i)}
-                <Line {startId} parentId={endId} />
+            {#each lines as {startId, endId}}
+                <Line {startId} parentId={endId}/>
             {/each} 
         </g>
         {#each $nodes as node}
@@ -54,9 +53,5 @@ $: console.log("[SVGMAIN]: lines: ", lines);
         background-repeat: repeat;
         background-color: var(--white-blue);
         background-origin: border-box;
-    }
-
-    #playground{
-        /*background-color: transparent;*/
     }
 </style>

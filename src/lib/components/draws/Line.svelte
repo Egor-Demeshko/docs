@@ -1,5 +1,5 @@
 <script>
-  import { nodes } from "$lib/scripts/stores";
+  import { nodes, linesStore } from "$lib/scripts/stores";
 
     export let startId = "";  //айди текущего блока
     export let parentId = "";   //айди родителя куда надо рисовать связь
@@ -17,9 +17,16 @@
 
     let markerHeight = 8;
 
+    let deleteButtonX = null;
+    let deleteButtonY = null;
+    let width = 20;
+    let height = 20;
+
+    /**отображение кнопки удалить линию*/
+    let showDelete = false;
+
 
     nodes.subscribe( (allBlocks) => {
-                                    
 
         let parentToFind;   
        
@@ -89,22 +96,84 @@
             M ${ startBlockCenter } ${ startY - (markerHeight / 2)}
             S ${ endBlockX } ${endY + endHeight + 52} ${endBlockX} ${ endY + endHeight }
         `
+
+        {
+            let endBlockY = endY + endHeight;
+            //расчет точки для кнопки удалить связь
+            let dx = (Math.abs(startBlockCenter - endBlockX)) / 2 - width / 2;
+            let dy = (Math.abs(startY - endBlockY)) / 2 - height / 2;
+
+            deleteButtonX = (startBlockCenter > endBlockX) ? endBlockX + dx : startBlockCenter + dx;
+            deleteButtonY = (startY > endBlockY) ? endBlockY + dy + 28 : (startY + dy + endHeight - 28);
+
+            /*console.log('[Line]: {drawing delete button}: ', {
+                deleteButtonY,
+                startY,
+                endBlockY,
+                height,
+                dy
+            });*/
+        }
         
-       /* d = `
-            M ${startBlockCenter} ${ startY }
-            l ${0} ${-halfOfYBetweenBlocks + 30}
-            q 0 -30 ${20 * sign} ${-halfOfYBetweenBlocks + 30}
-            Q ${endBlockX } ${(endY + endHeight) + 40} ${endBlockX} ${endY + endHeight + 10}
-        `*/
-        //console.log(`[LINE]: DRAWLINE: startId: ${startId} parentId: ${parentId}`, d);
-        /*d=`
-            M ${startBlockCenter} ${ startY + startHeight }
-            t ${endBlockX - startBlockCenter} ${halfOfYBetweenBlocks * 2}
-        `*/
     return d;
 }
 
+function clickHandle(){
+    showDelete = true;
+}
 
+
+function deleteLine(){
+    //в nodes найти блок с id === start_id
+    //удалить запись parent_id
+    //найти линию по parent_id и start_id
+    showDelete = false;
+   
+    
+    linesStore.update( (lines) => {
+        return lines = lines.filter( (line) => {
+            if( line['startId'] === startId && line["endId"] === parentId ){
+                /*console.log('[Line]: linesStore update',{
+                    "lineStart": line.startId,
+                    "lineEndId": line["endId"],
+                    startId,
+                    parentId
+                });*/
+                return false;
+            }
+            return true;
+        });
+    });
+
+
+    nodes.update( function(allNodes){
+            /*console.log('[Line]: nodes.update:', {
+                startId,
+                parentId
+            });*/
+            
+            for(let i = 0; allNodes.length; i++){
+                const element = allNodes[i];
+                
+                if(element["id"] !== startId) continue;
+                
+                element["parent_id"] = null;
+                break;
+            }
+
+            return allNodes;
+    });
+
+
+    /** используем для отложенного исполения срабатывания обновления node. от этого зависит 
+     * прорисовка линий. если убрать, то сразу после удаление линия не исчеснет.
+     * тут уж такая архитектурная реализация.
+    */
+    setTimeout(() => {
+        nodes.update( (nodes) => nodes);
+    }); 
+
+}
 
 </script>
 
@@ -123,7 +192,19 @@
           <path d="M 0 0 L 8 4 L 0 8 z" />
         </marker>
       </defs>
-    <path {d} marker-start="url(#arrow)"/>
+    <path {d} marker-start="url(#arrow)" 
+    on:click={clickHandle}/>
+
+    {#if showDelete}
+        <foreignObject class="close" x={deleteButtonX} y={deleteButtonY} {width} {height}
+            on:click={deleteLine}>
+            <div>
+                <svg>
+                    <use href="/assets/icons/all.svg#plus"></use>
+                </svg>
+            </div>
+        </foreignObject>
+    {/if}
 </g>
 
 <style>
@@ -131,11 +212,41 @@
         fill: var(--middle-blue);
     }
 
+
     path{
         fill: none;
         stroke: var(--middle-blue);
-        stroke-width: 1;
+        stroke-width: 2;
         stroke-linecap: round;
         z-index: 0;
+        transition: filter 600ms ease-in-out;
+    }
+
+
+    path:hover{
+        filter: drop-shadow(0 0 4px var(--pumpkin));
+    }
+
+
+    .close div{
+        background-color: var(--pumpkin);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        height: 100%;
+        padding: .4rem;
+        cursor: pointer;
+        transition: background 400ms ease-out;
+    }
+
+    .close div:hover{
+        background-color: var(--orange);
+    }
+
+    .close div svg{
+        width: 100%;
+        height: 100%;
+        transform: rotateZ(45deg);
     }
 </style>
