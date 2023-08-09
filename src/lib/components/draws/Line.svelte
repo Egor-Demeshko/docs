@@ -117,7 +117,7 @@
 }
 
 function clickHandle(e){
-    console.log('[Line]: clickHandle');
+
     deleteButtonX = e.pageX - width / 2;
     deleteButtonY = e.layerY - height * 1.5;
     showDeleteStore.set({
@@ -127,6 +127,20 @@ function clickHandle(e){
         height
     });
     deleteLineFunction.set(deleteLine);
+
+    /**регистрируем слушатель чтобы убрать кнопку, если клик пришелся куда попало*/
+    setTimeout( () => {
+
+        document.addEventListener("click", () => {
+            if($showDeleteStore){
+                showDeleteStore.set(false);
+            }
+            if(deleteLineFunction){
+                deleteLineFunction.set(false);
+            }
+        }, {once: true});
+
+    }, 10);
 }
 
 
@@ -185,12 +199,10 @@ function deleteLine(){
 
 
 function pointerEnter(){
-    console.log("[Line]: invisible twin");
     hoverlike = true;
 }
 
 function pointerLeave(){
-    console.log("[Line]: NORMAL IN");
     hoverlike = false;
 }
 

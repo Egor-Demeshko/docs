@@ -128,6 +128,7 @@ export const compareOptions = writable([
 
 ]);
 
+
 /***сторы используются для поддержания процесса создания связей между блоками.
  * в рабочем состоянии имеют вид объекта
  * {
@@ -142,6 +143,7 @@ export const compareOptions = writable([
  */
 export const parentConnection = writable(false);
 
+
 /**смысл этого стора такой же как у верхнего, есть одно отличие. Добавляется свойство
  * chainTopBlock.
  * {
@@ -154,6 +156,7 @@ export const parentConnection = writable(false);
  */
 export const childConnection = writable(false);
 
+
 /** отвечает за передачу данных и контроль линии, которая отрисовывается в момент создания связи
  * {
  *      x, y - блока
@@ -162,8 +165,9 @@ export const childConnection = writable(false);
 export const mouseLine = writable(false);
 
 
-/**контролирует кнопка удаления */
+/**контролирует показ кнопки удаления линии */
 export const showDeleteStore = writable(false);
 
-/**тут хранится ссылка на функцию контроля удаления линии */
+
+/**тут хранится динамически, ссылка на функцию, которая контролирует удаление линии */
 export const deleteLineFunction = writable(null);

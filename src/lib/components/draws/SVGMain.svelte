@@ -25,8 +25,6 @@ function svgLoaded(...args){
 
 $: showDelete = $showDeleteStore;
 $: deleteLine = $deleteLineFunction;
-$: console.log("[SVGMAIN]: showdelete, ", showDelete);
-$: console.log("[SVGMAIN]: deleteLine, ", deleteLine);
 $: lines = $linesStore;
 $: if(lines) lines = lines;
 
@@ -77,7 +75,6 @@ $: if(lines) lines = lines;
     .close{
         filter: drop-shadow(0 0 3px var(--deep-blue));
         transform: translate(0);
-        z-index: 10;
     }
 
 
