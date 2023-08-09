@@ -160,3 +160,10 @@ export const childConnection = writable(false);
  * }
  */
 export const mouseLine = writable(false);
+
+
+/**контролирует кнопка удаления */
+export const showDeleteStore = writable(false);
+
+/**тут хранится ссылка на функцию контроля удаления линии */
+export const deleteLineFunction = writable(null);

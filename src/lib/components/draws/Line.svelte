@@ -1,5 +1,5 @@
 <script>
-  import { nodes, linesStore } from "$lib/scripts/stores";
+  import { nodes, linesStore, showDeleteStore, deleteLineFunction } from "$lib/scripts/stores";
 
     export let startId = "";  //айди текущего блока
     export let parentId = "";   //айди родителя куда надо рисовать связь
@@ -19,12 +19,10 @@
 
     let deleteButtonX = null;
     let deleteButtonY = null;
-    let width = 20;
-    let height = 20;
 
-    /**отображение кнопки удалить линию*/
-    let showDelete = false;
-
+    let hoverlike = false;
+    let width = 28;
+    let height = 28;
 
     nodes.subscribe( (allBlocks) => {
 
@@ -96,16 +94,16 @@
             M ${ startBlockCenter } ${ startY - (markerHeight / 2)}
             S ${ endBlockX } ${endY + endHeight + 52} ${endBlockX} ${ endY + endHeight }
         `
-
+/*
         {
             let endBlockY = endY + endHeight;
             //расчет точки для кнопки удалить связь
             let dx = (Math.abs(startBlockCenter - endBlockX)) / 2 - width / 2;
             let dy = (Math.abs(startY - endBlockY)) / 2 - height / 2;
 
-            deleteButtonX = (startBlockCenter > endBlockX) ? endBlockX + dx : startBlockCenter + dx;
-            deleteButtonY = (startY > endBlockY) ? endBlockY + dy + 28 : (startY + dy + endHeight - 28);
-
+            //deleteButtonX = (startBlockCenter > endBlockX) ? endBlockX + dx : startBlockCenter + dx;
+            //deleteButtonY = (startY > endBlockY) ? endBlockY + dy + 28 : (startY + dy + endHeight - 28);
+*/
             /*console.log('[Line]: {drawing delete button}: ', {
                 deleteButtonY,
                 startY,
@@ -113,13 +111,22 @@
                 height,
                 dy
             });*/
-        }
+        /*}*/
         
     return d;
 }
 
-function clickHandle(){
-    showDelete = true;
+function clickHandle(e){
+    console.log('[Line]: clickHandle');
+    deleteButtonX = e.pageX - width / 2;
+    deleteButtonY = e.layerY - height * 1.5;
+    showDeleteStore.set({
+        deleteButtonX,
+        deleteButtonY,
+        width,
+        height
+    });
+    deleteLineFunction.set(deleteLine);
 }
 
 
@@ -127,7 +134,7 @@ function deleteLine(){
     //в nodes найти блок с id === start_id
     //удалить запись parent_id
     //найти линию по parent_id и start_id
-    showDelete = false;
+    showDeleteStore.set(false);
    
     
     linesStore.update( (lines) => {
@@ -173,6 +180,18 @@ function deleteLine(){
         nodes.update( (nodes) => nodes);
     }); 
 
+    deleteLineFunction.set(false);
+}
+
+
+function pointerEnter(){
+    console.log("[Line]: invisible twin");
+    hoverlike = true;
+}
+
+function pointerLeave(){
+    console.log("[Line]: NORMAL IN");
+    hoverlike = false;
 }
 
 </script>
@@ -192,19 +211,12 @@ function deleteLine(){
           <path d="M 0 0 L 8 4 L 0 8 z" />
         </marker>
       </defs>
-    <path {d} marker-start="url(#arrow)" 
+    <path {d} class:hoverlike marker-start="url(#arrow)"/>
+    <path {d} class="invisible_twin" 
+    on:pointerenter={pointerEnter} 
+    on:pointerleave={pointerLeave}
     on:click={clickHandle}/>
 
-    {#if showDelete}
-        <foreignObject class="close" x={deleteButtonX} y={deleteButtonY} {width} {height}
-            on:click={deleteLine}>
-            <div>
-                <svg>
-                    <use href="/assets/icons/all.svg#plus"></use>
-                </svg>
-            </div>
-        </foreignObject>
-    {/if}
 </g>
 
 <style>
@@ -216,37 +228,23 @@ function deleteLine(){
     path{
         fill: none;
         stroke: var(--middle-blue);
-        stroke-width: 2;
+        stroke-width: 1;
         stroke-linecap: round;
-        z-index: 0;
-        transition: filter 600ms ease-in-out;
+        width: 4px;
+        transition: filter 400ms ease-in-out, stroke 400ms ease-in-out;
     }
 
 
-    path:hover{
-        filter: drop-shadow(0 0 4px var(--pumpkin));
+    path.hoverlike{
+        filter: drop-shadow(0 0 2px var(--pumpkin));
+        stroke: var(--deep-blue);
     }
 
 
-    .close div{
-        background-color: var(--pumpkin);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 6px;
-        height: 100%;
-        padding: .4rem;
-        cursor: pointer;
-        transition: background 400ms ease-out;
+    .invisible_twin{
+        fill: none;
+        stroke-opacity: 0;
+        stroke-width: 10;
     }
 
-    .close div:hover{
-        background-color: var(--orange);
-    }
-
-    .close div svg{
-        width: 100%;
-        height: 100%;
-        transform: rotateZ(45deg);
-    }
 </style>
