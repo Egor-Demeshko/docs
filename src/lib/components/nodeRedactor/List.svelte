@@ -37,12 +37,16 @@
         listElements.push('');
         listElements = listElements;
         
-        setTimeout( () => {
-            if(!wrapper) return;
+        if(listElements.length === 1){
+            setTimeout( () => {
+                if(!wrapper) return;
 
-            let forFocus = wrapper.querySelector("input");
-            forFocus.focus();
-        });
+                let forFocus = wrapper.querySelector("input");
+                forFocus.focus();
+                wrapper = null;
+            });
+        }
+
 
     }
 
