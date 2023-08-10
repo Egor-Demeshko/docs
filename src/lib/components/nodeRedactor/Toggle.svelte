@@ -8,12 +8,23 @@
     function clickHandle(){
         isText = !isText;
     }
+
+    function keypress(e){
+        e.stopPropagation();
+        if(e.key === "Enter" || e.key === " "){
+            let input = e.target.querySelector("input");
+            input.checked = !input.checked;
+            isText = !isText;
+        };
+    }   
 </script>
 
 
-<label>
-    <input {id} type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} on:click={clickHandle}>
-    <div class="toggle__element">
+<label tabindex="0" role="button" on:keypress={keypress}>
+    <input {id} type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} 
+    on:click={clickHandle}
+    tabindex="-1">
+    <div class="toggle__element" tabindex="-1">
 
             <span>{(isText) ? "текст" : "число"}</span>
 
@@ -28,7 +39,13 @@
         border: 2px solid var(--middle-blue);
         position: relative;
         height: 1.125rem;
-        background-color: var(--white-blue);
+        background-color: transparent;
+        transition: outline 400ms ease;
+        cursor: pointer;
+    }
+
+    label:focus{
+        outline: 2px solid var(--orange);
     }
 
     input{
@@ -38,6 +55,11 @@
         height: 0px;
         top: 0;
         left: 0;
+    }
+
+
+    input:hover{
+        outline: none;
     }
 
 

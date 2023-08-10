@@ -8,11 +8,11 @@
     export let name = '';
     import syncDataInNodesStores from "$lib/scripts/controllers/syncDataInNodesStores.js";
 
-    let valid = '';
-    let invalid = '';
+   /* let valid = '';
+    let invalid = '';*/
     let input;
 
-
+/*
     function startValidation(){
         let reg = new RegExp(pattern);
 
@@ -43,17 +43,15 @@
 
     function blurHandler(){
         startValidation();
-    }
+    }*/
 </script>    
 
 {#if type === 'text'}
     <input {placeholder} {id} {name} {required} {pattern} type="text" bind:value={value}
-    on:blur={blurHandler}
     bind:this={input}
     />
 {:else if type === "number"}
     <input {placeholder} {id} {name} {required} {pattern} type="tel" bind:value={value}
-    on:blur={blurHandler}
     bind:this={input}
     />
 {/if}
@@ -68,6 +66,8 @@
         color: var(--color);
         background-color: var(--background);
         flex: 1 0;
+        outline: none;
+        transition: border 400ms ease, background 400ms ease;
     }
 
 
@@ -75,6 +75,19 @@
         color: var(--faded-gray-blue);
         font-style: italic;
     }
+
+    input:hover{
+        background-color: var(--background-hover);
+        border: var(--border-width) solid var(--border-color-hover);
+    }
+
+    input:focus{
+        border: var(--border-width) solid var(--orange);
+        background-color: var(--background);
+        outline: none;
+    }
+
+
 
 
 

@@ -24,6 +24,7 @@
         flex-direction: column;
         gap: .25rem;
         width: 100%;
+        outline: 2px solid transparent;
     }
 
     label{

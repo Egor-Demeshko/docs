@@ -1,10 +1,19 @@
 <script>
     export let isChecked = true;
+
+    function keypress(e){
+        e.stopPropagation();
+        if(e.key === "Enter" || e.key === " "){
+            let input = e.target.querySelector("input");
+            input.checked = !input.checked;
+            isChecked = !isChecked;
+        };
+    }  
 </script>
 
-<label>
+<label tabindex="0" role="button" on:keypress={keypress}>
     <span>Значение по умолчанию</span>
-    <input name="is_nodename_default" type="checkbox" bind:checked={isChecked}>
+    <input name="is_nodename_default" type="checkbox" bind:checked={isChecked} tabindex="-1">
     <div class="icon">
         {#if isChecked}
             <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +30,15 @@
         position: relative;
         align-items: center;
         gap: .75rem;
+        outline: 2px solid transparent;
+        border-radius: 6px;
     }
+
+
+    label:focus{
+        outline: 2px solid var(--orange);
+    }
+
 
     label span{
         font-size: .875rem;

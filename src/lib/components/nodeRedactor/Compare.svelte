@@ -44,6 +44,7 @@
         background-color: transparent;
         width: 100%;
         transform: translateZ(0);
+        z-index: 1;
     }
 
     label{

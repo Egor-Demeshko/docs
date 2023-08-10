@@ -16,11 +16,12 @@
         let data = validity.err_data;
 
         for(let i=0; i < data.length; i++){
-            if(data[i]?.field === name) return true;
+            if(data[i]?.field_name === name) return true;
         }
 
         return false;
     }
+
 
 </script>
 
@@ -89,8 +90,19 @@
         outline: none;
     }
 
-            /**отрисовка восклицательного знака*/
-            .error_mark{
+    .input_wrapper{
+        position: relative;
+        width: 100%;
+    }
+
+
+
+    /**отрисовка стилей ошибки*/
+    .not_valid input{
+        border: var(--border-width) solid var(--pumpkin);
+    }
+
+    .error_mark{
         width: calc(var(--border-radius) * 1.125);
         height: 100%;
         border-radius: var(--border-radius) 0 0 var(--border-radius);
@@ -101,7 +113,6 @@
         display: none;
         justify-content: start;
         align-items: start;
-       
     }
 
     .error_mark svg{

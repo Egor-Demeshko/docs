@@ -7,6 +7,7 @@
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
 
     export let id = '';
+    let wrapper;
     
 
     $: listElements = gainDataFromNodes($blockClickedId);
@@ -24,8 +25,8 @@
         for(let i = 0; i < $nodes.length; i++){
             if($nodes[i]['id'] !== blockId) continue;
 
-            
-            return $nodes[i]["options"];         
+            console.log("[LIST]: {gainDataFromNodes}: ", $nodes[i]);
+            return $nodes[i]["options"] || [];         
         }
     }
 
@@ -35,6 +36,14 @@
         e.stopPropagation();
         listElements.push('');
         listElements = listElements;
+        
+        setTimeout( () => {
+            if(!wrapper) return;
+
+            let forFocus = wrapper.querySelector("input");
+            forFocus.focus();
+        });
+
     }
 
     /**фнукия управляет удаление элемента в списке
@@ -87,20 +96,27 @@
 <form id="list" class="list__wrapper" on:click={deleteItem} on:submit={ (e) => e.preventDefault() }>
     <span class="list__name">Элементы списка</span>
 
-    <div class="list">
+    <div class="list" >
         {#if listElements}
             {#each listElements as value, i (i)}
 
             <!-- первый элемент должен быть с надписью значение по умолчанию. Остальные идут отдельным списком, без подписи.
             поэтому первый элемент инпут с лайбел. остальные просто инпут. -->
                 {#if i === 0}
-                <div class="line" id={`list_${i}`}>
+                <div class="line" id={`list_${i}`} bind:this={wrapper}>
                     <InputwithLabel view_type={"list"} label={"Значение по-умолчанию"}
-                    bind:value={value}
+                    bind:value={value} name={"options"}
                     --color="var(--deep-blue)"
-                    --border="2px solid var(--middle-blue)"
+                    --border-width="2px"
+                    --border-color="var(--middle-blue)"
                     --label-color="var(--middle-blue)"
-                    --padding="0.375rem 1rem"/>
+                    --padding="0.375rem 1rem"
+                    --background-color="var(--white-blue)"
+                    --placeholder="var(--faded-gray-blue)"
+                    --background-hover="var(--light-gray-blue)"
+                    --border-color-hover="var(--middle-blue)"
+                    --border-radius="15px"
+                    />
                     
                     <svg class="icon" viewBox="0 0 10 10">
                         <path d="M9.07675 5.92428H5.91769V9.07572C5.91769 9.58797 5.50612 10 4.99444 10C4.48276 10 4.07119 9.58797 4.07119 9.07572V5.92428H0.923248C0.411568 5.91314 0 5.50111 0 4.98886C0 4.74276 0.100111 4.51002 0.266963 4.33185C0.444939 4.16481 0.678532 4.06459 0.923248 4.06459H4.07119V0.924276C4.07119 0.412027 4.48276 0 4.99444 0C5.50612 0 5.91769 0.412027 5.91769 0.924276V4.06459H9.07675C9.58843 4.06459 10 4.47661 10 4.98886C10 5.50111 9.58843 5.91314 9.07675 5.92428Z"/>
@@ -125,7 +141,9 @@
                             --border-width="2px"
                             --border-color="var(--middle-blue)"
                             --padding=".375rem 1rem"
-                            --font-size=".875rem"/>
+                            --font-size=".875rem"
+                            --background-hover="var(--light-gray-blue)"
+                            --border-color-hover="var(--middle-blue)"/>
 
                             <svg class="icon_not_translated" viewBox="0 0 10 10">
                                 <path d="M9.07675 5.92428H5.91769V9.07572C5.91769 9.58797 5.50612 10 4.99444 10C4.48276 10 4.07119 9.58797 4.07119 9.07572V5.92428H0.923248C0.411568 5.91314 0 5.50111 0 4.98886C0 4.74276 0.100111 4.51002 0.266963 4.33185C0.444939 4.16481 0.678532 4.06459 0.923248 4.06459H4.07119V0.924276C4.07119 0.412027 4.48276 0 4.99444 0C5.50612 0 5.91769 0.412027 5.91769 0.924276V4.06459H9.07675C9.58843 4.06459 10 4.47661 10 4.98886C10 5.50111 9.58843 5.91314 9.07675 5.92428Z"/>
@@ -138,7 +156,9 @@
                             --border-width="2px"
                             --border-color="var(--middle-blue)"
                             --padding=".375rem 1rem"
-                            --font-size=".875rem"/>
+                            --font-size=".875rem"
+                            --background-hover="var(--light-gray-blue)"
+                            --border-color-hover="var(--middle-blue)"/>
 
                             <svg class="icon_not_translated" viewBox="0 0 10 10" data-close="true">
                                 <path d="M9.07675 5.92428H5.91769V9.07572C5.91769 9.58797 5.50612 10 4.99444 10C4.48276 10 4.07119 9.58797 4.07119 9.07572V5.92428H0.923248C0.411568 5.91314 0 5.50111 0 4.98886C0 4.74276 0.100111 4.51002 0.266963 4.33185C0.444939 4.16481 0.678532 4.06459 0.923248 4.06459H4.07119V0.924276C4.07119 0.412027 4.48276 0 4.99444 0C5.50612 0 5.91769 0.412027 5.91769 0.924276V4.06459H9.07675C9.58843 4.06459 10 4.47661 10 4.98886C10 5.50111 9.58843 5.91314 9.07675 5.92428Z"/>
@@ -208,6 +228,7 @@
         height: .6rem;
         fill: var(--middle-blue);
         cursor: pointer;
+        transition: fill 400ms ease;
     }
 
 
@@ -220,6 +241,11 @@
         transform: rotateZ(45deg);
     }
 
+    .icon:hover,
+    .icon_not_translated:hover{
+        fill: var(--pale-orange);
+    }
+
 
     button{
         border: none;
@@ -229,5 +255,19 @@
         width: 100%;
         margin-top: .375rem;
         border-radius: 10px;
+        transition: background 400ms ease, outline 400ms ease;
+        outline: 2px solid transparent;
+    }
+
+    button:hover{
+        background-color: var(--gray-blue);
+    }
+
+    button:focus{
+        outline: 2px solid var(--orange);
+    }
+
+    button:active{
+        background-color: var(--orange);
     }
 </style>

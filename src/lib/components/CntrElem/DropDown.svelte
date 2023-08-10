@@ -103,6 +103,15 @@
             type
         });*/
     }
+
+
+    function onInputEnter(e){
+        e.stopPropagation();
+        const input = e.target.querySelector('input');
+        if(e.key === "Enter" || e.key === " "){
+            changeHandle({target: input});
+        }
+    }
     
 
 </script>
@@ -150,8 +159,8 @@
                 
                 {:else}
                 <label class="options__label option-in-drop"
-                transition:blur tabindex="0">
-                    <input class="main_input" type="radio" {value} {name} checked={selected}/>
+                transition:blur tabindex="0" on:keypress={onInputEnter} role="button">
+                    <input class="main_input" type="radio" {value} {name} checked={selected} />
                     {#if isWithIcon}
                         <svg class="icon">
                             <use href="/assets/icons/all.svg#{value}"></use>
@@ -191,7 +200,8 @@
         border-radius: 30px;
         align-items: center;
         position: relative;
-        z-index: 2;
+        z-index: 4;
+        transition: background 400ms ease;
     }
 
 
@@ -202,6 +212,17 @@
         gap: .4rem;
         padding: var(--padding);
         cursor: pointer;
+        border-radius: inherit;
+        outline: 2px solid transparent;
+        transition: outline 400ms ease;
+    }
+
+    .main_view:hover{
+        background-color: var(--light-slate-gray);
+    }
+
+    .main_view:focus{
+        outline: 2px solid var(--orange);
     }
 
 
@@ -212,6 +233,12 @@
         gap: .4rem;
         padding: var(--padding-options);
         cursor: pointer;
+        outline: 2px solid transparent;
+    }
+
+
+    .options__label:focus{
+        outline: 2px solid var(--orange);
     }
 
 
@@ -271,7 +298,7 @@
         width: 100%;
         border: var(--border);
         border-top: none;
-        z-index: 1;
+        z-index: 2;
         border-radius: 0 0 12px 12px;
     }
 

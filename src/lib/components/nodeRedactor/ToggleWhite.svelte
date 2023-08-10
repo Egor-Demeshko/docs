@@ -10,13 +10,23 @@
     function clickHandle(){
         isText = !isText;
     }
+
+    function keypress(e){
+        e.stopPropagation();
+        if(e.key === "Enter" || e.key === " "){
+            let input = e.target.querySelector("input");
+            input.checked = !input.checked;
+            isText = !isText;
+        };
+    }  
 </script>
 
 
-<label>
+<label tabindex="0" role="button" on:keypress={keypress}>
     <span>Отображать элементы в анкете...</span>
     <input {id} type="checkbox" name="view_type" value={ (isText) ? "radiobutton" : "drop_list"}
-        on:click={clickHandle}>
+        on:click={clickHandle}
+        tabindex="-1">
     <div class="toggle__tray">
         <div class="toggle__element">
     
@@ -37,6 +47,13 @@
         border-radius: 10px;
         position: relative;
         background-color: var(--middle-blue);
+        outline: 2px solid transparent;
+        transition: outline 400ms ease;
+        cursor: pointer;
+    }
+
+    label:focus{
+        outline: 2px solid var(--orange);
     }
 
     input{

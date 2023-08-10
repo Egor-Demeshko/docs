@@ -36,44 +36,6 @@
     }
 
 
-    function startValidation(){
-        let reg = new RegExp(pattern);
-
-        if(!input.value && !required) {
-            setValid();
-            return;
-        };
-
-        if(reg.test(input.value) && input.checkValidity()){
-            setValid();
-        } else {
-            setInvalid();
-        }
-    }
-
-
-    function setValid(){
-        invalid = false;
-        valid = true; 
-    }
-
-
-    function setInvalid(){
-        valid = false;
-        invalid = true;
-    }
-
-
-    function blurHandler(){
-        startValidation();
-    }
-
-
-    function inputHandle(e){
-        
-    }
-
-
     function focusTextArea(){        
         let elements = $storeForSimpleTexts;
 
@@ -118,7 +80,6 @@
         <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
         bind:value={value}
         class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
-        on:input={inputHandle}
         on:focus={focusTextArea}
         on:blur={blurTextArea}
         ></textarea>
@@ -193,7 +154,7 @@
 
 
     textarea{
-        border: none;
+        border: 2px solid var(--light-blue);
         background-color: var(--light-blue);
         border-radius: var(--border-radius);
         color: var(--deep-blue);
@@ -202,16 +163,28 @@
         scrollbar-color: var(--middle-blue) transparent;
         width: 100%;
         height: 100%;
-        transition: outline 600ms ease-in-out;
-        outline: 1px solid transparent;
+        transition: border 400ms ease-in-out, background 400ms ease-in-out;
+        outline: none;
+    }
+
+    textarea::placeholder{
+        font-style: italic;
+        color: var(--faded-gray-blue);
     }
 
     textarea:hover{
-        outline: 1px solid var(--pale-orange);
+        background-color: var(--light-gray-blue);
+        border: 2px solid var(--light-gray-blue);
+    }
+
+    textarea:focus{
+        border: 2px solid var(--orange);
+        background-color: var(--light-blue);
     }
 
     .not_valid textarea{
-        outline: 1px solid var(--pumpkin);
+        border: 2px solid var(--pumpkin);
+        background-color: var(--light-blue);
     }
 
 
@@ -241,7 +214,6 @@
         display: none;
     }
 
-
     textarea::-webkit-scrollbar-thumb {
         background-color: var(--gray-blue); 
         border-radius: 10px;
@@ -250,11 +222,9 @@
 
     }
 
-
     textarea::-webkit-scrollbar-thumb:hover{
         background-color: var(--middle-blue);
     }
-
 
     textarea::placeholder{
         color: var(--faded-gray-blue);

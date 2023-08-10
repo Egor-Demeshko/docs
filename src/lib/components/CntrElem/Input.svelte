@@ -19,7 +19,7 @@
         let data = validity.err_data;
 
         for(let i=0; i < data.length; i++){
-            if(data[i]?.field === name) return true;
+            if(data[i]?.field_name === name) return true;
         }
 
         return false;

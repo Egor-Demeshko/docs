@@ -12,24 +12,31 @@
     import validation from "$lib/scripts/controllers/validation";
 
     let trigger = false;
+    let closing_animation = false;
 
-    $: open = false;
+    let open = false;
     //TODO сохранение состояния по комбинации cntl + S
 
     /**обработка анимации открытия*/
-    $: if(open){
-        setTimeout(() => {
-            trigger = true;
-            document.dispatchEvent(new CustomEvent("redactor-сhanged"));
-        }, 650);     
+    function arrowClicked(){
+        open = !open;
         
-    } else {
-        trigger = false;
-        
-        setTimeout(() => {
-            document.dispatchEvent(new CustomEvent("redactor-сhanged"));
-        }, 650);  
-        
+        if(open){    
+            setTimeout(() => {
+                trigger = true;
+                document.dispatchEvent(new CustomEvent("redactor-сhanged"));
+            }, 650);     
+            
+        } else {
+            trigger = false;
+            closing_animation = true;
+            
+            setTimeout(() => {
+                closing_animation = false;
+                document.dispatchEvent(new CustomEvent("redactor-сhanged"));
+            }, 650);  
+            
+        }
     }
 
     /**получаем текущий активный node_type. выбирается на <FiledTypePicker> это дропдаун*/
@@ -117,10 +124,13 @@
 
 </script>
 
-<form data-elements="node_redactor" class:open class:trigger>
+<form data-elements="node_redactor" 
+class:open 
+class:trigger 
+class:closing_animation>
     
     <div class="arrow__position">
-        <Arrow bind:open={open}/>
+        <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>
     </div>
 
     {#if trigger}
@@ -132,6 +142,7 @@
 
             <InputwithLabel bind:value={data.name} id={data.id}
             name={"name"}
+            validity={data.validity}
             --border-width="2px"
             --border-color="var(--light-blue)"
             --border-color-hover="var(--light-gray-blue)"
@@ -139,7 +150,7 @@
             --background-hover="var(--light-gray-blue)"
             --color ="var(--deep-blue)"
             --placeholder="var(--faded-gray-blue)"
-            --padding="0.5rem 1rem"
+            --padding=".5rem 1rem .5rem 1.75rem"
             />
 
             {#if node_type === "checkbox"}
@@ -250,6 +261,13 @@
         gap: 2.5rem;
     }
 
+    .closing_animation{
+        animation-name: close;
+        animation-duration: 600ms;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+    }
+
 
     @keyframes open{
         0%{
@@ -257,6 +275,16 @@
         }
         100%{
             min-height: 22.75rem;
+        }
+    }
+
+
+    @keyframes close{
+        0%{
+            min-height: 22.75rem;
+        }
+        100%{
+            min-height: 1.5rem;
         }
     }
 
