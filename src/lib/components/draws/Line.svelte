@@ -81,8 +81,6 @@
         //console.log("[Draw Line]");
         let startBlockCenter = startX  + (startWidth / 4);
         let endBlockX = endX + (endWidth / 4);
-        let halfOfYBetweenBlocks = (startY - ( endY + endHeight)) / 2;
-        let sign = (startBlockCenter - endBlockX > 0) ? 1 : -1;
         
         
         /*console.log(`[obj.id checker] : `, {
@@ -92,26 +90,8 @@
 
         d=`
             M ${ startBlockCenter } ${ startY - (markerHeight / 2)}
-            S ${ endBlockX } ${endY + endHeight + 52} ${endBlockX} ${ endY + endHeight }
+            C ${ startBlockCenter } ${ startY - (markerHeight / 2) - 72}, ${ endBlockX } ${endY + endHeight + 72}, ${endBlockX} ${ endY + endHeight }
         `
-/*
-        {
-            let endBlockY = endY + endHeight;
-            //расчет точки для кнопки удалить связь
-            let dx = (Math.abs(startBlockCenter - endBlockX)) / 2 - width / 2;
-            let dy = (Math.abs(startY - endBlockY)) / 2 - height / 2;
-
-            //deleteButtonX = (startBlockCenter > endBlockX) ? endBlockX + dx : startBlockCenter + dx;
-            //deleteButtonY = (startY > endBlockY) ? endBlockY + dy + 28 : (startY + dy + endHeight - 28);
-*/
-            /*console.log('[Line]: {drawing delete button}: ', {
-                deleteButtonY,
-                startY,
-                endBlockY,
-                height,
-                dy
-            });*/
-        /*}*/
         
     return d;
 }
