@@ -26,9 +26,11 @@
             bind:value={trigger} name={"trigger"}
             {validity}
             --border-color="var(--light-blue)"
-            --padding=".1rem .1rem .1rem 1.125rem"
-            --color="inherit"
-            --background="transparent"
+            --border-color-hover="var(--light-gray-blue)"
+            --padding=".1rem .1rem .1rem .875rem"
+            --color="var(--deep-blue)"
+            --background="var(--light-blue)"
+            --background-hover="var(--light-gray-blue)"
             --border-width="2px"
             --font-size=".875rem"
             />

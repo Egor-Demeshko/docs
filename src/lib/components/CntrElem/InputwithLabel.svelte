@@ -7,62 +7,41 @@
     export let type = "text";
     export let label ="Название блока";
     export let value = '';
+    export let validity;
+    export let name;
 
-    let valid = '';
-    let invalid = '';
-    let input;
-    const dispatch = createEventDispatcher();
+    $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
 
+    function isCurrentField(){
+        let data = validity.err_data;
 
-    function startValidation(){
-        let reg = new RegExp(pattern);
-
-        if(!input.value && !required) {
-            setValid();
-            return;
-        };
-
-        if(reg.test(input.value) && input.checkValidity()){
-            setValid();
-        } else {
-            setInvalid();
+        for(let i=0; i < data.length; i++){
+            if(data[i]?.field === name) return true;
         }
+
+        return false;
     }
 
-
-    function setValid(){
-        invalid = false;
-        valid = true; 
-    }
-
-
-    function setInvalid(){
-        valid = false;
-        invalid = true;
-    }
-
-
-    function blurHandler(){
-        startValidation();
-    }
-
-
-    /*function changeHandle({data}){
-        dispatch("input_name_changed", data);
-        on:input={changeHandle}
-    }*/
 </script>
 
 <label>
     <span>{label}</span>
 
-    {#if type === "text"}
-        <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
-        type = "text">
-    {:else if type === "number"}
-        <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
-        type = "tel">
-    {/if}
+    <div class="input_wrapper" class:not_valid>
+        <div class="error_mark">
+            <svg>
+                <use href="/assets/icons/all.svg#ex_mark"></use>
+            </svg>
+        </div>
+
+        {#if type === "text"}
+            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
+            type = "text">
+        {:else if type === "number"}
+            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
+            type = "tel">
+        {/if}
+    </div>
 </label>
 
 <style>
@@ -84,16 +63,61 @@
     }
 
     input{
-        border: var(--border);
+        border: var(--border-width) solid var(--border-color);
         background-color: var(--background);
         border-radius: 15px;
         color: var(--color);
         padding: var(--padding);
         width: 100%;
         height: 100%;
+        transition: border 400ms ease, background 400ms ease;
     }
 
     input::placeholder{
         color: var(--placeholder);
+        font-style: italic;
     }
+
+    input:hover{
+        background-color: var(--background-hover);
+        border: var(--border-width) solid var(--border-color-hover);
+    }
+
+    input:focus{
+        border: var(--border-width) solid var(--orange);
+        background-color: var(--background);
+        outline: none;
+    }
+
+            /**отрисовка восклицательного знака*/
+            .error_mark{
+        width: calc(var(--border-radius) * 1.125);
+        height: 100%;
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+        background-color: var(--pumpkin);
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: none;
+        justify-content: start;
+        align-items: start;
+       
+    }
+
+    .error_mark svg{
+        fill: var(--light-blue);
+        width: 2px;
+        max-height: 11px;
+        transform: translate(50%, -50%);  
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+
+    .not_valid .error_mark{
+        display: flex;
+    }
+    /********/
 </style>

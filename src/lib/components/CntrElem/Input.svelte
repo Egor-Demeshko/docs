@@ -65,11 +65,6 @@
 </script> 
 
 <div class="input_wrapper" class:not_valid>
-    <div class="error_mark">
-        <svg>
-            <use href="/assets/icons/all.svg#ex_mark"></use>
-        </svg>
-    </div>
 
     <input {placeholder} {id} {name} {required} {pattern} {type} {value}
     class:not_valid
@@ -94,11 +89,11 @@
         color: var(--color);
         background-color: var(--background);
         flex: 1 0;
-        transition: border 400ms ease;
+        transition: border 400ms ease, background 400ms ease;
     }
 
     input.not_valid{
-        border: 1px solid var(--pumpkin);
+        border: var(--border-width) solid var(--pumpkin);
     }
 
 
@@ -107,38 +102,14 @@
         font-style: italic;
     }
 
-        /**отрисовка восклицательного знака*/
-    .error_mark{
-        width: calc(var(--border-radius) * 1.125);
-        height: 100%;
-        border-radius: var(--border-radius) 0 0 var(--border-radius);
-        background-color: var(--pumpkin);
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: none;
-        justify-content: start;
-        align-items: start;
-       
+    input:hover{
+        background-color: var(--background-hover);
+        border: var(--border-width) solid var(--border-color-hover);
     }
 
-    .error_mark svg{
-        fill: var(--light-blue);
-        width: 2px;
-        max-height: 11px;
-        transform: translate(50%, -50%);  
-        position: relative;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+    input:focus{
+        background-color: var(--background);
+        border: var(--border-width) solid var(--orange);
+        outline: none;
     }
-
-
-    .not_valid .error_mark{
-        display: flex;
-    }
-    /********/
-
-
-
 </style>

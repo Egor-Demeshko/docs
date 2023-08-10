@@ -131,10 +131,14 @@
             bind:trigger={data.trigger} validity={data.validity}/>
 
             <InputwithLabel bind:value={data.name} id={data.id}
+            name={"name"}
+            --border-width="2px"
+            --border-color="var(--light-blue)"
+            --border-color-hover="var(--light-gray-blue)"
             --background = "var(--light-blue)"
+            --background-hover="var(--light-gray-blue)"
             --color ="var(--deep-blue)"
             --placeholder="var(--faded-gray-blue)"
-            --border="none"
             --padding="0.5rem 1rem"
             />
 

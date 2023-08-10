@@ -18,6 +18,9 @@ export default function validation(data){
 
 
     
+
+
+    
     for(let i = 0; i < reqFieldsList.length; i++){
         let key = reqFieldsList[i];
         let value = data[key];
