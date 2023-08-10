@@ -19,7 +19,7 @@
                 <Tab {name} id={i} parentId={id}/>
             {/if}
         {/each}
-            <li>
+            <li class="add_tab__wrapper">
                 <div class="add_tab">
                     <svg class="plus">
                         <use href="/assets/icons/all.svg#plus"></use>
@@ -68,13 +68,26 @@
         height: 100%;
         width: 4rem;
         position: relative;
+        transition: background 400ms ease-in-out;
     }
+
+    .add_tab__wrapper:hover .add_tab{
+        background-color: var(--pale-orange);
+    }
+
 
 
     .curve{
         display: inline;
         fill: var(--light-slate-gray);
+        transition: fill 400ms ease-in-out;
     }
+
+    .add_tab__wrapper:hover .curve{
+        fill: var(--pale-orange);
+    }   
+
+
 
 
     .plus{

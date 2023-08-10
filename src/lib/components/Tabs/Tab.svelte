@@ -5,7 +5,7 @@
     export let id;
     export let parentId = '';
     
-    //при первой отрисовке, первые вкладки сдева и справа делаем активными.
+    //при первой отрисовке, первые вкладки слева и справа делаем активными.
     if(active) activeTabId.update( (obj) => ({...obj, [parentId]: id}));
 
     $: active = ( id === $activeTabId[parentId] ) ? true : false;
@@ -70,6 +70,7 @@
 
     .border-curve{
         width: var(--curve-width);
+        transition: fill 400ms ease-in-out, filter 400ms ease-in-out;
     }
   
 
@@ -79,6 +80,11 @@
     
     .border-curve.ordinarySvg{
         fill: var(--faded-middle-blue);
+    }
+
+    .wrapper:hover .border-curve.activeSvg,
+    .wrapper:hover .border-curve.ordinarySvg{
+        fill: var(--gray-blue);
     }
 
     .activeSvg.leftShadow{
@@ -98,8 +104,12 @@
     }
 
 
-
-
+    /**СОСТОЯНИЕ ТЕНЕЙ ВКЛАДОК*/
+    .wrapper:hover .activeSvg.leftShadow,
+    .wrapper:hover .ordinarySvg.leftShadow{
+        filter: drop-shadow(-2px 0 0 var(--middle-blue));
+    } 
+    
     .wrapper{
         height: 100%;
         display: inline-flex;
@@ -124,6 +134,7 @@
         padding: .5rem .5rem .5rem 1rem;
         white-space: nowrap;
         width: 80px;
+        transition: background 400ms ease-in-out;
     }
 
 
@@ -137,6 +148,11 @@
         width: 250px;
         background-color: var(--middle-blue);
         padding: 0.5rem  1.3rem .5rem 1rem;
+    }
+
+    .wrapper:hover .ordinary,
+    .wrapper:hover .activeTab{
+        background-color: var(--gray-blue);
     }
 
 
