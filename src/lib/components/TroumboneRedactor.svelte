@@ -46,6 +46,7 @@
         editor = window.jQuery(container).trumbowyg('html', html);
         docRoot.set(root);
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
+        $storeForSimpleTexts.forEach( (element) => element.createListeners());
     });
 
  

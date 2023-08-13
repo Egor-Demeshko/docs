@@ -1,6 +1,6 @@
-import { interectiveOverlapShow, modalFieldsStore, storeForSimpleTexts, textElementsData, docRoot } from "$lib/scripts/stores";
+/*import { interectiveOverlapShow, modalFieldsStore, storeForSimpleTexts, textElementsData, docRoot } from "$lib/scripts/stores";
 import SimpleText from "$lib/scripts/docElements/simpleText";
-
+/*
 export default function onDocClick(e){
     e.stopPropagation();
     //console.log("[onDocClick]: startselect event: ", e);
@@ -17,7 +17,7 @@ export default function onDocClick(e){
 
 
             /**Show modal, and then logic to save state*/
-            modalFieldsStore.update( (obj) => {
+           /* modalFieldsStore.update( (obj) => {
                 obj.show = true;
                 obj.inputValue = range.extractContents().textContent;
 
@@ -38,7 +38,7 @@ export default function onDocClick(e){
                 
                       
                 /** subscribing with store, to handle data change */
-                let unsubscribe = modalFieldsStore.subscribe( (obj) => {
+               /* let unsubscribe = modalFieldsStore.subscribe( (obj) => {
                     if(!obj.inputValue) return;
                     
                     //console.log("[POinterUP]: [subscribe]: newElementOBJ: ", {newElementClass});       
@@ -46,7 +46,7 @@ export default function onDocClick(e){
                     
                     if(!obj.show && obj.inputValue){
                         /**обновляем сторы , если модалка уже не показывается*/      
-                        setTimeout( () => interectiveOverlapShow.set(false), 600);  
+                      /*  setTimeout( () => interectiveOverlapShow.set(false), 600);  
 
                         newElementClass.updateDomLink(newElement);
                         newElementClass.setTextData({ name: "test", content: obj.inputValue });
@@ -67,7 +67,7 @@ export default function onDocClick(e){
                         unsubscribe();
                     } else if(!obj.show && !obj.inputValue){
                         /**Если у модального окна не был заполнен инпут, то сохранять нечего, удаляем элемент из дума */
-                        newElement.remove();
+                      /*  newElement.remove();
                         range.insertNode(range.extractContents().textContent);
 
                         unsubscribe();
@@ -77,4 +77,4 @@ export default function onDocClick(e){
             }
         }, {once: true});
     }
-}
+}*/

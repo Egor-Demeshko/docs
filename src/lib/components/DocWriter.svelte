@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from "svelte";
-    import { storeForSimpleTexts, docRoot } from "$lib/scripts/stores";
+    import createOnDocumentRedactorEvents from "$lib/scripts/docElements/GlobalRedactorEvents";
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
 
@@ -13,9 +13,7 @@
 
 
     onMount( async () => {
-       
-
-        //console.log("[DOC WRITER]: HTML: ", html);
+        createOnDocumentRedactorEvents(root);
     });
 
 
@@ -45,7 +43,6 @@
         border-left: 2px solid var(--black);
         position: relative;
     }
-
     
 
     /* не удалять этот класс. на него валидируемся при событии*/
@@ -53,7 +50,13 @@
         position: relative;
         display: inline-block;
         background-color: var(--doc-element-bg);
-        transition: background 400ms ease;
+        transition: background 400ms ease, transform 400ms ease;
+        padding: 2px 3px;
+        border-radius: 4px;
+    }
+
+    :global(.doc_elements:focus){
+        outline: none;
     }
 
 
@@ -82,36 +85,11 @@
         display: none;
     }
 
-    /*
-    :global(.doc_elements:before){
-        content: " ";
-        position: absolute;
-        display: block;
-        top: 0;
-        left: -.4rem;
-        transform: scaleY(130%);
-        width: 6px;
-        height: 100%;
-        border-radius: 6px;
-        border-left: 4px solid var(--doc-element-bg);
-    }
-
-    :global(.doc_elements:after){
-        content: " ";
-        position: absolute;
-        display: block;
-        top: 0;
-        right: -.4rem;
-        transform: scaleY(130%);
-        width: 6px;
-        height: 100%;
-        border-radius: 6px;
-        border-right: 3px solid var(--node-bg);
-    }
-*/
-
     :global(.doc_active){
         background-color: var(--orange);
+        transform: scale(107%) translate(0);
+        z-index: 1;
+        box-shadow: 0 0 2px var(--middle-blue);
     }
 
     /**doc redactor*/
