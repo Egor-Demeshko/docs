@@ -83,8 +83,10 @@
      *  через data = data. так как сам по себе data это прямая ссылка на нужные обьект в сторе.
     */
     $: if($nodes){
-        data = data;
-        console.log("[NodeRedactor]: {$NODES} store changed, trigger", $nodes);
+        if(data){
+            data = data;
+            console.log("[NodeRedactor]: {$NODES} store changed, trigger", $nodes);
+        }
     }
     
 

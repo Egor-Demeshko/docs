@@ -97,6 +97,7 @@
         top: 50%;
         right: -10%;
         transform: translateY(-50%);
+        fill: var(--white-blue);
     }
 
     @media print{

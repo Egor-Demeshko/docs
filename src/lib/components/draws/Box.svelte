@@ -7,6 +7,7 @@
   import boxClickHandler from "$lib/scripts/eventHandlers/boxClickHandler";
 	import BoxInner from "./BoxInner.svelte";
   import BoxPoint from "./BoxPoint.svelte";
+  import BoxButtons from "./BoxButtons.svelte";
 
 
   /**
@@ -37,6 +38,9 @@
   let root;
   let glow;
   let boxElement;
+
+  /** используется для отображения кнопку управления блоком, появляется при фокусе*/
+  let showButtons = false;
 
   $: parent = updateParent($nodes);
 
@@ -221,8 +225,11 @@ function startDraging(e){
 
     if(e.target.tagName === "DIV" || e.target.tagName === "SPAN"){
         root.addEventListener("pointerup", () => {
+          /**показываем поле с кнопками удалить, выделить текст на узле*/
+          showButtons = true;
           root.removeEventListener("mousemove", coordinate);       
-        });
+        }, {once: true});
+        showButtons = false;
         root.addEventListener("mousemove", coordinate);
     }
 
@@ -275,6 +282,8 @@ function focusIn(){
         //console.log("[BOX]: trying to set active");
         elObj.setActive(id);
     });
+
+    showButtons = true;
 }
 
 
@@ -286,11 +295,14 @@ function focusOut(){
         set.delete(id);
         return set;
     });*/
-    blockClickedId.set(id);
+    //blockClickedId.set(id);
 
     $storeForSimpleTexts.forEach( (elObj) => {
         elObj.setInactive(id);
     });
+
+    /**/
+    setTimeout( () => showButtons = false, 200);
 }
 
 
@@ -575,7 +587,6 @@ function secondStepOnChildConnect(e){
               />
     </foreignObject>
 
-
           
     {#if isBlockChoosen}
         {#if pointUp}
@@ -599,6 +610,12 @@ function secondStepOnChildConnect(e){
             <BoxPoint />
           </foreignObject>
         {/if}
+    {/if}
+
+    {#if showButtons}
+          <foreignObject  width="16" {height} x="{x + width + 6}" {y}>
+              <BoxButtons {id}/>
+          </foreignObject>
     {/if}
 
 
@@ -681,6 +698,10 @@ function secondStepOnChildConnect(e){
     .glow{
       filter: drop-shadow(0 0 6px var(--orange));
     }
+
+
+
+    /**кнопки*/
 
     
 </style>

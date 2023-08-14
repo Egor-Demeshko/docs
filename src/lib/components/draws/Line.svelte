@@ -51,6 +51,7 @@
             }
         }
 
+        
         for(let i = 0; i < allBlocks.length; i++){
             let obj = allBlocks[i];
 

@@ -180,6 +180,7 @@
         width: .6rem;
         top: 50%;
         right: 0;
+        fill: var(--white-blue);
     }
 
 

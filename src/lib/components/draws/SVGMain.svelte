@@ -22,26 +22,47 @@ function svgLoaded(...args){
     }
 }
 
+let allNodes;
 
+
+$: allNodes = $nodes;
+$: length = allNodes.length;
+$: linesLength = lines.length;
 $: showDelete = $showDeleteStore;
 $: deleteLine = $deleteLineFunction;
 $: lines = $linesStore;
-$: if(lines) lines = lines;
+//$: if(lines) lines = lines;
+//$: if(allNodes) allNodes = allNodes;
+$: console.log("[SVGMAIN]: allNodes: ", allNodes);
+
 
 </script>
 
 
 <div class="svg_wrapper">
+    
     <svg id="playground" {width} {height} viewBox={`0 0 ${width} ${height}`} use:svgLoaded>
         <PresentationLine />
-        <g id=lines>
-            {#each lines as {startId, endId}}
-                <Line {startId} parentId={endId}/>
-            {/each} 
+        {#key linesLength}
+            <g id=lines>
+                {#each lines as {startId, endId}}
+                    
+                    <Line {startId} parentId={endId}/>
+                    
+                {/each}  
+            </g>
+        {/key}
+        
+        {#key length}
+        <g id="nodes">
+            {#each allNodes as node}
+                
+                <Box {node} />
+                
+            {/each}        
         </g>
-        {#each $nodes as node}
-            <Box {node} />
-        {/each}
+        {/key}
+
 
         {#if showDelete}
             <foreignObject class="close" 

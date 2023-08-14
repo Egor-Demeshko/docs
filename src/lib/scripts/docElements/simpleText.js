@@ -1,4 +1,4 @@
-import { blockClickedId, activeBlocks, nodes } from "/src/lib/scripts/stores";
+import { blockClickedId, activeBlocks, nodes, storeForSimpleTexts } from "/src/lib/scripts/stores";
 import EditRedactorEvents from "./EditRedactorEvents";
 import VisualRedactorEvents from "./VisualRedactorEvents";
 
@@ -177,7 +177,12 @@ export default class SimpleText {
     }
 
 
-
-/**добавляем слушатели событий */
-
+    deleteElement(){
+        
+        this.#domLinks.forEach( function deleteElement(element){
+            element.remove();
+        } );
+        
+        this.#domLinks = null;
+    }
 }    

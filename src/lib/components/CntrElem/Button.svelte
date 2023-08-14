@@ -21,8 +21,7 @@
         border: var(--border);
         border-radius: 30px;
         cursor: pointer;
-        font-size: 1.125rem;
-        font-family: 1.125rem;
+        font-size: var(--font-size);
         padding: var(--padding);
         text-align: center;
         transition: background 600ms ease, color 600ms ease, border 600ms ease;

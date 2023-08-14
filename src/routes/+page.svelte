@@ -10,6 +10,8 @@
     import LogoAndName from "$lib/components/LogoAndName.svelte";
 	import AddButton from "$lib/components/CntrElem/AddButton.svelte";
     import MessagesContainer from "$lib/components/MessagesContainer.svelte";
+    import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
+    import Modal from "$lib/components/Modal.svelte";
 
     //receiving data from load function
     export let data;
@@ -199,6 +201,10 @@
             </div>
     </div>  
 </main>
+
+<Tooltip />
+<Modal />
+
 
 
 

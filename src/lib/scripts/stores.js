@@ -29,11 +29,11 @@ export const interectiveOverlapShow = writable(false);
 /** modal visual conrol, when show=true, modal is visible*/
 export const modalFieldsStore = writable({
     show: false,
-    name: "имя",
+    text: "текст модалки",
     description: "описание",
-    placeholder: 'плейсхолдер',
-    inputValue: "",
-    nameInput: ""
+    result: false,
+    errorCallback: null,
+    okCallback: null
 });
 
 /* ____  DRAWERS STORES _____  */
@@ -170,3 +170,7 @@ export const showDeleteStore = writable(false);
 
 /**тут хранится динамически, ссылка на функцию, которая контролирует удаление линии */
 export const deleteLineFunction = writable(null);
+
+
+/**показывать tooltip {show: true, coors: {x: 0, y: 0}, text: "", place: "buttom"} */
+export const showTooltip = writable({show: false});
