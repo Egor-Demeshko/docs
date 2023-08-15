@@ -64,47 +64,6 @@
 </script>
 
 
-<svelte:head>
-    <script>
-        /*
-        setInterval(() => {
-            let event = new CustomEvent("error", {
-                detail: {
-                    status: "invalid",
-                    err_data: [ {
-                        field_name: "content",
-                        message: "тестовое сообщение для ошибки ДВА",
-                        blockId: 7
-                    }
-                    ],
-
-                }
-            });
-
-            console.log("[MeesagesContaier]: dispatching err event two: ", event);
-            window.document.dispatchEvent(event);
-        }, 15000);
-
-        setInterval(() => {
-            let event = new CustomEvent("error", {
-                detail: {
-                    status: "invalid",
-                    err_data: [ {
-                        field_name: "content",
-                        message: "первое тестовое сообщение для ошибки один.",
-                        blockId: 7
-                    }
-                    ],
-
-                }
-            });
-
-            console.log("[MeesagesContaier]: dispatching err event one: ", event);
-            window.document.dispatchEvent(event);
-        }, 11000);*/
-    </script>
-</svelte:head>
-
 <svelte:document on:error={errorHandle}></svelte:document>
 
 

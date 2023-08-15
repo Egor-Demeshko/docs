@@ -26,6 +26,7 @@ export function processSelection(callerId, eventSelection){
             detail: {
                 err_data: [
                     {
+                        blockId: callerId,
                         message: "Новая переменная не должна пересекать другие переменные и должна быть в пределах одного абзаца",
                         err_id: 1000,
                         err_type: "highlight"
