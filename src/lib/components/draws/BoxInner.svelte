@@ -32,8 +32,8 @@
     </svg>
 
        <span
-       on:selectstart={ (e) => e.preventDefault()}
-       on:dragstart={ (e) => e.preventDefault()}
+       on:selectstart={ (e) => e.preventDefault() }
+       on:dragstart={ (e) => e.preventDefault() }
        >{name}</span>
 
     {#if isLinked}
@@ -48,8 +48,8 @@
 <style>
     .wrapper{
         color: inherit;
-        height: 99%;
-        width: 99%;
+        height: 100%;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: start;

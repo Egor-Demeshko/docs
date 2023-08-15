@@ -567,11 +567,9 @@ function secondStepOnChildConnect(e){
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <foreignObject {x} {y} {width} {height} 
-      class:isBlockChoosen 
-      class:hoverLike
-      class:box_inactive
-      class:not_valid
+      class="box_wrapper"
       class:glow
+      class:isBlockChoosen
       bind:this={boxElement}
       tabindex=0
       role="tab"
@@ -582,11 +580,20 @@ function secondStepOnChildConnect(e){
       on:pointerenter={ pointerEnter }
       on:pointerleave={ pointerLeave }
       on:dragstart={ (e) => e.preventDefault()}
-      class="box">
-          <BoxInner {name} {node_type} 
+      >
+            <div class="box"
+             
+            class:hoverLike
+            class:box_inactive
+            class:not_valid>
+              <BoxInner {name} {node_type} 
               {gotConditions}
               isLinked={ (parent) ? true : false }
-              />
+            />
+            </div>
+            
+          
+
     </foreignObject>
 
           
@@ -623,6 +630,11 @@ function secondStepOnChildConnect(e){
 
 <!-- СТИЛИ  -->
 <style>
+    .box_wrapper{
+        outline: none;
+        background-color: transparent;
+        fill: none;
+    }
 
     /** стандартное отображение */
     .box{
@@ -630,11 +642,13 @@ function secondStepOnChildConnect(e){
         color: var(--middle-blue);
         fill: var(--middle-blue);
         border-radius: 8px;
-        transition: color 600ms ease-in-out, background 600ms ease-in-out, fill 600ms ease-in-out;
+        transition: color 400ms ease, background 400ms ease, fill 400ms ease;
         outline: none;
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 100%;
+        height: 100%;
     }
 
     .box:hover{
@@ -659,13 +673,14 @@ function secondStepOnChildConnect(e){
 
 
     /** выбранные блок */
-    .isBlockChoosen{
+    .isBlockChoosen > .box{
         color: var(--deep-blue);
         background-color: var(--orange);
         fill: var(--deep-blue);
+        z-index: 100;
     }
 
-    .isBlockChoosen:hover{
+    .isBlockChoosen:hover > .box{
         background-color: var(--pale-orange);
         fill: var(--deep-blue);
         color: var(--deep-blue);
@@ -699,11 +714,5 @@ function secondStepOnChildConnect(e){
 
     .glow{
       filter: drop-shadow(0 0 6px var(--orange));
-    }
-
-
-
-    /**кнопки*/
-
-    
+    }    
 </style>
