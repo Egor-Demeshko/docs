@@ -1,14 +1,24 @@
 <script>
+	import { onMount } from "svelte";
+
     export let fnToRunOnClick;
     export let labelName = "";
     export let name = "";
+    export let setFocus = false;
     
-    /**@description признак по которому определяется поведение кнопки*/
-    export let sing = "";
+    let button;
+
+    onMount( () => {
+        startFocus();
+    });
+
+    function startFocus(){
+        if(setFocus) button.focus();
+    }
 
 </script>
 
-<button on:click={fnToRunOnClick} aria-label="{labelName}">
+<button on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button}>
     {name}    
 </button>
 
@@ -32,5 +42,9 @@
         background-color: var(--bg-hover);
         color: var(--color-hover);
         border: var(--border-hover);
+    }
+
+    button:focus{
+        outline: 2px solid var(--orange);
     }
 </style>

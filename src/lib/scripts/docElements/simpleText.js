@@ -31,7 +31,7 @@ export default class SimpleText {
         // debugger;
         /*console.log("SIMPLE TEXT", {id: this.id, name: this.name, content: this.content, root: this.root});*/
         let links = this.root.querySelectorAll(`span[data-element="${this.#id}"]`);
-        console.log("[simpleText]: root: ", links);
+        //console.log("[simpleText]: root: ", links);
         
 
         if(links instanceof NodeList){
@@ -184,5 +184,10 @@ export default class SimpleText {
         } );
         
         this.#domLinks = null;
+    }
+
+    /**добавляет новое место переменной в редакторе, используется у уже созданных узлов. НЕ ДЛЯ НОВЫХ полность новых узлов */
+    addOnMoreNodeInText(event){
+        console.log("[simpleText]: addOnMoreNodeInText");
     }
 }    

@@ -2,10 +2,13 @@ import { nodes } from "$lib/scripts/stores";
 
 export default function validation(data){
     const reqFieldsList = ["name", "data_type", "node_type"];
+
+    /**err_type используется для последующей стилизации сообщений смотрим message.svelte messagesContainer.svelte */
     data.validity = {
         status: "valid",
         err_data: [],
-        blockId: null
+        blockId: null,
+        err_type: "emergency"
     }
     //проверять обязательные поля
     //тип данных на узлах
@@ -31,7 +34,8 @@ export default function validation(data){
                 err_data: [ ...data.validity.err_data, {
                     field_name: key,
                     message: "Поле обязательно для заполнения!",
-                    err_id: 800
+                    err_id: 800,
+                    err_type: "emergency"
                 }]
             }
         }
@@ -50,7 +54,8 @@ export default function validation(data){
                     field: "content",
                     message: "Выбран тип данных число, а введены буквенные символы.",
                     blockId: data.id,
-                    err_id: 801
+                    err_id: 801,
+                    err_type: "emergency"
                 }
                 ],
             }
@@ -84,7 +89,8 @@ export default function validation(data){
                     field: "",
                     message: "Не указан родительский блок, нет связи",
                     blockId: data.id,
-                    err_id: 802
+                    err_id: 802,
+                    err_type: "emergency"
                 }
                 ],
             }
@@ -104,7 +110,8 @@ export default function validation(data){
                                                 field: "trigger",
                                                 message: "Логические условия больше/меньше работают только с числами",
                                                 blockId: data.id,
-                                                err_id: 803
+                                                err_id: 803,
+                                                err_type: "emergency"
                                             }
                                             ],
                                         }
@@ -135,7 +142,8 @@ export default function validation(data){
                                     field: "trigger",
                                     message: "Значение родительского блока и значение условия сравнения дочернего блока должны быть одновременно или строкой (с числами) или только числами",
                                     blockId: data.id,
-                                    err_id: 804
+                                    err_id: 804,
+                                    err_type: "emergency"
                                 }
                                 ],
                             }

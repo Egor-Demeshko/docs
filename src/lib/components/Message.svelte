@@ -8,6 +8,9 @@
     export let blockId = "";
     export let closeMessageCallback;
 
+    /**определяет стиль сообщения. emergency, simple, highlight*/
+    export let err_type;
+
 
     onMount( () => {
         if(closeMessageCallback){
@@ -28,7 +31,7 @@
 
 
 
-<div class="message"
+<div class="message {err_type}" 
 in:fly={{y: 100}}
 out:fly={{x: 50}}>
     <span>
@@ -53,8 +56,22 @@ out:fly={{x: 50}}>
         position: relative;
     }
 
+
+    /**текст отображается разными цветами, взависимости от типа сообщения*/
     .message span{
+        color: var(--middle-blue);
+    }
+
+    .emergency span{
         color: var(--pumpkin);
+    }
+
+    .simple span{
+        color: var(--middle-blue);
+    }
+
+    .highlight span{
+        color: var(--orange);
     }
 
     .icon{

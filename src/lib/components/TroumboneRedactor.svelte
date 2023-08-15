@@ -2,11 +2,54 @@
     import jQuery from 'jquery'; 
     import { onMount } from 'svelte';
     import {storeForSimpleTexts, docRoot} from '$lib/scripts/stores';
+    import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
+    import { processSelection } from "$lib/scripts/utils/nodes/proccessAddingNodeTOText.js";
+
 
     export let html = '';
     let editor;
     let container;
     let root;
+
+    /*записываем обычный id блока. в данном случае айди блока которые вызвал поток добавление переменной в текст*/
+    let callerId;
+
+    /** меняет цвет заднего фона при старте процесс добавление переменной*/
+    $: active_bg = ($addExcitingNodeToRedator.status === "start") ? true : false;
+    $: if($addExcitingNodeToRedator.status === "start"){
+        callerId = $addExcitingNodeToRedator.id;
+        createListenersForNodeAddition();
+    }
+
+    /**ФУНКЦИИ В АЛФАВИТНОМ ПОРЯДКЕ*/
+
+    function createListenersForNodeAddition(){
+        let eventSelection = null;
+        
+        root.addEventListener("pointerdown", function createNodePointerDown(){
+            /** теперь отслеживаем выделение текста и при измернение выделения, отправляем на создание*/
+
+            document.addEventListener("selectionchange", storeEvent);
+
+            root.addEventListener("pointerup", () => {
+                document.removeEventListener("selectionchange", storeEvent);
+                
+                processSelection(callerId, eventSelection);
+
+                addExcitingNodeToRedator.set( {
+                    status: null
+                } );
+            }, {once:true});
+
+        }, {once: true});
+
+
+        function storeEvent(e){
+            console.log("[troumbone]: selection changed, ");
+            eventSelection = e;
+        }       
+    }
+
 
     onMount( async () => {
         if (!window.jQuery) window.jQuery = jQuery;
@@ -56,7 +99,7 @@
     <link rel="stylesheet" href="/assets/css/trumbowyg.css">
 </svelte:head>
 
-<div class="editor" bind:this={root}>
+<div class="editor" bind:this={root} class:active_bg>
     <div bind:this={container}>
         
     </div>
@@ -74,5 +117,9 @@
 
     .editor *{
         color: var(--deep-blue);
+    }
+
+    :global(.editor.active_bg .trumbowyg-editor){
+        background-color: var(--pale-orange);
     }
 </style>

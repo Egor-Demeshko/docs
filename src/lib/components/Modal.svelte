@@ -19,11 +19,21 @@
         });
     }
 
+
+    function activateClickHandle(){
+        setTimeout( () => {
+            document.addEventListener( "click", (e) => {
+                if(e.target.tagName === "DIV" && e.target.classList.contains("elements")) return;
+                closeModal();
+            }, {once:true});
+        });
+    }
+
 </script>
 
 
 {#if active}
-    <div class="wrapper" aria-live="assertive">
+    <div class="wrapper" aria-live="assertive" use:activateClickHandle>
         <div class="elements" in:fly={{y: 100, duration: 600}}
         out:fly={{y: 100, duration: 600}}>
             <span>{$modalFieldsStore.text}</span>
@@ -44,7 +54,8 @@
                 --border="2px solid var(--middle-blue)"
                 --bg-hover="var(--gray-blue)"
                 --border-hover="2px solid var(--gray-blue)"
-                --font-size=".875rem"/>
+                --font-size=".875rem"
+                setFocus={true}/>
             </div>
             <svg class="icon" on:click={closeModal}>
                 <use href="/assets/icons/all.svg#plus"></use>
@@ -85,6 +96,8 @@
 
     .elements>span{
         color: var(--middle-blue);
+        padding: 0 .5rem 0 0;
+        pointer-events: none;
     } 
 
     .buttons{

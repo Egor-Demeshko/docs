@@ -2,6 +2,8 @@
     import Message from "$lib/components/Message.svelte";
     import { onMount } from "svelte";
 
+    /**СООБЩЕНИЯ появляется при срабатывании события я error на document*/
+
     /**reveived error messages*/
     let messages = [];
     let nodeRedactor;
@@ -26,7 +28,7 @@
         //console.log("[MessagesContainer]: errorHandel before push: ", data);
 
         for(let i = 0; i < data.length; i++){
-            let {blockId, message, err_id} = data[i];
+            let {blockId, message, err_id, err_type} = data[i];
 
             //проблема. при первой валидации, если две ошибки сразу, то вторая не добавляется
             for(let i = 0; i < messages.length; i++){
@@ -39,7 +41,8 @@
             messages.push( {
                 blockId,
                 message,
-                err_id
+                err_id,
+                err_type
             } );
 
             messages = messages;
@@ -106,8 +109,8 @@
 
 
 <div class="messages" style="bottom: {bottomCor}px">
-    {#each messages as {blockId, message}}
-        <Message {blockId} {message} closeMessageCallback={ deleteMessageFromList }/>
+    {#each messages as {blockId, message, err_type}}
+        <Message {blockId} {message} {err_type} closeMessageCallback={ deleteMessageFromList }/>
     {/each}
 </div>
 

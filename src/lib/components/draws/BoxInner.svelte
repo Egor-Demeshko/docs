@@ -31,7 +31,10 @@
         {/if}
     </svg>
 
-       <span>{name}</span>
+       <span
+       on:selectstart={ (e) => e.preventDefault()}
+       on:dragstart={ (e) => e.preventDefault()}
+       >{name}</span>
 
     {#if isLinked}
         <svg class="link" width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">

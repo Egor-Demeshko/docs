@@ -2,6 +2,7 @@
     import { fade } from "svelte/transition";
     import { showTooltip, modalFieldsStore } from "$lib/scripts/stores";
     import { deleteNode } from "$lib/scripts/controllers/nodes/createDeleteNode";
+    import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore";
 
     export let id = '';
 
@@ -52,6 +53,48 @@
     }
     /* --------- END OF POINTER EVENTS -------- */
 
+
+    /**ОБЩИЕ ФУНКЦИИ, по алфавиту*/
+    /**стартует процесс добавление узла в текст, тут работаем уже со созданным узлом*/
+    function addNode(){
+        hideTooltip();
+        document.dispatchEvent(new CustomEvent("error", {
+            detail: {
+                err_data: [
+                    {
+                        message: "Выделите область в документе, чтобы добавить блок в текст",
+                        err_type: "simple",
+                        blockId: id,
+                        err_id: 900
+                    }
+                ]
+            }
+        }));
+
+
+        addExcitingNodeToRedator.set( {
+            status: "start",
+            id 
+        } );
+    }
+    
+    
+    /**показывает модалку и передает коллбек*/
+    function deleteFlow(){
+        
+        hideTooltip();
+        
+        
+        modalFieldsStore.update( () => {
+            return {
+                show: true,
+                text: "Вы действительно хотите безвозвратно удалить блок?",
+                okCallback: deleteNodeStart
+            }
+        });    
+    }
+    
+
     function deleteNodeStart(e){
         console.log("[BoxButton]: deleteNode");
 
@@ -66,9 +109,8 @@
         });
     }
 
-
-    function deleteFlow(){
-      
+    /** cкрывает tooltip*/
+    function hideTooltip(){
         showTooltip.update( () => {
             return {
                 show: false,
@@ -77,34 +119,27 @@
                 text: ""
             }
         });
-
-
-        modalFieldsStore.update( () => {
-            return {
-                show: true,
-                text: "Вы действительно хотите безвозвратно удалить блок ?",
-                okCallback: deleteNodeStart
-            }
-        });
-    
     }
+    
+    
+    
 </script>
 
 
-<div in:fade
-    out:fade class="buttons"
+<div in:fade={{duration: 200}}
+    out:fade={{duration: 200}} class="buttons"
     role="tooltip">
     <svg class="buttons__icons delete"
     on:pointerenter={pointerEnterDelete}
     on:pointerleave={pointerLeave}
-    on:click={ deleteFlow } 
-    >
+    on:click={ deleteFlow } >
         <use href="/assets/icons/all.svg#box_cancel"></use>
     </svg>
 
     <svg class="buttons__icons"
     on:pointerleave={pointerLeave}
-    on:pointerenter={pointerEnter}>
+    on:pointerenter={pointerEnter}
+    on:click={addNode}>
         <use href="/assets/icons/all.svg#create_node"></use>
     </svg>
 </div>

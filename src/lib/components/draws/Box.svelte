@@ -229,6 +229,7 @@ function startDraging(e){
           showButtons = true;
           root.removeEventListener("mousemove", coordinate);       
         }, {once: true});
+
         showButtons = false;
         root.addEventListener("mousemove", coordinate);
     }
@@ -580,6 +581,7 @@ function secondStepOnChildConnect(e){
       on:blur={ focusOut }
       on:pointerenter={ pointerEnter }
       on:pointerleave={ pointerLeave }
+      on:dragstart={ (e) => e.preventDefault()}
       class="box">
           <BoxInner {name} {node_type} 
               {gotConditions}

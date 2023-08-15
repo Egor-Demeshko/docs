@@ -1,4 +1,5 @@
 import { blockClickedId, activeBlocks, nodes } from "/src/lib/scripts/stores";
+import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
 
 
 export default class visualRedactorEvents{
@@ -102,8 +103,7 @@ export default class visualRedactorEvents{
         
         if(e.target.classList.contains('doc_elements')){
             text = e.target.textContent;
-            text = text.trim()
-                        .replace(/<script .*>.*<\/script>/, "");
+            text = sanitizeHTML(text);
         } else {
             return;
         }
