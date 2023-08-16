@@ -5,6 +5,7 @@
     export let labelName = "";
     export let name = "";
     export let setFocus = false;
+
     
     let button;
 
@@ -36,6 +37,7 @@
         text-align: center;
         transition: background 600ms ease, color 600ms ease, border 600ms ease;
         width: 100%;
+        outline: none;
     }
 
     button:hover{
@@ -45,6 +47,6 @@
     }
 
     button:focus{
-        outline: 2px solid var(--orange);
+        border: 2px solid var(--orange);
     }
 </style>

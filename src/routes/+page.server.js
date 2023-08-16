@@ -1,6 +1,9 @@
-export const ssr = false;
+//TODO
 
-export function load({ locals }){
-    if(locals) return {locals};
-    return {}
-}
+/**
+ * в лоад функции мы будем получать куки, 
+ * делаем проверку авторизации
+ * если логин есть. перенаправляем на мои проекты
+ * это даже наверно в хуках
+ * 
+ */

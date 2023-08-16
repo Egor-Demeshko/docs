@@ -119,5 +119,6 @@ $: console.log("[SVGMAIN]: allNodes: ", allNodes);
         width: 100%;
         height: 100%;
         transform: rotateZ(45deg);
+        fill: var(--white-blue);
     }
 </style>

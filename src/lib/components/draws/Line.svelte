@@ -99,29 +99,40 @@
 
 function clickHandle(e){
 
+    if ($showDeleteStore && $showDeleteStore.initialTarget === e.target) return;
+
+    /** если у нас будет клик по другой линии, это обеспечит не заркытие ее, а перерисовку по новым кординатам*/
+    e.stopPropagation();
+
+
     deleteButtonX = e.pageX - width / 2;
     deleteButtonY = e.layerY - height * 1.5;
+
     showDeleteStore.set({
         deleteButtonX,
         deleteButtonY,
         width,
-        height
+        height,
+        initialTarget: e.target
     });
     deleteLineFunction.set(deleteLine);
 
     /**регистрируем слушатель чтобы убрать кнопку, если клик пришелся куда попало*/
     setTimeout( () => {
+        document.addEventListener("click", closeDeleteButton, {once: true});
+    }, 0);
 
-        document.addEventListener("click", () => {
+
+    function closeDeleteButton(e){
+            console.log("[event listener]");
+
             if($showDeleteStore){
                 showDeleteStore.set(false);
             }
             if(deleteLineFunction){
                 deleteLineFunction.set(false);
             }
-        }, {once: true});
-
-    }, 10);
+    }
 }
 
 

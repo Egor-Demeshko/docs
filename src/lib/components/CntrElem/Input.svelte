@@ -98,7 +98,7 @@
 
 
     input::placeholder{
-        color: var(--faded-gray-blue);
+        color: var(--placeholder);
         font-style: italic;
     }
 

@@ -1,5 +1,5 @@
 <script>
-	import SearchInput from "../../lib/components/CntrElem/SearchInput.svelte";
+	import SearchInput from "$lib/components/CntrElem/SearchInput.svelte";
 </script>
 
 <div class="controll">
