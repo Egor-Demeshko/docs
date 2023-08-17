@@ -5,6 +5,7 @@
     export let labelName = "";
     export let name = "";
     export let setFocus = false;
+    export let no_wrap = false;
 
     
     let button;
@@ -19,7 +20,7 @@
 
 </script>
 
-<button on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button}>
+<button on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap>
     {name}    
 </button>
 
@@ -38,6 +39,10 @@
         transition: background 600ms ease, color 600ms ease, border 600ms ease;
         width: 100%;
         outline: none;
+    }
+
+    .no_wrap{
+        white-space: nowrap;
     }
 
     button:hover{

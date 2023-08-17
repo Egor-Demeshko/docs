@@ -7,7 +7,7 @@
 	import NodeRedactor from "$lib/components/nodeRedactor/NodeRedactor.svelte";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import Tabs from "$lib/components/Tabs/Tabs.svelte";
-    import LogoAndName from "$lib/components/LogoAndName.svelte";
+
 	import AddButton from "$lib/components/CntrElem/AddButton.svelte";
     import MessagesContainer from "$lib/components/MessagesContainer.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
@@ -176,31 +176,26 @@
 </script>
 
 
-<main>
-    <div class="background">
-    </div>     
-        <div class="logo_position">
-            <LogoAndName/>
+
+<div class="redactors">
+
+        <div class="element element__left">
+            <MessagesContainer />
+            <Tabs id={"left"} tabNames={["Схема 1", "Схема 2"]}/>
+            <TopControllBar />
+            <AddButton --width="3.4rem" --height="3.4rem"/>
+            <SVGMain />
+            <NodeRedactor />
         </div>
-        <div class="redactors">
 
-            <div class="element element__left">
-                <MessagesContainer />
-                <Tabs id={"left"} tabNames={["Схема 1", "Схема 2"]}/>
-                <TopControllBar />
-                <AddButton --width="3.4rem" --height="3.4rem"/>
-                <SVGMain />
-                <NodeRedactor />
-            </div>
+        <!--<div class="devider"></div>-->
 
-            <!--<div class="devider"></div>-->
+        <div class="element">
+            <Tabs id={"right"} tabNames={["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"]}/>
+            <DocWriter html={cleanHtml}/>
+        </div>
+</div>  
 
-            <div class="element">
-                <Tabs id={"right"} tabNames={["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"]}/>
-                <DocWriter html={cleanHtml}/>
-            </div>
-    </div>  
-</main>
 
 <Tooltip />
 <Modal />
@@ -209,32 +204,6 @@
 
 
 <style>
-    main{
-        background-color: var(--main-bg);
-        position: relative;
-        top: 0;
-        left: 0;
-        background: url('/assets/images/background.svg');        
-        height: 100vh;
-        width: 100vw;
-    }
-
-    .background{
-        background: url('/assets/images/noise.svg');
-        mix-blend-mode: soft-light;  
-        position: absolute;
-        top:0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-    }
-
-    .logo_position{
-        padding: 1.5rem;
-        background-color: transparent;
-        position: relative;
-
-    }
 
     .element{
         flex: 2;

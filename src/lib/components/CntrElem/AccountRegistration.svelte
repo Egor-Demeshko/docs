@@ -1,22 +1,17 @@
 <script>
-    import Input from "./CntrElem/Input.svelte";
-    import InputWithEye from "./CntrElem/InputWithEye.svelte";
-    import Button from "./CntrElem/Button.svelte";
+    import Input from "$lib/components/CntrElem/Input.svelte";
+    import InputWithEye from "$lib/components/CntrElem//InputWithEye.svelte";
+    import Button from "$lib/components/CntrElem/Button.svelte";
     import { createEventDispatcher } from "svelte";
-
 
     let dispatch = createEventDispatcher();
 
-
-    function logIn(){
-        window.location = window.location.origin + "/r";
-    }
 </script>
 
 <form>
-    <h1>Вход в личный кабинет</h1>
+    <h1>Регистрация</h1>
     <div class="controls">
-        <Input id={"login"} placeholder={"Введите ваш логин"}
+        <Input id={"reg_login"} placeholder={"Введите ваше имя"}
         type={'text'}
         --border-width="2px"
         --border-color="var(--middle-blue)"
@@ -27,7 +22,7 @@
         --border-color-hover="var(--pale-orange)"
         --background-hover="var(--white-blue)"/>
         
-        <InputWithEye id={"password"} placeholder={"Введите ваш пароль"}
+        <InputWithEye id={"reg_password"} placeholder={"Введите ваш пароль"}
         --border-width="2px"
         --border-color="var(--middle-blue)"
         --font-size="1.125rem"
@@ -38,8 +33,18 @@
         --background-hover="var(--white-blue)"
         type={"password"}/>
 
-        <Button name={"Войти"} 
-        fnToRunOnClick={logIn}
+        <InputWithEye id={"reg_password_repeat"} placeholder={"Повторите ваш пароль"}
+        --border-width="2px"
+        --border-color="var(--middle-blue)"
+        --font-size="1.125rem"
+        --color="var(--deep-blue)"
+        --background="var(--white-blue)"
+        --placeholder="var(--gray-blue)"
+        --border-color-hover="var(--pale-orange)"
+        --background-hover="var(--white-blue)"
+        type={"password"}/>
+
+        <Button name={"Зарегистрироваться"} 
         --bg="var(--middle-blue)" 
         --color="var(--white-blue)"
         --bg-hover="var(--gray-blue)"
@@ -50,7 +55,7 @@
     </div>
 
 
-    <Button name={"Зарегистрироваться"}
+    <Button name={"Есть аккаунт? Залогиниться"}
     --bg="var(--light-blue)" 
     --color="var(--middle-blue)"
     --bg-hover="var(--light-gray-blue)"
@@ -58,8 +63,8 @@
     --border="2px solid var(--light-blue)"
     --border-hover="2px solid var(--light-gray-blue)"
     --font-size="1.125rem"
-    fnToRunOnClick={ () => dispatch("switch_to_registration")}
-    on:switch_to_registration/>
+    fnToRunOnClick={ () => dispatch("switch_to_login")}
+    on:switch_to_login/>
 
 </form>
 

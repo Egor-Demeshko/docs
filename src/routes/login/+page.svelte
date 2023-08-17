@@ -1,14 +1,24 @@
 <script>
     import Button from "$lib/components/CntrElem/Button.svelte";
-    import {fade} from "svelte/transition";
+    import {fade, blur} from "svelte/transition";
     import Form from "$lib/components/Form.svelte";
-    /*import AccountRegistration from "$lib/components/CntrElem/AccountRegistration.svelte";*/
+    import AccountRegistration from "$lib/components/CntrElem/AccountRegistration.svelte";
 
     /**goto("/r");*/
     let logIn_open = false;
+    let registration_open = false;
 
     function logIn(){
+        console.log("login");
+        registration_open = false;
         logIn_open = true;
+        
+    }
+
+    function goToRegistration(){
+        console.log("registration")
+        logIn_open = false;
+        registration_open = true;
     }
 
 </script>
@@ -16,7 +26,7 @@
 
 <main>
 
-    <section class:logIn_open>
+    <section class:registration_open class:logIn_open>
         <div class="heading">
             <svg>
                 <use href="/assets/icons/all.svg#logo"></use>
@@ -24,7 +34,7 @@
             <h1>Contract Constructor</h1>
         </div>
 
-        {#if !logIn_open}
+        {#if !logIn_open && !registration_open}
         <div out:fade={{duration: 300}}
         class="buttons">
             <Button name={"Войти в личный кабинет"}
@@ -45,35 +55,33 @@
             --padding=".75rem"
             --bg-hover="var(--light-gray-blue)"
             --border-hover="2px solid var(--light-gray-blue)"
-            --color-hover="var(--middle-blue)"/>
+            --color-hover="var(--middle-blue)"
+            fnToRunOnClick={goToRegistration}/>
         </div>
         {/if}
 
-        {#if logIn_open}
-            <div in:fade={{duration: 400, delay: 800}}
-                out:fade={{duration: 400, delay: 400}}>
-                <Form />
-            </div>      
-        {/if}
-<!--
-        {#if logIn_open}
-        <div in:fade={{duration: 400, delay: 800}}
-            out:fade={{duration: 400, delay: 400}}>
-            <AccountRegistration />
-        </div>      
-        {/if}
--->
+        <div class="forms">
+            {#if logIn_open}
+                <div class="forms__form" in:fade={{duration: 400, delay: 800}}
+                    out:fade={{duration: 400}}>
+                    <Form on:switch_to_registration={goToRegistration}/>
+                </div>      
+            {/if}
+
+            {#if registration_open}
+                <div class="forms__form" in:fade={{duration: 400, delay: 800}}
+                    out:fade={{duration: 400}}>
+                    <AccountRegistration on:switch_to_login={logIn}/>
+                </div>      
+            {/if}
+        <div>
+
     </section>
 
 </main>
 
 <style>
-    main{
-        width: 100vw;
-        height: 100vh;
-        background: url('/assets/images/background.svg');  
-        position: fixed;
-    }
+
 
 
     section{
@@ -82,17 +90,27 @@
         left: 50%;
         display: flex;
         flex-direction: column;
-        max-width: 30rem;
+        width: 30rem;
         transform: translate(-50%);
-        gap: 6.25rem;
+        gap: 5rem;
     }
 
-    section.logIn_open{
+    section.logIn_open,
+    section.registration_open{
         animation-name: moveup;
         animation-timing-function: ease-in-out;
         animation-duration: 600ms;
         animation-fill-mode: forwards;
         animation-delay: 300ms;
+    }
+
+    .forms{
+        position: relative;
+    }
+
+
+    .forms__form{
+        position: absolute;
     }
 
 
