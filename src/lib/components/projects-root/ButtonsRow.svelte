@@ -55,7 +55,8 @@
             --border-hover="2px solid var(--middle-blue)"
             --font-size=".875rem"
             --padding=".3rem 1rem"
-            --bg-hover="var(--light-gray-blue)"/>        
+            --bg-hover="var(--light-gray-blue)"
+            fnToRunOnClick={ () => window.location = window.location.origin + "/anketa"}/>        
         </div>
         <div class="buttons_row__right">
             <Button 

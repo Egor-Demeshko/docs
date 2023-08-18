@@ -7,13 +7,24 @@
     let open = false;
     let rotate = false;
     let directionOfanimation = false;
+    let rotateBack = false;
+    let icon;
 
+    /**обе эти переменные исопльзуются для анимации повтора стрелки, через классы*/
     $: rotate = (open) ? true : false;
 
 
-    function clickHandle(){
+
+    function clickHandle(e){
+        const target = e.target;
+
+        if(target.tagName === "BUTTON") return;
+
         directionOfanimation = !directionOfanimation;
-        setTimeout( () => open = !open);
+        setTimeout( () => {
+            open = !open;
+            rotateBack = (!open) ? true : false;
+        });
     }
 </script>
 
@@ -28,14 +39,17 @@
             <path d="M7.80516 6.265C7.66016 6.195 7.52016 6.125 7.38516 6.045C7.27516 5.98 7.17016 5.91 7.06516 5.835C6.98016 5.78 6.88016 5.7 6.78516 5.62C6.77516 5.615 6.74016 5.585 6.70016 5.545C6.53516 5.405 6.35016 5.225 6.18516 5.025C6.17016 5.015 6.14516 4.98 6.11016 4.935C6.06016 4.875 5.97516 4.775 5.90016 4.66C5.84016 4.585 5.77016 4.475 5.70516 4.365C5.62516 4.23 5.55516 4.095 5.48516 3.955C5.39338 3.75833 5.13525 3.69991 4.98179 3.85337L2.17016 6.665C2.10516 6.73 2.04516 6.855 2.03016 6.94L1.76016 8.855C1.71016 9.195 1.80516 9.515 2.01516 9.73C2.19516 9.905 2.44516 10 2.71516 10C2.77516 10 2.83516 9.995 2.89516 9.985L4.81516 9.715C4.90516 9.7 5.03016 9.64 5.09016 9.575L7.90643 6.75873C8.05682 6.60834 8.00032 6.34957 7.80516 6.265Z"/>
         </svg>
     </div>
+    
     <!-- svelte-ignore empty-block -->
-
    {#if open}
         <ButtonsRow {directionOfanimation}/>
     {/if}
 
     
-    <svg class="accordion_icon" class:rotate width="15" height="8" viewBox="0 0 15 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="accordion_icon" class:rotate class:rotateBack
+    bind:this={icon} 
+    width="15" height="8" 
+    viewBox="0 0 15 8" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12.9197 0.179993H6.68975H1.07975C0.119748 0.179993 -0.360251 1.33999 0.319749 2.01999L5.49975 7.19999C6.32975 8.02999 7.67975 8.02999 8.50975 7.19999L10.4797 5.22999L13.6897 2.01999C14.3597 1.33999 13.8797 0.179993 12.9197 0.179993Z"/>
     </svg>
 
@@ -73,6 +87,10 @@
         background-color: var(--light-blue);
     }
 
+    li.open::after{
+        display: none;
+    }
+
     li:hover{
         background-color: var(--light-blue);
     }
@@ -95,7 +113,7 @@
 
     .icon{
         /*display: none;*/
-        display: block;
+        /*display: block;*/
         width: 1rem;
         height: 1rem;
         opacity: 0;
@@ -107,14 +125,21 @@
         position: absolute;
         right: 1.8rem;
         top: 50%;
-        transform: translateY(0) rotateZ(0);
+        transform: rotateZ(0);
     }
 
     .accordion_icon.rotate{
         animation-name: rotate;
         animation-timing-function: ease-in-out;
         animation-duration: 400ms;
-        animation-fill-mode: both;
+        animation-fill-mode: forwards;
+    }
+
+    .accordion_icon.rotateBack{
+        animation-name: rotateBack;
+        animation-timing-function: ease-in-out;
+        animation-duration: 600ms;
+        animation-fill-mode: forwards;
     }
 
     .icon path{
@@ -132,10 +157,28 @@
 
     @keyframes rotate{
         0%{
-            transform: translateY(0) rotateZ(0);
+            transform: rotateZ(0);
+            opacity: 1;
         }
         100%{
-            transform: translateY(0) rotateZ(180deg);
+            transform: rotateZ(180deg);
+            opacity: 0;
+        }
+    }
+
+
+    @keyframes rotateBack{
+        0%{
+            transform: rotateZ(180deg);
+            opacity: 0;
+        }
+        30%{
+            transform: rotateZ(180deg);
+            opacity: 0;
+        }
+        100%{
+            transform: rotateZ(0);
+            opacity: 1;
         }
     }
 </style>

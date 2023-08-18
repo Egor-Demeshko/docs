@@ -172,5 +172,5 @@ export const showDeleteStore = writable(false);
 export const deleteLineFunction = writable(null);
 
 
-/**показывать tooltip {show: true, coors: {x: 0, y: 0}, text: "", place: "buttom"} */
+/**показывать tooltip {show: true, coors: {x: 0, y: 0}, text: "", place: "above || under"} */
 export const showTooltip = writable({show: false});
