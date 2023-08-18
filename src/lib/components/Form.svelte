@@ -9,7 +9,7 @@
 
 
     function logIn(){
-        window.location = window.location.origin + "/r";
+        window.location = window.location.origin + "/projects";
     }
 </script>
 
