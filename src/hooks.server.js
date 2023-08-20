@@ -1,7 +1,8 @@
 export async function handle({ event, resolve}){
     const fetch = event.fetch;
 
-    if(event.url.pathname.startsWith("/")){
+    if( event.url.pathname.startsWith("/redactor") ||
+        event.url.pathname.startsWith("/anketa") ){
         
         try{
             let data = await fetch('http://constructor.crabdance.com/get_project', {
@@ -29,6 +30,8 @@ export async function handle({ event, resolve}){
             });
         }
 
-    return await resolve(event)
+
     }
+
+    return await resolve(event)
 }

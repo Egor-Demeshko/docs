@@ -13,7 +13,7 @@
     onMount( () => {
         let urlString = window.location.toString();
         
-        if(urlString.includes("redactor")) showHeading = true;
+        if(urlString.includes("redactor") || urlString.includes("anketa")) showHeading = true;
     });
 </script>
 

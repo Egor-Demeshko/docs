@@ -122,4 +122,20 @@
     :global(.editor.active_bg .trumbowyg-editor){
         background-color: var(--pale-orange);
     }
+
+    :global(.editor .trumbowyg-box){
+        background-color: var(--white-blue);
+        padding: 5rem 0;
+    }
+
+    :global(.editor .trumbowyg-box .trumbowyg-editor){
+        max-width: 21cm;
+        background-color: var(--white);
+    }
+
+    :global(.editor .trumbowyg-box .trumbowyg-button-pane){
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 </style>
