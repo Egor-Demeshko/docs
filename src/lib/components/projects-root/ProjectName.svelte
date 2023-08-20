@@ -1,14 +1,47 @@
+<script context="module">
+    const set = new Set();
+    const callbacks = new Set();
+
+    export function subscribeOnProjectListSet(fn){
+        callbacks.add(fn);
+    }
+
+
+    /**обеспечивает сигнал для других полей проектов*/
+    function changeAllDirections(projectNameStore){
+        set.forEach( ( store ) => {
+            (store === projectNameStore) ? store.set(true) : store.set(false);
+        });
+    }
+</script>
+
+
+
 <script>
-	import { fade } from "svelte/transition";
     import ButtonsRow from "$lib/components/projects-root/ButtonsRow.svelte";
+    import { writable } from "svelte/store";
+	import { onMount } from "svelte";
 
     export let name = "Название стандартное";
 
+    /**
+     * пробовал через subscribe, не получилоась
+     * а так по значению стора, решаем открыть имя проекта или нет
+    */
+    $: ($projectNameStore) ? openProject() : closeProject();
+    let projectNameStore = writable(false);
     let open = false;
     let rotate = false;
     let directionOfanimation = false;
     let rotateBack = false;
     let icon;
+    let projectName;
+
+    onMount( () => {
+        set.add(projectNameStore);
+        return () => set.delete(projectNameStore);
+    });
+    
 
     /**обе эти переменные исопльзуются для анимации повтора стрелки, через классы*/
     $: rotate = (open) ? true : false;
@@ -20,16 +53,41 @@
 
         if(target.tagName === "BUTTON") return;
 
-        directionOfanimation = !directionOfanimation;
+        /**так как отрисовка идет через значение стора, то меняем его.
+         * если окно открыто и мы повторно кликнули, нужно закрыть только его
+        */
+        if(open) {
+            projectNameStore.set(false);
+        };
+
+        if(!open) changeAllDirections(projectNameStore);
+
+        /*у этого компонента как модуля, могут быть подписчики, заинтересованные в изменение состояния отрисовки названия проектов*/
+        callbacks.forEach( (fn) => fn(set));
+    }
+
+
+    function openProject(){
+        directionOfanimation = true;
         setTimeout( () => {
-            open = !open;
+            open = true;
+            rotateBack = (!open) ? true : false;
+        });
+    }
+
+
+    function closeProject(){
+        directionOfanimation = false;
+
+        setTimeout( () => {
+            open = false;
             rotateBack = (!open) ? true : false;
         });
     }
 </script>
 
 
-<li class:open on:click={clickHandle}>
+<li class:open on:click={clickHandle} bind:this={projectName}>
     
     <div class="name__wrapper">
         <span class="name" contenteditable="true" on:click={(e) => e.stopPropagation()}>{name}</span>

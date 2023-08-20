@@ -11,7 +11,6 @@
     $: if(directionOfanimation){
         setTimeout( () => show = true, 600);
     } else {
-        console.log("show: ", {show, directionOfanimation});
         show = false;
     }
 

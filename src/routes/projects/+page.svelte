@@ -2,14 +2,59 @@
 	import TopControll from "$lib/components/projects-root/TopControll.svelte";
     import ProjectName from "$lib/components/projects-root/ProjectName.svelte";
     import Button from "$lib/components/CntrElem/Button.svelte";
-	import DocName from "$lib/components/CntrElem/DocName.svelte";
-    import Tooltip from "$lib/components/CntrElem/Tooltip.svelte"
+	import ProjectRight from "$lib/components/projects-root/ProjectRight.svelte";
+    import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
+    import { subscribeOnProjectListSet } from "$lib/components/projects-root/ProjectName.svelte";
+    import { get } from "svelte/store";
 
 
     /*TODO получаем список проектов этого пользователя*/
     let projects;
+    let showRight = false;
 
     /*TODO и получить список документов из проекта*/
+
+
+    subscribeOnProjectListSet(shouldBeOpened);
+
+    function shouldBeOpened(set){
+        /*
+            анимация правого окна, на открытие закрытие.
+            мы получаем текущее состояние сет. 
+            по нему пробегаемся, если все сторы false. 
+            стартуем анимацию закрытия.
+            если есть тру. 
+            то если сейчас закрто, то открываем
+            если уже открыто ничего не делаем.
+
+            сама анимация, это комбинация изменений
+            например, за 200мс надо чтобы исчезла внутрянка.
+            и затем за оставшиеся сама анимация 400. 
+            в течении 400 мы меняем flex basis
+        */
+        let deciding = false;
+
+        
+        set.forEach( (store, i) => {
+            
+            let bool = get(store);
+            
+            if(bool)  deciding = true;
+        });
+
+        if(deciding && !showRight) showRight = true;
+        if(!deciding && showRight) showRight = false;
+    }
+
+
+    /*правильное добавление gap*/
+    $: if(!showRight && projects){
+        setTimeout(() => {
+            projects.style.gap = "0";
+        }, 350);
+    } else if(showRight) {
+        projects.style.gap = "1.5rem";
+    }
 </script>
 
 
@@ -17,7 +62,7 @@
         
         <TopControll />
     
-        <div class="projects">
+        <div class="projects" bind:this={projects}>
             <div class="projects__left">
                 <ul class="project__list">
                     <ProjectName />
@@ -42,11 +87,11 @@
                     </div>
                 </div>
             </div>
-    
-            <div class="projects__right">
-                <DocName/>
-                <DocName/>
-                <DocName/>
+
+            <div class="projects__right" class:showRight>
+                {#if showRight}
+                    <ProjectRight />
+                {/if}
             </div>
     
         </div>
@@ -72,7 +117,7 @@
     .projects{
         flex: 1 0;
         display: flex;
-        gap: 1.5rem;
+        gap: 0;
         width: 100%;
         height: 100%;
         align-items: stretch;
@@ -86,13 +131,21 @@
         position: relative;
     }
 
-    .projects__right{
+    .projects__right.showRight{
         flex: 2;
-        border-radius: 20px 0 0 0;
         padding: 3rem 1.5rem 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+
+        /*animation-name: close;
+        animation-duration: 400ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;*/
+    }
+
+    .projects__right{
+        flex: 0;
+        border-radius: 20px 0 0 0;
+        padding: 0;
+        transition: all 400ms ease-out;
     }
 
     .projects__left,
@@ -118,7 +171,4 @@
         left: 0;
         background-color: var(--light-blue);
     }
-
-
-
 </style>
