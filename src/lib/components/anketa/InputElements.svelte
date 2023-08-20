@@ -16,7 +16,7 @@
         {:else if data.node_type === "select" && data.view_type === "radiobutton"}
             <SelectInput {data}/>
         {:else if data.node_type === "select" && data.view_type === "drop_list"}
-            <AnketaDropdown {data}/>
+            <AnketaDropdown {data} />
         {/if}
 
 

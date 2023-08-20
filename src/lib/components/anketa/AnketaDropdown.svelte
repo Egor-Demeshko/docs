@@ -112,20 +112,19 @@
         let target = e.target;
         let type = target.value;  //значение выбранной опции
 
-        options.update( (array) => {
-            array.forEach( (elem) => {
-                if(elem.value === type) {
-                    
-                    elem.selected = true;
-                    syncDataInNodesStore(id, name, elem.value);
-                } else {
-                    elem.selected = false;
-                }
-            });
 
-
-            return array;
+        derivedOptions.forEach( (elem) => {
+            if(elem.text === type) {
+                
+                elem.selected = true;
+                syncDataInNodesStore(data.id, "content", elem.text);
+            } else {
+                elem.selected = false;
+            }
         });
+
+        derivedOptions = derivedOptions;
+
 
         isOpened = false;
 
@@ -244,8 +243,10 @@
         border-radius: 30px;
         align-items: center;
         position: relative;
+        transform: translate(0);
         z-index: 4;
         transition: background 400ms ease;
+        background-color: var(--white-blue);
     }
 
 
@@ -275,8 +276,7 @@
         display: flex;
         justify-content: start;
         align-items: center;
-        gap: .4rem;
-        padding: var(--padding-options);
+        padding: .2rem .875rem;
         cursor: pointer;
         outline: 2px solid transparent;
     }
@@ -304,16 +304,10 @@
     }
 
 
-    .icon{
-        width: 0.8rem;
-        height: 0.8rem;
-    }
-
-
     .arrow{
         fill: var(--gray-blue);
-        width: 0.5rem;
-        height: 0.25rem;
+        width: 0.875rem;
+        height: 0.5rem;
         position: absolute;
         right: 0.75rem;
         animation-duration: 400ms;
@@ -337,13 +331,14 @@
         position: absolute;
         display: flex;
         flex-direction: column;
+        gap:.2rem;
         top: 50%;
         left: 0;
-        background-color: var(--middle-blue);
-        padding-top: 1.3rem;
+        background-color: var(--white-blue);
+        padding-top: 1.6rem;
         padding-bottom: .5rem;
         width: 100%;
-        border: var(--border);
+        border: 2px solid var(--gray-blue);
         border-top: none;
         z-index: 2;
         border-radius: 0 0 12px 12px;
@@ -359,7 +354,7 @@
     }
 
     .option-in-drop:hover{
-        background-color: var(--light-slate-gray);
+        background-color: var(--light-gray-blue);
     }
 
     @keyframes rotate{
