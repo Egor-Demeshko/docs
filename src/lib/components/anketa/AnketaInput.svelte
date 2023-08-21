@@ -1,13 +1,25 @@
 <script>
     import TextArea from "$lib/components/CntrElem/TextArea.svelte";
+    import { setElementHoverLike, removeElementHoverLike} from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess.js"
     export let data;
 
-    let name = "Имя поля";
+    let name = data.name;
+
+
+    function setHoverLike(){
+        setElementHoverLike(data.id);
+    }
+
+    function removeHoverLike(){
+        removeElementHoverLike(data.id);
+    }
 </script>
 
 
 
-<div class="input_anketa">
+<div class="input_anketa"
+on:pointerenter={setHoverLike}
+on:pointerleave={removeHoverLike}>
     <div class="input_anketa__name">
         <span>{name}</span>
     </div>
@@ -21,7 +33,9 @@
         --padding=".5rem 1.25rem"
         --background="var(--white-blue)"
         --background-hover="var(--white-blue)"
-        --color="var(--deep-blue)"/>
+        --color="var(--deep-blue)"
+        id={data.id}
+        name={data.name}/>
     </div>
 </div>
 

@@ -1,4 +1,3 @@
-import { textElementsData } from "$lib/scripts/stores";
 import { storeForSimpleTexts } from "$lib/scripts/stores";
 
 export default async function elementsDataUpdate({id, name, content}){
@@ -11,7 +10,7 @@ export default async function elementsDataUpdate({id, name, content}){
 
             arrayOfElementsObj[i].setTextData({name, content});
 
-           /* console.log("[ElementsDataUpdate]: $storeForSimpleTexts {name, content}: ", {
+            /*console.log("[ElementsDataUpdate]: $storeForSimpleTexts {name, content}: ", {
                 name, content
             })*/
             break;

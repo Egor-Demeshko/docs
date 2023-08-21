@@ -13,6 +13,7 @@
 
     /*записываем обычный id блока. в данном случае айди блока которые вызвал поток добавление переменной в текст*/
     let callerId;
+    let urlPath = '';
 
     /** меняет цвет заднего фона при старте процесс добавление переменной*/
     $: active_bg = ($addExcitingNodeToRedator.status === "start") ? true : false;
@@ -86,6 +87,23 @@
             ]
         });
 
+        urlPath = window.location.pathname;
+
+        /*если мы на странице анкеты, то редактировать запрещенно текст*/
+        if(urlPath.includes("anketa")){
+           let textarea = document.querySelector(".trumbowyg-editor");
+           textarea.setAttribute("contenteditable", false);
+
+           container.addEventListener("selectstart", (e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+           });
+
+           textarea.classList.add("blockinteraction");
+        }
+
+        
+
         editor = window.jQuery(container).trumbowyg('html', html);
         docRoot.set(root);
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
@@ -137,5 +155,9 @@
         position: absolute;
         top: 0;
         left: 0;
+    }
+
+    :global(.blockinteraction){
+        pointer-events: none;
     }
 </style>

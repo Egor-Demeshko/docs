@@ -1,5 +1,5 @@
 <script>
-    import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
+    import generateSimplifiedTextElements from "$lib/scripts/docWriter/generateSimplifiedTextElements.js";
     import DocWriter  from "$lib/components/DocWriter.svelte";
     import { nodes } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
@@ -183,7 +183,7 @@
 
 
         /** генерируем span элементы в строчном виде и вставляем их в разметку*/
-        cleanHtml = generateTextElements(graph, cleanHtml);
+        cleanHtml = generateSimplifiedTextElements(graph, cleanHtml);
     }
 </script>
 

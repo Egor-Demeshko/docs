@@ -1,4 +1,6 @@
 <script>
+    import { setElementActive, setElementInactive } from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess";
+    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     export let id = "login";
     export let type = "text";
     export let placeholder = "Текст подсказка";
@@ -12,13 +14,19 @@
 
     let textarea;
 
-    function blurHandler(){
-        //TODO empty
+    function focusIn(){
+        setElementActive(id);
+    }
+
+    function focusOut(){
+        setElementInactive(id);
     }
 
 
-    function changeHandle(){
-        //TODO empty
+    function changeHandle(e){
+        const target = e.target;
+        //console.log("[TextArea]: changeHandler, ", {id, name, content: target.value});
+        elementsDataUpdate({id, name, content: target.value});
     }
 </script>
 
@@ -26,7 +34,8 @@
 
     <textarea {placeholder} {id} {name} {required} {pattern} {type} {value}
     {rows}
-    on:blur={blurHandler}
+    on:focus={focusIn}
+    on:blur={focusOut}
     on:change={changeHandle}
     bind:this={textarea}
     />

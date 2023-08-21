@@ -1,11 +1,13 @@
 <script>
 
-    let text = 'Нежилое помещение';
+    export let text = 'Пример текста';
     export let name = "";
+
+    /*все обработчики находятся на wrapper компоненте, куда жти элементы вставляются*/
 </script>
 
 <label>
-    <input type="radio" {name} >
+    <input type="radio" {name} tabindex="0" value={text}>
     <div class="custom_input">
         <div class="custom_input__inner">
 
@@ -33,10 +35,18 @@
         padding: 3px;
         width: 1rem;
         height: 1rem;
-        border: 1px solid var(--gray-blue);
+        border: 2px solid var(--gray-blue);
         background-color: var(--white-blue);
         text-align: center;
-        transition: background 400ms ease;
+        transition: background 400ms ease, border 400ms ease;
+    }
+
+    input:focus{
+        outline: none;
+    }
+
+    input:focus~.custom_input{
+        border: 2px solid var(--pale-orange);
     }
 
     label:hover .custom_input{

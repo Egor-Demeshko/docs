@@ -1,7 +1,10 @@
 <script>
     import { fly } from "svelte/transition";
     import { nodes } from "$lib/scripts/stores";
-    import syncDataInNodesStore from "$lib/scripts/controllers/syncDataInNodesStores.js";
+
+    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate.js";
+    import { setElementActive, setElementInactive, setElementHoverLike, removeElementHoverLike }
+             from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess";
 
 
 
@@ -117,11 +120,12 @@
             if(elem.text === type) {
                 
                 elem.selected = true;
-                syncDataInNodesStore(data.id, "content", elem.text);
+                elementsDataUpdate({id: data.id, name: data.name, content: type});
             } else {
                 elem.selected = false;
             }
         });
+
 
         derivedOptions = derivedOptions;
 
@@ -142,8 +146,26 @@
             changeHandle({target: input});
         }
     }
-    
 
+
+    /* ОБРАБОТКА ПОИНТЕР ИВЕНТОВ */
+    function elementFocusIn(){
+        setElementActive(data.id);
+    }
+
+
+    function elementFocusOut(){
+        setElementInactive(data.id);
+    }
+
+    function elementPointerEnter(){
+        setElementHoverLike(data.id);
+    }
+
+    function elementPointerLeave(){
+        removeElementHoverLike(data.id);
+    }
+    
 </script>
 
 
@@ -151,7 +173,10 @@
 <svelte:document on:click={releasePopUp}></svelte:document>
 
 
-<div class="wrapper">
+<div class="wrapper"
+on:pointerenter={elementPointerEnter}
+on:pointerleave={elementPointerLeave}
+>
     <div class="name">
         <span>{data.name}</span>
     </div>
@@ -159,7 +184,11 @@
     <div class="dropdown" on:change={changeHandle}>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <div class="main_view" on:click={handleClick} on:keydown={handleKeyPressed} role="button" tabindex="0">
+        <div class="main_view" on:click={handleClick} 
+        on:keydown={handleKeyPressed} 
+        on:focus={elementFocusIn}
+        on:blur={elementFocusOut}
+        role="button" tabindex="0">
 
             {#each derivedOptions as {text, selected}}
                 {#if selected}
@@ -210,7 +239,7 @@
 
     .wrapper{
         display: flex;
-        gap: 1.5rem;
+        gap: 1rem;
         padding: 1rem 0;
         align-items: center;
     }
