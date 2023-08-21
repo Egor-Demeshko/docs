@@ -71,7 +71,6 @@
                 },
             },
             btns: [
-                ['viewHTML'],
                 ['undo', 'redo'], 
                 ['formatting'],
                 ['strong', 'em', 'del'],
