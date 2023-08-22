@@ -75,7 +75,7 @@
 		"node_type": "select",
 		"options": ["красный","зелёный","синий"],
         "view_type": "select",
-		"content": "зелёный",
+		"content": "красный",
 		"condition": null,
 		"trigger": null,
 		"x": 300,

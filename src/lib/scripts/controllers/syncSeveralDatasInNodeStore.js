@@ -5,40 +5,30 @@ import { nodes, storeForSimpleTexts } from "$lib/scripts/stores";
  * конкретного поля под именем, по айди блока. БЕРЕТ НЕСКОЛЬКО ДАННЫХ В ВИДЕ ОБЬЕКТА.
  * хорошо для работы со динамическими списками
  */
-export default function syncSeveralDatasInNodeStore(id, options){
-    console.log("[syncSeveralDatasInNodeStore]: arguments options: ",  options);
+export default function syncSeveralDatasInNodeStore(id, data){
+    console.log("[syncSeveralDatasInNodeStore]: arguments options: ",  data);
     /*
-    /**обновляем nodes снача 
     nodes.update( (nodes) => {
-        /** с использованием этого флага пытаемся предотвратить waterfall  
-        let wasChanged = false;
-
-        for(let i = 0; i < nodes.length; i++){
-            const node = nodes[i];
-
-            if(node["id"] !== id) continue; 
+        for (let i = 0; i < nodes.length; i++) {
+            const element = nodes[i];
             
-            for (let [key, value] of Object.entries(options)) {
-                if(node[key] != value) {
-                    node[key] = value;
-                    wasChanged = true;
-                };               
-            }
+            if(element["id"] !== id) continue;
 
-            if(wasChanged) nodes[i] = node;
+            element.options = data.options;
+            nodes[i]["content"] = data.content;
             break;
         }
         return nodes;
-    });
-    */
+    });*/
+    
     /**обновляем обьекты simpletext для правильного отображения в редакторе документов */
     storeForSimpleTexts.update( (arr) => {
         
         for(let i = 0; i < arr.length; i++){
             if(arr[i]['id'] !== id) continue;
 
-            if(options["content"]){
-                arr[i].setTextData({content: options.content});
+            if(data["content"]){
+                arr[i].setTextData({content: data.content});
             }
             break;
         }

@@ -38,7 +38,7 @@
 
 <style>
     .wrapper{
-        background-color: var(--gray-blue);
+        
         width: var(--width);
         height: var(--height);
         border-radius: 25%;
@@ -50,10 +50,13 @@
     }
 
     .icon{
+        background-color: var(--gray-blue);
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
+        transition: background 600ms ease;
+        border-radius: 25%;
     }
 
     .dropdown{
@@ -65,10 +68,10 @@
     }
 
     svg{
-        fill: var(--white);
+        fill: var(--light-blue);
         width: 1.7rem;
         height: 1.7rem;
-        transition: transform 400ms ease-out;
+        transition: transform 400ms ease-out, fill 400ms ease;
     }
 
     .rotate svg{
@@ -76,13 +79,23 @@
     }
 
     .wrapper:hover{
-        box-shadow: 0 0 6px var(--gray-blue);
+        box-shadow: 0 0 4px var(--gray-blue);
+    }
+
+    .icon:hover{
         background-color: var(--orange);
     }
 
-    .rotate,
-    .rotate:hover{
-        background-color: var(--pumpkin);
+    .icon:hover svg{
+        fill: var(--white-blue);
+    }
+
+    .rotate .icon{
+        background-color: var(--light-slate-gray);
+    }
+
+    .rotate svg{
+        fill: var(--light-blue);
     }
 
 

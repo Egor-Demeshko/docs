@@ -6,38 +6,25 @@
     import radioContentAndValuesChecker from "$lib/scripts/controllers/radioContentAndValuesChecker.js";
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
 
-    export let id = '';
+    export let id = "";
+    export let options = "";
+
     let wrapper;
-    
 
-    $: listElements = gainDataFromNodes($blockClickedId);
-    
-    /**обновляем NODES пакетом по нескольким значениям*/
-    $: if(listElements) syncSeveralDatasInNodeStore(id, { "options": listElements, "content": listElements[0]});
-
-    //$: console.log("[List]: listElements: ", listElements);
-    $: if($nodes){
-        listElements = listElements;
-    }
-
-
-    function gainDataFromNodes(blockId){
-        for(let i = 0; i < $nodes.length; i++){
-            if($nodes[i]['id'] !== blockId) continue;
-
-            console.log("[LIST]: {gainDataFromNodes}: ", $nodes[i]);
-            return $nodes[i]["options"] || [];         
-        }
+    $: if(options){
+        options = options;
+        
+        syncSeveralDatasInNodeStore(id, { "options": options, "content": options[0]});
     }
 
 
     /** TODO сделать сохранение куда-то, пока мы только в runtime добавляем в массив*/
     function addInput(e){
         e.stopPropagation();
-        listElements.push('');
-        listElements = listElements;
+        options.push('');
+        options = options;
         
-        if(listElements.length === 1){
+        if(options.length === 1){
             setTimeout( () => {
                 if(!wrapper) return;
 
@@ -46,20 +33,11 @@
                 wrapper = null;
             });
         }
-
-
     }
 
-    /**фнукия управляет удаление элемента в списке
-     * так как делается все реактивно есть нюансы в реализации
-     * определяем ХТМЛ элемент который нужно удалить.
-     * затем необходимо значение этого элемента удалить в управляющем массиве
-     * удаление элемент может привести к конфликту с полем content, а также необходимо
-     * переназначить значение в визуальном интерфейсе по умолчанию.
-     * Назначение элемента по умолчанию произойдет автоматически, будет использован первый
-     * элемент в массиве.
-     * Для проверки и переназначения поля content узла используется функция
-     * radioContentAndValuesChecker
+    /**
+     * удалние элемента делает через реактивность родителя. 
+     * optins это ссылка на массив прямо в обьекте графа
     */
     function deleteItem(e){
         //у каждого элемента есть айди. айди фактически порядковый номер в массиве.
@@ -69,7 +47,7 @@
             let div = e.target.closest("div[id*=list]");
             let id = +div.id.replace("list_", '');
 
-            listElements = listElements.filter( ( v, i) => {
+            options = options.filter( ( v, i) => {
                 if(i === id){ 
                     /*valueOfElementToBeDeleted = v;*/
                     //console.log("[LIST]: deleteItem, click handle in filter function, valueOfElementToBeDeleted: ", valueOfElementToBeDeleted);
@@ -80,16 +58,6 @@
         }
 
         //console.log('[List]: deleteItem function: listElements: ', listElements);
-
-        /**
-         * вызываемая функция делает переназначение поля content в узле, если на визуальном 
-         * интерфесе было удалено это значение.
-         * setTimeout использован для правильного реактивного потока данных.
-         * без него не успевает обновится реактивно поле options
-        */
-        /*if(valueOfElementToBeDeleted){
-            setTimeout( () => radioContentAndValuesChecker(valueOfElementToBeDeleted, id), 0);
-        }*/     
     }
 </script>
 
@@ -101,8 +69,8 @@
     <span class="list__name">Элементы списка</span>
 
     <div class="list" >
-        {#if listElements}
-            {#each listElements as value, i (i)}
+        {#if options}
+            {#each options as value, i (i)}
 
             <!-- первый элемент должен быть с надписью значение по умолчанию. Остальные идут отдельным списком, без подписи.
             поэтому первый элемент инпут с лайбел. остальные просто инпут. -->
@@ -133,10 +101,10 @@
 
         <!-- повторно делаем each по тому же массиву, чтобы сформировать список остальных возможных опций. первый элемент
         отрисовывать не надо -->
-        {#if listElements}
+        {#if options}
             <div class="list__options">
                 <span class="list__additional">Дополнительные значения:</span>
-                {#each listElements as value, i (i)}
+                {#each options as value, i (i)}
 
                     {#if i === 1}
                         <div class="line" id={`list_${i}`} >               

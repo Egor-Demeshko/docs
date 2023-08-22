@@ -52,6 +52,7 @@
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         validation(data);
         //console.log("[NodeRedactor]: after {validation} check data", data);
+        /*обновляем дом*/
         elementsDataUpdate(data);
     } 
 
@@ -84,6 +85,7 @@
     */
     $: if($nodes){
         if(data){
+            //debugger;
             data = data;
             nodes.update( (nodes) => nodes);
             console.log("[NodeRedactor]: {$NODES} store changed, trigger", $nodes);
@@ -185,7 +187,7 @@ class:closing_animation>
 
             {#if node_type === "select"}
                 <div class="select__wrapper">
-                    <List id={data.id}/>
+                    <List id={data.id} bind:options={data.options}/>
                     <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} bind:value={data.description} validity={data.validity}/>
                 </div>
             {/if}
