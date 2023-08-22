@@ -1,6 +1,12 @@
 import { nodes } from "$lib/scripts/stores";
+import validateSiblingsWithoutMessage from "$lib/scripts/utils/validation/validateSiblingsWithoutMessage";
 
-export default function validation(data){
+
+/** @description функция представляет общий конвеер валидации
+ * @param {Object} data - Объект, который содержит данн. Обязательное
+ * @param {Object} options? - опции
+ */
+export default async function validation(data, options){
     const reqFieldsList = ["name", "data_type", "node_type"];
 
     /**err_type используется для последующей стилизации сообщений смотрим message.svelte messagesContainer.svelte */
@@ -10,20 +16,19 @@ export default function validation(data){
         blockId: null,
         err_type: "emergency"
     }
-    //проверять обязательные поля
-    //тип данных на узлах
+
     //делать очистку строки на name, content, description, trigger
     //само поле validity имеет status и errors [{[data.field.name], [message]}]
 
-    /*  - `data_type`: (см. Разрешенные значения), (**обязательное поле!**)  
-        - `node_type`: (см. Разрешенные значения), (**обязательное поле!**)
-        - `name`: str (**обязательное поле!**)*/
 
-
+    /* запускаем валидацию дочерних узлов без сообщений */
+    if(!options?.nopropogate){
+        validateSiblingsWithoutMessage(data.id);
+    }
     
 
 
-    
+    //проверять обязательные поля
     for(let i = 0; i < reqFieldsList.length; i++){
         let key = reqFieldsList[i];
         let value = data[key];
@@ -162,11 +167,11 @@ export default function validation(data){
     }
 
     //console.log('[VALIDATION.js FUNCTION]: custing event: ', data.validity);
-
-    
-    if(data.validity.status === "invalid") document.dispatchEvent(new CustomEvent("error", {
-        detail: data.validity
-    }));
+    if(!options?.nomessages){
+        if(data.validity.status === "invalid") document.dispatchEvent(new CustomEvent("error", {
+            detail: data.validity
+        }));
+    }
 
     return  /**возращаем data с измененным поле validity, а может даже не возращаем. */;
 }

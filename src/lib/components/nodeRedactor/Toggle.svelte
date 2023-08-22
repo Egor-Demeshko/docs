@@ -2,11 +2,11 @@
     export let id;
     export let data_type = "";
 
-    $: isText = true;
-    $: data_type = (isText) ? "string" : "integer";
+    $: isText = (data_type === "string") ? true : false;
+   
 
     function clickHandle(){
-        isText = !isText;
+        data_type = (data_type === "string") ? "integer" : "string";
     }
 
     function keypress(e){
@@ -14,14 +14,14 @@
         if(e.key === "Enter" || e.key === " "){
             let input = e.target.querySelector("input");
             input.checked = !input.checked;
-            isText = !isText;
+            data_type = (data_type === "string") ? "integer" : "string";
         };
     }   
 </script>
 
 
 <label tabindex="0" role="button" on:keypress={keypress}>
-    <input {id} type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} 
+    <input {id} type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} checked={ (isText) ? false : true}
     on:click={clickHandle}
     tabindex="-1">
     <div class="toggle__element" tabindex="-1">

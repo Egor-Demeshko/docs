@@ -9,7 +9,7 @@
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
-    import validation from "$lib/scripts/controllers/validation";
+    import validation from "$lib/scripts/utils/validation/validation";
 
     let trigger = false;
     let closing_animation = false;
