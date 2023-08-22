@@ -23,9 +23,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@ckeditor/ckeditor5-build-classic": "^38.1.0",
-		"@ckeditor/ckeditor5-html-support": "^38.1.0",
 		"jquery": "^3.7.0",
-		"trumbowyg": "^2.27.3"
+		"trumbowyg": "^2.27.3",
+		"uuid": "^9.0.0"
 	}
 }

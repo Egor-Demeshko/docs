@@ -85,6 +85,7 @@
     $: if($nodes){
         if(data){
             data = data;
+            nodes.update( (nodes) => nodes);
             console.log("[NodeRedactor]: {$NODES} store changed, trigger", $nodes);
         }
     }

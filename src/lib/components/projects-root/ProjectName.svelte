@@ -141,6 +141,7 @@
         transform: translateX(-50%);
     }
 
+
     li.open{
         background-color: var(--light-blue);
     }
@@ -150,7 +151,7 @@
     }
 
     li:hover{
-        background-color: var(--light-blue);
+        background-color: var(--light-blue);   
     }
 
 
@@ -167,6 +168,11 @@
         line-height: 100%;
         font-weight: 500;
         color: var(--middle-blue);
+        transition: color 400ms ease-in-out;
+    }
+
+    li:hover .name{
+        color: var(--orange);
     }
 
     .icon{
@@ -184,6 +190,11 @@
         right: 1.8rem;
         top: 50%;
         transform: rotateZ(0);
+        transition: fill 400ms ease-in-out;
+    }
+
+    li:hover .accordion_icon{
+        fill: var(--orange);
     }
 
     .accordion_icon.rotate{

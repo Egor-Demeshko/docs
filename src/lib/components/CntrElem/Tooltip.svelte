@@ -42,13 +42,16 @@
 
 <style>
     div{
-        background-color: var(--faded-gray-blue);
-        color: var(--white);
+        background-color: var(--white);
         font-style: italic;
         font-size: .878rem;
         padding: .25rem .5rem;
         position: fixed;
         border-radius: 4px;
+    }
+
+    span{
+        color: var(--faded-gray-blue);
     }
 
     .under{

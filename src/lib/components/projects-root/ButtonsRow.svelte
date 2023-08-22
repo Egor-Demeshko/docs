@@ -59,7 +59,7 @@
         </div>
         <div class="buttons_row__right">
             <Button 
-            name={"Заполнить анкеты"}
+            name={"Удалить проект"}
             no_wrap={true}
             --bg="var(--light-blue)"
             --color="var(--middle-blue)"

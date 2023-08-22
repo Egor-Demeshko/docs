@@ -181,11 +181,6 @@
 
 
 <style>
-    :root{
-        --border: 2px solid var(--light-blue);
-    }
-
-
     .dropdown{
         font-size: 0.875rem;
         position: relative;
@@ -265,6 +260,7 @@
 
 
     .arrow{
+        fill: var(--white-blue);
         width: 0.5rem;
         height: 0.25rem;
         position: absolute;

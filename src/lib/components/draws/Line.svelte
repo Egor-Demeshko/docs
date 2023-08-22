@@ -40,8 +40,8 @@
                 startHeight = obj.height;
                 startWidth = obj.width;
                 parentToFind = obj.parent_id
-                /*
-                console.log("[LINE]: nodes.subscribe", {
+                
+                /*console.log("[LINE]: nodes.subscribe", {
                     startX,
                     startY,
                     startHeight,
