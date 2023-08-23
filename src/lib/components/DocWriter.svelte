@@ -4,9 +4,10 @@
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
 
+    
     /** @description разметка документа */
-    export let html = '';
-
+    /*export let html = '';
+*/
 
     /** @description корневой элемент документа*/
     let root;
@@ -29,7 +30,7 @@
 
 
 <section bind:this={root} >
-    <TroumboneRedactor {html}/>
+    <TroumboneRedactor />
 
     <Modal />
 </section>

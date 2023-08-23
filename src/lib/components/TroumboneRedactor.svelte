@@ -1,19 +1,21 @@
 <script>
     import jQuery from 'jquery'; 
     import { onMount } from 'svelte';
-    import {storeForSimpleTexts, docRoot} from '$lib/scripts/stores';
+    import {storeForSimpleTexts, docRoot, documents} from '$lib/scripts/stores';
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
     import { processSelection } from "$lib/scripts/utils/nodes/proccessAddingNodeTOText.js";
 
 
-    export let html = '';
+    let html = '';
     let editor;
+    /**ссылка на dom элемент, где и будет редактор*/
     let container;
     let root;
-
     /*записываем обычный id блока. в данном случае айди блока которые вызвал поток добавление переменной в текст*/
     let callerId;
     let urlPath = '';
+    /**флаг для того чтобы реактивность документа не срабатывала до того как будет инициализирован редактор*/
+    let redactorInitialized = false;
 
     /** меняет цвет заднего фона при старте процесс добавление переменной*/
     $: active_bg = ($addExcitingNodeToRedator.status === "start") ? true : false;
@@ -21,6 +23,18 @@
         callerId = $addExcitingNodeToRedator.id;
         createListenersForNodeAddition();
     }
+
+
+    documents.subscribe( (docs) => {
+        if(!docs) return;
+        html = docs.gainActiveHtml();
+    });
+
+
+    $: if(html && redactorInitialized) {
+        renderEditor()
+    };
+
 
     /**ФУНКЦИИ В АЛФАВИТНОМ ПОРЯДКЕ*/
 
@@ -103,11 +117,17 @@
 
         
 
-        editor = window.jQuery(container).trumbowyg('html', html);
+        redactorInitialized = true;
         docRoot.set(root);
+        renderEditor();
+    });
+
+
+    function renderEditor(){
+        editor = window.jQuery(container).trumbowyg('html', html);
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
         $storeForSimpleTexts.forEach( (element) => element.createListeners());
-    });
+    }
 
  
 </script>

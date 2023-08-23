@@ -89,6 +89,7 @@
   /**определяем какого вида границу блока рисовать. зависит от наличия условия триггера и condition в data <= $nodes
   */
   $: gotConditions = (condition && !(trigger == undefined || trigger == '' || trigger === null)) ? true : false;
+  $: console.log("[Box]: gotConditions", gotConditions);
   
   
 /**переопределние класс отображение неактивного блока, если флаг актив false*/

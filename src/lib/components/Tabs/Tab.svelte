@@ -1,21 +1,26 @@
 <script>
-    import { activeTabId, tabsQuantity } from "$lib/scripts/stores";
+    import { activeTabId, tabsQuantity, documents } from "$lib/scripts/stores";
     export let name = "Имя";
     export let active = false;
-    export let id;
+    export let tabId;
     export let parentId = '';
+    export let documentId = null;
     
     //при первой отрисовке, первые вкладки слева и справа делаем активными.
-    if(active) activeTabId.update( (obj) => ({...obj, [parentId]: id}));
+    if(active) activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
+    if(tabId === 0) documents.update( (docs) => {
+        docs.setActive(documentId);
+        return docs;
+    });
 
-    $: active = ( id === $activeTabId[parentId] ) ? true : false;
+    $: active = ( tabId === $activeTabId[parentId] ) ? true : false;
     $: activeTab =  (active) ? "activeTab" : "ordinary";
     $: activeSvg = (active) ? "activeSvg" : "ordinarySvg";
-    $: svgShadow =  (id > $activeTabId[parentId]) ? "rightShadow" : 
-                    (id < $activeTabId[parentId]) ? "leftShadow" : 
-                    (id === $activeTabId[parentId] && id === 0) ? "rightShadow" : "leftShadow";
-    $: zIndex = (id === $activeTabId[parentId]) ? $tabsQuantity[parentId] :
-                (id > $activeTabId[parentId]) ? $tabsQuantity[parentId] - id : id;
+    $: svgShadow =  (tabId > $activeTabId[parentId]) ? "rightShadow" : 
+                    (tabId < $activeTabId[parentId]) ? "leftShadow" : 
+                    (tabId === $activeTabId[parentId] && tabId === 0) ? "rightShadow" : "leftShadow";
+    $: zIndex = (tabId === $activeTabId[parentId]) ? $tabsQuantity[parentId] :
+                (tabId > $activeTabId[parentId]) ? $tabsQuantity[parentId] - tabId : tabId;
     /*$: console.log(`activetab, ${parentId}`, { 
                                                 "parent_ID": parentId,
                                                 "activeTab id": $activeTabId[parentId], 
@@ -24,7 +29,12 @@
     
 
     function handelClick(){
-        activeTabId.update( (obj) => ({...obj, [parentId]: id}));
+        activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
+        documents.update( (docs) => {
+            docs.setActive(documentId);
+            console.log("[TAB]: handle click");
+            return docs;
+        });
     }
 </script>
 
@@ -32,7 +42,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="wrapper" style="z-index: {zIndex}" on:click={handelClick}>
-    <svg class="border-curve {activeSvg} {(id === 0 || svgShadow === "rightShadow") ? '' : svgShadow}" 
+    <svg class="border-curve {activeSvg} {(tabId === 0 || svgShadow === "rightShadow") ? '' : svgShadow}" 
         viewBox="0 0 40 32" 
         fill="none" xmlns="http://www.w3.org/2000/svg">
             <path class="" fill-rule="evenodd" clip-rule="evenodd" d="M40 32H0C12.2219 32 18.7403 27.8258 21.9995 16.1894C23.6304 6.96624 31.0695 0 40 0V32Z"/>
@@ -55,7 +65,7 @@
     </li>
 
 
-    <svg class="border-curve {activeSvg} {(id === $tabsQuantity[parentId] - 1 || svgShadow === "leftShadow") ? '' : svgShadow}" 
+    <svg class="border-curve {activeSvg} {(tabId === $tabsQuantity[parentId] - 1 || svgShadow === "leftShadow") ? '' : svgShadow}" 
         viewBox="0 0 40 32" 
         fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>

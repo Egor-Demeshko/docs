@@ -5,6 +5,9 @@ import { writable } from "svelte/store";
 export const nodes = writable([]);
 
 
+/**стор для хранения массива обьектов документа.CLASS DOCUMENTS with fields {id: string uuid, string:htmlstring, name:string, active:bool} */
+export const documents = writable(null);
+
 /** стор для передачи переменными/блоками переменных
  * структура айди блока: значение
  * транспорт данных из блока переменных в блок размещенный на документе

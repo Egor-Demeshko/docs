@@ -1,7 +1,7 @@
 <script>
     import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import { nodes } from "$lib/scripts/stores";
+    import { nodes, documents } from "$lib/scripts/stores";
     import SVGMain from "$lib/components/draws/SVGMain.svelte";
     import createMassive from "$lib/scripts/createMassive";
 	import NodeRedactor from "$lib/components/nodeRedactor/NodeRedactor.svelte";
@@ -12,6 +12,7 @@
     import MessagesContainer from "$lib/components/MessagesContainer.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
     import Modal from "$lib/components/Modal.svelte";
+    import Documents from "$lib/scripts/controllers/documents/Documents.js";
 
     //receiving data from load function
     export let data;
@@ -20,7 +21,7 @@
     let { html, graph } = locals.data;
     let cleanHtml = '';
 
-    /*console.log("HTML: ", html);*/
+    console.log("HTML: ", html);
     //console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
@@ -148,31 +149,112 @@
     }
 }
 
+
+html = [
+        {   
+            id: "15-17-18",
+            string: `HTML:  <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title> %project_name% </title>
+                        </head>
+                        <body>
+                            <p>город %id=(1)%</p>
+                            <p>%id=(2)% года</p>
+                            <p>%id=(3)%, именуемый в дальнейшем «Арендодатель», с одной стороны и %id=(4)%, в дальнейшем
+                                именуемый «Арендатор», именуемые в дальнейшем совместно «Стороны»,
+                        заключили настоящий договор о нижеследующем:</p>
+                        
+                        
+                        <h1>1. Предмет договора</h1>
+                        <p>1.1. Арендодатель предоставляет за плату, а Арендатор принимает во
+                            временное владение и пользование %id=(5)% (далее – «Объект»), расположенного по адресу: %id=(6)%,
+                            общей площадью %id=(7)% кв. см. Объект принадлежит
+                            Арендодателю на основании договора купли-продажи.</p>
+                            
+                            
+                            <h1>2. Права и обязанности сторон</h1>
+                            <p>2.1. Арендатор обязан:</p>
+                            <p>2.1.2. Содержать Объект в технически исправном, надлежащем санитарном и
+                                соответствующем противопожарном состоянии.</p>
+                                <p>2.1.3. Не производить никаких перепланировок и переоборудования
+                                    арендуемых помещений без письменного разрешения Арендодателя.</p>
+                                    <p>2.1.4. Любой ремонт Объекта, перенос инженерных сетей и коммуникаций
+                                        выполнять только с письменного разрешения Арендодателя.</p>
+                                        <p>%id=(8)%</p>
+                                        
+                                        <h1>3. Платежи и расчеты по Договору</h1>
+                                        <p>3.1. Арендатор оплачивает Арендодателю арендную плату в размере %id=(9)% рублей в
+                                            месяц. Оплата производится до %id=(10)% числа ежемесячно за текущий месяц.</p>
+                                            <p>3.2. В течение рабочих дней с момента подписания акта приема-передачи
+                                                Объекта Арендатор обязан внести арендную плату за текущий месяц, а также
+                                                перечислить на счет Арендодателя сумму, равную размеру арендной платы за
+                                                один месяц, в качестве страхового платежа.</p>
+                                                
+                                                <h1>%id=(11)%</h1>
+                                                <p>%id=(12)%</p>
+                                                </body>
+                                        </html>`,
+            name: "Название документа 1"
+        },
+        
+        {
+            id: "15-6-19",
+            string: `<body>
+                    <p>это совсем другой тестовый документ,  %id=(1)% даже абзац этот поменяли %id=(2)% года</p>
+                    <p>%id=(3)%, именуемый в дальнейшем «Арендодатель», с одной стороны и %id=(4)%, в дальнейшем
+                        именуемый «Арендатор», именуемые в дальнейшем совместно «Стороны»,
+                    заключили настоящий договор о нижеследующем:</p>
+                    
+                    
+                    <h1>1. Предмет договора</h1>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit %id=(5)% accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas 
+                        sit aspernatur aut odit aut fugit, sed %id=(5)% consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. 
+                        Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, %id=(6)%, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate 
+                        velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas %id=(6)% pariatur?</p>
+                        
+                        
+                    <h1>2. Права и обязанности сторон</h1>
+                    <p>2.1. Арендатор обязан:</p>
+                    <p>2.1.2. Содержать Объект в технически исправном, надлежащем санитарном и
+                    соответствующем противопожарном состоянии.</p>
+                    <p>2.1.3. Не производить никаких перепланировок и переоборудования
+                        арендуемых помещений без письменного разрешения Арендодателя.</p>
+                        <p>2.1.4. Любой ремонт Объекта, перенос инженерных сетей и коммуникаций
+                            выполнять только с письменного разрешения Арендодателя.</p>
+                            <p>%id=(8)%</p>
+                            
+                            <h1>3. Платежи и расчеты по Договору</h1>
+                            <p>3.1. Арендатор оплачивает Арендодателю арендную плату в размере %id=(9)% рублей в
+                                месяц. Оплата производится до %id=(10)% числа ежемесячно за текущий месяц.</p>
+                                <p>3.2. В течение рабочих дней с момента подписания акта приема-передачи
+                                    Объекта Арендатор обязан внести арендную плату за текущий месяц, а также
+                                    перечислить на счет Арендодателя сумму, равную размеру арендной платы за
+                                    один месяц, в качестве страхового платежа.</p>
+                                    
+                                    <h1>%id=(11)%</h1>
+                                    <p>%id=(12)%</p>
+                                    </body>`,
+            name: "Название документа 2"
+        }
+    ]
+    
     if(locals.error){
         prompt(locals.error.message);
     }
-    
-    /*console.log("HTML on doc write: ", html);*/
-    html = html.trim() + '';
-    cleanHtml = html.match(/<body>[\s\S]*<\/body>/)[0];
-    cleanHtml = cleanHtml.replace(/<body>/, "<div>")
-                        .replace(/<\/body>/, "</div>");   
-    /*console.log("DocWriter", cleanHtml);*/
-    
-    
-    {   
-        /**делаем из графа массив*/
-        /* также задаем значения по умолчанию, если их нет*/
-        graph = createMassive(graph);
 
-        
-        /* сохраняем граф в стор*/
-        nodes.set(graph);
+    /**делаем из графа массив*/
+    /* также задаем значения по умолчанию, если их нет*/
+    graph = createMassive(graph);
+    /* сохраняем граф в стор*/
+    nodes.set(graph);
+    
+    
+    
+    const docs = new Documents(html, graph);
+    /**заполняем стор документов*/
+    documents.set(docs);
 
-
-        /** генерируем span элементы в строчном виде и вставляем их в разметку*/
-        cleanHtml = generateTextElements(graph, cleanHtml);
-    }
 </script>
 
 
@@ -181,7 +263,7 @@
 
         <div class="element element__left">
             <MessagesContainer />
-            <Tabs id={"left"} tabNames={["Схема 1", "Схема 2"]}/>
+            <!--<Tabs tabsPosition={"left"} tabNames={["Схема 1"]}/>-->
             <TopControllBar />
             <AddButton --width="3.4rem" --height="3.4rem"/>
             <SVGMain />
@@ -191,8 +273,8 @@
         <!--<div class="devider"></div>-->
 
         <div class="element">
-            <Tabs id={"right"} tabNames={["Договор аренды помещения и еще больше текста", "Акт приема", "еще один акт прием"]}/>
-            <DocWriter html={cleanHtml}/>
+            <Tabs tabsPosition={"document"} documents={$documents.docs}/>
+            <DocWriter />
         </div>
 </div>  
 

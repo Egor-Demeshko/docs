@@ -1,22 +1,24 @@
 <script>
     import Tab from "./Tab.svelte";
-    import { tabsQuantity } from "$lib/scripts/stores";
-    export let tabNames = [];
-    export let id = '';
+    import { tabsQuantity } from "$lib/scripts/stores"; 
+    export let tabsPosition = '';
+    export let documents;
+    //$:console.log("[TABS]: ddocuments", documents);
 
-    tabsQuantity.update( (obj) => ({ ...obj, [id]: tabNames.length}));
+    tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
 
     let active = false;
     let activeTab = "activeTab";
 </script>
 
+
 <div class="tab_bar">
     <ul>
-        {#each tabNames as name, i}
+        {#each documents as {name, id}, i}
             {#if i == 0}
-                <Tab {name} active={true} id={i} parentId={id}/>
+                <Tab {name} active={true} tabId={i} parentId={tabsPosition} documentId={id}/>
             {:else}
-                <Tab {name} id={i} parentId={id}/>
+                <Tab {name} tabId={i} parentId={tabsPosition} documentId={id}/>
             {/if}
         {/each}
             <li class="add_tab__wrapper">
@@ -32,6 +34,7 @@
             </li>
     </ul>
 </div>
+
 
 <style>
     .tab_bar{

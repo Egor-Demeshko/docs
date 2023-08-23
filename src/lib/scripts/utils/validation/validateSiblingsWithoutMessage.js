@@ -11,7 +11,7 @@ export default async function validateSiblingsWithoutMessage(id){
     let blocksToBeValidated = [];
 
     searchForChildrenWithOurBlock();
-    console.log("[alvalidateSiblingsWithoutMessagelNodes]: blocksToBeValidated:", blocksToBeValidated);
+    //console.log("[alvalidateSiblingsWithoutMessagelNodes]: blocksToBeValidated:", blocksToBeValidated);
 
     if(blocksToBeValidated.length > 0){
         sendToValidate();
@@ -27,7 +27,7 @@ export default async function validateSiblingsWithoutMessage(id){
 
     function sendToValidate(){
         blocksToBeValidated.forEach( (data) => {
-            console.log("[alvalidateSiblingsWithoutMessagelNodes]: {sendToValidate} data:", data);
+            //console.log("[alvalidateSiblingsWithoutMessagelNodes]: {sendToValidate} data:", data);
             validation(data, {nomessages: true, nopropogate: true});
         });
     }
