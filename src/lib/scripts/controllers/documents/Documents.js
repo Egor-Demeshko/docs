@@ -8,7 +8,7 @@ export default class Documents{
     #projectId;
 
     constructor(data, graph, saveDeleteService){
-        const clearHtmlArr = generateTextElements(graph, sanitizeManyHtml(data));
+        const clearHtmlArr = this.generateElements(data, graph);
         //console.log("[DOCUMENTS]: ", clearHtmlArr);
 
         this.#docs = clearHtmlArr;
@@ -18,6 +18,11 @@ export default class Documents{
 
     get docs(){
         return this.#docs;
+    }
+
+
+    generateElements(data, graph){
+        return generateTextElements(graph, sanitizeManyHtml(data))
     }
 
 
