@@ -162,7 +162,6 @@
 
     :global(.editor .trumbowyg-box){
         background-color: var(--white-blue);
-        padding: 5rem 0;
     }
 
     :global(.editor .trumbowyg-box .trumbowyg-editor){
@@ -171,7 +170,7 @@
     }
 
     :global(.editor .trumbowyg-box .trumbowyg-button-pane){
-        position: absolute;
+        position: sticky;
         top: 0;
         left: 0;
     }
