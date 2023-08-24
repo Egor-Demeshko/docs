@@ -177,3 +177,7 @@ export const deleteLineFunction = writable(null);
 
 /**показывать tooltip {show: true, coors: {x: 0, y: 0}, text: "", place: "above || under"} */
 export const showTooltip = writable({show: false});
+
+
+/**показывает модалку в поле редактирования документа  */
+export const showModalDocumentCreator = writable(false);

@@ -1,6 +1,6 @@
 <script>
     import Tab from "./Tab.svelte";
-    import { tabsQuantity } from "$lib/scripts/stores"; 
+    import { tabsQuantity, showModalDocumentCreator } from "$lib/scripts/stores"; 
     export let tabsPosition = '';
     export let documents;
     //$:console.log("[TABS]: ddocuments", documents);
@@ -15,7 +15,7 @@
     let pointerLeave = () => hover = false;
 
     function click(){
-        console.log("[TABS]: clicked");
+        showModalDocumentCreator.set(true);
     }
 </script>
 
@@ -92,7 +92,7 @@
         display: inline-block;
         background-color: var(--light-slate-gray);
         height: 100%;
-        width: 4rem;
+        width: 2rem;
         position: relative;
         transition: background 400ms ease-in-out;
     }

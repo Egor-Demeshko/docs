@@ -11,14 +11,15 @@ export default class HTTPtemplate extends HTTPBaseServise{
     }
 
     async post(data){
-        super.post(data, this.#path);
+        console.log("[HTTPTEMPLATE]: POST");
+        return await super.post(data, this.#path);
     }
 
     async delete(data){
-        super.delete(data, this.#path);
+        return await super.delete(data, this.#path);
     }
 
     async patch(data){
-        super.patch(data, this.#path);
+        return await super.patch(data, this.#path);
     }
 }

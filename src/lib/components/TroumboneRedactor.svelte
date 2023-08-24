@@ -1,9 +1,10 @@
 <script>
     import jQuery from 'jquery'; 
     import { onMount } from 'svelte';
-    import {storeForSimpleTexts, docRoot, documents} from '$lib/scripts/stores';
+    import {storeForSimpleTexts, docRoot, documents, showModalDocumentCreator} from '$lib/scripts/stores';
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
     import { processSelection } from "$lib/scripts/utils/nodes/proccessAddingNodeTOText.js";
+    import ModalDocumentCreator from "$lib/components/CntrElem/ModalDocumentCreator.svelte";
 
 
     let html = '';
@@ -16,6 +17,7 @@
     let urlPath = '';
     /**флаг для того чтобы реактивность документа не срабатывала до того как будет инициализирован редактор*/
     let redactorInitialized = false;
+    let no_elements = false;
 
     /** меняет цвет заднего фона при старте процесс добавление переменной*/
     $: active_bg = ($addExcitingNodeToRedator.status === "start") ? true : false;
@@ -27,13 +29,23 @@
 
     documents.subscribe( (docs) => {
         if(!docs) return;
-        html = docs.gainActiveHtml();
+        html = docs.gainActiveHtml() || '';
+        //console.log("[TROUMBOUNE]: document changed. change html  ", html);
+
+        if(html.length === 0) showModalDocumentCreator.set(true);
+
+
+        if(redactorInitialized){
+            renderEditor();
+        }
+
+        no_elements = (html) ? false : true;
     });
 
 
-    $: if(html && redactorInitialized) {
+  /*  $: if(html && redactorInitialized) {
         renderEditor()
-    };
+    };*/
 
 
     /**ФУНКЦИИ В АЛФАВИТНОМ ПОРЯДКЕ*/
@@ -136,11 +148,16 @@
     <link rel="stylesheet" href="/assets/css/trumbowyg.css">
 </svelte:head>
 
-<div class="editor" bind:this={root} class:active_bg>
+
+<div class="editor" bind:this={root} class:active_bg class:no_elements>
     <div bind:this={container}>
         
     </div>
 </div>
+
+{#if $showModalDocumentCreator}
+    <ModalDocumentCreator />
+{/if}
 
 <style>
     .editor{
@@ -156,17 +173,32 @@
         color: var(--deep-blue);
     }
 
-    :global(.editor.active_bg .trumbowyg-editor){
-        background-color: var(--pale-orange);
+    .editor.no_elements{
+        background-color: var(--light-blue);
+    }
+
+    
+    :global(.editor .trumbowyg-box .trumbowyg-editor){
+        max-width: 21cm;
+        background-color: var(--white);
     }
 
     :global(.editor .trumbowyg-box){
         background-color: var(--white-blue);
+        height: 100%;
+        overflow-y: scroll;
     }
 
-    :global(.editor .trumbowyg-box .trumbowyg-editor){
-        max-width: 21cm;
-        background-color: var(--white);
+    :global(.editor.no_elements .trumbowyg-editor-box){
+        background-color: var(--light-blue);
+    }
+    
+    :global(.editor.no_elements .trumbowyg-editor){
+        background-color: var(--light-blue);
+    }
+    
+    :global(.editor.active_bg .trumbowyg-editor){
+        background-color: var(--pale-orange);
     }
 
     :global(.editor .trumbowyg-box .trumbowyg-button-pane){

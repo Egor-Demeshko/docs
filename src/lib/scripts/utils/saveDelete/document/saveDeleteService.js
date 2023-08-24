@@ -2,8 +2,8 @@ import HTTPtemplate from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPtemplate.j
 
 export default function saveDeleteService(type){
     let service;
+    type = type.toLowerCase();
     if(type === "template"){
-        console.log("[saveDeleteService]: template");
         service = new HTTPtemplate();
     }
 

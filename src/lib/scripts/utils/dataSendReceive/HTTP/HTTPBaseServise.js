@@ -6,9 +6,13 @@ export default class HTTPBaseServise{
 
 
     async post(data, path){
-        console.log("[HTTPBaseServise]  POST DATA: ", data);
-        let URL = new URL(this.#origin + path);
-        fetch(URL);
+        let url = new URL(this.#origin + "users");
+        let result = await fetch(url, {
+            method: "POST"
+        });
+        
+        console.log("[HTTPBaseServise]  POST DATA: ", result);
+        return await result.json();
     }
 
     async delete(data, path){

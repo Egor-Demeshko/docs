@@ -1,6 +1,7 @@
 import sanitizeManyHtml from "$lib/scripts/utils/sanitizeManyHtml";
 import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
 import { documents } from "$lib/scripts/stores";
+import generateUUID from "$lib/scripts/utils/generateUUID.js";
 
 export default class Documents{
     #docs = [];
@@ -49,6 +50,28 @@ export default class Documents{
             const element = arr[i];
             if(element["active"]) return element["string"];            
         }
+    }
+
+
+    async createNewDocument(){
+        //запихать в массив новый объект нужных данных
+        //post нового шаблона
+        let newId = generateUUID();
+        let newdocumentObj = {
+            active: true,
+            string: "<p>Это ваш новый документ! Вы можете редактировать прямо тут или скопируйте текст</p>",
+            id: newId,
+            project_id: this.#projectId,
+            name: "Новый документ"
+        }
+
+        this.#docs.push(newdocumentObj);
+
+        let status = await this.#saveDeleteService.createInstance(newdocumentObj);
+        console.log("[dpcuments]: AFTER create New Document: ", newdocumentObj);
+        documents.update( (docs) => docs);
+
+        return status;
     }
 
 

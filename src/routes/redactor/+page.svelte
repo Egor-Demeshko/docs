@@ -275,7 +275,9 @@ html = [
         <!--<div class="devider"></div>-->
 
         <div class="element">
-            <Tabs tabsPosition={"document"} documents={$documents.docs}/>
+            {#if $documents.docs.length > 0}
+                <Tabs tabsPosition={"document"} documents={$documents.docs}/>
+            {/if}
             <DocWriter />
         </div>
 </div>  
