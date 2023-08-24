@@ -48,6 +48,7 @@
         padding: .25rem .5rem;
         position: fixed;
         border-radius: 4px;
+        z-index: 30;
     }
 
     span{

@@ -1,5 +1,5 @@
 <script>
-    import { activeTabId, tabsQuantity, documents } from "$lib/scripts/stores";
+    import { activeTabId, tabsQuantity, documents, showTooltip, modalFieldsStore} from "$lib/scripts/stores";
     export let name = "Имя";
     export let active = false;
     export let tabId;
@@ -36,6 +36,32 @@
             return docs;
         });
     }
+
+    /**заркываем таб, закрытие приводит к удалению документа*/
+    function closeTab(){
+        //вывесити модалку
+        //если ок, то удаляем документ.
+        //ВСЕ ДЕЛАЕ ассинхронно
+        //на сервер отправить запрос об удалении
+        //почистить локал сторидж
+
+        modalFieldsStore.set({
+                show: true,
+                text: 'Вы собираетесь удалить документ, Вы согласны?',
+                okCallback: () => $documents.delete({documentId})
+            });
+    }
+
+    let pointerEnterClose = (e) => showTooltip.set( {
+        show: true,
+        coors: {
+            x: e.x,
+            y: e.y
+        },
+        text: "УДАЛИТЬ ДОКУМЕНТ",
+        place: "above" 
+    } )
+    let pointerLeaveClose = () => showTooltip.set(false);
 </script>
 
 
@@ -44,7 +70,7 @@
 <div class="wrapper" style="z-index: {zIndex}" on:click={handelClick}>
     <svg class="border-curve {activeSvg} {(tabId === 0 || svgShadow === "rightShadow") ? '' : svgShadow}" 
         viewBox="0 0 40 32" 
-        fill="none" xmlns="http://www.w3.org/2000/svg">
+        fill="none">
             <path class="" fill-rule="evenodd" clip-rule="evenodd" d="M40 32H0C12.2219 32 18.7403 27.8258 21.9995 16.1894C23.6304 6.96624 31.0695 0 40 0V32Z"/>
     </svg>
 
@@ -58,7 +84,10 @@
             </svg>
         {/if}
         {#if active}
-            <svg id="close" class="icons close">
+            <svg id="close" class="icons close" 
+            on:pointerenter={pointerEnterClose}
+            on:pointerleave={pointerLeaveClose}
+             on:click={closeTab}>
                 <use href="/assets/icons/all.svg#plus"></use>
             </svg> 
         {/if}
@@ -67,7 +96,7 @@
 
     <svg class="border-curve {activeSvg} {(tabId === $tabsQuantity[parentId] - 1 || svgShadow === "leftShadow") ? '' : svgShadow}" 
         viewBox="0 0 40 32" 
-        fill="none" xmlns="http://www.w3.org/2000/svg">
+        fill="none">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>
     </svg> 
 </div>
@@ -191,6 +220,7 @@
         top: 50%;
         right: 0;
         fill: var(--white-blue);
+        cursor: pointer;
     }
 
 

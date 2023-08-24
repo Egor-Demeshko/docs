@@ -26,7 +26,7 @@
     function errorHandle({ detail }){
         let data = detail.err_data;
         //console.log("[MessagesContainer]: errorHandel before push: ", data);
-
+        
         for(let i = 0; i < data.length; i++){
             let {blockId, message, err_id, err_type} = data[i];
 
@@ -37,18 +37,18 @@
                 if(messages[i]["err_id"] === err_id) return;
             }
 
-
+            
             messages.push( {
                 blockId,
                 message,
                 err_id,
                 err_type
             } );
-
+            
             messages = messages;
         }
-
         //console.log("[MessagesContainer]: {errorHandle}: all error messages: ", messages);
+
     }
 
 

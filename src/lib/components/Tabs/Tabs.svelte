@@ -7,8 +7,16 @@
 
     tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
 
-    let active = false;
-    let activeTab = "activeTab";
+    /**дом елемент кнопки добавления документа*/
+    let add_tab;
+    let hover;
+
+    let pointerEnter = () => hover = true;
+    let pointerLeave = () => hover = false;
+
+    function click(){
+        console.log("[TABS]: clicked");
+    }
 </script>
 
 
@@ -21,17 +29,32 @@
                 <Tab {name} tabId={i} parentId={tabsPosition} documentId={id}/>
             {/if}
         {/each}
-            <li class="add_tab__wrapper">
-                <div class="add_tab">
+            <li class="add_tab__wrapper" class:hover>
+                <svg class="curve" viewBox="0 0 40 32" 
+                fill="none" >
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M40 32H0C12.2219 32 18.7403 27.8258 21.9995 16.1894C23.6304 6.96624 31.0695 0 40 0V32Z"/>
+                </svg>
+                <div class="add_tab" bind:this={add_tab}>
                     <svg class="plus">
                         <use href="/assets/icons/all.svg#plus"></use>
                     </svg>
                 </div>
 
-                <svg class="curve" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="curve" viewBox="0 0 40 32" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>
                 </svg> 
             </li>
+
+           
+            <div class="add_tab_clicker" 
+            aria-label="Добавить новый документ"
+            role="button"
+            on:pointerenter={pointerEnter}
+            on:pointerleave={pointerLeave}
+            on:click={click}>
+
+            </div>
+           
     </ul>
 </div>
 
@@ -74,7 +97,7 @@
         transition: background 400ms ease-in-out;
     }
 
-    .add_tab__wrapper:hover .add_tab{
+    .add_tab__wrapper.hover .add_tab{
         background-color: var(--pale-orange);
     }
 
@@ -86,9 +109,20 @@
         transition: fill 400ms ease-in-out;
     }
 
-    .add_tab__wrapper:hover .curve{
+    .add_tab__wrapper.hover .curve{
         fill: var(--pale-orange);
     }   
+
+    
+    .add_tab_clicker{
+        position: absolute;
+        top: 0;
+        right: .7rem;
+        width: 2.7rem;
+        height: 100%;
+        z-index: 10;
+        background-color: transparent;
+    }
 
 
 

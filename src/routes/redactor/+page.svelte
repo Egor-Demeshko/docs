@@ -13,6 +13,7 @@
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
     import Modal from "$lib/components/Modal.svelte";
     import Documents from "$lib/scripts/controllers/documents/Documents.js";
+    import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
 
     //receiving data from load function
     export let data;
@@ -153,6 +154,7 @@
 html = [
         {   
             id: "15-17-18",
+            project_id: "15-14-19",
             string: `HTML:  <!DOCTYPE html>
                     <html>
                     <head>
@@ -251,7 +253,7 @@ html = [
     
     
     
-    const docs = new Documents(html, graph);
+    const docs = new Documents(html, graph, saveDeleteService("template"));
     /**заполняем стор документов*/
     documents.set(docs);
 

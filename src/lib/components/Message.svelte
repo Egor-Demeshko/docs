@@ -14,7 +14,7 @@
 
     onMount( () => {
         if(closeMessageCallback){
-
+            
           setTimeout( () => {
                 closeMessageCallback(blockId, message);
             }, 10000);
