@@ -3,6 +3,8 @@ import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
 import { documents } from "$lib/scripts/stores";
 import generateUUID from "$lib/scripts/utils/generateUUID.js";
 
+
+/*описание полей см. в stores. один из первых сторов, documents */
 export default class Documents{
     #docs = [];
     #saveDeleteService;
@@ -57,6 +59,7 @@ export default class Documents{
         //запихать в массив новый объект нужных данных
         //post нового шаблона
         let newId = generateUUID();
+        
         let newdocumentObj = {
             active: true,
             string: "<p>Это ваш новый документ! Вы можете редактировать прямо тут или скопируйте текст</p>",
