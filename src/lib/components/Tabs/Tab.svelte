@@ -26,13 +26,14 @@
                                                 "activeTab id": $activeTabId[parentId], 
                                                 "current id": id, 
                                                 "quantity": $tabsQuantity[parentId]});*/
+
     
 
     function handelClick(){
         activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
         documents.update( (docs) => {
             docs.setActive(documentId);
-            console.log("[TAB]: handle click");
+            //console.log("[TAB]: handle click");
             return docs;
         });
     }

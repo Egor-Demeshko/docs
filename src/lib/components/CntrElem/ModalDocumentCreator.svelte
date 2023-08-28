@@ -1,5 +1,6 @@
 <script>
     import Button from "$lib/components/CntrElem/Button.svelte";
+    import FilePicker from "$lib/components/CntrElem/FilePicker.svelte";
     import Spinner from "$lib/components/Spinner.svelte"
     import {documents, showModalDocumentCreator} from "$lib/scripts/stores";
 	import { get } from 'svelte/store';
@@ -15,17 +16,52 @@
         let docClass;
 
         docClass = get(documents);
-        console.log(docClass);
+        //console.log(docClass);
         result = await docClass.createNewDocument();
-        console.log("[MODALDOCUMENT]", result);
+        
         showSpinner = false;
         showModalDocumentCreator.set(false);
+    }
+
+
+    function closeClick(e){
+        if(e.target.tagName === "BUTTON" || e.target.tagName === "LABEL" || e.target.tagName === "INPUT") return;
+
+        console.log("[ModalDocumentCreator]: CLICK", e.target);
+
+        let docClass = get(documents);
+        let length = docClass.docs.length;
+
+        if(!length) return;
+
+        showModalDocumentCreator.set(false);
+    }
+
+
+    function change(e){
+        /* с атрибутом мультипарт несколько файлов можно выбрать
+        выбранные файлу содежрадться в input.files.это свойство возращает
+        filelist 
+        array-like обьект, свойство length вернет количество выбранных файлов.
+        внутри будет лежать обьект file*/
+        /*так как мы файлы можем много откуда отправлять
+        то точно отправка файла должна быть отдельным классом,
+        возможно в папке http
+        --скорее всего обернем в form и отправим на сервер*/
+        console.log("[ModalDocumentCreator]: change ", e.target);
+        e.target.files[0].text().then( (value) => console.log("[result of file transfer]: ", value));
+        
     }
 
 </script>
 
 
-<div class="modal" in:fade>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="modal" 
+in:fade
+out:fade={{duration: 400}} 
+on:click={closeClick}>
     {#if showSpinner}
         <Spinner/>
     {/if}
@@ -43,8 +79,8 @@
         --color-hover="var(--white-blue)"
         --border-hover="2px solid var(--gray-blue)"
         />
-        <Button fnToRunOnClick={console.log}
-        name={"Загрузить документ"}
+        <FilePicker 
+        text={"Загрузить документ"}
         --bg="var(--middle-blue)"
         --color="var(--light-blue)"
         --border="2px solid var(--middle-blue)"
@@ -52,7 +88,8 @@
         --padding=".625rem"
         --bg-hover="var(--gray-blue)"
         --color-hover="var(--white-blue)"
-        --border-hover="2px solid var(--gray-blue)"/>
+        --border-hover="2px solid var(--gray-blue)"
+        on:change={change}/>
     </div>
     {/if}
 </div>

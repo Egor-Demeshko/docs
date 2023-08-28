@@ -5,7 +5,7 @@
     export let documents;
     //$:console.log("[TABS]: ddocuments", documents);
 
-    tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
+   tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
 
     /**дом елемент кнопки добавления документа*/
     let add_tab;
@@ -16,6 +16,12 @@
 
     function click(){
         showModalDocumentCreator.set(true);
+    }
+
+    /* когда мы через модалку создаем новый документ, эта страка необходима чтобы обновить стор, количества вкладок,
+    которое конгечно зависит от количества документов*/
+    $: if(document){
+        tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
     }
 </script>
 
@@ -65,7 +71,17 @@
         position: absolute;
         top: -2rem;
         left: 3.5rem;
+        max-width: 92%;
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none; 
     }
+
+
+    .tab_bar::-webkit-scrollbar{
+        display: none;
+    }
+
 
     ul{
         list-style: none;
