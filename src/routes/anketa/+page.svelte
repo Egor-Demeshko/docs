@@ -5,8 +5,7 @@
     import { nodes, documents } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
-	import Tabs from "$lib/components/Tabs/Tabs.svelte";
-    import MessagesContainer from "$lib/components/MessagesContainer.svelte";
+	import TabsWithoutEvents from "$lib/components/Tabs/TabsWithoutEvents.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
     import Modal from "$lib/components/Modal.svelte";
 	import InputElements from "../../lib/components/anketa/InputElements.svelte";
@@ -16,7 +15,6 @@
 
     let { locals } = data;
     let { html, graph } = locals.data;
-    let cleanHtml = '';
 
     /*console.log("HTML: ", html);*/
     //console.log("GRAPH: ", graph);
@@ -268,7 +266,7 @@ html = [
         <!--<div class="devider"></div>-->
 
         <div class="element">
-            <Tabs tabsPosition={"document"} documents={$documents.docs}/>
+            <TabsWithoutEvents tabsPosition={"document"} documents={$documents.docs}/>
             <DocWriter />
         </div>
 </div>  

@@ -4,6 +4,7 @@
     export let text = "Стандартный текст";
 </script>
 
+
 <label >
     {text}
     <input type="file" {name} {accept} on:change>
@@ -25,6 +26,7 @@
         transition: background 600ms ease, color 600ms ease, border 600ms ease;
         width: 100%;
         outline: none;
+        display: var(--display);
     }
 
     input{

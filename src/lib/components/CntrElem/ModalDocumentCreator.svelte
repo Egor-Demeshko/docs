@@ -48,6 +48,15 @@
         то точно отправка файла должна быть отдельным классом,
         возможно в папке http
         --скорее всего обернем в form и отправим на сервер*/
+
+        /*
+        СХЕМА. отсюда запускаем отправку форму, или вызываем для этого отдельный класс.
+        ждем ответа, т.е. функция должна быть асинхронной. 
+        крутим спиннер.
+        обязательно сделать проверку. ответа сервера.
+        скорее всего через fetch, c адресом энд поинта. и в теле FormData.
+        нужна будет форма. доступ к ней можно получить и через событие.
+        */
         console.log("[ModalDocumentCreator]: change ", e.target);
         e.target.files[0].text().then( (value) => console.log("[result of file transfer]: ", value));
         
@@ -79,17 +88,20 @@ on:click={closeClick}>
         --color-hover="var(--white-blue)"
         --border-hover="2px solid var(--gray-blue)"
         />
-        <FilePicker 
-        text={"Загрузить документ"}
-        --bg="var(--middle-blue)"
-        --color="var(--light-blue)"
-        --border="2px solid var(--middle-blue)"
-        --font-size=".875rem"
-        --padding=".625rem"
-        --bg-hover="var(--gray-blue)"
-        --color-hover="var(--white-blue)"
-        --border-hover="2px solid var(--gray-blue)"
-        on:change={change}/>
+        <form id="doc_file_picker">
+            <FilePicker 
+            text={"Загрузить документ"}
+            --bg="var(--middle-blue)"
+            --color="var(--light-blue)"
+            --border="2px solid var(--middle-blue)"
+            --font-size=".875rem"
+            --padding=".625rem"
+            --bg-hover="var(--gray-blue)"
+            --color-hover="var(--white-blue)"
+            --border-hover="2px solid var(--gray-blue)"
+            --display="block"
+            on:change={change}/>
+        </form>
     </div>
     {/if}
 </div>

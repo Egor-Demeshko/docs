@@ -5,7 +5,13 @@ import { writable } from "svelte/store";
 export const nodes = writable([]);
 
 
-/**стор для хранения массива обьектов документа.CLASS DOCUMENTS with fields {id: string uuid, string:htmlstring, name:string, active:bool} */
+/**стор для хранения экземпляра класса.CLASS DOCUMENTS with fields {id: string uuid, string:htmlstring, name:string, active:bool, project_id} 
+ * id - уникальный индентификатора документа, как текстового файла
+ * string - это html одного документа
+ * name - имя
+ * active - добавляется уже во время работы приложение, не приходит с сервера, указывает на активный в данный момент документ в редакторе.
+ * project-id - айди проекта к которому относится документ
+*/
 export const documents = writable(null);
 
 /** стор для передачи переменными/блоками переменных
