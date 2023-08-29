@@ -1,6 +1,6 @@
 <script>
     import { activeTabId, tabsQuantity, documents, showTooltip, modalFieldsStore} from "$lib/scripts/stores";
-	import { onMount } from "svelte";
+	import { get } from "svelte/store";
     export let name = "Имя";
     export let active = false;
     export let tabId;
@@ -35,13 +35,17 @@
     
 
     function handelClick(){
+        /**меняем номер активной вкладки*/
         activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
+        /**меняем id активного документа. в сетактив таже будет сохраняться состояние html редактора*/
         documents.update( (docs) => {
+            docs.saveHtmlState();
             docs.setActive(documentId);
             //console.log("[TAB]: handle click");
             return docs;
         });
     }
+
 
     /**заркываем таб, закрытие приводит к удалению документа*/
     function closeTab(){
@@ -58,6 +62,7 @@
             });
     }
 
+    /**hover like события*/
     let pointerEnterClose = (e) => showTooltip.set( {
         show: true,
         coors: {

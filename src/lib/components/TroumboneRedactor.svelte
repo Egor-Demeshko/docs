@@ -6,11 +6,14 @@
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
     import { processSelection } from "$lib/scripts/utils/nodes/proccessAddingNodeTOText.js";
     import ModalDocumentCreator from "$lib/components/CntrElem/ModalDocumentCreator.svelte";
-    import Spinner from "$lib/components/Spinner.svelte"
+    import Spinner from "$lib/components/Spinner.svelte";
+    import RedactorContainer from '$lib/components/RedactorContainer.svelte';
 
 
     let html = '';
     let editor;
+    /**айди текущего активного документа, в осном нужно для проверки необходимости перерисовки редактора*/
+    let activeDocumentId;
     /**ссылка на dom элемент, где и будет редактор*/
     let container;
     let root;
@@ -30,14 +33,22 @@
         createListenersForNodeAddition();
     }
 
+
+    /** эта подписка используется для перерисовки редактора, в случае если был выбран другой документ
+    */
     documents.subscribe( (docs) => {
         if(!docs) return;
+        let freshId = docs.getActiveDocumentId();
+
+        if(freshId === activeDocumentId) return;
+        
+
         html = docs.gainActiveHtml() || '';
         let isDocumentInialized = docs.isActiveInitialized();
         
         console.log("[TROUMBOUNE]: {document changed}. isInialized  ", isDocumentInialized);
 
-        if(/*html.length === 0 || !html.length*/ isDocumentInialized) {
+        if(isDocumentInialized) {
             showModalDocumentCreator.set(false);
         } else {
             showModalDocumentCreator.set(true);
@@ -49,6 +60,7 @@
         }
 
         no_elements = (isDocumentInialized) ? false : true;
+        activeDocumentId = freshId;
     });
 
 
@@ -145,14 +157,16 @@
 
 
     function renderEditor(){
+        console.log('{renderEditor} starting');
         editor = window.jQuery(container).trumbowyg('html', html);
+        console.log('{renderEditor} after html implementint, document id: ', activeDocumentId);
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
         $storeForSimpleTexts.forEach( (element) => element.createListeners());
     }
 
 
     function RollSpinner(e){
-        console.log("SPINNER");
+        //console.log("SPINNER");
         let detail = e.detail;
         if(detail === "redactor") spinner = !spinner;
     }
@@ -167,7 +181,6 @@
 <svelte:document on:spinner={RollSpinner}>
 </svelte:document>
 
-
 <div class="editor" bind:this={root} class:active_bg class:no_elements>
     {#if $showModalDocumentCreator}
         <ModalDocumentCreator />
@@ -177,9 +190,9 @@
             <Spinner/>
         </div>
     {/if}
-    <div bind:this={container}>
-        
-    </div>
+
+    <RedactorContainer bind:container {activeDocumentId}/>
+   
 </div>
 
 

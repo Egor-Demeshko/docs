@@ -14,6 +14,7 @@
     import Modal from "$lib/components/Modal.svelte";
     import Documents from "$lib/scripts/controllers/documents/Documents.js";
     import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
+	import { onDestroy } from "svelte";
 
     //receiving data from load function
     export let data;
@@ -258,8 +259,14 @@ html = [
     /**заполняем стор документов*/
     documents.set(docs);
 
-</script>
 
+   /* onDestroy(() => {
+        let storage = window.localStorage;
+
+        storage.setItem("test", "NEW TEST");
+    });*/
+
+</script>
 
 
 <div class="redactors">

@@ -7,7 +7,7 @@ import generateUUID from "$lib/scripts/utils/generateUUID.js";
 /*описание полей см. в stores. один из первых сторов, documents */
 export default class Documents{
     #docs = [];
-    #saveDeleteService;
+    #saveDeleteService; //дл взаимодействия по html
     #projectId;
 
     constructor(data, graph, saveDeleteService){
@@ -109,7 +109,7 @@ export default class Documents{
 
     initDocument(){
         let arr = this.#docs;
-        
+
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];
             if(element["active"] && element.not_initialized) {
@@ -143,6 +143,27 @@ export default class Documents{
     }
 
 
+    saveHtmlState(){
+        //TODO когда будет реализовать отправку по http сделать проверку, сохранился ли прошлый результат
+        let arr = this.#docs;
+        let html = window.jQuery(document.getElementById("container")).trumbowyg('html');
+        //console.log("[Documents]: gained html");
+        
+
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"]) {
+
+                element.string = html;
+                break;
+            }          
+        }
+
+        arr = null;
+        html = null;
+    }
+
+
     /**помечает все документы как неактивные */
     setAllInactive(){
         let docs = this.#docs;
@@ -172,7 +193,4 @@ export default class Documents{
 
         docs = null;
     }
-
-
-
 }
