@@ -1,19 +1,25 @@
 <script>
     import { activeTabId, tabsQuantity, documents, showTooltip, modalFieldsStore} from "$lib/scripts/stores";
+	import { onMount } from "svelte";
     export let name = "Имя";
     export let active = false;
     export let tabId;
     export let parentId = '';
     export let documentId = null;
     
-    //при первой отрисовке, первые вкладки слева и справа делаем активными.
-    if(active) activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
-    if(tabId === 0) documents.update( (docs) => {
-        docs.setActive(documentId);
-        return docs;
-    });
+    /**
+     * активность вкладки определяется от активного докуметна.
+     * если айди документа равно активному документу, то вкладка активная
+     * сразу следом меняем activeTabId
+    */
+    $: active = (documentId === $documents.getActiveDocumentId()) ? true : false;
+    $: if(active){
+        activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
+    }
 
-    $: active = ( tabId === $activeTabId[parentId] ) ? true : false;
+
+
+    //$: active = ( tabId === $activeTabId[parentId] ) ? true : false;
     $: activeTab =  (active) ? "activeTab" : "ordinary";
     $: activeSvg = (active) ? "activeSvg" : "ordinarySvg";
     $: svgShadow =  (tabId > $activeTabId[parentId]) ? "rightShadow" : 
@@ -26,7 +32,6 @@
                                                 "activeTab id": $activeTabId[parentId], 
                                                 "current id": id, 
                                                 "quantity": $tabsQuantity[parentId]});*/
-
     
 
     function handelClick(){

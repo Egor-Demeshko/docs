@@ -1,7 +1,6 @@
 <script>
     import Button from "$lib/components/CntrElem/Button.svelte";
     import FilePicker from "$lib/components/CntrElem/FilePicker.svelte";
-    import Spinner from "$lib/components/Spinner.svelte"
     import {documents, showModalDocumentCreator} from "$lib/scripts/stores";
 	import { get } from 'svelte/store';
     import { fade } from "svelte/transition";
@@ -11,20 +10,22 @@
 
 
     async function createNewDocument(){
-        let result;
+        /*let result;
         showSpinner = true;
         let docClass;
 
-        docClass = get(documents);
+        
         //console.log(docClass);
         result = await docClass.createNewDocument();
         
-        showSpinner = false;
+        showSpinner = false;*/
+        let docClass = get(documents);
+        docClass.initDocument();
         showModalDocumentCreator.set(false);
     }
 
 
-    function closeClick(e){
+    /*function closeClick(e){
         if(e.target.tagName === "BUTTON" || e.target.tagName === "LABEL" || e.target.tagName === "INPUT") return;
 
         console.log("[ModalDocumentCreator]: CLICK", e.target);
@@ -35,7 +36,7 @@
         if(!length) return;
 
         showModalDocumentCreator.set(false);
-    }
+    }*/
 
 
     function change(e){
@@ -69,11 +70,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="modal" 
 in:fade
-out:fade={{duration: 400}} 
-on:click={closeClick}>
-    {#if showSpinner}
-        <Spinner/>
-    {/if}
+out:fade={{duration: 400}}>
 
     {#if !showSpinner}
     <div class="buttons">

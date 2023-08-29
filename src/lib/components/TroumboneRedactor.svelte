@@ -1,3 +1,4 @@
+
 <script>
     import jQuery from 'jquery'; 
     import { onMount } from 'svelte';
@@ -5,6 +6,7 @@
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
     import { processSelection } from "$lib/scripts/utils/nodes/proccessAddingNodeTOText.js";
     import ModalDocumentCreator from "$lib/components/CntrElem/ModalDocumentCreator.svelte";
+    import Spinner from "$lib/components/Spinner.svelte"
 
 
     let html = '';
@@ -18,6 +20,8 @@
     /**флаг для того чтобы реактивность документа не срабатывала до того как будет инициализирован редактор*/
     let redactorInitialized = false;
     let no_elements = false;
+    /*управляет спиннером*/
+    let spinner = false;
 
     /** меняет цвет заднего фона при старте процесс добавление переменной*/
     $: active_bg = ($addExcitingNodeToRedator.status === "start") ? true : false;
@@ -26,20 +30,25 @@
         createListenersForNodeAddition();
     }
 
-
     documents.subscribe( (docs) => {
         if(!docs) return;
         html = docs.gainActiveHtml() || '';
-        //console.log("[TROUMBOUNE]: document changed. change html  ", html);
+        let isDocumentInialized = docs.isActiveInitialized();
+        
+        console.log("[TROUMBOUNE]: {document changed}. isInialized  ", isDocumentInialized);
 
-        if(html.length === 0) showModalDocumentCreator.set(true);
+        if(/*html.length === 0 || !html.length*/ isDocumentInialized) {
+            showModalDocumentCreator.set(false);
+        } else {
+            showModalDocumentCreator.set(true);
+        }
 
 
         if(redactorInitialized){
             renderEditor();
         }
 
-        no_elements = (html) ? false : true;
+        no_elements = (isDocumentInialized) ? false : true;
     });
 
 
@@ -141,6 +150,13 @@
         $storeForSimpleTexts.forEach( (element) => element.createListeners());
     }
 
+
+    function RollSpinner(e){
+        console.log("SPINNER");
+        let detail = e.detail;
+        if(detail === "redactor") spinner = !spinner;
+    }
+
  
 </script>
 
@@ -148,16 +164,28 @@
     <link rel="stylesheet" href="/assets/css/trumbowyg.css">
 </svelte:head>
 
+<svelte:document on:spinner={RollSpinner}>
+</svelte:document>
+
 
 <div class="editor" bind:this={root} class:active_bg class:no_elements>
+    {#if $showModalDocumentCreator}
+        <ModalDocumentCreator />
+    {/if}
+    {#if spinner}
+        <div class="spinner">
+            <Spinner/>
+        </div>
+    {/if}
     <div bind:this={container}>
         
     </div>
 </div>
 
-{#if $showModalDocumentCreator}
-    <ModalDocumentCreator />
-{/if}
+
+
+
+
 
 <style>
     .editor{
@@ -167,6 +195,7 @@
         border-radius: 18px 0 0 0;
         overflow-y: scroll;
         caret-color: red;
+        position: relative;
     }
 
     .editor *{
@@ -177,6 +206,18 @@
         background-color: var(--light-blue);
     }
 
+    .spinner{
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;        
+        top: 0;
+        left: 0;
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        background-color: #DDE6ED80;
+    }
     
     :global(.editor .trumbowyg-box .trumbowyg-editor){
         max-width: 21cm;

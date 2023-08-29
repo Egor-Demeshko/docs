@@ -202,6 +202,7 @@ html = [
         
         {
             id: "15-6-19",
+            project_id: "15-14-19",
             string: `<body>
                     <p>это совсем другой тестовый документ,  %id=(1)% даже абзац этот поменяли %id=(2)% года</p>
                     <p>%id=(3)%, именуемый в дальнейшем «Арендодатель», с одной стороны и %id=(4)%, в дальнейшем
@@ -276,7 +277,7 @@ html = [
 
         <div class="element">
             {#if $documents.docs.length > 0}
-                <Tabs tabsPosition={"document"} documents={$documents.docs}/>
+                <Tabs tabsPosition={"document"} docsArr={$documents.docs}/>
             {/if}
             <DocWriter />
         </div>

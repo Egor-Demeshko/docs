@@ -1,11 +1,12 @@
 <script>
     import Tab from "./Tab.svelte";
-    import { tabsQuantity, showModalDocumentCreator } from "$lib/scripts/stores"; 
+    import { tabsQuantity, showModalDocumentCreator, documents } from "$lib/scripts/stores"; 
+    import { get } from "svelte/store";
     export let tabsPosition = '';
-    export let documents;
+    export let docsArr;
     //$:console.log("[TABS]: ddocuments", documents);
 
-   tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
+   tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: docsArr.length}));
 
     /**дом елемент кнопки добавления документа*/
     let add_tab;
@@ -14,27 +15,32 @@
     let pointerEnter = () => hover = true;
     let pointerLeave = () => hover = false;
 
-    function click(){
-        showModalDocumentCreator.set(true);
+    /**при клике на плюс, создаем объект документа, в основном для того чтобы создать новую вкладку
+     * также открываем модалку в этой вкладке. документ сразу редактировать нельзя
+    */
+    async function click(){
+        let docClass = get(documents);
+        
+        document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
+        await new Promise( (resolve) => {setTimeout( () => resolve(), 1500)});
+        await docClass.createNewDocument();
+        document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
     }
 
     /* когда мы через модалку создаем новый документ, эта страка необходима чтобы обновить стор, количества вкладок,
     которое конгечно зависит от количества документов*/
     $: if(document){
-        tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: documents.length}));
+        tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: docsArr.length}));
     }
 </script>
 
 
 <div class="tab_bar">
     <ul>
-        {#each documents as {name, id}, i}
-            {#if i == 0}
-                <Tab {name} active={true} tabId={i} parentId={tabsPosition} documentId={id}/>
-            {:else}
-                <Tab {name} tabId={i} parentId={tabsPosition} documentId={id}/>
-            {/if}
+        {#each docsArr as {name, id}, i}    
+            <Tab {name} tabId={i} parentId={tabsPosition} documentId={id}/>
         {/each}
+        
             <li class="add_tab__wrapper" class:hover>
                 <svg class="curve" viewBox="0 0 40 32" 
                 fill="none" >

@@ -5,12 +5,15 @@ import { writable } from "svelte/store";
 export const nodes = writable([]);
 
 
-/**стор для хранения экземпляра класса.CLASS DOCUMENTS with fields {id: string uuid, string:htmlstring, name:string, active:bool, project_id} 
+/**стор для хранения экземпляра класса.CLASS DOCUMENTS with fields {id: string uuid, string:htmlstring, name:string, active:bool, project_id, ?not_initialized} 
  * id - уникальный индентификатора документа, как текстового файла
  * string - это html одного документа
  * name - имя
  * active - добавляется уже во время работы приложение, не приходит с сервера, указывает на активный в данный момент документ в редакторе.
  * project-id - айди проекта к которому относится документ
+ * ?not_initialized - флаг, который указывает что документ создан, кнопкой, но опция будет ли это чистый документ 
+ *                      или документ загруженный сервера не выбрана. 
+ * 
 */
 export const documents = writable(null);
 
@@ -22,7 +25,7 @@ export const textElementsData = writable([]);
 
 
 /**
- * стор простых элементов
+ * стор простых элементов(js class), которые управляют элементами в разметке документа в редакторе
  */
 export const storeForSimpleTexts = writable([]);
 

@@ -13,7 +13,8 @@ export default class Documents{
     constructor(data, graph, saveDeleteService){
         const clearHtmlArr = this.generateElements(data, graph);
         //console.log("[DOCUMENTS]: ", clearHtmlArr);
-
+        clearHtmlArr[0].active = true;
+        console.log(clearHtmlArr[0]);
         this.#docs = clearHtmlArr;
         this.#saveDeleteService = saveDeleteService;
         this.#projectId = clearHtmlArr[0].project_id;
@@ -24,51 +25,30 @@ export default class Documents{
     }
 
 
-    generateElements(data, graph){
-        return generateTextElements(graph, sanitizeManyHtml(data))
-    }
-
-
-    setActive(id){
-        let docs = this.#docs;
-
-        for (let i = 0; i < docs.length; i++) {
-            const element = docs[i];
-            if(element["id"] !== id) {
-                element.active = false;
-                continue;
-            };
-
-            element.active = true;
-        }
-
-        docs = null;
-    }
-
-
-    gainActiveHtml(){
-        const arr = this.#docs;
-        for (let i = 0; i < arr.length; i++) {
-            const element = arr[i];
-            if(element["active"]) return element["string"];            
-        }
-    }
-
-
-    async createNewDocument(){
+      /**запускает некоторые процедуры для создания документа, отправляет запрос в базу, обновляет сторы.
+     * вновь создаваемый документ автоматически становится активным. Активным может быть только один документ.
+     * также в обьект документ добавляет не обязательно поле not_initialized. документ не инициализирован.
+     */
+      async createNewDocument(){
         //запихать в массив новый объект нужных данных
         //post нового шаблона
         let newId = generateUUID();
+        this.setAllInactive();
+        
         
         let newdocumentObj = {
-            active: true,
-            string: "<p>Это ваш новый документ! Вы можете редактировать прямо тут или скопируйте текст</p>",
+            active: true, 
+            string: "",
             id: newId,
             project_id: this.#projectId,
-            name: "Новый документ"
+            name: "Новый документ",
+            not_initialized: true
         }
 
         this.#docs.push(newdocumentObj);
+
+        /**несмотря на то */
+        this.setActive(newId);
 
         let status = await this.#saveDeleteService.createInstance(newdocumentObj);
         console.log("[dpcuments]: AFTER create New Document: ", newdocumentObj);
@@ -114,4 +94,85 @@ export default class Documents{
             documents.update( (docs) => docs);
         }
     }
+
+
+    isActiveInitialized(){
+        let arr = this.#docs;
+
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"] && !element?.not_initialized) return true;   
+            if(element["active"] && element?.not_initialized) return false;        
+        }
+    }
+
+
+    initDocument(){
+        let arr = this.#docs;
+        
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"] && element.not_initialized) {
+                delete element.not_initialized;
+                break;
+            }           
+        }
+    }
+
+
+    gainActiveHtml(){
+        const arr = this.#docs;
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"]) return element["string"];            
+        }
+    }
+
+    getActiveDocumentId(){
+        let arr = this.#docs;
+
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"]) return element["id"];            
+        }
+    }
+
+
+    generateElements(data, graph){
+        return generateTextElements(graph, sanitizeManyHtml(data))
+    }
+
+
+    /**помечает все документы как неактивные */
+    setAllInactive(){
+        let docs = this.#docs;
+
+        for (let i = 0; i < docs.length; i++) {
+            const element = docs[i];
+
+            element.active = false; 
+        }
+
+        docs = null;
+    }
+
+
+    /**делает один документ по айди активным*/
+    setActive(id){
+        let docs = this.#docs;
+        this.setAllInactive();
+
+        for (let i = 0; i < docs.length; i++) {
+            const element = docs[i];
+            if(element["id"] === id) {
+                element.active = true;
+                break;
+            };
+        }
+
+        docs = null;
+    }
+
+
+
 }
