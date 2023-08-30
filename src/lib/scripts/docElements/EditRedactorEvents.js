@@ -40,6 +40,7 @@ export default class RedactorEvents{
                         "focusNode": selection.focusNode
                 });*/
                 e.preventDefault();
+                e.stopPropagation();
 
 
                 //записываем выделенный текст в буфер обмена
@@ -108,6 +109,7 @@ export default class RedactorEvents{
                 
                 if(selection.anchorNode !== selection.focusNode) return;
                 e.preventDefault();
+                e.stopPropagation();
                 
                 let textToAppend = textContent.replace(textSelected, clipboardText);
                 selection.deleteFromDocument();
