@@ -1,9 +1,12 @@
 import { storeForSimpleTexts } from "$lib/scripts/stores";
+import globalCopyHandle from "$lib/scripts/docElements/utils/globalCopyHandle.js";
+import { nextElementForward, previousNode } from "$lib/scripts/docElements/utils/nextElement.js";
 
 
 export default function createOnDocumentRedactorEvents(redactorRoot){
     redactorRoot.addEventListener("cut", cutHandle);
     redactorRoot.addEventListener("paste", pasteHandle);
+    redactorRoot.addEventListener("copy", (e) => globalCopyHandle(e, reconnect));
 }
 
 
@@ -14,13 +17,8 @@ function cutHandle(e){
        *  узлы попавшие целиком, сохраняют разметку автоматом, благодаря редактору. после вставки текста
        * с разметкой включающей наше элементы(узлы) достаточно обеспечить реконнект.
        * желательно чтобы кусочки копировались, но не меняли содержимого узла, при этом кусочки были чисты и невинные 
-       * и вставлялись как текст
-       * 
-       *    
+       * и вставлялись как текст    
        */
-
-        //создать массив для хранения все наших узлов (html node, не element)
-        const textNodes = [];
         const selection = window.getSelection();
         var textTowriteToBUffer = '';
 
@@ -70,194 +68,285 @@ function cutHandle(e){
 
 
         if(direction === 2){
-            textTowriteToBUffer = gartherTextToLeft();
+            
+            textTowriteToBUffer = goLeft();
+           
         } else if(direction === 4){
-            textTowriteToBUffer = gartherTextToRight();
+            try{
+                textTowriteToBUffer = goRight();
+            } catch (e){
+                console.log(e.message);
+            }
         }
 
         e.clipboardData.setData("text/html", textTowriteToBUffer);
-       // navigator.clipboard.write(textTowriteToBUffer);
-
-        
 
 
-        function gartherTextToLeft(){
-            console.log("WE GO TO LEFT");
-            let text = selectionAnchor.textContent.slice(0, anchorOffset) + " ";
+        /**
+         * Базовый случай, это когда мы идем просто по нодам
+         * ищем среди них на фокус нод.
+         * 
+         */
+        function goLeft(){
+            let text = "";
             let element = selectionAnchor;
-            
-            /** при старте процесса, в любом случае копируем выделенный текст, но
-             * если стартовый элемент является узлом(SPAN связанный с графом), то мы больше ничего не делаем, а вот если
-             * это просто текстовая нода, тогда необходимо у нее оставить только тот текст, который не поделжит вырезке.
+
+            /**если мы делаем вырезку в одном абзаце, иногда селекшен при врезке манипуляции с текстом в нод
+             * скидывает селекшен на весь элемент.
              */
-            if(!anchorParent.classList.contains("doc_elements")){
-    
-                selectionAnchor.textContent = selectionAnchor.textContent.slice(anchorOffset);
-                selection.empty();
+            selection.empty();
+
+
+            gartherTextToLeft();            
+
+
+            /**переводим в массив, так как из сета нельщя нормально ремовы сделать.
+             * при кол в том что у Node вызывается метод remove тоже, но он ничего не делает
+             * поэтому, например, не получилось использовать ?.
+             */
+            let arr = Array.from(elementsToBeDeleted);
+
+            for(let i = 0; i < arr.length; i++){
+                let el = arr[i];
+
+                if(el instanceof HTMLElement){
+                    el.remove();
+                } else if(el instanceof Node) {
+                    el.parentElement.removeChild(el);
+                }     
             }
 
-            textsearch: while(true){
-                element = element.previousSibling || element.parentNode.previousSibling;
+            return text;
+        
+            
+            function gartherTextToLeft(){              
+                
 
-                /**
-                 * следующий элемент может быть
-                 * span элемент
-                 *    если спан, то надо войти и посмотреть есть там там selectionFocus
-                 *    если нет, то мы копируем у такого элемента полностью outerHTML
-                 *    если есть, то мы вырезаеем кусочек текста, заканчиваем цикл
-                 *  просто текст, 
-                 * просто текст и равен selectionFocus
-                 */
+                textsearch: while(true){
+                        /**
+                     * следующий элемент может быть
+                     * span элемент
+                     *    если спан, то надо войти и посмотреть есть там там selectionFocus
+                     *    если нет, то мы копируем у такого элемента полностью outerHTML
+                     *    если есть, то мы вырезаеем кусочек текста, заканчиваем цикл
+                     *  просто текст, 
+                     * просто текст и равен selectionFocus
+                     */
+                    if(element instanceof HTMLElement && element.tagName !== "SPAN") {
+                        if(element.contains(selectionFocus)){
+                            element = element.lastChild;
+                            return gartherTextToLeft();
 
-                if(element.tagName === "SPAN"){
-                    let children = element.childNodes;
+                        } else {
 
-                    //проходим по всем детям, если есть совпадение с элементами из селекшен, то вырезаем, вставляем текст
-                    //выходим
-                    for(let i = 0; i < children.length; i++){
-                        let innerNode = children[i];
-                        /**insideSpanText собирает текст нод внутри span, текстовых нод может быть несколько
-                         * до того как мы возможно встретимя на фокусэлемент из селекшен.
-                         */
-                        let insideSpanText = '';
-
-                        if(innerNode === selectionFocus){
-                            text += insideSpanText + innerNode.textContent.slice(focusOffset);
-                            break textsearch;
-                        } 
-
-                        insideSpanText += innerNode.textContent + " ";
+                            text = element.outerHTML + " " + text;
+                            elementsToBeDeleted.add(element);
+                            element = previousNode(element);
+                            continue textsearch;
+                        }
                     }
 
-                    /**если внутри SPAN не нашлось нашей фокус ноды, то мы копируем разметку целиком, элемент удаляем */
-                    text += element.outerHTML;
-                    elementsToBeDeleted.add(element)
-                    continue textsearch;
-                }
 
-                /**если мы просто встретили фокус ноду, то ее текст копируем согласно оффсета, а вот 
-                 * оставшийся текст, необходимо присвоить ноде. эффект вырезания
-                 */
-                if(element === selectionFocus){
-                    text += selectionFocus.textContent.slice(focusOffset);
-                    selectionFocus.textContent = selectionFocus.textContent.slice(0, focusOffset);
-                    
-                    break textsearch;
-                }
+                    if(element.tagName === "SPAN" ){
+                        let children = element.childNodes;
 
-                text += element.textContent;   
-                //не просто element.remove так как элемент может быть текстовой нодой, а у нее метода ремув нет
-                elementsToBeDeleted.add(element);
+                        //проходим по всем детям, если есть совпадение с элементами из селекшен, то вырезаем, вставляем текст
+                        //выходим
+                        for(let i = children.length - 1; i >= 0; i--){
+                            let innerNode = children[i];
+                            /**insideSpanText собирает текст нод внутри span, текстовых нод может быть несколько
+                             * до того как мы возможно встретимя на фокусэлемент из селекшен.
+                             */
+                            let insideSpanText = '';
+
+                            if(innerNode === selectionFocus){
+                                text = innerNode.textContent.slice(focusOffset) + " " + insideSpanText + text;
+                                
+                                return;
+                            } 
+
+                            insideSpanText = innerNode.textContent + (insideSpanText.length === 0) ? "" : " ";
+                        }
+
+                        /**если внутри SPAN не нашлось нашей фокус ноды, то мы копируем разметку целиком, элемент удаляем */
+                        /**не использовали метод contains() */
+                        text = element.outerHTML + " " + text;
+                        elementsToBeDeleted.add(element)
+                        element = previousNode(element);
+                        continue textsearch;
+                    }
+
+
+                    /**если мы просто встретили фокус ноду, то ее текст копируем согласно оффсета, а вот 
+                     * оставшийся текст, необходимо присвоить ноде. эффект вырезания
+                     */
+                    if(element === selectionFocus){
+                        text = selectionFocus.textContent.slice(focusOffset) + " " + text;
+                        selectionFocus.textContent = selectionFocus.textContent.slice(0, focusOffset);
+                        element = previousNode(element);
+                        
+                        return;
+                    }
+
+                    /**если СТАРТОВАЯ ПОЗИЦИЯ / элемент */
+                    if(element === selectionAnchor){
+                        text = " " + selectionAnchor.textContent.slice(0, anchorOffset);
+
+                        /** при старте процесса, в любом случае копируем выделенный текст, но
+                        * если стартовый элемент является узлом(SPAN связанный с графом), то мы больше ничего не делаем, а вот если
+                        * это просто текстовая нода, тогда необходимо у нее оставить только тот текст, который не поделжит вырезке.
+                        */
+                        if(!anchorParent.classList.contains("doc_elements")){
+
+                            selectionAnchor.textContent = selectionAnchor.textContent.slice(anchorOffset);
+                            selection.empty();
+                        }
+                        element = previousNode(element);
+                        continue textsearch;
+                    }
+
+                    text = element.textContent + ' ' + text;   
+                    //не просто element.remove так как элемент может быть текстовой нодой, а у нее метода ремув нет
+                    elementsToBeDeleted.add(element);
+                    element = previousNode(element);
+                }
             }
-
-
-            elementsToBeDeleted.forEach( (value) => {
-                value?.remove() || value.parentElement?.removeNode(value);
-            });
-            return text;
         }
 
 
-        function gartherTextToRight(){
-            console.log("We go to right");
-            let text = selectionAnchor.textContent.slice(anchorOffset)+ ' ';;
+
+        function goRight(){
+            let text = "";
             let element = selectionAnchor;
 
-            //console.log(element);
-
-            /** при старте процесса, в любом случае копируем выделенный текст, но
-             * если стартовый элемент является узлом(SPAN связанный с графом), то мы больше ничего не делаем, а вот если
-             * это просто текстовая нода, тогда необходимо у нее оставить только тот текст, который не поделжит вырезке.
+            /**если мы делаем вырезку в одном абзаце, иногда селекшен при врезке манипуляции с текстом в нод
+             * скидывает селекшен на весь элемент.
              */
-            if(!anchorParent.classList.contains("doc_elements")){
-                
-                selectionAnchor.textContent = selectionAnchor.textContent.slice(0, anchorOffset);
-                selection.empty();
+            selection.empty();
+
+            
+            gartherTextToRight();
+
+            /**переводим в массив, так как из сета нельщя нормально ремовы сделать.
+             * при кол в том что у Node вызывается метод remove тоже, но он ничего не делает
+             * поэтому, например, не получилось использовать ?.
+             */
+            let arr = Array.from(elementsToBeDeleted);
+
+            for(let i = 0; i < arr.length; i++){
+                let el = arr[i];
+
+                if(el instanceof HTMLElement){
+                    el.remove();
+                } else if(el instanceof Node) {
+                    el.parentElement.removeChild(el);
+                }     
             }
 
-            textsearch: while(true){
-                element = element.nextSibling || element.parentNode.nextSibling;
+            return text;
 
-                /**
-                 * следующий элемент может быть
-                 * span элемент
-                 *    если спан, то надо войти и посмотреть есть там там selectionFocus
-                 *    если нет, то мы копируем у такого элемента полностью outerHTML
-                 *    если есть, то мы вырезаеем кусочек текста, заканчиваем цикл
-                 *  просто текст, 
-                 * просто текст и равен selectionFocus
-                 */
-
-                if(element.tagName === "SPAN"){
-                    let children = element.childNodes;
-
-                    //проходим по всем детям, если есть совпадение с элементами из селекшен, то вырезаем, вставляем текст
-                    //выходим
-                    for(let i = 0; i < children.length; i++){
-                        let innerNode = children[i];
-                        /**insideSpanText собирает текст нод внутри span, текстовых нод может быть несколько
-                         * до того как мы возможно встретимя на фокусэлемент из селекшен.
-                         */
-                        let insideSpanText = '';
-
-                        if(innerNode === selectionFocus){
-                            text += insideSpanText + innerNode.textContent.slice(0, focusOffset);
-                            break textsearch;
-                        } 
-
-                        insideSpanText += innerNode.textContent + " ";
+            
+            function gartherTextToRight(){
+              
+                textsearch: while(true){
+                        /**
+                     * следующий элемент может быть
+                     * span элемент
+                     *    если спан, то надо войти и посмотреть есть там там selectionFocus
+                     *    если нет, то мы копируем у такого элемента полностью outerHTML
+                     *    если есть, то мы вырезаеем кусочек текста, заканчиваем цикл
+                     *  просто текст, 
+                     * просто текст и равен selectionFocus
+                     */
+                    if(element instanceof HTMLElement && element.tagName !== "SPAN") {
+                        if(element.contains(selectionFocus)){
+                            element = element.firstChild;
+                            return gartherTextToRight();
+                        } else {
+                            text += element.outerHTML + " ";
+                            elementsToBeDeleted.add(element);
+                            element = nextElementForward(element);
+                            continue textsearch; 
+                        }
                     }
 
-                    /**если внутри SPAN не нашлось нашей фокус ноды, то мы копируем разметку целиком, элемент удаляем */
-                    text += element.outerHTML;
-                    elementsToBeDeleted.add(element)
-                    continue textsearch;
-                }
+                    if(element.tagName === "SPAN" ){
+                        let children = element.childNodes;
 
-                /**если мы просто встретили фокус ноду, то ее текст копируем согласно оффсета, а вот 
-                 * оставшийся текст, необходимо присвоить ноде. эффект вырезания
-                 */
-                if(element === selectionFocus){
-                    text += selectionFocus.textContent.slice(0, focusOffset);
-                    selectionFocus.textContent = selectionFocus.textContent.slice(focusOffset);
+                        //проходим по всем детям, если есть совпадение с элементами из селекшен, то вырезаем, вставляем текст
+                        //выходим
+                        for(let i = 0; i < children.length; i++){
+                            let innerNode = children[i];
+                            /**insideSpanText собирает текст нод внутри span, текстовых нод может быть несколько
+                             * до того как мы возможно встретимя на фокусэлемент из селекшен.
+                             */
+                            let insideSpanText = '';
+
+                            if(innerNode === selectionFocus){
+                                text += insideSpanText + innerNode.textContent.slice(0, focusOffset);
+                                
+                                return;
+                            } 
+                            
+                            insideSpanText = innerNode.textContent + " ";
+                        }
+
+                        /**если внутри SPAN не нашлось нашей фокус ноды, то мы копируем разметку целиком, элемент удаляем */
+                        /**не использовали метод contains() */
+                        text += element.outerHTML + " ";
+                        elementsToBeDeleted.add(element)
+                        element = nextElementForward(element);
+                        continue textsearch;
+                    }
+
+
+                    /**если мы просто встретили фокус ноду, то ее текст копируем согласно оффсета, а вот 
+                     * оставшийся текст, необходимо присвоить ноде. эффект вырезания
+                     */
+                    if(element === selectionFocus){
+                        text += selectionFocus.textContent.slice(0, focusOffset);
+                        selectionFocus.textContent = selectionFocus.textContent.slice(focusOffset);
+                                                
+                        return;
+                    }
+
+                    /**если СТАРТОВАЯ ПОЗИЦИЯ / элемент */
+                    if(element === selectionAnchor){
+                        text = selectionAnchor.textContent.slice(anchorOffset) + " ";
+
+                        /** при старте процесса, в любом случае копируем выделенный текст, но
+                        * если стартовый элемент является узлом(SPAN связанный с графом), то мы больше ничего не делаем, а вот если
+                        * это просто текстовая нода, тогда необходимо у нее оставить только тот текст, который не поделжит вырезке.
+                        */
+                        if(!anchorParent.classList.contains("doc_elements")){
+                            selectionAnchor.textContent = selectionAnchor.textContent.slice(0, anchorOffset);
+                            selection.empty();
+                        }
+                        
+                        element = nextElementForward(element);
+
+                        continue textsearch;
+                    }
+
+                    text += element.textContent + ' ';   
+                    //не просто element.remove так как элемент может быть текстовой нодой, а у нее метода ремув нет
+                    elementsToBeDeleted.add(element);
                     
-                    break textsearch;
-                }
-
-                text += element.textContent;   
-                //не просто element.remove так как элемент может быть текстовой нодой, а у нее метода ремув нет
-                elementsToBeDeleted.add(element);
-
+                    element = nextElementForward(element);
+                }                
             }
-            //console.log("GARTHERED TEXT: ", text);
-
-            /**необходимо удалить элемент, которые были для этого помечены */
-            //console.log("LIST OF ELEMENTS TO BE DELETED", elementsToBeDeleted);
-            elementsToBeDeleted.forEach( (value) => {
-                value?.remove() || value.parentElement?.removeNode(value);
-            });
-            return text;
         }
 }
-
-
-
-
-function pasteHandle(e){
-    /**при вставке мы можем вставлять просто текст или всталять уже скопированный текст из нашего документа.
-     * ключевое тут что мы должны вставить наш элемент, как элемент
-     * 
-     * первоначально нам надо получить данные из буфера.
-     * если разметки нашего узла нет, то сделать return
-     * если есть, опишем ниже
-     *
-     */
-
-    reconnect();
+    
+    
+function pasteHandle(){
+        
+        reconnect();
 }
 
 
 function reconnect(){
+    /**settime для того чтобы отработало событие cut полность и перерисовался редактор, после этого переподключаемся */
     setTimeout(() => {
       storeForSimpleTexts.update( (allTextClasses) => {
               allTextClasses.forEach( (obj) => {
