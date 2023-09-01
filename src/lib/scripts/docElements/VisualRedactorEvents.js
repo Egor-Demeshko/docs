@@ -108,10 +108,15 @@ export default class visualRedactorEvents{
     }
 
     #keyDown(e){
-       const target = e.taget;
+       const target = e.target;
 
-       if(e.target.textContent.length === 1 && e.key === 'Backspace' ){
-            e.target.textContent = "_";
+       if(target.textContent === "_" && /[\w\d_!%&$*()]/.test(e.key)){
+            target.textContent = "";
+            return;
+       }
+
+       if(target.textContent.length === 1 && e.key === 'Backspace' ){
+            target.textContent = "_";
        }
     }
 
@@ -150,7 +155,7 @@ export default class visualRedactorEvents{
                 if(arrNodes[i]["id"] !== this.#id) continue;
                     if(arrNodes[i]["content"] !== text){
                         arrNodes[i]["content"] = text;
-                        console.log("[simpleText]: CONTENT updated");
+                        //console.log("[simpleText]: CONTENT updated");
                         if(arrNodes[i]["options"] && arrNodes[i]["options"].length > 0){
                             arrNodes[i]["options"][0] = text;
                             //console.log("[simpleText]: arrNodes[i][options][0] updated");
