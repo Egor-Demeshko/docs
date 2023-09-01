@@ -1,16 +1,20 @@
 import { storeForSimpleTexts } from "$lib/scripts/stores";
 import globalCopyHandle from "$lib/scripts/docElements/utils/globalCopyHandle.js";
 import { nextElementForward, previousNode } from "$lib/scripts/docElements/utils/nextElement.js";
+import stack from "$lib/scripts/docElements/utils/stack.js";
+import { setNewHtml } from "$lib/scripts/docWriter/redactor.js";
 
 
 export default function createOnDocumentRedactorEvents(redactorRoot){
-    redactorRoot.addEventListener("cut", cutHandle);
-    redactorRoot.addEventListener("paste", pasteHandle);
+    let stackInstance = stack(redactorRoot);
+
+    redactorRoot.addEventListener("cut", (e) => cutHandle(e, stackInstance));
+    redactorRoot.addEventListener("paste", (e) => pasteHandle(e, stackInstance, redactorRoot));
     redactorRoot.addEventListener("copy", (e) => globalCopyHandle(e, reconnect));
 }
 
 
-function cutHandle(e){
+function cutHandle(e, stack){
       /** 
        *  когда идет вырезание большого куска текста. мы сохраняем узлы, кроме крайних
        *  крайние элементы должны быть очищены от тега span, оставлены просто текстом.
@@ -60,6 +64,8 @@ function cutHandle(e){
         
         /**отменить стандартное выполение */
         e.preventDefault();
+        /**пока используется для разовой отмены вставки, сразу после этого действия */
+        /*stack.setActive();*/
         //используя compareDocumentPosition узнать в какую сторону нам идти
         //метод возращает число, поэтому если 2, в методе selectionAnchor.compareDocumentPosition(selectionFocus)
         //то значить focus идет перед анкор, значит надо делать node.previousSibling для сборка текста
@@ -80,6 +86,19 @@ function cutHandle(e){
         }
 
         e.clipboardData.setData("text/html", textTowriteToBUffer);
+        history.pushState({
+            cutText: textTowriteToBUffer
+        }, '');
+
+        window.addEventListener("popstate", console.log);
+
+        /*
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'z') {
+              alert('Undo!');
+            }
+          });*/
+          
 
 
         /**
@@ -339,9 +358,16 @@ function cutHandle(e){
 }
     
     
-function pasteHandle(){
-        
-        reconnect();
+function pasteHandle(e, stack, redactorRoot){
+    console.log("[GlobalRedactor events]: pasteHandle");
+    /*if(stack.isActive()){
+        stack.saveString();
+        stack.disableFlag();
+        redactorRoot.addEventListener("keydown", (e) => isFallBackNeeded(e, stack), {once: true});
+    }*/
+    
+    
+    reconnect();
 }
 
 
@@ -358,3 +384,15 @@ function reconnect(){
     }, 30);
 }
 
+
+function isFallBackNeeded(e, stack){
+    /*let string = stack.getString();*/
+    console.log("setting new html");
+    /*
+    debugger;
+    if((e.key === "z" && !shiftKey && ctrlKey) || 
+    (e.key === "z" && !shiftKey && metaKey)){
+        console.log("BACK");
+        setNewHtml(string);
+    }*/
+}
