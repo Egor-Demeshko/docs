@@ -1,5 +1,6 @@
 import { blockClickedId, activeBlocks, nodes } from "/src/lib/scripts/stores";
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
+import { get } from "svelte/store";
 
 
 export default class visualRedactorEvents{
@@ -27,6 +28,7 @@ export default class visualRedactorEvents{
             domLink.addEventListener("pointerleave", this.#pointerLeave.bind(this));
 
             domLink.addEventListener("keyup", this.#keyupHandle.bind(this));
+            domLink.addEventListener("keydown", this.#keyDown.bind(this));
             
         });
     }
@@ -38,7 +40,15 @@ export default class visualRedactorEvents{
         this.#domLinks.forEach( (domElem, i) => {
             domElem.classList.add("doc_active");
 
-            //TODO сделать чтобы скроб был только при переключение по коробка. если работаем в тексте сролл инту не нужен
+        });
+    }
+
+    setActiveWithScroll(id){
+        if(this.#id !== id) return;
+        
+        this.#domLinks.forEach( (domElem, i) => {
+            domElem.classList.add("doc_active");
+
             if(i === 0) domElem.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center'
@@ -56,8 +66,9 @@ export default class visualRedactorEvents{
     }
 
 
-    #focusHandle(){
-
+    #focusHandle(e){
+        let id = get(blockClickedId);
+        if(id === this.#id) return;
         blockClickedId.set(this.#id);
         this.setActive(this.#id);
     }
@@ -94,6 +105,14 @@ export default class visualRedactorEvents{
                 return setOfblocks;
             });
         }
+    }
+
+    #keyDown(e){
+       const target = e.taget;
+
+       if(e.target.textContent.length === 1 && e.key === 'Backspace' ){
+            e.target.textContent = "_";
+       }
     }
 
 

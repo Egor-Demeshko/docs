@@ -67,6 +67,10 @@ export default class SimpleText {
         this.#visualRedactorEvents.setActive(id);
     }
 
+    setActiveWithScroll(id){
+        this.#visualRedactorEvents.setActiveWithScroll(id);
+    }
+
 
     setInactive(id){
         this.#visualRedactorEvents.setInactive(id);
@@ -100,12 +104,13 @@ export default class SimpleText {
     /**функция запускается после валидации данных */
     #update(name, content){
         if(name && this.#name !== name) this.#name = name;
-        if(content && this.#content !== content) {
-            this.#content = content;
-            this.#domLinks.forEach( (domElement) => {
-                domElement.textContent = content;
-            });
-        }
+        
+        /*если контент пустой. присыва */
+        if(content.length === 0) content = "___";
+        this.#domLinks.forEach( (domElement) => {
+            domElement.textContent = content;
+        });
+        
     }
 
 

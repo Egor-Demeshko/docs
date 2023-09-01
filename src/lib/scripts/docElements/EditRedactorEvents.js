@@ -12,11 +12,8 @@ export default class RedactorEvents{
 
                 /*слушатель для вырезания текста, исключительно в границах элемента" */
                 domLinks.forEach( (domLink) => {
-                        domLink.addEventListener("cut", this.#cutHandler.bind(this));                              
-                });
-
-                domLinks.forEach( (domLink) => {
-                        domLink.addEventListener("paste", this.#pasteHandle.bind(this));
+                        domLink.addEventListener("cut", this.#cutHandler.bind(this));  
+                        domLink.addEventListener("paste", this.#pasteHandle.bind(this));                         
                 });
         }
 

@@ -3,6 +3,7 @@ import globalCopyHandle from "$lib/scripts/docElements/utils/globalCopyHandle.js
 import { nextElementForward, previousNode } from "$lib/scripts/docElements/utils/nextElement.js";
 import stack from "$lib/scripts/docElements/utils/stack.js";
 import { setNewHtml } from "$lib/scripts/docWriter/redactor.js";
+import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
 
 
 export default function createOnDocumentRedactorEvents(redactorRoot){
@@ -85,20 +86,9 @@ function cutHandle(e, stack){
             }
         }
 
+
+        textTowriteToBUffer = sanitizeHTML(textTowriteToBUffer);
         e.clipboardData.setData("text/html", textTowriteToBUffer);
-        history.pushState({
-            cutText: textTowriteToBUffer
-        }, '');
-
-        window.addEventListener("popstate", console.log);
-
-        /*
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.key === 'z') {
-              alert('Undo!');
-            }
-          });*/
-          
 
 
         /**

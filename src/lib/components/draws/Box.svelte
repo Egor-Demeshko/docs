@@ -282,7 +282,7 @@ function focusIn(){
 
     $storeForSimpleTexts.forEach( (elObj) => {
         //console.log("[BOX]: trying to set active");
-        elObj.setActive(id);
+        elObj.setActiveWithScroll(id);
     });
 
     showButtons = true;

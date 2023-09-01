@@ -29,9 +29,6 @@ export function removeElementHoverLike(id){
 }
 
 
-
-
-
 function searchForElement(id){
     let elementToReturn;
 

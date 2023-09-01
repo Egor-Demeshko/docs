@@ -1,5 +1,6 @@
 import {PUBLIC_ELEMENTCLASS} from '$env/static/public';
 import { nextElementForward, previousNode } from "$lib/scripts/docElements/utils/nextElement.js";
+import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
 
 export default function globalCopyHandle(e, reconnect){
     /**при копировании нам важно соблюсди общую концепцию работы с нашими узлами, наш узел интерактивно копируется 
@@ -46,6 +47,7 @@ export default function globalCopyHandle(e, reconnect){
         textTowriteToBuffer = goToRight();
     }
 
+    textTowriteToBuffer = sanitizeHTML(textTowriteToBuffer);
     e.clipboardData.setData("text/html", textTowriteToBuffer);
 
 
@@ -59,7 +61,6 @@ export default function globalCopyHandle(e, reconnect){
         /*сразу копируем текст частично у анкорэлемента
         в цикле идем по следующим элементам, копируем текст*/
         function gartherTextToLeft(){
-            console.log("WE ARE GOING TO LEFT");
 
             //debugger;
             /**перебераем dom node в поисках фокус ноды и копируем текст
