@@ -5,9 +5,13 @@ import {storeForSimpleTexts, docRoot} from "$lib/scripts/stores";
 export function processSelection(callerId, eventSelection){
     if(!eventSelection) return;
     let root;
+    /**@description HTMLElement, элемент, в котором находится node, попавшая в selection */
+    let parentElement = "";
+
     let selection = window.getSelection();
     let anchorNode = selection.anchorNode;
-    let parentElement = "";
+
+    /**HTML строка, родителя node в который происходит вставка */
     let parentHtml = "";
     let selectionText = "";
 
@@ -16,10 +20,9 @@ export function processSelection(callerId, eventSelection){
         return docRoot;
     });
     
-    console.log("[Troumboube]: selection changed: ", selection);
+    //console.log("[Troumboube]: selection changed: ", selection);
     
     //убедится что в одном элементе выделение ,если нет то выкинуть сообщение о том что переменняа не должна 
-
     if(anchorNode !== selection.focusNode){
 
         document.dispatchEvent(new CustomEvent("error", {
@@ -39,8 +42,10 @@ export function processSelection(callerId, eventSelection){
         return;
     }
 
-    //надо взять текст, берем весь элемент как html строку
-    //санитизировать его от скриптов
+    /**берем родительский html. через нахождение текста node куда вставляем и индексы селекшена,
+     * определим точку вставки переменной
+     */
+    //санитизировать строку от скриптов
     {
         parentElement = anchorNode.parentElement;
         parentHtml = parentElement.innerHTML;
@@ -49,35 +54,27 @@ export function processSelection(callerId, eventSelection){
         parentHtml = sanitizeHTML(parentHtml);
     }
 
-    //сделать из него span с айди и вставить в разметку.
-    //получаем текст
     {   
-        let text = selection.anchorNode.nodeValue;
-        let anchorI = selection.anchorOffset;
-        let focusI = selection.focusOffset;
+        /**@description корректирующие индексы, из селекшена */
+        let startIndex = ( selection.anchorOffset <= selection.focusOffset )    ? selection.anchorOffset 
+                                                                                : selection.focusOffset;
+        let endIndex = ( selection.anchorOffset <= selection.focusOffset )  ? selection.focusOffset
+                                                                            : selection.anchorOffset;
 
-        if(anchorI < focusI){
-            selectionText = text.slice(anchorI, focusI);
-        } else {
-            selectionText = text.slice(focusI, anchorI);
-        }
-        console.log("[troumboune]: selection text", selectionText);
-        //console.log("[troumboune]: BEFORE parentHTML", parentHtml);
+        /**идекс узла(а точнее его текста) куда происходит вставка */
+        let index = parentHtml.indexOf(anchorNode.nodeValue);
 
-        {
-            //ищем индекс  в парентХТМЛ, текущий по всему тексту из NodeAnchor
-            let index = parentHtml.indexOf(anchorNode.nodeValue);
+        if(index === -1) throw new Error("Couldn't find place to insert new text");
 
-            if(index === -1) throw new Error("Couldn't find place to insert new text");
-            //вырезаем строку с этого индекса. вырезанное сохраняем
+        let leftHand = parentHtml.slice(0, index + startIndex);
+        let rightHand = parentHtml.slice(index + startIndex + (endIndex - startIndex));
 
-            let cutString = parentHtml.slice(index);
-            // в вырезанной строке находим наш текст для заменя, те селекшон текст
-            let updatedCutString = cutString.replace(selectionText, `<span class="doc_elements" data-element="${callerId}" tabindex="0">${selectionText}</span>`);
-            // меняем
-            parentHtml = parentHtml.replace(cutString, updatedCutString);
-
-        }
+        //console.log("[troumboune]: selection text", selectionText);
+        //console.log("[troumboune]: BEFORE parentHTML", parentHtml);            
+            
+        parentHtml = leftHand + `<span class="doc_elements" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
+                        + rightHand;
+       
 
         //исправленная строка применяется к элементов в котором находился узел и селекшон
         parentElement.innerHTML = parentHtml;
