@@ -13,14 +13,14 @@
     //receiving data from load function
     export let data;
 
-    let { locals } = data;
-    let { html, graph } = locals.data;
+    //let { locals } = data;
+    //let { html, graph } = locals.data;
 
     /*console.log("HTML: ", html);*/
     //console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
-    graph = {
+    let graph = {
         "1": {
 		"parent_id": null,
 		"name": "Имя узла",
@@ -145,7 +145,7 @@
 }
 
 
-html = [
+let html = [
         {   
             id: "15-17-18",
             project_id: "15-14-19",
@@ -235,9 +235,9 @@ html = [
         }
     ]
     
-    if(locals.error){
+    /*if(locals.error){
         prompt(locals.error.message);
-    }
+    }*/
 
     /**делаем из графа массив*/
     /* также задаем значения по умолчанию, если их нет*/
