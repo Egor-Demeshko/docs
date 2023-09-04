@@ -1,14 +1,15 @@
 import nodemailer from "nodemailer";
+import { EMAIL_HOST, EMAIL_USER, EMAIL_PASS} from "$env/static/private";
 
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.yandex.ru",
+    host: EMAIL_HOST,
     port: 465,
     secure: true,
     auth: {
       // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-      user: "cc.chain@yandex.by",
-      pass: "ybryujqkhvcrtyoo",
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
     },
 });
 
