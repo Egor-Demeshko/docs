@@ -1,5 +1,12 @@
 <script>
     import LogoAndName from "$lib/components/LogoAndName.svelte";
+    import Button2 from "$lib/components/CntrElem/Button2.svelte";
+    import {goto} from "$app/navigation";
+    import {base} from "$app/paths";
+
+    function buttonClick(){
+        window.location = "/contact";
+    }
 </script>
 
 <main>
@@ -7,6 +14,22 @@
     </div>     
         <div class="logo_position">
             <LogoAndName/>
+            <div class="header_right">
+                <Button2
+                on:click={buttonClick}
+                --bg="transparent"
+                --color="var(--white-blue)"
+                --border="3px solid var(--white-blue)"
+                --font-size="1rem"
+                --padding=".5rem 1.25rem"
+                --bg-hover="var(--gray-blue)"
+                --color-hover="var(--white-blue)"
+                --border-hover="3px solid var(--white-blue)"
+                --focus-border="3px solid var(--orange)"
+                --focus-outline="none"
+                name={"Поддержка"}
+                />
+            </div>          
         </div>
     <slot></slot>
 </main>
@@ -37,7 +60,8 @@
         padding: 1.5rem;
         background-color: transparent;
         position: relative;
-
+        display: flex;
+        justify-content: space-between;
     }
     
 </style>

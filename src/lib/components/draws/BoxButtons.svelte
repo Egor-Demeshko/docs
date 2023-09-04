@@ -5,6 +5,7 @@
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore";
 
     export let id = '';
+    export let node_type = "text";
 
 
 
@@ -135,13 +136,15 @@
     on:click={ deleteFlow } >
         <use href="/assets/icons/all.svg#box_cancel"></use>
     </svg>
-
-    <svg class="buttons__icons"
-    on:pointerleave={pointerLeave}
-    on:pointerenter={pointerEnter}
-    on:click={addNode}>
-        <use href="/assets/icons/all.svg#create_node"></use>
-    </svg>
+    
+    {#if node_type !== "checkbox"}
+        <svg class="buttons__icons"
+        on:pointerleave={pointerLeave}
+        on:pointerenter={pointerEnter}
+        on:click={addNode}>
+            <use href="/assets/icons/all.svg#create_node"></use>
+        </svg>
+    {/if}
 </div>
 
 

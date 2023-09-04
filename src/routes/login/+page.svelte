@@ -4,7 +4,6 @@
     import Form from "$lib/components/Form.svelte";
     import AccountRegistration from "$lib/components/CntrElem/AccountRegistration.svelte";
 
-    /**goto("/r");*/
     let logIn_open = false;
     let registration_open = false;
 

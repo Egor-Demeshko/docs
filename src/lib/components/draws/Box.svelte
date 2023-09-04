@@ -556,7 +556,7 @@ function secondStepOnChildConnect(e){
 
     {#if showButtons}
           <foreignObject  width="16" {height} x="{x + width + 6}" {y}>
-              <BoxButtons {id}/>
+              <BoxButtons {id} {node_type}/>
           </foreignObject>
     {/if}
 

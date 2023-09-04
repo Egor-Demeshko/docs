@@ -261,7 +261,23 @@
         left: 0;
     }
 
+
+    :global(.trumbowyg-button-pane button svg){
+        fill:var(--light-blue);
+        transition: fill 400ms ease;
+    }
+
+    :global(.trumbowyg-button-pane button:hover){
+
+        background-color: transparent !important;
+    }
+
+    :global(.trumbowyg-button-pane button:hover svg){
+        fill:var(--orange);
+    }
+    
     :global(.blockinteraction){
         pointer-events: none;
     }
+
 </style>

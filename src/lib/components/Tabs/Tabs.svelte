@@ -15,6 +15,8 @@
     let pointerEnter = () => hover = true;
     let pointerLeave = () => hover = false;
 
+    let tabs;
+
     /**при клике на плюс, создаем объект документа, в основном для того чтобы создать новую вкладку
      * также открываем модалку в этой вкладке. документ сразу редактировать нельзя
     */
@@ -29,13 +31,13 @@
 
     /* когда мы через модалку создаем новый документ, эта страка необходима чтобы обновить стор, количества вкладок,
     которое конгечно зависит от количества документов*/
-    $: if(document){
+    $: if(tabs){
         tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: docsArr.length}));
     }
 </script>
 
 
-<div class="tab_bar">
+<div class="tab_bar" bind:this={tabs}>
     <ul>
         {#each docsArr as {name, id}, i}    
             <Tab {name} tabId={i} parentId={tabsPosition} documentId={id}/>

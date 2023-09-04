@@ -59,11 +59,6 @@
     function blurHandler(){
         startValidation();
     }
-
-
-    function changeHandle(e){
-        syncDataInNodesStores(id, name, e.target.value);
-    }
 </script> 
 
 <div class="input_wrapper" class:not_valid>
@@ -71,7 +66,7 @@
     <input {placeholder} {id} {name} {required} {pattern} {type} {value} {autocomplete}
     class:not_valid
     on:blur={blurHandler}
-    on:change={changeHandle}
+    on:input
     bind:this={input}
     />
 </div>

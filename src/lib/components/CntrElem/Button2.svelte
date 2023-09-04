@@ -1,20 +1,17 @@
 <script>
-    export let name = "doc";
-    export let accept = ".docx";
-    export let text = "Стандартный текст";
+    export let labelName = "";
+    export let name = "";
+
 </script>
 
-
-<label tabindex="0">
-    {text}
-    <input type="file" {name} {accept} on:change tabindex="-1">
-</label>
-
+<button on:click aria-label="{labelName}">
+    {name}    
+</button>
 
 <style>
-
-    label{
-        position: relative;
+    button{
+        display: block;
+        appearance: none;
         background-color: var(--bg);
         color: var(--color);
         border: var(--border);
@@ -26,24 +23,16 @@
         transition: background 600ms ease, color 600ms ease, border 600ms ease;
         width: 100%;
         outline: none;
-        display: var(--display);
     }
 
-    input{
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-    }
-
-    label:hover{
+    button:hover{
         background-color: var(--bg-hover);
         color: var(--color-hover);
         border: var(--border-hover);
     }
 
-    label:focus{
-        border: 2px solid var(--orange);
+    button:focus{
+        border: var(--focus-border);
+        outline: var(--focus-outline);
     }
 </style>
