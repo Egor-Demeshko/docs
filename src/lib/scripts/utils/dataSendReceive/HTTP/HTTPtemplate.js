@@ -11,7 +11,6 @@ export default class HTTPtemplate extends HTTPBaseServise{
     }
 
     async post(data){
-        console.log("[HTTPTEMPLATE]: POST");
         return await super.post(data, this.#path);
     }
 

@@ -190,3 +190,7 @@ export const showTooltip = writable({show: false});
 
 /**показывает модалку в поле редактирования документа  */
 export const showModalDocumentCreator = writable(false);
+
+
+/**хранит экземпляр User */
+export const userStore = writable();

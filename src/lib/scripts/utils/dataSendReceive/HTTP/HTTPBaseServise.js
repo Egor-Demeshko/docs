@@ -1,14 +1,21 @@
 export default class HTTPBaseServise{
-    #origin = "https://reqres.in/api/";
+    #origin = "http://constructor.crabdance.com/";
     constructor(){
 
     }
 
 
     async post(data, path){
-        let url = new URL(this.#origin + "users");
+        let url = new URL(this.#origin + path);
+        console.log("{url}", data);
+
         let result = await fetch(url, {
-            method: "POST"
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: data
         });
         
         console.log("[HTTPBaseServise]  POST DATA: ", result);

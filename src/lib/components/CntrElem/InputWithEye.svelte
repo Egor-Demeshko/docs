@@ -7,7 +7,6 @@
     export let value = '';
     export let name = '';
     export let validity;
-    import syncDataInNodesStores from "$lib/scripts/controllers/syncDataInNodesStores.js";
 
     let valid = '';
     let invalid = '';
@@ -60,12 +59,6 @@
     }
 
 
-    function changeHandle(e){
-        syncDataInNodesStores(id, name, e.target.value);
-    }
-
-
-
     function clickHandle(e){
         if(e.target.tagName === "path" || e.target.tagName === "svg"){
             passwordVisible = !passwordVisible;
@@ -77,18 +70,16 @@
         }
     }
 
-
-    function pointerEnter(){
-
-    }
 </script> 
 
 <div class="input_wrapper" class:not_valid on:click={clickHandle}>
 
     <input {placeholder} {id} {name} {required} {pattern} {type} {value}
     class:not_valid
+    class:invalid
+    minlength={5}
     on:blur={blurHandler}
-    on:change={changeHandle}
+    on:input
     bind:this={input}
     />
 
@@ -126,7 +117,8 @@
         transition: border 400ms ease, background 400ms ease;
     }
 
-    input.not_valid{
+    input.not_valid,
+    input.invalid{
         border: var(--border-width) solid var(--pumpkin);
     }
 

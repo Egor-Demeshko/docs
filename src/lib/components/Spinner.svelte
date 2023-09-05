@@ -4,7 +4,7 @@
 </script>
 
 <div class="spinner">
-
+    
 </div>
 
 <style>

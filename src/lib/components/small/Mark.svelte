@@ -6,7 +6,9 @@
 
 <div in:scale
     out:scale>
-    <span>{quantity}</span>
+    <span>
+        {quantity}
+    </span>
 </div>
 
 <style>
@@ -22,10 +24,17 @@
         transform: translate(50%, -50%);
         background-color: var(--pumpkin);
         border-radius: 50%;
+
     }
 
     div>span{
         font-size: .875rem;
         color: var(--white-blue);
+    }
+
+    @media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+        div>span{
+            transform: translateY(4%);
+        }
     }
 </style>

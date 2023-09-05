@@ -1,37 +1,83 @@
 <script>
-    import LogoAndName from "$lib/components/LogoAndName.svelte";
-    import Button2 from "$lib/components/CntrElem/Button2.svelte";
-    import {goto} from "$app/navigation";
-    import {base} from "$app/paths";
+    import Spinner from "$lib/components/Spinner.svelte";
+    import { userStore } from "$lib/scripts/stores";
+	import User from "$lib/scripts/controllers/instances/User";
+	import { onMount } from "svelte";
+    import DataService from "$lib/scripts/controllers/instances/DataServise.js";
+    import { beforeNavigate } from "$app/navigation";
 
-    function buttonClick(){
-        window.location = "/contact";
-    }
+    let loaded = false;
+    userStore.set( new User({save: "local"}) );
+
+
+    onMount( async() => {
+       
+        /**если токен есть, нужно рефрешнуть сессию.*/
+        if(DataService.isToken()){
+        /**
+         * проверяем токен, просто в памяти. есть ли он.
+         * если его нет, разблокируем логин
+         * 
+         * если токен есть, то проверяем его свежесть
+         * 
+         * если он свежий, то грузим дальше
+         * если нет, то пытаемся его обновить
+
+         * если обновился, то грузим дальше
+         * если нет то редирект на логин, старый токен необходимо удалить.
+        */
+            //если он свежий, то грузим дальше
+            if($userStore.isTokenFresh()){
+                loaded = true;
+            } else {
+                //если нет, то пытаемся его обновить
+                try{
+                    let isRefreshed = await $userStore.refreshSession();
+                    if(isRefreshed) loaded = true;
+
+                } catch(e) {
+                    console.log("[main]: не удалось обновить сессию");
+                    window.location = window.location.origin;
+                }
+            }
+
+        } else {
+            if(window.location.pathname === '/'){
+                loaded = true;
+            } else {
+                window.location = window.location.origin;
+            }
+        }
+
+        
+        if(!$userStore){
+            console.log("[layout.svelte]: userstore: ", $userStore);
+
+            userStore.set( new User() );
+            window.location = window.location.origin;
+        }
+        console.log('[layout.svelte]: userstore', $userStore);
+
+    });
+
+
+    beforeNavigate( () => {
+        loaded = false;
+    });
+
+
+    
+
 </script>
 
 <main>
-    <div class="background">
-    </div>     
-        <div class="logo_position">
-            <LogoAndName/>
-            <div class="header_right">
-                <Button2
-                on:click={buttonClick}
-                --bg="transparent"
-                --color="var(--white-blue)"
-                --border="3px solid var(--white-blue)"
-                --font-size="1rem"
-                --padding=".5rem 1.25rem"
-                --bg-hover="var(--gray-blue)"
-                --color-hover="var(--white-blue)"
-                --border-hover="3px solid var(--white-blue)"
-                --focus-border="3px solid var(--orange)"
-                --focus-outline="none"
-                name={"Поддержка"}
-                />
-            </div>          
+    {#if !loaded}
+        <div class="spinner_wrapper">
+            <Spinner/>
         </div>
-    <slot></slot>
+    {:else}
+        <slot></slot>
+    {/if}
 </main>
 
 <style>
@@ -45,23 +91,17 @@
         width: 100vw;
     }
 
-    .background{
-        background: url('/assets/images/noise.svg');
-        mix-blend-mode: soft-light;  
-        position: absolute;
-        top:0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 0;
-    }
-
-    .logo_position{
-        padding: 1.5rem;
-        background-color: transparent;
-        position: relative;
+    .spinner_wrapper{
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--spinner-back);
+        z-index: 100;
     }
     
 </style>

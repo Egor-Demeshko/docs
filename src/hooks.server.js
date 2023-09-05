@@ -1,6 +1,15 @@
 export async function handle({ event, resolve}){
     const fetch = event.fetch;
+    const cookies = event.cookies;
 
+
+
+
+    let response = await resolve(event);
+
+   /* console.log("event", event);
+    console.log("coockie", cookies.getAll());*/
+    /*
     if( event.url.pathname.startsWith("/redactor") ||
         event.url.pathname.startsWith("/anketa") ){
         
@@ -17,7 +26,7 @@ export async function handle({ event, resolve}){
             })
             .then( (response) => (response.ok) ? response.json() : '');
 
-            /*console.log("DATA FROM SERVER: ", data);*/
+            /*console.log("DATA FROM SERVER: ", data);*//*
 
             if(data){
                 event.locals = data;
@@ -29,9 +38,9 @@ export async function handle({ event, resolve}){
                 "message": err.message
             });
         }
-
+    
 
     }
-
-    return await resolve(event)
+    */
+    return response;
 }
