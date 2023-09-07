@@ -37,11 +37,6 @@
    });
 
 
-    beforeNavigate( () => {
-        loaded = false;
-    });
-
-
     
 
 </script>

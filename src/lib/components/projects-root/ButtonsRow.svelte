@@ -2,9 +2,14 @@
     import Button from "$lib/components/CntrElem/Button.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
+    import { projectsStore, modalFieldsStore } from "$lib/scripts/stores";
+    import { goto } from "$app/navigation";
+    import { createEventDispatcher } from "svelte";
 
 
     export let directionOfanimation = false;
+    export let id;
+
     let show = false;
 
 
@@ -24,7 +29,62 @@
             easing: params.easing || cubicInOut,
             css: (t, u) => `height: ${t * 28}px; margin-top: ${t * 10}px;`
         };
-  }
+    }
+
+    /** отправляет в редактор по id из пропса */
+    function navigateToRedactor(){
+        $projectsStore.setActiveProject(id);
+        goto("/redactor");
+    }
+
+    function navigateToAnkets(){
+        $projectsStore.setActiveProject(id);
+        goto("/anketa");
+    }
+
+    function deleteProject(){
+        /**
+         *  show: false,
+                text: '',
+                errorCallback: null,
+                okCallback: null,
+                result: false
+        */
+        modalFieldsStore.set(
+            {
+                show: true,
+                text: 'Удалить проект навсегда? Отменить это действие нельзя!',
+                errorCallback: () => modalFieldsStore.set({
+                                                            show: false,
+                                                            text: '',
+                                                            errorCallback: null,
+                                                            okCallback: null,
+                                                            result: false
+                                                        }),
+                okCallback: processDelete
+            }
+        );
+    }
+
+
+    async function processDelete(){
+        modalFieldsStore.set({
+                                show: false,
+                                text: '',
+                                errorCallback: null,
+                                okCallback: null,
+                                result: false
+                            });
+
+        //необходимо удалить проект, и возможно обновить список проектов.
+        //если удачно, послать событие listupdated
+        //projects запросит новый списко
+        let result = await $projectsStore.delete(id);
+
+        if(result){
+            document.dispatchEvent( new CustomEvent("project_delete"))
+        }
+    }
 </script>
 
 
@@ -36,6 +96,7 @@
             <Button 
             name={"Редактировать"}
             no_wrap={true}
+            fnToRunOnClick={navigateToRedactor}
             --bg="var(--light-blue)"
             --color="var(--middle-blue)"
             --color-hover="var(--middle-blue)"
@@ -55,12 +116,13 @@
             --font-size=".875rem"
             --padding=".3rem 1rem"
             --bg-hover="var(--light-gray-blue)"
-            fnToRunOnClick={ () => window.location = window.location.origin + "/anketa"}/>        
+            fnToRunOnClick={ navigateToAnkets }/>        
         </div>
         <div class="buttons_row__right">
             <Button 
             name={"Удалить проект"}
             no_wrap={true}
+            fnToRunOnClick={ deleteProject }
             --bg="var(--light-blue)"
             --color="var(--middle-blue)"
             --color-hover="var(--middle-blue)"

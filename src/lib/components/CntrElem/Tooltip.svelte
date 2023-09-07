@@ -10,6 +10,7 @@
     $: show = $showTooltip.show;
 
     $: if (coors){
+        console.log("tooltip");
         x = coors.x;
         y = coors.y;
     }

@@ -7,7 +7,9 @@
     import { subscribeOnProjectListSet } from "$lib/components/projects-root/ProjectName.svelte";
     import { get } from "svelte/store";
 	import { onMount } from "svelte";
-    import { userStore, projectsStore } from "$lib/scripts/stores";
+    import { userStore, projectsStore, showTooltip } from "$lib/scripts/stores";
+    import Modal from "$lib/components/Modal.svelte";
+    import ModalWithInput from "$lib/components/ModalWithInput.svelte";
 
 
     /*TODO получаем список проектов этого пользователя*/
@@ -30,6 +32,10 @@
     $: console.log("[projects PAGE]: projects[]: ", projects);
     let projectElement;
     let showRight = false;
+    let invalid = false;
+
+    /**флаг для отображения модалки создания нового проекта*/
+    let active = false;
 
     /**
      * @type <Array>
@@ -43,6 +49,35 @@
 
     subscribeOnProjectListSet(shouldBeOpened);
     subscribeOnProjectListSet(openedProject);
+
+
+    /**создание проекта*/
+    async function createProject(e){
+        const input = e.target.previousElementSibling;
+        let name = input.value;
+        
+
+        let valid = input.checkValidity();
+
+        if(!valid) {
+            let coors = input.getBoundingClientRect();
+            showTooltip.set({show: true, 
+                            coors: {x: coors.x + input.offsetWidth / 2, y: coors.y + 10}, 
+                            text: "Обязательное поле", 
+                            place: "above"});
+
+            setTimeout( () => showTooltip.set({show: false}), 6000);
+            return;
+        };
+
+        showTooltip.set({show: false});
+        active = false;
+        console.log("create object");
+
+        let result = await $projectsStore.create(name);
+        debugger;
+    }
+
 
     function shouldBeOpened({set}){
         /*
@@ -84,7 +119,6 @@
         console.log('[page.svelte]: ', data);
     }
 
-
     /*правильное добавление gap*/
     $: if(!showRight && projectElement){
         setTimeout(() => {
@@ -99,6 +133,8 @@
         projects = await $projectsStore.getList();
     });
 </script>
+
+<svelte:document on:project_delete={ async () => projects = await $projectsStore.getList()}></svelte:document>
 
 
 <div class="wrapper">
@@ -125,6 +161,7 @@
                         --border-hover="2px solid var(--gray-blue)"
                         --font-size=".875rem"
                         --padding=".5rem 4.6rem"
+                        fnToRunOnClick={() => active = true}
                         />
                     </div>
                 </div>
@@ -142,8 +179,78 @@
 <Tooltip --bg="var(--white)"
 --color="var(--faded-gray-blue)"/>
 
+<Modal />
+<ModalWithInput
+    
+    bind:active={active}
+    text={"Введите название нового проекта"}
+    >
+    
+    <div slot="inner" class="modal_controls">
+        <input type="text" class="modal_input" required 
+        class:invalid
+        on:invalid={ () => invalid = true}/>
+        <button on:click={createProject} class="modal_button">Создать</button>
+    </div>
+    
+</ModalWithInput>
+
 
 <style>
+    .modal_input{
+        border: 2px solid var(--middle-blue);
+        border-radius: 15px;
+        background-color: var(--white-blue);
+        padding: .5rem 1rem;
+        color: var(--deep-blue);
+        transition: background 400ms ease, border 400ms ease;
+    }
+
+    .modal_input:hover{
+        background-color: var(--light-blue);
+    }
+
+    .modal_input:focus{
+        border: 2px solid var(--orange);
+        outline: none;
+    }
+
+    .modal_input.invalid{
+        border: 2px solid var(--pumpkin);
+    }
+
+    .modal_controls{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .modal_button{
+        appearance: none;
+        padding: .5rem 1rem;
+        border: 2px solid var(--middle-blue);
+        background-color: var(--middle-blue);
+        color: var(--white-blue);
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background 400ms ease, border 400ms ease;
+    }
+
+    .modal_button:hover{
+        background-color: var(--gray-blue);
+        border: 2px solid var(--gray-blue);
+    }
+
+    .modal_button:focus{
+        border: 2px solid var(--orange);
+        outline: none;
+    }
+
+
+
+
     .wrapper{
         display: flex;
         flex-direction: column;

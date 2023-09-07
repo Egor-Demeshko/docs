@@ -199,5 +199,5 @@ export const userStore = writable();
 /**хранит экземпляр контроллер Projects */
 export const projectsStore = readable( new Projects() );
 
-/** */
+/**флаг отображения строки сохранения */
 export const saving = writable(false);

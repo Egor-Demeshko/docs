@@ -122,7 +122,7 @@
     
     <!-- svelte-ignore empty-block -->
    {#if open}
-        <ButtonsRow {directionOfanimation}/>
+        <ButtonsRow {directionOfanimation} id={project.id}/>
     {/if}
 
     

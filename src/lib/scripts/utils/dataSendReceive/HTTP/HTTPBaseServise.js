@@ -33,8 +33,22 @@ export default class HTTPBaseServise{
         console.log("[HTTPBaseServise]  POST DATA: ", result);
     }
 
-    async delete(data, path){
-        console.log("[HTTPBaseServise]  DELETE DATA: ", data);
+    async delete(token, data, route){
+        const url = new URL(this.#origin + this.path + this.secondPath + route);
+
+        const headers = { 
+            "Content-type": "application/json"
+        }
+
+        if(token) headers.jwt = token;
+
+        let response = await fetch(url, {
+            method: "DELETE",
+            cors: "cors",
+            headers,
+            body: data
+        });
+        return await response.json();
     }
 
     async patch(token = null, data, route){
@@ -69,5 +83,22 @@ export default class HTTPBaseServise{
         });
 
         return response.json();
+    }
+
+    async postWithHeader({token = null, data, route}){
+        const url = new URL(this.#origin + this.path + this.secondPath + route );
+        console.log('[http basic]: url: ', url.href);
+        const headers = {
+            "Content-type": "application/json"
+        };
+        if(token) headers.jwt = token; 
+
+        let response = await fetch(url, {
+            method: "POST",
+            cors: "cors",
+            headers,
+            body: data
+        });
+        return await response.json();
     }
 }

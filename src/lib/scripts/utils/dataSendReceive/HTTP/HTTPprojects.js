@@ -24,4 +24,28 @@ export default class HTTPprojects extends HTTPBaseServise{
             console.log("[http client]: error changing name: ", e.message);
         }
     }
+
+
+    async create(token, data){
+        const route = "/create";
+
+        try{
+            return await super.postWithHeader({token, data: JSON.stringify(data), route});
+        } catch (e){
+            console.log("[http client]: ошибка при создании проекта ", e.message);
+        }
+    }
+
+
+    async delete(token, data){
+        const route = "/delete";
+
+        try{
+            let json = await super.delete(token, JSON.stringify(data), route);
+            console.log('[DELETE result]: json: ', json);
+            return json;
+        } catch(e){
+            console.log("[http client]: не удалось удалить проекть ", e.message);
+        }
+    }
 }

@@ -7,6 +7,8 @@ export class Projects{
     #client;
     #jwt;
     #saveData;
+    /**айди активного проекта. используется для навигации projects => redactor */
+    #activeProject;
 
     constructor(){
         this.#client = new HTTPprojects();
@@ -15,6 +17,26 @@ export class Projects{
             saveService: this.#saveData,
             http: this.#client
         });
+    }
+
+
+    async create(newName){
+        let token = await this.#jwt.getToken();
+
+        if(token){
+            let result = await this.#client.create(token, {name: newName});
+        }
+    }
+
+    /** удаление проекта */
+    async delete(id){
+        // запросить эндпоинт
+        let token = await this.#jwt.getToken();
+
+        if(token){
+            let result = await this.#client.delete(token, {project_id: id});
+        }
+        //
     }
 
     /**
@@ -36,5 +58,10 @@ export class Projects{
             let result = await this.#client.changeName(token, data);
             if(result.success) return result.data;
         }
+    }
+
+    /**устанавливает id активного проекта */
+    setActiveProject(id){
+        this.#activeProject = id;
     }
 }
