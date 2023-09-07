@@ -1,5 +1,5 @@
 export default class dataSenderReceiver{
-    #senderClient;
+    /*#senderClient;
     #type;
     #callerId;
 
@@ -29,5 +29,5 @@ export default class dataSenderReceiver{
                     this.#senderClient = new HTTPTemplate();
             }
         }
-    }
+    }*/
 }

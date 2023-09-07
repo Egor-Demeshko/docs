@@ -1,3 +1,5 @@
+import Storage from "$lib/scripts/controllers/instances/Storage.js";
+
 export default class JWT{
     #saveService;
     #http;
@@ -11,63 +13,90 @@ export default class JWT{
 
     /**проверяем свежий ли токен */
     isTokenFresh(){
-        let token = this.#saveService.getToken();
-        if(token){
-            let exp = token.exp;
+        let expiredStamp = this.#saveService.getTokenExp();
+        if(expiredStamp){
 
-            if( Date.now() - exp >= 0 ){
+            if( Math.floor(Date.now()/1000) - expiredStamp >= 0 ){
                 this.#saveService.deleteToken();
                 return false;
             }
-
             return true;
-        }
+        } 
+        console.log("[TOKEN FRESH]: no timestamp"); 
+        return false;
     }
 
 
     /**@param tokens {jwt: {string}, refresh: {string}} */
     saveToken(tokens){
-        console.log('[JWT]: saving token');
-        
+        console.log('[JWT]: saving token', tokens);
         this.#saveService.save({...tokens, expired: this.#expired});
     }
 
+    /**
+     * @description функция пробует получить новые токены, декодировать из записать их.
+     * если не получилось возращается false или выкидывает ошибку
+     * @returns boolean
+     */
     async processTokens(){
-        let refreshToken = this.#saveService.getToken();
-        console.log('[JWT] {process token}: token', token);
+        let refreshToken = this.#saveService.getToken("refresh");
+        console.log('[JWT] {process token}: refreshtoken', refreshToken);
 
         if(refreshToken){
             try{
+                /** {jwt, refresh} */
                 const tokens = await this.#http.refresh(refreshToken);
 
-                this.decodeJWT(tokens.jwt);
+                if(tokens){
+                    this.decodeJWT(tokens.jwt);
 
-                this.saveToken(tokens);
-
-                return true;
+                    this.saveToken(tokens);
+    
+                    return true;
+                } else {
+                    console.log("[НЕТ ТОКЕНОВ]");
+                    return false;
+                }
             } catch(e){
-                console.log("[USER]: не удалось обновить токен через соединение");
+                console.log("[USER]: не удалось обновить токен: ", e.message);
             }
         } else {
             throw new Error("не удалось получить токен из памяти");
         }
-        console.log("[JWT] refresh result: ", result);
+        return false;
     }
 
 
     decodeJWT(jwt){
         let arr = jwt.split('.');
 
-        arr = arr.map( (value) => atob(value));
-        console.log("[JWT]: {decodeJWT}: arr", arr);
+        arr = arr.map( (value, i) => {
+            if(i === 2) return value;
 
+            let str = atob(value);
+            return JSON.parse(str);
+        });
+        console.log("[JWT]: {decodeJWT}: arr", arr);
         for(let i = 0; i < arr.length; i++){
             if(arr[i].exp){
-                this.#expired = exp;
+                this.#expired = arr[i].exp;
             }
         }
 
-       // return arr;
+       //return arr;
     }
 
+    /**@description определяет есть ли токен и/или получает его из локальной памяти*/
+    async getToken(){
+        let isFresh = this.isTokenFresh();
+
+        if(Storage.isToken() && isFresh){
+            return this.#saveService.getToken("jwt");
+        } else if (Storage.isRefreshToken()){
+            let result = await this.processTokens();
+            if(result) return this.#saveService.getToken("jwt");
+        } else {
+            throw new Error("НЕТ АКТИВНОЙ СЕССИИ");
+        }
+    }
 }

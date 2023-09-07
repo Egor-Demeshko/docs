@@ -3,20 +3,53 @@
     import InputWithEye from "./CntrElem/InputWithEye.svelte";
     import Button from "./CntrElem/Button.svelte";
     import { createEventDispatcher } from "svelte";
+    import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService.js";
+    import { userStore } from "$lib/scripts/stores";
+    import { goto } from "$app/navigation";
 
 
     let dispatch = createEventDispatcher();
     let validData = {login: {value: "", validity: false}, password: {value: "", validity: false}};
+    let disabled = false;
 
 
-    function logIn(e){
+    async function logIn(e){
         e.preventDefault();
+        disabled = true;
+        const servise = new saveDeleteService("login");
+        console.log("[LOGIN]: START LOGGINING");
 
+
+        /**проверяем валидность полей ввода*/
         for(let key of Object.keys(validData)){
-            if(!validData[key].validity) return;
+            if(!validData[key].validity) {
+                disabled = false;
+                return;
+            };
         }
 
-        
+        {
+            const dataToSend ={
+                password: validData.password.value,
+                login: validData.login.value
+            }
+
+
+            let {success, data, detail} = await servise.createInstance(dataToSend);
+
+            if(!success && detail.error_type === "param_error"){
+                //TODO show error
+            }
+
+           console.log("[AFTER login]: data ", data);
+
+            if(data && $userStore){
+                let result = $userStore.saveData(data);
+                if(result) goto("/projects");
+            }
+
+            disabled = false;
+        }         
     }
 
 
@@ -33,8 +66,10 @@
     }
 
 
-    function validHandle({id, validity}){
-        data
+    function validHandle(e){
+        const {id, validity} = e.detail;
+
+        validData[id]["validity"] = validity;
     }
 </script>
 
@@ -57,7 +92,7 @@
         on:input={inputChange}/>
         
         <InputWithEye id={"password"} name={"password"} placeholder={"Введите ваш пароль"}
-        pattern={"[a-zA-Z_0-9!\-]{5,}"}
+        pattern={".{5,}"}
         required={true}
         on:valid={validHandle}
         --border-width="2px"
@@ -73,6 +108,7 @@
 
         <Button name={"Войти"} 
         fnToRunOnClick={logIn}
+        {disabled}
         --bg="var(--middle-blue)" 
         --color="var(--white-blue)"
         --bg-hover="var(--gray-blue)"

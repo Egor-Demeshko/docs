@@ -1,6 +1,8 @@
 <script>
     import DocName from "$lib/components/CntrElem/DocName.svelte";
 
+    export let documentsToShow;
+
     let list_show = false;
 
     /*для анимации появления необходимо показать с задержкой
@@ -13,9 +15,11 @@
 </script>
 
 <div class="list" class:list_show use:enablelist>
-    <DocName/>
-    <DocName/>
-    <DocName/>
+    {#if documentsToShow}
+        {#each documentsToShow as document}
+        <DocName {document}/>
+        {/each}
+    {/if}
 </div>
 
 

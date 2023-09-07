@@ -42,7 +42,7 @@
 
 <style>
     div{
-        background-color: var(--white);
+        background-color: var(--bg);
         font-style: italic;
         font-size: .878rem;
         padding: .25rem .5rem;
@@ -52,7 +52,7 @@
     }
 
     span{
-        color: var(--faded-gray-blue);
+        color: var(--color);
     }
 
     .under{

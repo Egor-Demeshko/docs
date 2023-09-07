@@ -1,8 +1,7 @@
 <script>
-
+    import LogoAndName from "$lib/components/LogoAndName.svelte";
+    import Button2 from "$lib/components/CntrElem/Button2.svelte";
 </script>
-
-
 
 
 <div class="background">

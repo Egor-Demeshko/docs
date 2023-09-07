@@ -3,6 +3,7 @@
     import {fade, blur} from "svelte/transition";
     import Form from "$lib/components/Form.svelte";
     import AccountRegistration from "$lib/components/CntrElem/AccountRegistration.svelte";
+    import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
 
     let logIn_open = false;
     let registration_open = false;
@@ -23,7 +24,7 @@
 </script>
 
 
-<main>
+<div>
 
     <section class:registration_open class:logIn_open>
         <div class="heading">
@@ -77,14 +78,17 @@
 
     </section>
 
-</main>
+    <Tooltip --bg="var(--faded-gray-blue)"
+    --color="var(--white-blue)"/>
+
+
+</div>
+
 
 <style>
 
-
-
     section{
-        position: absolute;
+        position: fixed;
         top: 37%;
         left: 50%;
         display: flex;
@@ -115,7 +119,7 @@
 
     .heading{
         display: flex;
-        gap: 2.5rem;
+        gap: 1.8rem;
         align-items: center;
     }
 

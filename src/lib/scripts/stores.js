@@ -1,4 +1,5 @@
-import { writable } from "svelte/store";
+import { writable, readable } from "svelte/store";
+import { Projects } from "$lib/scripts/controllers/instances/Projects.js";
 
 
 
@@ -194,3 +195,9 @@ export const showModalDocumentCreator = writable(false);
 
 /**хранит экземпляр User */
 export const userStore = writable();
+
+/**хранит экземпляр контроллер Projects */
+export const projectsStore = readable( new Projects() );
+
+/** */
+export const saving = writable(false);

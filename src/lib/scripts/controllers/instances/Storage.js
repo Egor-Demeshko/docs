@@ -1,36 +1,55 @@
-import { PUBLIC_CHAIN } from "$env/static/public";   
+import { PUBLIC_CHAIN } from "$env/static/public";  
+import { PUBLIC_REFRESH } from "$env/static/public"; 
 
 export default class Storage{
     static instance;
 
     constructor(){
-        if(Storage.instance) return instance;
-        
+        if(Storage.instance) return this.instance;
         Storage.instance = this;
     }
 
     static isToken(){
-        const storage = window.localStorage;
         let data = localStorage.getItem(PUBLIC_CHAIN);
 
         return (data) ? true : false;
     }
 
 
-    getTokenRefresh(){
-        return localStorage.getItem(PUBLIC_CHAIN)?.refresh;
+    static isRefreshToken(){
+        let data = localStorage.getItem(PUBLIC_REFRESH);
+
+        return (data) ? true : false;  
     }
 
 
-    getTokenJwt(){
+    getToken(kind){
+        const data = localStorage.getItem(PUBLIC_CHAIN);
+
+        if(kind === "refresh"){
+            return JSON.parse( localStorage.getItem(PUBLIC_REFRESH) );
+
+        } else if(kind === "jwt"){
+            const obj = JSON.parse( localStorage.getItem(PUBLIC_CHAIN) );
+            return obj?.jwt;
+        }
+    }
+
+
+    getTokenExp(){
+        const data = localStorage.getItem(PUBLIC_CHAIN);
         
+        return JSON.parse(data)?.expired;
     }
 
 
     save(data){
-        const storage = window.localStorage;
-
-        storage.setItem( PUBLIC_CHAIN, data);
+        let accessToken = {jwt: data.jwt, expired: data.expired};
+        let refresh = {refresh: data.refresh};
+        
+        
+        localStorage.setItem( PUBLIC_CHAIN, JSON.stringify(accessToken));
+        localStorage.setItem( PUBLIC_REFRESH, JSON.stringify(refresh));
     }
 
 

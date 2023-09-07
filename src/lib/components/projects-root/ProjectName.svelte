@@ -21,8 +21,9 @@
     import ButtonsRow from "$lib/components/projects-root/ButtonsRow.svelte";
     import { writable } from "svelte/store";
 	import { onMount } from "svelte";
+    import { projectsStore, saving } from "$lib/scripts/stores";
 
-    export let name = "Название стандартное";
+    export let project;
 
     /**
      * пробовал через subscribe, не получилоась
@@ -50,6 +51,11 @@
 
     function clickHandle(e){
         const target = e.target;
+        /**
+         * @type {ARRAY}
+         * @description когда открыт список докуметов, содержит маccив документов
+         */
+        let data = null;
 
         if(target.tagName === "BUTTON") return;
 
@@ -58,12 +64,16 @@
         */
         if(open) {
             projectNameStore.set(false);
+            data = null;
         };
 
-        if(!open) changeAllDirections(projectNameStore);
+        if(!open) {
+            changeAllDirections(projectNameStore);
+            data = project.documents;
+        };
 
         /*у этого компонента как модуля, могут быть подписчики, заинтересованные в изменение состояния отрисовки названия проектов*/
-        callbacks.forEach( (fn) => fn(set));
+        callbacks.forEach( (fn) => fn({set, data}));
     }
 
 
@@ -84,13 +94,25 @@
             rotateBack = (!open) ? true : false;
         });
     }
+
+    /**@description сохраняем название проекта*/
+    async function blur(e){
+        saving.set(true);
+        const target = e.target;
+        const name = target.textContent;
+
+
+        let result = await $projectsStore.changeName({project_id: project.id, name});
+        saving.set(false);
+    }
 </script>
 
 
 <li class:open on:click={clickHandle} bind:this={projectName}>
     
     <div class="name__wrapper">
-        <span class="name" contenteditable="true" on:click={(e) => e.stopPropagation()}>{name}</span>
+        <span class="name" contenteditable="true" on:click={(e) => e.stopPropagation()}
+            on:blur={blur}>{project.name}</span>
         <svg class="icon" viewBox="0 0 12 13">
             <path d="M10.5 11.5H1.5C1.295 11.5 1.125 11.33 1.125 11.125C1.125 10.92 1.295 10.75 1.5 10.75H10.5C10.705 10.75 10.875 10.92 10.875 11.125C10.875 11.33 10.705 11.5 10.5 11.5Z"/>
             <path d="M9.50979 2.24C8.53979 1.27 7.58979 1.245 6.59479 2.24L5.98979 2.845C5.93979 2.895 5.91979 2.975 5.93979 3.045C6.31979 4.37 7.37979 5.43 8.70479 5.81C8.72479 5.815 8.74479 5.82 8.76479 5.82C8.81979 5.82 8.86979 5.8 8.90979 5.76L9.50979 5.155C10.0048 4.665 10.2448 4.19 10.2448 3.71C10.2498 3.215 10.0098 2.735 9.50979 2.24Z" />

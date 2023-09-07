@@ -3,8 +3,8 @@ import Storage from "$lib/scripts/controllers/instances/Storage.js";
 export default class DataService{
     #service;
 
-    constructor({service}){
-        if(service === "local"){
+    constructor({save}){
+        if(save === "local"){
             this.#service = new Storage();
         }
     }
@@ -14,9 +14,17 @@ export default class DataService{
         return Storage.isToken();
     }
 
+    static isRefreshToken(){
+        return Storage.isRefreshToken();
+    }
 
-    getToken(){
-        this.#service.getToken();
+
+    getToken(whatToken){
+        return this.#service.getToken(whatToken);
+    }
+
+    getTokenExp(){
+        return this.#service.getTokenExp();
     }
 
     save(obj){

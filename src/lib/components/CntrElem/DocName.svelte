@@ -1,7 +1,16 @@
 <script>
     import { showTooltip } from "$lib/scripts/stores";
     
-    export let name = "имя документа по умолчанию.docx";
+    /**
+    * @description массив документов, полученных от сервера
+    *   {
+            "id": {Number},
+            "project_id": {Number},
+            "name": <{String}>,
+            "created_at": <{Date}>
+        }
+     */
+    export let document;
 
     function pointerEvent(e){
         let {x, y} = e;
@@ -54,7 +63,7 @@ on:pointerleave={pointerLeave}>
     <svg class="icon">
         <use href="/assets/icons/all.svg#doc"></use>
     </svg>
-    <span class="name">{name}</span>
+    <span class="name">{document.name}</span>
 </div>
 
 <style>

@@ -1,4 +1,7 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+    import { showTooltip } from "$lib/scripts/stores";
+
     export let id = "login";
     export let type = "text";
     export let placeholder = "Логин";
@@ -10,8 +13,9 @@
 
     let valid = '';
     let invalid = '';
-    let input;
+    export let input;
     let passwordVisible = false;
+    const dispatcher = createEventDispatcher();
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
 
@@ -45,16 +49,26 @@
     function setValid(){
         invalid = false;
         valid = true; 
+        dispatcher("valid", {id, validity: true});
+        showTooltip.set(false);
     }
 
 
     function setInvalid(){
+        dispatcher("valid", {id, validity: false});
+        const coors = input.getBoundingClientRect();
+        showTooltip.set({show: true, 
+            coors: {x: coors.x + input.offsetWidth/2, y: coors.y + 20}, 
+            text: "Минимум 5 символoв. Латинские буквы, цифры, _", 
+            place: "under"});
+
         valid = false;
         invalid = true;
     }
 
 
     function blurHandler(){
+        showTooltip.set({show: false});
         startValidation();
     }
 

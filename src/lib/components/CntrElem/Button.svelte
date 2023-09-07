@@ -6,6 +6,7 @@
     export let name = "";
     export let setFocus = false;
     export let no_wrap = false;
+    export let disabled = false;
 
     
     let button;
@@ -20,7 +21,7 @@
 
 </script>
 
-<button on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap>
+<button on:submit={console.log} on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap {disabled}>
     {name}    
 </button>
 
@@ -53,5 +54,11 @@
 
     button:focus{
         border: 2px solid var(--orange);
+    }
+
+    button:disabled{
+        cursor: auto;
+        background-color: var(--light-gray-blue);
+        border: 2px solid var(--light-gray-blue);
     }
 </style>

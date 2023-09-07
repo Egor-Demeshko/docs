@@ -11,6 +11,7 @@ export default class User{
     #token;
     #id;
     #mail;
+    #name;
     #jwtClient;
 
     static instance;
@@ -20,7 +21,7 @@ export default class User{
         if(User?.instance) return User.instance;
 
         this.#login = new HTTPLogin();
-        this.#saveService = new DataService(save);
+        this.#saveService = new DataService({save});
         this.#jwtClient = new JWT({saveService: this.#saveService, http: this.#login});
         User.instance = this;
     }
@@ -31,9 +32,31 @@ export default class User{
         return await this.#jwtClient.processTokens();
     }
 
+    async registrate(data, reg){
+        this.#login.post(data, reg);
+    }
+
 
     isTokenFresh(){
         return this.#jwtClient.isTokenFresh();
+    }
+
+    saveData(data){
+        //данные надо декодировать
+        //данные нужно сохранить в классе
+        //данные нужно сохранить в local
+        this.#token = data.jwt;
+        this.#id = data.user_id;
+        this.#name = data.name;
+
+        try{
+            this.#jwtClient.decodeJWT(data.jwt);
+
+            this.#jwtClient.saveToken({jwt: data.jwt, refresh: data.refresh});
+            return true;
+        } catch(e) {
+            console.log("[saving data error]: ", e.message);
+        }   
     }
 
 }

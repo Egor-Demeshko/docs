@@ -6,18 +6,45 @@
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
     import { subscribeOnProjectListSet } from "$lib/components/projects-root/ProjectName.svelte";
     import { get } from "svelte/store";
+	import { onMount } from "svelte";
+    import { userStore, projectsStore } from "$lib/scripts/stores";
 
 
     /*TODO получаем список проектов этого пользователя*/
-    let projects;
+    /**@description  [
+            {
+                "id": 1,
+                "name": "new_project 1",
+                "created_at": "2023-09-04T17:46:48.067289+00:00",
+                "documents": [
+                    {
+                        "id": 1,
+                        "project_id": 1,
+                        "name": "first document 1",
+                        "created_at": "2023-09-05T18:31:04.730164+00:00"
+                    }
+                ]
+            }
+        ]*/
+    let projects = [];
+    $: console.log("[projects PAGE]: projects[]: ", projects);
+    let projectElement;
     let showRight = false;
+
+    /**
+     * @type <Array>
+     * @description когда открыт список документов, тут содержится документы активного проекта.
+     * документы которые необходимо показать
+     */
+    let documentsToShow;
 
     /*TODO и получить список документов из проекта*/
 
 
     subscribeOnProjectListSet(shouldBeOpened);
+    subscribeOnProjectListSet(openedProject);
 
-    function shouldBeOpened(set){
+    function shouldBeOpened({set}){
         /*
             анимация правого окна, на открытие закрытие.
             мы получаем текущее состояние сет. 
@@ -46,15 +73,31 @@
         if(!deciding && showRight) showRight = false;
     }
 
+    /**
+     * 
+     * @param data {Array}
+     * @description функция  коллбек, передает список документов, активного проекта.
+     */
+    function openedProject({data}){
+        documentsToShow = (data) ? data : null;
+        
+        console.log('[page.svelte]: ', data);
+    }
+
 
     /*правильное добавление gap*/
-    $: if(!showRight && projects){
+    $: if(!showRight && projectElement){
         setTimeout(() => {
-            projects.style.gap = "0";
+            projectElement.style.gap = "0";
         }, 350);
     } else if(showRight) {
-        projects.style.gap = "1.5rem";
+        projectElement.style.gap = "1.5rem";
     }
+
+    onMount( async () => {
+        
+        projects = await $projectsStore.getList();
+    });
 </script>
 
 
@@ -62,13 +105,12 @@
         
         <TopControll />
     
-        <div class="projects" bind:this={projects}>
+        <div class="projects" bind:this={projectElement}>
             <div class="projects__left">
                 <ul class="project__list">
-                    <ProjectName />
-                    <ProjectName />
-                    <ProjectName />
-                    <ProjectName />
+                    {#each projects as project}
+                    <ProjectName {project}/>
+                    {/each}
                 </ul>
                 
                 <div class="projects__new_project">
@@ -90,14 +132,15 @@
 
             <div class="projects__right" class:showRight>
                 {#if showRight}
-                    <ProjectRight />
+                    <ProjectRight {documentsToShow}/>
                 {/if}
             </div>
     
         </div>
 </div>
 
-<Tooltip />
+<Tooltip --bg="var(--white)"
+--color="var(--faded-gray-blue)"/>
 
 
 <style>

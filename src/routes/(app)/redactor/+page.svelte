@@ -291,7 +291,8 @@ let html = [
 </div>  
 
 
-<Tooltip />
+<Tooltip --bg="var(--white)"
+--color="var(--faded-gray-blue)"/>
 <Modal />
 
 

@@ -1,9 +1,34 @@
 <script>
 	import { onMount } from "svelte";
+    import { saving } from "$lib/scripts/stores";
 
     let value = "введите название";
     let span;
     let showHeading = false;
+    let showName = true;
+
+    /**
+     * @type {number}
+     * @description id интервала, анимирующего строку статуса*/
+    let interval;
+
+    /**
+     * @type {string}
+     * @description отображает текст в строке индикации процесса сохранения*/
+    let status = '';
+    $: if($saving){
+        let str = "Сохраняем...";
+        let i = 3;
+        interval = setInterval( () => {
+            status = str.slice(0, str.length - i);
+            if(i-- === 0) i = 3;
+        }, 500);
+    } else {
+        status = "изменения сохранены";
+        clearInterval(interval);
+    }
+
+
     
     function handleUp(e){
         value = span.textContent;
@@ -13,7 +38,11 @@
     onMount( () => {
         let urlString = window.location.toString();
         
-        if(urlString.includes("redactor") || urlString.includes("anketa")) showHeading = true;
+        if(urlString.includes("redactor") || urlString.includes("anketa") ) showHeading = true;
+        if(urlString.includes("projects")) {
+            showHeading = true;
+            showName = false;
+        }
     });
 </script>
 
@@ -24,15 +53,16 @@
     </svg>
 
     {#if showHeading}
-    <div class="document_name">
-        <span contenteditable="true" on:keyup={handleUp} bind:this={span} >{value}</span>
-        <svg>
-            <use href="/assets/icons/all.svg#pen"></use>
-        </svg>
-    </div>
+        {#if showName}
+        <div class="document_name">
+            <span contenteditable="true" on:keyup={handleUp} bind:this={span} >{value}</span>
+            <svg>
+                <use href="/assets/icons/all.svg#pen"></use>
+            </svg>
+        </div>
+        {/if}
 
-
-        <span class="status">изменения сохранены</span>
+        <span class="status">{status}</span>
     {/if}
         
 </div>
@@ -42,6 +72,7 @@
         background-color: transparent;
         display: flex;
         align-items: start;
+        justify-content: space-between;
         gap: 1.25rem;
     }
     
@@ -54,7 +85,6 @@
         align-items: end;
         top: 0;
         gap: .5rem;
-        width: 28rem;
     }
 
     .document_name span{

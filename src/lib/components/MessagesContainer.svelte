@@ -11,7 +11,7 @@
     let bottomCor;
 
     onMount( () => {
-        nodeRedactor = document.querySelector("form[data-elements='node_redactor']");
+        nodeRedactor = document.querySelector("form[data-elements='node_redactor']") || document.getElementById("messages_anchor");
         updateCors();
         document.addEventListener("redactor-сhanged", updateCors);
     });
@@ -26,7 +26,6 @@
     function errorHandle({ detail }){
         let data = detail.err_data;
         //console.log("[MessagesContainer]: errorHandel before push: ", data);
-        
         for(let i = 0; i < data.length; i++){
             let {blockId, message, err_id, err_type} = data[i];
 

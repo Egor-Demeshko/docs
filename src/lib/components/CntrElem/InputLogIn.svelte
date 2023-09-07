@@ -1,4 +1,6 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+    import { showTooltip } from "$lib/scripts/stores";
 
     export let id = "login";
     export let type = "text";
@@ -14,6 +16,7 @@
     let valid = '';
     let invalid = '';
     let input;
+    const dispatcher = createEventDispatcher();
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
 
@@ -45,21 +48,37 @@
 
 
     function setValid(){
+        dispatcher("valid", {id, validity: true});
+        showTooltip.set({show: false});
+
         invalid = false;
         valid = true; 
     }
 
 
     function setInvalid(){
+        dispatcher("valid", {id, validity: false});
+        const coors = input.getBoundingClientRect();
+        if(id !== "reg_mail"){
+            showTooltip.set({show: true, coors: {x: coors.x + input.offsetWidth/2, y: coors.y}, text: "Минимум 4 символа. Латинские буквы, цифры, _", place: "above"});
+        } else if (id === "reg_name"){
+            showTooltip.set({show: true, coors: {x: coors.x + input.offsetWidth/2, y: coors.y}, text: "Минимум 4 символа. Можно кирилицу, латиницу. Буквы, цифры, _", place: "above"});
+        } else {
+            showTooltip.set({
+                show: true, 
+                coors: {x: coors.x + input.offsetWidth/2, y: coors.y + 20},
+                 text: "Почта должна быть вида example@mail.ex", place: "under"});
+        }
+
         valid = false;
         invalid = true;
     }
 
 
     function blurHandler(){
+        showTooltip.set({show: false});
         startValidation();
     }
-
 </script> 
 
 <div class="input_wrapper" class:not_valid>
@@ -69,6 +88,9 @@
     class:invalid
     minlength={4} maxlength={30}
     on:blur={blurHandler}
+    on:focus
+    on:mouseenter
+    on:mouseleave
     on:input
     bind:this={input}
     />
