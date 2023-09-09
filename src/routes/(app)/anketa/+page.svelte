@@ -2,25 +2,38 @@
     import DocumentsWithSimpleText from "$lib/scripts/controllers/documents/DocumentsWithSimpleTexts";
 	import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import { nodes, documents } from "$lib/scripts/stores";
+    import { nodes, documents, anketaGraphController } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import TabsWithoutEvents from "$lib/components/Tabs/TabsWithoutEvents.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
     import Modal from "$lib/components/Modal.svelte";
-	import InputElements from "../../lib/components/anketa/InputElements.svelte";
+	import InputElements from "$lib/components/anketa/InputElements.svelte";
+    import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
+	import { onMount, onDestroy } from "svelte";
+    import DynamicGraphController from "$lib/scripts/controllers/nodes/anketa/controller/DynamicGraphController.js"
 
     //receiving data from load function
     export let data;
+    let graph;
+    
+    let {templates, project_id, project_name, active_nodes} = data;
+    graph = active_nodes;
 
-    //let { locals } = data;
-    //let { html, graph } = locals.data;
 
-    /*console.log("HTML: ", html);*/
+    let html = optimizeDATA(templates, project_id);
+
+    /**динамик граф контроллер отвечает за подготовку данных и их отправку через http так и получение
+     * некотоырх данных из локального хранилища. 
+    */
+    anketaGraphController.set( new DynamicGraphController({project_id, saveClient: "local"}));
+    $anketaGraphController.subscribe(updateGraph);
+
+    console.log("HTML: ", html);
     //console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
-    let graph = {
+    /*let graph = {
         "1": {
 		"parent_id": null,
 		"name": "Имя узла",
@@ -142,10 +155,10 @@
 		"y": 550,
 		"active": false,
     }
-}
+}*/
 
 
-let html = [
+/*let html = [
         {   
             id: "15-17-18",
             project_id: "15-14-19",
@@ -233,7 +246,7 @@ let html = [
                                     </body>`,
             name: "Название документа 2"
         }
-    ]
+    ]*/
     
     /*if(locals.error){
         prompt(locals.error.message);
@@ -243,7 +256,7 @@ let html = [
     /* также задаем значения по умолчанию, если их нет*/
     graph = createMassive(graph);
     /* сохраняем граф в стор*/
-    nodes.set(graph);
+    $: nodes.set(graph);
     
     
     
@@ -251,6 +264,20 @@ let html = [
 	console.log("[PAGE]: docs CLASS", docs);
     /**заполняем стор документов*/
     documents.set(docs);
+
+    onDestroy( () => {
+        /**очищаем данные контроллера, и зануляем стор контроллера*/
+        $anketaGraphController.clearAll();
+        anketaGraphController.set(null);
+    })
+
+
+    function updateGraph(data){
+        if(data.active_nodes){
+            console.log('[page]: {updateGraph}: in if active nodes: ', data.active_nodes);
+            graph = createMassive(data.active_nodes);
+        }
+    }
 
 </script>
 

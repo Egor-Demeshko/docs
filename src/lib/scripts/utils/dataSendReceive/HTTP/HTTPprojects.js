@@ -1,6 +1,6 @@
-import HTTPBaseServise from "./HTTPBaseServise";
+import HTTPrefresher from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPrefresher.js";
 
-export default class HTTPprojects extends HTTPBaseServise{
+export default class HTTPprojects extends HTTPrefresher{
     path = "api/v1";
     secondPath = "/project";
 
@@ -46,6 +46,28 @@ export default class HTTPprojects extends HTTPBaseServise{
             return json;
         } catch(e){
             console.log("[http client]: не удалось удалить проекть ", e.message);
+        }
+    }
+
+    async getFullInfo(token, data, cors){
+        const route = "/detail";
+
+        try{
+            return await super.postWithHeader(token, JSON.stringify(data), route, cors);
+        } catch (e){
+            console.log("[http client]: ошибка при получении полного списка ", e.message);
+        }
+
+    }
+
+
+    async getOnlyActive(token, data, cors){
+        const route = "/form";
+
+        try {
+            return await super.postWithHeader(token, JSON.stringify(data), route, cors);
+        } catch (error) {
+            console.log("[http client]: ошибка при получении активных узлов", e.message);
         }
     }
 }

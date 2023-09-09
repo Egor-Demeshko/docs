@@ -1,6 +1,18 @@
 <script>
     import LogoAndName from "$lib/components/LogoAndName.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
+	import { onMount } from "svelte";
+    import { setUpdate, destroyUpdate } from "$lib/scripts/utils/automaticTokenUpdate.js";
+
+    onMount( () => {
+        setUpdate();
+        
+        return () => {  
+            destroyUpdate();
+        }
+    });
+
+
 </script>
 
 
@@ -10,7 +22,10 @@
     <LogoAndName/>
     <div class="header_right">
         <Button2
-        on:click
+        on:click={() => {
+            let url = new URL(window.location.origin + "/contact");
+            window.open(url, "_blank")
+        }}
         --bg="transparent"
         --color="var(--white-blue)"
         --border="3px solid var(--white-blue)"

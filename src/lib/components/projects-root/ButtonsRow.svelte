@@ -4,7 +4,7 @@
     import { cubicInOut } from "svelte/easing";
     import { projectsStore, modalFieldsStore } from "$lib/scripts/stores";
     import { goto } from "$app/navigation";
-    import { createEventDispatcher } from "svelte";
+    import Storage from "$lib/scripts/controllers/instances/Storage.js";
 
 
     export let directionOfanimation = false;
@@ -31,15 +31,27 @@
         };
     }
 
-    /** отправляет в редактор по id из пропса */
-    function navigateToRedactor(){
+    /** отправляет в редактор по id из пропса, устанавливает куки */
+    async function navigateToRedactor(){
         $projectsStore.setActiveProject(id);
-        goto("/redactor");
+        let token = await $projectsStore.getToken();
+
+        if(token) {
+            document.cookie = `jwt=${token}; max-age=900; samesite=lax`;
+            document.cookie = `project_id=${id}; max-age=900; samesite=lax`;
+            goto("/redactor");
+        } 
+
     }
 
-    function navigateToAnkets(){
+    async function navigateToAnkets(){
         $projectsStore.setActiveProject(id);
-        goto("/anketa");
+        let token = await $projectsStore.getToken();
+        if(token) {
+            document.cookie = `jwt=${token}; max-age=900; samesite=lax`;
+            document.cookie = `project_id=${id}; max-age=900; samesite=lax`;
+            goto("/anketa");
+        } 
     }
 
     function deleteProject(){
@@ -80,8 +92,8 @@
         //если удачно, послать событие listupdated
         //projects запросит новый списко
         let result = await $projectsStore.delete(id);
-
-        if(result){
+        console.log('[ButtonsRow]: result: ', result);
+        if(result.success){
             document.dispatchEvent( new CustomEvent("project_delete"))
         }
     }

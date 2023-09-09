@@ -13,11 +13,11 @@ export default class Documents{
     constructor(data, graph, saveDeleteService){
         const clearHtmlArr = this.generateElements(data, graph);
         //console.log("[DOCUMENTS]: ", clearHtmlArr);
-        clearHtmlArr[0].active = true;
+        if(clearHtmlArr[0]) clearHtmlArr[0].active = true;
         console.log(clearHtmlArr[0]);
         this.#docs = clearHtmlArr;
         this.#saveDeleteService = saveDeleteService;
-        this.#projectId = clearHtmlArr[0].project_id;
+        this.#projectId = clearHtmlArr[0]?.project_id || null;
     }
 
     get docs(){

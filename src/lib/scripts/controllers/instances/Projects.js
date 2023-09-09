@@ -25,6 +25,7 @@ export class Projects{
 
         if(token){
             let result = await this.#client.create(token, {name: newName});
+            if(result) return result;
         }
     }
 
@@ -35,6 +36,7 @@ export class Projects{
 
         if(token){
             let result = await this.#client.delete(token, {project_id: id});
+            if(result) return result;
         }
         //
     }
@@ -51,6 +53,17 @@ export class Projects{
         }
     }
 
+    
+    async getToken(){
+        return await this.#jwt.getToken(); 
+    }
+
+
+    getTokenTimeStamp(){
+        return this.#saveData.getTokenExp();
+    }
+
+
     async changeName(data){
         let token = await this.#jwt.getToken(); 
 
@@ -64,4 +77,14 @@ export class Projects{
     setActiveProject(id){
         this.#activeProject = id;
     }
+
+
+
+
+    async getProjectFullInfo(){
+        
+    }
+
+
+
 }

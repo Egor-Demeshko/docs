@@ -379,7 +379,7 @@ function isFallBackNeeded(e, stack){
     /*let string = stack.getString();*/
     console.log("setting new html");
     /*
-    debugger;
+    ;
     if((e.key === "z" && !shiftKey && ctrlKey) || 
     (e.key === "z" && !shiftKey && metaKey)){
         console.log("BACK");

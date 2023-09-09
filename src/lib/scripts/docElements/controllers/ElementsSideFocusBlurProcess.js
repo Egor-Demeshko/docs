@@ -4,28 +4,28 @@ import { storeForSimpleTexts } from "$lib/scripts/stores";
 export function setElementActive(id){
     const elementController = searchForElement(id);
 
-    elementController.setActive(id);
+    elementController?.setActive(id);
 }
 
 
 export function setElementInactive(id){
     const elementController = searchForElement(id);
 
-    elementController.setInactive(id);
+    elementController?.setInactive(id);
 }
 
 
 export function setElementHoverLike(id){
     const elementController = searchForElement(id);
 
-    elementController.setHoverLike();
+    elementController?.setHoverLike();
 }
 
 
 export function removeElementHoverLike(id){
     const elementController = searchForElement(id);
 
-    elementController.removeHoverLike();
+    elementController?.removeHoverLike();
 }
 
 

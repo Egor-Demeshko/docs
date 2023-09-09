@@ -104,7 +104,7 @@ export default async function validation(data, options){
 
         if(data.trigger && data.condition){
             let condition = data.condition;
-            //debugger;
+            //;
 
             //console.log("[validation]: {trigger} wrong type for CONDITION");
 

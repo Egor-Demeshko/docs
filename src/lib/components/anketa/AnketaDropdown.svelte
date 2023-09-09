@@ -1,6 +1,7 @@
 <script>
     import { fly } from "svelte/transition";
     import { nodes } from "$lib/scripts/stores";
+    import { getContext } from "svelte";
 
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate.js";
     import { setElementActive, setElementInactive, setElementHoverLike, removeElementHoverLike }
@@ -9,6 +10,7 @@
 
 
     export let data;
+    const controller = getContext("controller");
 
 
    /*
@@ -26,11 +28,10 @@
     $: rotate = (isOpened) ? true : false;
 
     let options = data.options;
-
     let derivedOptions = [];
-
+    
     for(let i = 0; i < options.length; i++){
-        if(i === 0){
+        if( options[i] === data.content ){
             derivedOptions.push( {
                 selected: true,
                 text: options[i]
@@ -42,7 +43,6 @@
             } );
         }
     }
-
 
     /**
      * получаем отдельно опшинс, text
@@ -120,7 +120,9 @@
             if(elem.text === type) {
                 
                 elem.selected = true;
+                /**обновление элементов в тексте*/
                 elementsDataUpdate({id: data.id, name: data.name, content: type});
+                $controller.saveData({node_id: data.id, content: target.value});
             } else {
                 elem.selected = false;
             }

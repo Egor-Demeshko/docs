@@ -3,9 +3,13 @@
     import SelectInput from "$lib/components/anketa/SelectInput.svelte";
     import AnketaDropdown from "$lib/components/anketa/AnketaDropdown.svelte";
     import { nodes } from "$lib/scripts/stores";
+	import { onMount, setContext } from "svelte";
+    import { anketaGraphController } from "$lib/scripts/stores";
 
-    $: console.log($nodes);
-    /* TODO из нод будет получать информацию о типе узла*/
+    $: console.log("[INPUTELEMENTS]: nodes", $nodes);
+    
+    setContext("controller", anketaGraphController);
+    
 </script>
 
 <div>

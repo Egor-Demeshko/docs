@@ -6,9 +6,9 @@ export default class HTTPBaseServise{
 
 
     async post(data, endroute){
-        debugger;
+        ;
         
-        let url = new URL(this.#origin + this.path + endroute);
+        let url = new URL(this.#origin + this.path + this.secondPath + endroute);
         console.log("{url}", url.href);
         let result;
 
@@ -53,6 +53,7 @@ export default class HTTPBaseServise{
 
     async patch(token = null, data, route){
         const url = new URL(this.#origin + this.path + this.secondPath + route );
+        console.log("[HTTP basic]: {patch} data to be send", data);
 
         const headers = {
             "Content-type": "application/json"
@@ -85,9 +86,10 @@ export default class HTTPBaseServise{
         return response.json();
     }
 
-    async postWithHeader({token = null, data, route}){
+    async postWithHeader(token = null, data, route, cors="cors"){
         const url = new URL(this.#origin + this.path + this.secondPath + route );
         console.log('[http basic]: url: ', url.href);
+        console.log('[HTTP BASIC: ], data to send: ', data);
         const headers = {
             "Content-type": "application/json"
         };
@@ -95,7 +97,7 @@ export default class HTTPBaseServise{
 
         let response = await fetch(url, {
             method: "POST",
-            cors: "cors",
+            mode: cors,
             headers,
             body: data
         });

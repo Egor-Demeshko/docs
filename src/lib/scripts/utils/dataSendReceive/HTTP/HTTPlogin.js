@@ -1,44 +1,14 @@
-import HTTPBaseServise from "./HTTPBaseServise";
+import HTTPrefresher from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPrefresher.js";
 
-export default class HTTPLogin extends HTTPBaseServise{
+export default class HTTPLogin extends HTTPrefresher{
     #post = "";
     #delete = "";
     #get = "";
-    path = "api/v1/auth";
+    path = "api/v1";
+    secondPath = "/auth";
 
     constructor(){
         super()
-    }
-
-
-    /**запрашиваем енд поинт, перерабатываем ответ, чтобы только токены были 
-     * @return {
-     *  jwt {string}
-     *  refresh {string}
-     * }
-    */
-    async refresh(token){
-        console.log('[HTTPlogin]: refreshing token');
-        const end = "/refresh";
-
-        try{
-            let result = await super.post(JSON.stringify(token), end);
-            
-            let {success, data, details} = result;
-
-            console.log("[HTTPLOGIN]: after request: ", {result});
-            
-            if(success){
-                return  {jwt: data.jwt, refresh: data.refresh}; 
-            } else {
-                let errors = '';
-                details.forEach( (err) => errors += `${err.message} \n`);
-                throw new Error(errors);
-            }
-
-        } catch(e){
-            console.log(e.message);
-        }
     }
 
 

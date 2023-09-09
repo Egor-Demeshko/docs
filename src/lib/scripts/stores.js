@@ -201,3 +201,9 @@ export const projectsStore = readable( new Projects() );
 
 /**флаг отображения строки сохранения */
 export const saving = writable(false);
+
+
+/**контроллер графа на странице анкеты, своя логика обработки, так как приходят в ответах только активные узлы
+ * создается на странице анкеты и уничтожается при onDestroy
+ */
+export const anketaGraphController = writable();

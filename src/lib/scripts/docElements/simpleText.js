@@ -28,7 +28,7 @@ export default class SimpleText {
         if(!this.root){
             throw new CustomError("No element to connect");
         }
-        // debugger;
+        // ;
         /*console.log("SIMPLE TEXT", {id: this.id, name: this.name, content: this.content, root: this.root});*/
         let links = this.root.querySelectorAll(`span[data-element="${this.#id}"]`);
         //console.log("[simpleText]: root: ", links);

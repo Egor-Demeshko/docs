@@ -75,7 +75,7 @@
         console.log("create object");
 
         let result = await $projectsStore.create(name);
-        debugger;
+        if(result.success) document.dispatchEvent( new CustomEvent("project_delete"));
     }
 
 

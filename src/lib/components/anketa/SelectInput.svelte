@@ -6,6 +6,7 @@
     export let data;
 
     let {options, name, id} = data;
+    console.log("[SelectInput]: {initizialization}: data", data);
 
     /**Более расширенная версия options с добавление selected, сразу тут помечаем какой элемент выбран*/
     let derivedOptions = [];

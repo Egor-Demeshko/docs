@@ -10,6 +10,7 @@ export default class DocumentsWithSimpleText extends Documents{
 
     generateElements(data, graph){
         console.log("[DocumentsWithSimpleTexts]: {data,}", data);
+        console.log("[DocumentsWithSimpleTexts]: {graph,}", graph);
         return generateTextElements(graph, sanitizeManyHtml(data))
     }
 }

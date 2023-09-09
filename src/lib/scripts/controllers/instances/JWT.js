@@ -58,7 +58,7 @@ export default class JWT{
                     return false;
                 }
             } catch(e){
-                console.log("[USER]: не удалось обновить токен: ", e.message);
+                console.log("[JWT]: не удалось обновить токен: ", e.message);
             }
         } else {
             throw new Error("не удалось получить токен из памяти");

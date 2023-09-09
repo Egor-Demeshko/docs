@@ -1,15 +1,19 @@
 <script>
     import TextArea from "$lib/components/CntrElem/TextArea.svelte";
     import { setElementHoverLike, removeElementHoverLike} from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess.js"
+    
+    /*обьект данных из графа, конкретный для инпута*/
     export let data;
 
     let name = data.name;
 
 
+    /*описывает hover сосотояние на элементе в текстовом редакторе.*/
     function setHoverLike(){
         setElementHoverLike(data.id);
     }
 
+    /*описывает removehover сосотояние на элементе в текстовом редакторе.*/
     function removeHoverLike(){
         removeElementHoverLike(data.id);
     }
@@ -34,8 +38,10 @@ on:pointerleave={removeHoverLike}>
         --background="var(--white-blue)"
         --background-hover="var(--white-blue)"
         --color="var(--deep-blue)"
+        node_id={data.id}
         id={data.id}
-        name={data.name}/>
+        name={data.name}
+        value={data.content}/>
     </div>
 </div>
 

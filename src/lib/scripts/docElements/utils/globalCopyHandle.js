@@ -62,7 +62,7 @@ export default function globalCopyHandle(e, reconnect){
         в цикле идем по следующим элементам, копируем текст*/
         function gartherTextToLeft(){
 
-            //debugger;
+            //;
             /**перебераем dom node в поисках фокус ноды и копируем текст
              * если span элемент, без нашей ноды копируем полностью
              * если span элемент, c focusNode нодой, то копируем текст, до этой ноды.

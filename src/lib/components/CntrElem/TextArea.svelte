@@ -1,6 +1,7 @@
 <script>
     import { setElementActive, setElementInactive } from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess";
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
+	import { getContext } from "svelte";
     export let id = "login";
     export let type = "text";
     export let placeholder = "Текст подсказка";
@@ -10,9 +11,12 @@
     export let name = '';
     export let rows = 1;
     export let validity;
+    export let node_id;
 
 
     let textarea;
+    const controller = getContext("controller");
+
 
     function focusIn(){
         setElementActive(id);
@@ -26,7 +30,9 @@
     function changeHandle(e){
         const target = e.target;
         //console.log("[TextArea]: changeHandler, ", {id, name, content: target.value});
+        /*обновляем элементы dom*/
         elementsDataUpdate({id, name, content: target.value});
+        $controller.saveData({node_id, content: target.value});
     }
 </script>
 
@@ -62,7 +68,6 @@
         resize: vertical;
     }
 
-
     input.not_valid{
         border: var(--border-width) solid var(--pumpkin);
     }
@@ -82,5 +87,10 @@
         background-color: var(--background);
         border: var(--border-width) solid var(--orange);
         outline: none;
+    }
+
+
+    textarea::-webkit-scrollbar{
+        display: none;
     }
 </style>
