@@ -22,7 +22,7 @@ export class Projects{
 
     async create(newName){
         let token = await this.#jwt.getToken();
-
+        console.log("[projects]: create: ", {newName});
         if(token){
             let result = await this.#client.create(token, {name: newName});
             if(result) return result;

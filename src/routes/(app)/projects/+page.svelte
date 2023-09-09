@@ -72,7 +72,7 @@
 
         showTooltip.set({show: false});
         active = false;
-        console.log("create object");
+        console.log("create object", {name});
 
         let result = await $projectsStore.create(name);
         if(result.success) document.dispatchEvent( new CustomEvent("project_delete"));

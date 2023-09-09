@@ -30,7 +30,7 @@ export default class HTTPprojects extends HTTPrefresher{
         const route = "/create";
 
         try{
-            return await super.postWithHeader({token, data: JSON.stringify(data), route});
+            return await super.postWithHeader(token, JSON.stringify(data), route);
         } catch (e){
             console.log("[http client]: ошибка при создании проекта ", e.message);
         }
