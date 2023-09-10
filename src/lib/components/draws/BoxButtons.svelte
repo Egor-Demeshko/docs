@@ -3,11 +3,12 @@
     import { showTooltip, modalFieldsStore } from "$lib/scripts/stores";
     import { deleteNode } from "$lib/scripts/controllers/nodes/createDeleteNode";
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore";
+	import { getContext } from "svelte";
 
     export let id = '';
     export let node_type = "text";
 
-
+    const controller = getContext('controller');
 
     /**POINTER EVENTS HANDLER*/
 /**/function pointerEnter(e){
@@ -99,7 +100,7 @@
     function deleteNodeStart(e){
         console.log("[BoxButton]: deleteNode");
 
-        deleteNode(id);
+        deleteNode(id, controller);
         pointerLeave();
         modalFieldsStore.update( () => {
             return {

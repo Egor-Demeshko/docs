@@ -4,8 +4,7 @@ import { PUBLIC_BLOCKWIDTH, PUBLIC_BLOCKHEIGHT } from '$env/static/public';
 import SimpleText from "$lib/scripts/docElements/simpleText.js";
 
 
-
-export default function createNewBlock(whatBlockToCreate){
+export default async function createNewBlock(whatBlockToCreate, controller){
     const id = generateUUID();
     const defaultName = "Новый блок";
     let newTextElement = new SimpleText({id, name: "", content: defaultName});
@@ -35,4 +34,8 @@ export default function createNewBlock(whatBlockToCreate){
     nodes.update(nodes => [...nodes, newBlock]);     
 
     storeForSimpleTexts.update( (elements) => [...elements, newTextElement]);
+
+    //TODO new block
+    let result = await controller.create(newBlock);
+    console.log("[createNewBlock]: reslut: ", result);
 }

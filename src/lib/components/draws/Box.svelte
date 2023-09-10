@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { drawRoot, nodes } from "$lib/scripts/stores"
   import { linesStore, activeBlocks, storeForSimpleTexts, blockClickedId, parentConnection, childConnection,
   mouseLine } from "$lib/scripts/stores";
@@ -9,6 +9,7 @@
   import BoxPoint from "./BoxPoint.svelte";
   import BoxButtons from "./BoxButtons.svelte";
 
+  const controller = getContext("controller");
 
   /**
    * Компонент визуализации узла в виде интерактивного прямоугольника на канве.
@@ -92,7 +93,7 @@
   $: console.log("[Box]: gotConditions", gotConditions);
   
   
-/**переопределние класс отображение неактивного блока, если флаг актив false*/
+/**переопределние класса отображение неактивного блока, если флаг актив false*/
   $: box_inactive = (active) ? "" : "box_inactive";
   $: not_valid = (validity?.status === "invalid") ? true : false; 
 
@@ -223,12 +224,18 @@
 */
 function startDraging(e){
     e.stopPropagation();
+    let newX;
+    let newY;
 
     if(e.target.tagName === "DIV" || e.target.tagName === "SPAN"){
         root.addEventListener("pointerup", () => {
           /**показываем поле с кнопками удалить, выделить текст на узле*/
           showButtons = true;
-          root.removeEventListener("mousemove", coordinate);       
+          root.removeEventListener("mousemove", coordinate); 
+          //тут сохранение данных кординат
+          controller.saveNourgent({node_id: id, field_name: "x", field_data: newX});
+          controller.saveNourgent({node_id: id, field_name: "y", field_data: newY});
+          newX, newY = null;      
         }, {once: true});
 
         showButtons = false;
@@ -237,15 +244,15 @@ function startDraging(e){
 
 
     function coordinate(e){
-        let newX = x + e.movementX;
-        let newY = y + e.movementY;
-
+        newX = x + e.movementX;
+        newY = y + e.movementY;
+        
         nodes.update( (allBlocks) => {
             for(let i = 0; i < allBlocks.length; i++){
               let obj = allBlocks[i];
               
               if(obj.id === id){
-                
+                console.log("[mousemove]", {x, y, ex: e.movementX, ey: e.movementY});
                   obj.x = newX;
                   obj.y = newY;
                   allBlocks[i] = obj;

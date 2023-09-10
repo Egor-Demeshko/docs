@@ -1,11 +1,12 @@
 <script>
     import createNewBlock from '$lib/scripts/utils/createNewBlock.js';
     import { nodeOptions } from "$lib/scripts/stores.js";
+    import {getContext} from "svelte";
 
-
+    const controller = getContext("controller");
   
     function handleClick(optionId) {
-        createNewBlock(optionId);
+        createNewBlock(optionId, controller);
     }
 
 

@@ -7,8 +7,6 @@ export class Projects{
     #client;
     #jwt;
     #saveData;
-    /**айди активного проекта. используется для навигации projects => redactor */
-    #activeProject;
 
     constructor(){
         this.#client = new HTTPprojects();
@@ -59,6 +57,16 @@ export class Projects{
     }
 
 
+    async getFullData(project_id){
+        let token = await this.#jwt.getToken(); 
+
+        if(token){
+            const {success, data} = await this.#client.getFullInfo(token, {project_id}, "cors");
+            if(success) return data;
+        }
+    }
+
+
     getTokenTimeStamp(){
         return this.#saveData.getTokenExp();
     }
@@ -75,7 +83,7 @@ export class Projects{
 
     /**устанавливает id активного проекта */
     setActiveProject(id){
-        this.#activeProject = id;
+        //this.#activeProject = id;
     }
 
 

@@ -207,3 +207,9 @@ export const saving = writable(false);
  * создается на странице анкеты и уничтожается при onDestroy
  */
 export const anketaGraphController = writable();
+
+
+/**
+ * контроллер графа на странице редактора, отдельная логика от графа anketaGraphController
+ */
+export const nodeController = writable();

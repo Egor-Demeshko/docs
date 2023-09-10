@@ -33,7 +33,7 @@ $: deleteLine = $deleteLineFunction;
 $: lines = $linesStore;
 //$: if(lines) lines = lines;
 //$: if(allNodes) allNodes = allNodes;
-$: console.log("[SVGMAIN]: allNodes: ", allNodes);
+//$: console.log("[SVGMAIN]: allNodes: ", allNodes);
 
 
 </script>

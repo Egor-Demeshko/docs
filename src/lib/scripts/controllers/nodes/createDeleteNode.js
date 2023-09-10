@@ -2,12 +2,10 @@ import { nodes, blockClickedId, storeForSimpleTexts } from "$lib/scripts/stores"
 import { deleteLines } from "$lib/scripts/controllers/lines/createDeleteLine"
 
 /**функция удаляет узел */
-export function deleteNode(id){
+export async function deleteNode(id, controller){
     //удалить узел в nodes store
     
     deleteLines(id);
-
-    blockClickedId.set(1);
 
     storeForSimpleTexts.update( (jsClasses) => {
         return jsClasses.filter( (element) => {
@@ -18,8 +16,9 @@ export function deleteNode(id){
         });
     });
     
-
-    nodes.update( (nodesArr) => nodesArr.filter( (dataObj) => {
+    /**для уставноки фокуса на первом элементе */
+    let setted = false;
+    nodes.update( (nodesArr) => nodesArr.filter( (dataObj, i) => {
         if(dataObj.parent_id === id){
             dataObj.parent_id = null;
         }
@@ -29,11 +28,24 @@ export function deleteNode(id){
             return false;
         }
 
+        if(!setted){
+            setted = true;
+            blockClickedId.set(dataObj.id);
+        }
+
         return true;
     }));
 
 
+    try{
+        let result = await controller.delete(id);
+        console.log("[createDeleteNode]: after delete request, result", result);
 
+    } catch(e){
+        console.log("[delete node]: ошибка удаления узла");
+    }
+
+    //TODO ТЕПЕРЬ НАДО СДЕЛАТЬ ЗАПРОС ОБНОВЛЕНИЯ УЗЛОВ
     /*setTimeout(() => {
         nodes.update( (nodes) => nodes);  
     }, 0);*/

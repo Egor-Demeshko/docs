@@ -5,9 +5,7 @@ export default class HTTPBaseServise{
     }
 
 
-    async post(data, endroute){
-        ;
-        
+    async post(data, endroute){        
         let url = new URL(this.#origin + this.path + this.secondPath + endroute);
         console.log("{url}", url.href);
         let result;
@@ -35,6 +33,7 @@ export default class HTTPBaseServise{
 
     async delete(token, data, route){
         const url = new URL(this.#origin + this.path + this.secondPath + route);
+        console.log("[HTTP basic]: {DELETE} data to be send", data);
 
         const headers = { 
             "Content-type": "application/json"
@@ -53,7 +52,6 @@ export default class HTTPBaseServise{
 
     async patch(token = null, data, route){
         const url = new URL(this.#origin + this.path + this.secondPath + route );
-        console.log("[HTTP basic]: {patch} data to be send", data);
 
         const headers = {
             "Content-type": "application/json"
@@ -101,6 +99,26 @@ export default class HTTPBaseServise{
             headers,
             body: data
         });
+        return await response.json();
+    }
+
+    async put(token = null, data, route){
+        const url = new URL(this.#origin + this.path + this.secondPath + route );
+        console.log("[HTTP basic]: {patch} data to be send", URL);
+
+        const headers = {
+            "Content-type": "application/json"
+        };
+        if(token) headers.jwt = token; 
+        
+
+        let response = await fetch(url, {
+            method: "PUT",
+            cors: "cors",
+            headers,
+            body: data
+        });
+        
         return await response.json();
     }
 }
