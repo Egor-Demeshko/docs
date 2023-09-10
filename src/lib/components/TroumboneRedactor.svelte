@@ -1,6 +1,5 @@
-
 <script>
-    import jQuery from 'jquery'; 
+    //import jQuery from "jquery";
     import { onMount } from 'svelte';
     import {storeForSimpleTexts, docRoot, documents, showModalDocumentCreator} from '$lib/scripts/stores';
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
@@ -8,6 +7,7 @@
     import ModalDocumentCreator from "$lib/components/CntrElem/ModalDocumentCreator.svelte";
     import Spinner from "$lib/components/Spinner.svelte";
     import RedactorContainer from '$lib/components/RedactorContainer.svelte';
+    import initRedactor from "$lib/scripts/utils/redactor/initRedactor.js";
 
 
     let html = '';
@@ -100,38 +100,8 @@
 
 
     onMount( async () => {
-        if (!window.jQuery) window.jQuery = jQuery;
-        await import('trumbowyg');
 
-        window.jQuery.trumbowyg.svgPath = '/assets/icons/troumbone.svg';
-        //console.log(window.jQuery.trumbowyg);
-        window.jQuery(container).trumbowyg({
-            tagsToKeep: ['span'],
-            btnsDef: {
-                print: {
-                    fn: () => window.print(),
-                    title: 'Напечатать',
-                    text: 'Print',
-                    class: '',
-                    hasIcon: true,
-                    ico: "print"
-                },
-            },
-            btns: [
-                ['undo', 'redo'], 
-                ['formatting'],
-                ['strong', 'em', 'del'],
-                ['superscript', 'subscript'],
-                ['link'],
-                ['insertImage'],
-                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                ['unorderedList', 'orderedList'],
-                ['horizontalRule'],
-                ['removeformat'],
-                ['print'],
-                ['fullscreen']
-            ]
-        });
+        await initRedactor(container);
 
         urlPath = window.location.pathname;
 

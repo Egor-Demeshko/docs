@@ -14,20 +14,26 @@
     import Modal from "$lib/components/Modal.svelte";
     import Documents from "$lib/scripts/controllers/documents/Documents.js";
     import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
+    import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
 	import { onDestroy } from "svelte";
 
     //receiving data from load function
     export let data;
 
-   /* let { locals } = data;
-    let { html, graph } = locals.data;*/
+    let { locals } = data;
+    console.log('[page]: data: ', data);
+    let {templates, project_id, project_name, nodes: serverNode} = data;
     let cleanHtml = '';
 
+    let graph = serverNode;
+    let html = optimizeDATA(templates, project_id);
+
+
     //console.log("HTML: ", html);
-    //console.log("GRAPH: ", graph);
+    console.log("GRAPH: ", graph);
 
     //TODO убрать тестовую реализацию графа
-    let graph = {
+    /*let graph = {
         "1": {
 		"parent_id": null,
 		"name": "Имя узла",
@@ -241,7 +247,7 @@ let html = [
                                     </body>`,
             name: "Название документа 2"
         }
-    ]
+    ]*/
     
     /*if(locals.error){
         prompt(locals.error.message);

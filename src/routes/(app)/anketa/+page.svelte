@@ -18,7 +18,6 @@
     let graph;
     
     let {templates, project_id, project_name, active_nodes} = data;
-    debugger;
     graph = active_nodes;
 
 

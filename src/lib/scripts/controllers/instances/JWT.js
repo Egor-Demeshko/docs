@@ -46,7 +46,6 @@ export default class JWT{
             try{
                 /** {jwt, refresh} */
                 const tokens = await this.#http.refresh(refreshToken);
-
                 if(tokens){
                     this.decodeJWT(tokens.jwt);
 

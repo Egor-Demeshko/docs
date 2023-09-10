@@ -56,6 +56,8 @@ export async function shouldRedirected(controller){
                 } else {
                     return {redirect: false, path: ""};
                 }  
+            } else {
+                return {redirect: true, path: "/"};
             }
         } else {
             if(window.location.pathname === '/'){

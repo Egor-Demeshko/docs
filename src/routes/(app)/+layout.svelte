@@ -5,10 +5,10 @@
     import { setUpdate, destroyUpdate } from "$lib/scripts/utils/automaticTokenUpdate.js";
 
     onMount( () => {
-        setUpdate();
+       // setUpdate();
         
         return () => {  
-            destroyUpdate();
+            //destroyUpdate();
         }
     });
 

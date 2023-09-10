@@ -129,7 +129,14 @@
     }
 
     onMount( async () => {
-        
+
+        /**почему-то при навигации, один блок редактора вылетает в разметку, когда редактор не используется. 
+         * нейтрализуем его*/
+        const container = document.getElementById("trumbowyg-icons");
+        if(container){
+            container.style.display = "none";
+        }
+
         projects = await $projectsStore.getList();
     });
 </script>
