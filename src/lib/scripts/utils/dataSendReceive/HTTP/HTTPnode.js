@@ -13,7 +13,8 @@ export default class HTTPnode extends HTTPrefresher{
         
         if(token){
             try{
-                return await this.put(token, JSON.stringify(data), route);
+                const json = await this.put(token, JSON.stringify(data), route);
+                return json;
             } catch (e){
                 console.log("[HTTPNODE] не удалось выполнить запрос,", e.message);
             }

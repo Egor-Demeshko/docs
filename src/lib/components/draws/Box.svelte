@@ -90,7 +90,7 @@
   /**определяем какого вида границу блока рисовать. зависит от наличия условия триггера и condition в data <= $nodes
   */
   $: gotConditions = (condition && !(trigger == undefined || trigger == '' || trigger === null)) ? true : false;
-  $: console.log("[Box]: gotConditions", gotConditions);
+  //$: console.log("[Box]: gotConditions", gotConditions);
   
   
 /**переопределние класса отображение неактивного блока, если флаг актив false*/
@@ -183,7 +183,7 @@
 
     function isStartInChain(currentblockId){
 
-      console.log('[BOX]: {isStartInChain} currentBlockId: ', currentblockId);
+      //console.log('[BOX]: {isStartInChain} currentBlockId: ', currentblockId);
         for(let i=0; i<data.length; i++){
             if(data[i]["id"] !== currentblockId) continue;
             
@@ -408,7 +408,7 @@ function connectChildBlock(){
 
 
 /**функция для улавливания второго клика при создании связи*/
-function secondStepOnParentConnect(e){
+async function secondStepOnParentConnect(e){
 
   /**если второй клик сам на себя, но до этого мы делаем проверкой и так это невозможным*/
   if($parentConnection.start === id){
@@ -422,19 +422,38 @@ function secondStepOnParentConnect(e){
       return connectObj;
   });
 
+  let store = $parentConnection;
+  parentConnection.set(false);
+  //debugger;
+
+  /**перед тем как обновить данные в самом приложении, отправляем данные на сервер
+   * connectObj.start айди блока в котором необходимо установить parent_id
+  */
+  let {success} = await controller.update({
+            node_id: store.start, 
+            field_name: "parent_id", 
+            field_value: store.end
+          });
+
+  if(!success)return;
+  
+
   nodes.update( (nodes) => {
       for (let i = 0; i < nodes.length; i++) {
           const element = nodes[i];
+
 
           /**secondStepOnParentConnect функция работает при создании связи,
            * срабатывает на втором кликнутом блоке. тоесть на блоке который мы выбираем как родитель.
            * чтобы установить правильного родителя, мы теперь должны найти блок, с которого начинался
            * процесс. стартовый блок.
           */
-          if(element["id"] != $parentConnection.start) continue;
+          if(element["id"] != store.start) continue;
+
+          
 
           if(!element.parent_id){
-            element.parent_id = $parentConnection.end;
+            element.parent_id = store.end;
           } else {
             console.log("[Line creation error]: родитель уже назначен");
           }
@@ -451,13 +470,15 @@ function secondStepOnParentConnect(e){
 
   linesStore.update( ( lines ) => {
     lines.push({
-        startId: $parentConnection.start,
-        endId: $parentConnection.end
+        startId: store.start,
+        endId: store.end
       });
     return lines;
   });
 
-  parentConnection.set(false);
+  console.log('[box.svelte]: {secondStepOnParentConnect} stores were update, going to call callback update');
+  controller.updateCallBack();
+  
 }
 
 

@@ -7,6 +7,9 @@ export default class Node{
     #saveData;
     #jwt;
     #project_id;
+    /**используется для старта полного обновления узлов, по умолчанию функция определена в page.svelte
+     * и запускает запрос полностью графа и возможно html
+     */
     #updateCallBack;
     /**некоторые обновления не влияют на прорисовку блоков и документ
      * например, изменение координат блока. мы сохраняем не критические изменения
@@ -170,4 +173,48 @@ export default class Node{
     }
 
 
+    async update({node_id, field_name, field_value}){
+        /**
+         * {
+                "project_id": 1,
+                "nodes": {
+                    "3dc0f268-fe7b-41c4-8462-413f274e2007": {
+                        <fieldname>: <value>,
+                    }
+                }
+            }
+         */
+        const token = await this.getToken();
+
+        if(this.#updateQueue.length > 0){      
+            this.#deleteIdandSend(node_id);
+        }
+
+        const dataToBeSend = {
+            project_id: this.#project_id,
+            nodes: {
+            }
+        }
+
+        dataToBeSend["nodes"][node_id] = {}
+        dataToBeSend["nodes"][node_id][field_name] = field_value;
+
+        /**callback для обновления вызывается в коде который вызывает этот метод,
+         * чаще всего элемент не удален и если вызывать колбек, то у нас обновятя данные, а затем еще
+         * код вызвавший отправку, перерисует контент
+         */
+
+        const obj = await this.#client.update(token, dataToBeSend);
+
+        console.log('[NODEHTTP]: {after update request}, result', obj);
+
+        return obj;
+    }
+
+    /**чаще всего функция коллбек используется для уведомления о том что данные изменились и старта запроса нового пакеета данных
+     * там где это необходимо
+     */
+    updateCallBack(){
+        this.#updateCallBack();
+    }
 }

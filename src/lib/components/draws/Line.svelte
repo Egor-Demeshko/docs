@@ -1,8 +1,11 @@
 <script>
   import { nodes, linesStore, showDeleteStore, deleteLineFunction } from "$lib/scripts/stores";
+  import { getContext } from "svelte";
 
-    export let startId = "";  //айди текущего блока
-    export let parentId = "";   //айди родителя куда надо рисовать связь
+    /**айди текущего блока*/
+    export let startId = "";  
+    /**айди родителя куда надо рисовать связь*/
+    export let parentId = "";   
     let d;
 
     let startX;
@@ -23,6 +26,8 @@
     let hoverlike = false;
     let width = 28;
     let height = 28;
+
+    const controller = getContext("controller");
 
     nodes.subscribe( (allBlocks) => {
 
@@ -136,13 +141,22 @@ function clickHandle(e){
 }
 
 
-function deleteLine(){
+async function deleteLine(){
     //в nodes найти блок с id === start_id
     //удалить запись parent_id
     //найти линию по parent_id и start_id
     showDeleteStore.set(false);
+
+    //сначала обновим данные на сервере, если ответ будет ок, тогда удалем тут везде
+    //отправляем в контроллер изменяемые поля
+
+    let {success, data, detail} = await controller.update({node_id: startId, field_name: "parent_id", field_value: null});
    
-    
+    if(!success){
+        console.log("[LINE]: ошибка синхронизации удаления линии", detail);
+        return;
+    }
+
     linesStore.update( (lines) => {
         return lines = lines.filter( (line) => {
             if( line['startId'] === startId && line["endId"] === parentId ){

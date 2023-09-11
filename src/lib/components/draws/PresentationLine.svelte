@@ -64,7 +64,7 @@
         endX = e.pageX;
         endY = +(e.pageY - dy.y).toFixed(0);
         drawLine();
-        console.log("[UPDATECORS], ", {endX, endY});
+        //console.log("[UPDATECORS], ", {endX, endY});
     }
 
 
