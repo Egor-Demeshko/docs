@@ -43,7 +43,6 @@ export default class HTTPnode extends HTTPrefresher{
         
         if(token){
             try{
-                debugger;
                 return await super.delete(token, JSON.stringify(data), route);
             } catch (e){
                 console.log("[HTTPNODE] не удалось выполнить запрос DELETE,", e.message);

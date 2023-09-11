@@ -11,8 +11,7 @@ export default class Node{
     /**некоторые обновления не влияют на прорисовку блоков и документ
      * например, изменение координат блока. мы сохраняем не критические изменения
      * и отправляем целиком все обновления, когда критические изменения происходят
-     * [{node_id: {data}}]
-     */
+     * [{node_id: {data}}]*/
     #updateQueue = [];
     constructor(project_id, updateCallBack){
         this.#client = new HTTPnode();
@@ -71,6 +70,10 @@ export default class Node{
          */
         const token = await this.getToken();
 
+        if(this.#updateQueue.length > 0){      
+            this.#deleteIdandSend(id);
+        }
+
         const dataToBeSend = {
             project_id: this.#project_id,
             delete_list: [ id ],
@@ -78,12 +81,29 @@ export default class Node{
 
         try{
             let json = await this.#client.delete(token, dataToBeSend);
-            //console.log("[NODE]: {create}: result(resoponse json): ", json);
+            console.log("[NODE]: {delete}: result(resoponse json): ", json);
             if(json.success) this.#updateCallBack();
             return json;
         } catch (e){
             console.log("[NODE]: не удалось сохранить новый узел");
         }
+    }
+
+    /**при удалении узла, мы смотрим не был ли удален узел, изменения которого занесене в очередь на update
+     * сервер не принимает запрос на update если узел вдруг окажется удаленным
+    */
+    async #deleteIdandSend(id){
+        //проверить есть ли узел с таким айди в очереди. если есть, удалить из очереди
+        let queue = this.#updateQueue;
+
+        this.#updateQueue = queue.filter( (obj) => {
+            if(Object.hasOwn(obj, id)){
+                return false;
+            }
+            return true;
+        });
+
+        this.sendDataInQueue();
     }
 
 
@@ -92,7 +112,7 @@ export default class Node{
     }
 
 
-    /**созраняет не срочный данные */
+    /**созраняет не срочные, не критичные данные локально*/
     saveNourgent({node_id, field_name, field_data}){
         console.log("[Node] {saveNourgent} enter arguments: ", {node_id, field_name, field_data});
         if(node_id && field_name){
@@ -141,7 +161,7 @@ export default class Node{
             
 
             let result = await this.#client.update(token, dataToSend);
-            //console.log("[NODE]: {sendDataInQueue} result: ", result);
+            console.log("[NODE]: {sendDataInQueue} result: ", result);
             if(result.success){
                 this.clearQueue();
                 return result;

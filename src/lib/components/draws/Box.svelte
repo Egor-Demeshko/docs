@@ -252,7 +252,6 @@ function startDraging(e){
               let obj = allBlocks[i];
               
               if(obj.id === id){
-                console.log("[mousemove]", {x, y, ex: e.movementX, ey: e.movementY});
                   obj.x = newX;
                   obj.y = newY;
                   allBlocks[i] = obj;

@@ -42,7 +42,7 @@ export async function deleteNode(id, controller){
         console.log("[createDeleteNode]: after delete request, result", result);
 
     } catch(e){
-        console.log("[delete node]: ошибка удаления узла");
+        console.log("[delete node]: ошибка удаления узла: ", e.message);
     }
 
     //TODO ТЕПЕРЬ НАДО СДЕЛАТЬ ЗАПРОС ОБНОВЛЕНИЯ УЗЛОВ
