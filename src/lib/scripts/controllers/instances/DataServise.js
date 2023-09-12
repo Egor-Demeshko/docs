@@ -31,7 +31,7 @@ export default class DataService{
         this.#service.save(obj);
     }
 
-    deleteToken(){
+    delete(){
         this.#service.delete();
     }
 }

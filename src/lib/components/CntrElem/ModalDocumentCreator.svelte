@@ -64,7 +64,6 @@
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
 
         let result = await docClass.sendFile(formData);
-
         //отключаем спиннер
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
 
@@ -75,12 +74,10 @@
             showModalDocumentCreator.set(true);
         }
 
-
         /* сервер ждет
         --header 'jwt: {{JWT}}' \
         --form 'file=@"example contract2.docx"' \
-        --form 'project_id="1"'*/
-       
+        --form 'project_id="1"'*/  
         
     }
 

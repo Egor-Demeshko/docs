@@ -2,12 +2,18 @@
     export let name = "file";
     export let accept = ".docx";
     export let text = "Стандартный текст";
+    import { documents } from "$lib/scripts/stores";
+
+    const projectID = $documents.projectId;
+
+
 </script>
 
 
 <label tabindex="0">
     {text}
     <input type="file" {name} {accept} on:change tabindex="-1">
+    <!--<input type="text" name="project_id" value="{projectID}" style="width: 0; height: 0">-->
 </label>
 
 

@@ -35,11 +35,10 @@ export default class HTTPBaseServise{
     async postFile(token, data, endroute, cors = "cors"){
         let url = new URL(this.#origin + this.path + this.secondPath + endroute);
         let result;
-        const boundary = 'boundary=--------------------------' + Math.random().toString(36).slice(2);
-        debugger;
+        /*const boundary = '---' + Math.random().toString(36).slice(2);*/
 
         const headers = { 
-            "Content-type": "multipart/form-data; " + boundary,
+          /* "Content-Type": "multipart/form-data; boundary=" + boundary,*/
         }
 
         if(token) headers.jwt = token;
@@ -51,9 +50,8 @@ export default class HTTPBaseServise{
                 headers,
                 body: data
             });
-            result = await response.text();
+            result = await response.json();
             console.log("[HTTPBaseService]: POST result", result);
-            debugger;
             return result;
 
         } catch(e){
