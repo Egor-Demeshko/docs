@@ -25,6 +25,10 @@ export default class Documents{
         return this.#docs;
     }
 
+    get projectId(){
+        return this.#projectId;
+    }
+
 
       /**запускает некоторые процедуры для создания документа, отправляет запрос в базу, обновляет сторы.
      * вновь создаваемый документ автоматически становится активным. Активным может быть только один документ.
@@ -180,6 +184,28 @@ export default class Documents{
     }
 
 
+        /**при получении данных, в момент загрузки файла, это функция обеспечивает синхронизацию
+     * данных с уже созданных временным обьектом нового документа
+     * через метод createNewDocument
+     */
+    normolizeNewDocument(id, name, html){
+        this.initDocument();
+
+        const docs = this.#docs;
+
+        for(let i = 0; i < docs.length; i++){
+            let obj = docs[i];
+            if(obj.active === true){
+                obj.name = name;
+                obj.id = id;
+                obj.string = html;
+
+                break;
+            }
+        }
+    }
+
+
     saveHtmlState(){
         //TODO когда будет реализовать отправку по http сделать проверку, сохранился ли прошлый результат
         let arr = this.#docs;
@@ -256,14 +282,19 @@ export default class Documents{
     async sendFile(formData){
         formData.append("project_id", this.#projectId);
 
-        let result = await this.#saveDeleteService.sendFile(formData);
+        let {success, data:{html, id, name}} = await this.#saveDeleteService.sendFile(formData);
         //TODO если ок, то вероятно надо отсюда сохранять html в визуализацию, и отправлять на сервер.
         //вероянто надо прогрнать через стандартную процедуру которую делаем на page. 
         //тоесть создание элементов, зачистка html. посмотрим что в ответе будет
         /**приходят в data: {html, id, name}  */
+
+        if(success){
+            this.normolizeNewDocument(id, name, html);
+            /**дергаем стор чтобы обновить отображение */
+            documents.update( (docs) => docs);
+        }
+
+        return success;
     }
 
-    get projectId(){
-        return this.#projectId;
-    }
 }

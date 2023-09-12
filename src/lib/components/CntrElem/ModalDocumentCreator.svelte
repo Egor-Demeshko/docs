@@ -67,18 +67,9 @@
         //отключаем спиннер
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
 
-        if(result.success){
-            //TODO по полученным данным, загрузить html в редактор
-        } else {
-            //если результат неудачный пока показываем опять модалку
+        if(!result){
             showModalDocumentCreator.set(true);
-        }
-
-        /* сервер ждет
-        --header 'jwt: {{JWT}}' \
-        --form 'file=@"example contract2.docx"' \
-        --form 'project_id="1"'*/  
-        
+        } 
     }
 
 </script>
