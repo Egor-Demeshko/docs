@@ -1,6 +1,7 @@
 import HTTPnode from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPnode.js";
 import DataServise from "$lib/scripts/controllers/instances/DataServise.js";
 import JWT from "$lib/scripts/controllers/instances/JWT.js";
+import {nodeDataNormolize} from "$lib/scripts/utils/nodes/NodeDataNormolize.js";
 
 export default class Node{
     #client;
@@ -115,7 +116,12 @@ export default class Node{
     }
 
 
-    /**созраняет не срочные, не критичные данные локально*/
+    normolizeData(){
+
+    }
+
+
+    /**созраняет не срочные, не критичные данные локально, одиночно*/
     saveNourgent({node_id, field_name, field_data}){
         console.log("[Node] {saveNourgent} enter arguments: ", {node_id, field_name, field_data});
         if(node_id && field_name){
@@ -147,6 +153,35 @@ export default class Node{
         }
     }
 
+    /**созраняет несрочные, не критичные данные локально, одиночно*/
+    saveNourgentAsObj(id, obj){
+        const arr = this.#updateQueue;
+
+        //найти обьект по айди
+        //если такой есть, то сделать деструкторизацию
+        for(let i = 0; i < arr.length; i++){
+            let data = arr[i];
+            
+            /**есть ли по ключу обьект */
+            if(!data[id]) continue;
+
+            data[id] = {...data[id], ...obj};
+            console.log("[NODE]: {saveAsOBJ}: ", data);
+            console.log("[NODE]: {queue}:", this.#updateQueue);
+            console.log("instanceof", typeof data);
+            break;
+        }
+
+        /**если в массиве не нашлось обьект с ключом node_id, тогда создаем новый */
+        {
+            const objToSave = {};
+            objToSave[id] = obj;
+            this.#updateQueue.push(objToSave);
+            console.log("[NODE]: {saveNourgent}: queue data: ", this.#updateQueue);
+            return {success: true};
+        }
+    }
+
 
     async sendDataInQueue(){
         if(this.#updateQueue.length > 0){
@@ -162,7 +197,8 @@ export default class Node{
                 }
             });
             
-
+            console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
+            //debugger;
             let result = await this.#client.update(token, dataToSend);
             console.log("[NODE]: {sendDataInQueue} result: ", result);
             if(result.success){
@@ -205,7 +241,6 @@ export default class Node{
          */
 
         const obj = await this.#client.update(token, dataToBeSend);
-
         console.log('[NODEHTTP]: {after update request}, result', obj);
 
         return obj;

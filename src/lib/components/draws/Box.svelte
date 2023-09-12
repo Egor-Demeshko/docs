@@ -224,8 +224,8 @@
 */
 function startDraging(e){
     e.stopPropagation();
-    let newX;
-    let newY;
+    let newX = x + 1;
+    let newY = y + 1;
 
     if(e.target.tagName === "DIV" || e.target.tagName === "SPAN"){
         root.addEventListener("pointerup", () => {

@@ -2,11 +2,16 @@
     import { fly } from "svelte/transition";
     import { nodes } from "$lib/scripts/stores";
     import syncDataInNodesStore from "$lib/scripts/controllers/syncDataInNodesStores.js";
+    import { getContext } from "svelte";
+    import { get } from "svelte/store";
+
     export let options;    //стор типа узлов
     export let name = 'dropdown default';   //по нему определяем тип для которого отображается дроб даун
     export let isWithIcon = true;
     export let buildTypeid = 'none';
     export let id = '';
+
+    const controller = getContext("controller");
 
    /*
         Компонент отображается выпадающие меню опций в зависимости от переданного массива
@@ -80,13 +85,23 @@
     function changeHandle(e){
         let target = e.target;
         let type = target.value;  //значение выбранной опции
+        
 
         options.update( (array) => {
             array.forEach( (elem) => {
                 if(elem.value === type) {
                     
                     elem.selected = true;
-                    syncDataInNodesStore(id, name, elem.value);
+                    
+                    //TODO delete this
+                    //let nodesData = get(nodes);
+                    //debugger;
+                    //fieldsToBeUpdate = {filedname: value}
+                    let filedsToBeUpdate = syncDataInNodesStore(id, name, elem.value);
+                    console.log("[DROPDOWN]: filedsToBeUpdate", filedsToBeUpdate);
+                    controller.saveNourgentAsObj(id, filedsToBeUpdate);
+                    let result = controller.sendDataInQueue();
+
                 } else {
                     elem.selected = false;
                 }
