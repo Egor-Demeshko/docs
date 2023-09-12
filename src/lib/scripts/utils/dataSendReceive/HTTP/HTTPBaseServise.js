@@ -21,7 +21,7 @@ export default class HTTPBaseServise{
             });
 
             result = await response.json();
-            console.log("[HTTPBaseService]: result", result);
+            console.log("[HTTPBaseService]: POST result", result);
             return result;
 
         } catch(e){
@@ -29,6 +29,36 @@ export default class HTTPBaseServise{
         }
         
         console.log("[HTTPBaseServise]  POST DATA: ", result);
+    }
+
+
+    async postFile(token, data, endroute, cors = "cors"){
+        let url = new URL(this.#origin + this.path + this.secondPath + endroute);
+        let result;
+        const boundary = 'boundary=--------------------------' + Math.random().toString(36).slice(2);
+        debugger;
+
+        const headers = { 
+            "Content-type": "multipart/form-data; " + boundary,
+        }
+
+        if(token) headers.jwt = token;
+
+        try{
+            let response = await fetch(url, {
+                method: "POST",
+                mode: cors,
+                headers,
+                body: data
+            });
+            result = await response.text();
+            console.log("[HTTPBaseService]: POST result", result);
+            debugger;
+            return result;
+
+        } catch(e){
+            console.log('[Ошибка отправки файла]: ошибка запроса: ', e.message);
+        }
     }
 
     async delete(token, data, route){

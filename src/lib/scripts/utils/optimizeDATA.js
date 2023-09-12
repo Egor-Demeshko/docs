@@ -12,11 +12,11 @@ export default function optimizeDATA(templates, project_id){
      * 
      */
 
-     return templates.map( ({template_id, name, html}) => {
+     return templates.map( ({id, name, html}) => {
         return {
             string: html,
             name,
-            id: template_id,
+            id,
             project_id
         }
      });

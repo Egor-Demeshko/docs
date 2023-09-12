@@ -25,10 +25,11 @@
     //console.log('[page]: data: ', data);
     let {templates, id: project_id, project_name, nodes: serverNode} = data;
     let cleanHtml = '';
-
+    
     let graph = serverNode;
-    let html = optimizeDATA(templates, project_id);
 
+    /**добавляем в обьект данных project_Id*/
+    let html = optimizeDATA(templates, project_id);
     nodeController.set(new Node(project_id, graphUpdate));
     /**контроллер работы в целом с проектом*/
 

@@ -7,6 +7,7 @@
 
     let unsubscribe;
     let showSpinner;
+    let form;
 
 
     async function createNewDocument(){
@@ -20,8 +21,19 @@
         
         showSpinner = false;*/
         let docClass = get(documents);
-        docClass.initDocument();
+        
         showModalDocumentCreator.set(false);
+        document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
+
+        let result = await docClass.handleCreateRequest({name: undefined, html: undefined});
+
+        //отключаем спиннер
+        document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
+        if(!result.success){
+            showModalDocumentCreator.set(true);
+            return;
+        }
+        docClass.initDocument();
     }
 
 
@@ -39,27 +51,36 @@
     }*/
 
 
-    function change(e){
-        /* с атрибутом мультипарт несколько файлов можно выбрать
-        выбранные файлу содежрадться в input.files.это свойство возращает
-        filelist 
-        array-like обьект, свойство length вернет количество выбранных файлов.
-        внутри будет лежать обьект file*/
-        /*так как мы файлы можем много откуда отправлять
-        то точно отправка файла должна быть отдельным классом,
-        возможно в папке http
-        --скорее всего обернем в form и отправим на сервер*/
-
-        /*
-        СХЕМА. отсюда запускаем отправку форму, или вызываем для этого отдельный класс.
-        ждем ответа, т.е. функция должна быть асинхронной. 
-        крутим спиннер.
-        обязательно сделать проверку. ответа сервера.
-        скорее всего через fetch, c адресом энд поинта. и в теле FormData.
-        нужна будет форма. доступ к ней можно получить и через событие.
-        */
+    async function change(e){
         console.log("[ModalDocumentCreator]: change ", e.target);
-        e.target.files[0].text().then( (value) => console.log("[result of file transfer]: ", value));
+        
+        const input = e.target;
+        const formData = new FormData(form);
+        if(!formData.has("file")) return;
+        const docClass = get(documents);
+
+        showModalDocumentCreator.set(false);
+        //включаем спиннер
+        document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
+
+        let result = await docClass.sendFile(formData);
+
+        //отключаем спиннер
+        document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
+
+        if(result.success){
+            //TODO по полученным данным, загрузить html в редактор
+        } else {
+            //если результат неудачный пока показываем опять модалку
+            showModalDocumentCreator.set(true);
+        }
+
+
+        /* сервер ждет
+        --header 'jwt: {{JWT}}' \
+        --form 'file=@"example contract2.docx"' \
+        --form 'project_id="1"'*/
+       
         
     }
 
@@ -85,7 +106,7 @@ out:fade={{duration: 400}}>
         --color-hover="var(--white-blue)"
         --border-hover="2px solid var(--gray-blue)"
         />
-        <form id="doc_file_picker">
+        <form id="doc_file_picker" bind:this={form}>
             <FilePicker 
             text={"Загрузить документ"}
             --bg="var(--middle-blue)"

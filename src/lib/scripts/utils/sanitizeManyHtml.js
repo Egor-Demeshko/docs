@@ -18,9 +18,11 @@ export default function sanitizeManyHtml(arr){
 
 
     function clearHtml(html){
-        let cleanHtml;
+        let cleanHtml = '';
         html = html.trim() + '';
-        cleanHtml = html.match(/<body>[\s\S]*<\/body>/)[0];
+        let matchArr = html.match(/<body>[\s\S]*<\/body>/);
+        if(!matchArr) return html;
+        cleanHtml = matchArr[0];
         cleanHtml = cleanHtml.replace(/<body>/, "<div>")
                     .replace(/<\/body>/, "</div>");   
         return cleanHtml;

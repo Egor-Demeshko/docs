@@ -1,5 +1,5 @@
 <script>
-    export let name = "doc";
+    export let name = "file";
     export let accept = ".docx";
     export let text = "Стандартный текст";
 </script>

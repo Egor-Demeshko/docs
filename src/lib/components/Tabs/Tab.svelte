@@ -6,13 +6,14 @@
     export let tabId;
     export let parentId = '';
     export let documentId = null;
-    
+
     /**
      * активность вкладки определяется от активного докуметна.
      * если айди документа равно активному документу, то вкладка активная
      * сразу следом меняем activeTabId
     */
     $: active = (documentId === $documents.getActiveDocumentId()) ? true : false;
+    console.log("[TAB]: active: ", active);
     $: if(active){
         activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
     }
@@ -62,6 +63,25 @@
             });
     }
 
+
+    /**сохраняем нахвание template или на enter или если blur */
+    async function saveHeading(e){
+        const name = e.target.textContent;
+
+        if(e.code === 'Enter'){
+            e.preventDefault();
+        }
+
+        if(e.code && e.code === 'Enter' || e instanceof FocusEvent && e.type === "blur"){
+            let result = await $documents.saveHeading(documentId, name);
+            if(e.code) { 
+                
+                e.target.blur();
+            };
+        }
+    }
+
+
     /**hover like события*/
     let pointerEnterClose = (e) => showTooltip.set( {
         show: true,
@@ -87,7 +107,7 @@
 
 
     <li class={activeTab}>
-        <span contenteditable={active}>{name}</span>
+        <span contenteditable={active} on:keypress={saveHeading} on:blur={saveHeading}>{name}</span>
     
         {#if active}
             <svg class="icons pen">

@@ -4,8 +4,8 @@
     import { get } from "svelte/store";
     export let tabsPosition = '';
     export let docsArr;
-    //$:console.log("[TABS]: ddocuments", documents);
-
+    //console.log("[TABS]: ddocuments", documents);
+    console.log("[TABS]: docsArr  ", {docsArr, length: docsArr.length});
    tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: docsArr.length}));
 
     /**дом елемент кнопки добавления документа*/
@@ -20,17 +20,16 @@
     /**при клике на плюс, создаем объект документа, в основном для того чтобы создать новую вкладку
      * также открываем модалку в этой вкладке. документ сразу редактировать нельзя
     */
-    async function click(){
+    function click(){
         let docClass = get(documents);
         
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
-        await new Promise( (resolve) => {setTimeout( () => resolve(), 1500)});
-        await docClass.createNewDocument();
+        docClass.createNewDocument();
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
     }
 
-    /* когда мы через модалку создаем новый документ, эта страка необходима чтобы обновить стор, количества вкладок,
-    которое конгечно зависит от количества документов*/
+    /* когда мы через модалку создаем новый документ, эта строка необходима чтобы обновить стор, количества вкладок,
+    которое зависит от количества документов*/
     $: if(tabs){
         tabsQuantity.update( (obj) => ({ ...obj, [tabsPosition]: docsArr.length}));
     }
