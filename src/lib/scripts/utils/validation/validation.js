@@ -8,7 +8,7 @@ import validateSiblingsWithoutMessage from "$lib/scripts/utils/validation/valida
  */
 export default async function validation(data, options){
     const reqFieldsList = ["name", "data_type", "node_type"];
-
+    
     /**err_type используется для последующей стилизации сообщений смотрим message.svelte messagesContainer.svelte */
     data.validity = {
         status: "valid",

@@ -95,12 +95,11 @@
                     
                     //TODO delete this
                     //let nodesData = get(nodes);
-                    //debugger;
-                    //fieldsToBeUpdate = {filedname: value}
-                    let filedsToBeUpdate = syncDataInNodesStore(id, name, elem.value);
+                    const filedsToBeUpdate = controller.normolize(name, elem.value);
+                    syncDataInNodesStore(id, null, null, filedsToBeUpdate);
                     console.log("[DROPDOWN]: filedsToBeUpdate", filedsToBeUpdate);
-                    controller.saveNourgentAsObj(id, filedsToBeUpdate);
-                    let result = controller.sendDataInQueue();
+                    //controller.saveNourgentAsObj(id, filedsToBeUpdate);
+                    //let result = controller.sendDataInQueue();
 
                 } else {
                     elem.selected = false;

@@ -10,12 +10,14 @@
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
     import validation from "$lib/scripts/utils/validation/validation";
+	import { getContext } from "svelte";
 
     let trigger = false;
     let closing_animation = false;
 
     let open = false;
     //TODO сохранение состояния по комбинации cntl + S
+    const controller = getContext("controller");
 
     /**обработка анимации открытия*/
     function arrowClicked(){
@@ -51,7 +53,7 @@
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         validation(data);
-        //console.log("[NodeRedactor]: after {validation} check data", data);
+        console.log("[NodeRedactor]: after {validation} check data", data);
         /*обновляем дом*/
         elementsDataUpdate(data);
     } 
@@ -108,6 +110,7 @@
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
         for(let i = 0; i < $nodes.length; i++){
             if($nodes[i]["id"] === activeBlockId){
+                controller.setActiveNode($nodes[i]);
                 return $nodes[i];
             }
         }

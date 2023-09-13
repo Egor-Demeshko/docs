@@ -424,7 +424,6 @@ async function secondStepOnParentConnect(e){
 
   let store = $parentConnection;
   parentConnection.set(false);
-  //debugger;
 
   /**перед тем как обновить данные в самом приложении, отправляем данные на сервер
    * connectObj.start айди блока в котором необходимо установить parent_id

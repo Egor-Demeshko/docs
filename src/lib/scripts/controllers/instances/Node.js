@@ -1,9 +1,9 @@
 import HTTPnode from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPnode.js";
 import DataServise from "$lib/scripts/controllers/instances/DataServise.js";
 import JWT from "$lib/scripts/controllers/instances/JWT.js";
-import {nodeDataNormolize} from "$lib/scripts/utils/nodes/NodeDataNormolize.js";
+import Normolize from "$lib/scripts/utils/validation/Normolize.js";
 
-export default class Node{
+export default class Node extends Normolize{
     #client;
     #saveData;
     #jwt;
@@ -18,6 +18,7 @@ export default class Node{
      * [{node_id: {data}}]*/
     #updateQueue = [];
     constructor(project_id, updateCallBack){
+        super();
         this.#client = new HTTPnode();
         this.#saveData = new DataServise({save: "local"});
         this.#jwt = new JWT({
@@ -116,11 +117,6 @@ export default class Node{
     }
 
 
-    normolizeData(){
-
-    }
-
-
     /**созраняет не срочные, не критичные данные локально, одиночно*/
     saveNourgent({node_id, field_name, field_data}){
         console.log("[Node] {saveNourgent} enter arguments: ", {node_id, field_name, field_data});
@@ -198,7 +194,6 @@ export default class Node{
             });
             
             console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
-            //debugger;
             let result = await this.#client.update(token, dataToSend);
             console.log("[NODE]: {sendDataInQueue} result: ", result);
             if(result.success){
