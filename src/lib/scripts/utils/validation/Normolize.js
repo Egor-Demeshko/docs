@@ -1,11 +1,13 @@
+import NodeConsistencyValidation from "$lib/scripts/utils/nodes/NodeConsistencyValidation.js";
+
 /**
  */
-export default class Normolize{
+export default class Normolize extends NodeConsistencyValidation{
     /**@type {Object} */
     #activeNodeData;
 
     constructor(){
-
+        super();
     }
 
     /**
@@ -25,6 +27,7 @@ export default class Normolize{
     
         if(fieldName === "node_type"){
             if(value === "select") {
+                debugger;
                 if(node.data_type !== "string" && node.data_type !== "integer") fieldsToUpdate.data_type = "string";
 
                 if(node.content && node.data_type !== "bool") {
@@ -65,7 +68,16 @@ export default class Normolize{
 
 
     setActiveNode(node){
+        super.setActiveNode(node);
         this.#activeNodeData = {...node};
+    }
+
+    deleteNoBackendFields(obj){
+        debugger;
+        const newObj = {...obj};
+        delete newObj.validity;
+        delete newObj.id;
+        return newObj;
     }
 }
 

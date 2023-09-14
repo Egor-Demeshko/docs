@@ -1,7 +1,10 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, getContext } from "svelte";
 
     export let open;
+    const controller = getContext("controller");
+
+
     let dispatch = createEventDispatcher();
 
     /*
@@ -11,7 +14,22 @@
 
 
     function clickHandle(){
-        dispatch("arrow_clicked");
+        if(!open){
+            dispatch("arrow_clicked");
+            return;
+        }
+
+        if(controller.wasValidated){
+            dispatch("arrow_clicked");
+        } else {
+            let result = controller.consistencyCheck();
+            if(result){
+                dispatch("arrow_clicked");
+            } else {
+                return;
+            }
+        }
+        
     }
 
     function keypress(){

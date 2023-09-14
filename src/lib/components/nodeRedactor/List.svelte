@@ -1,20 +1,20 @@
 <script>
     import DynamicInput from "$lib/components/CntrElem/DynamicInput.svelte";
     import InputwithLabel from "../CntrElem/InputwithLabel.svelte";
-    import { nodes, blockClickedId } from "$lib/scripts/stores";
     import syncSeveralDatasInNodeStore from "$lib/scripts/controllers/syncSeveralDatasInNodeStore.js";
-    import radioContentAndValuesChecker from "$lib/scripts/controllers/radioContentAndValuesChecker.js";
-    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
+
 
     export let id = "";
     export let options = "";
+    export let data;
 
     let wrapper;
-
+    console.log("[list] value change", data);
     $: if(options){
-        options = options;
+        //options = options;
+        /**обновлени dom  элементов*/
+        syncSeveralDatasInNodeStore(id, { "options": [...options], "content": options[0]});
         
-        syncSeveralDatasInNodeStore(id, { "options": options, "content": options[0]});
     }
 
 
@@ -76,7 +76,7 @@
             поэтому первый элемент инпут с лайбел. остальные просто инпут. -->
                 {#if i === 0}
                 <div class="line" id={`list_${i}`} bind:this={wrapper}>
-                    <InputwithLabel view_type={"list"} label={"Значение по-умолчанию"}
+                    <InputwithLabel label={"Значение по-умолчанию"}
                     bind:value={value} name={"options"}
                     --color="var(--deep-blue)"
                     --border-width="2px"

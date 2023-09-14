@@ -16,6 +16,8 @@
     let closing_animation = false;
 
     let open = false;
+    let not_valid = false;
+    
     //TODO сохранение состояния по комбинации cntl + S
     const controller = getContext("controller");
 
@@ -23,13 +25,21 @@
     function arrowClicked(){
         open = !open;
         
-        if(open){    
+        if(open){              
+            
             setTimeout(() => {
                 trigger = true;
                 document.dispatchEvent(new CustomEvent("redactor-сhanged"));
             }, 650);     
             
         } else {
+
+            /*
+            let objTosend = controller.deleteNoBackendFields(data);
+            controller.saveNourgentAsObj(data.id, objTosend);
+            controller.sendDataInQueue();
+            */
+
             trigger = false;
             closing_animation = true;
             
@@ -39,6 +49,9 @@
             }, 650);  
             
         }
+    }
+    $: if(!open){
+        not_valid = false;
     }
 
     /**получаем текущий активный node_type. выбирается на <FiledTypePicker> это дропдаун*/
@@ -52,10 +65,14 @@
 
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
-        console.log("[NodeRedactor]: after {validation} check data", data);
+        
+        console.log("[NodeRedactor]: AFTER {validation} check data", data);
         /*обновляем дом*/
         elementsDataUpdate(data);
+        
+        not_valid = false;
     } 
 
 
@@ -124,18 +141,24 @@
     }
 
 
-    /*function inputNameChanged(e){
-        console.log("[NodeRedactor]: changed: ", e);
-        on:input_name_changed={inputNameChanged}
-    }*/
+    function handleError({detail}){
+        const {code} = detail;
+  
+        if(code === 806){
+            not_valid = true;
+        }
+    }
 
 
 </script>
 
+<svelte:document on:error={handleError}></svelte:document>
+
 <form data-elements="node_redactor" 
 class:open 
 class:trigger 
-class:closing_animation>
+class:closing_animation
+class:not_valid>
     
     <div class="arrow__position">
         <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>
@@ -181,21 +204,21 @@ class:closing_animation>
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
                 placeholder={"Описание будет отображаться в анкете"} 
                 bind:value={data.description} rows={3} validity={data.validity}/>
-            {/if}
-
-            {#if node_type === "checkbox"}
+            {:else if node_type === "checkbox"}
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
                 bind:value={data.description} validity={data.validity}/>
-            {/if}
-
-            {#if node_type === "select"}
+            {:else if node_type === "select"}
                 <div class="select__wrapper">
                     <List id={data.id} bind:options={data.options}/>
-                    <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} bind:value={data.description} validity={data.validity}/>
+                    <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
+                    bind:value={data.description} validity={data.validity}/>
+                
                 </div>
             {/if}
+        
         </div>
     {/if}
+    
 </form>
 
 
@@ -212,6 +235,12 @@ class:closing_animation>
         gap: 2.6rem;
         justify-content: space-between;
         z-index: 5;
+        border-top: 3px solid transparent;
+        transition: border 400ms ease;
+    }
+
+    form.not_valid{
+        border-top: 3px solid var(--orange);
     }
 
 

@@ -27,6 +27,7 @@ export default function syncSeveralDatasInNodeStore(id, data){
         for(let i = 0; i < arr.length; i++){
             if(arr[i]['id'] !== id) continue;
 
+            debugger;
             if(data["content"]){
                 arr[i].setTextData({content: data.content});
             }

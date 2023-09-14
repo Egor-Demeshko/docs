@@ -55,7 +55,6 @@
         nodes.set(graph);
     
     
-    
         const docs = new Documents(html, graph, saveDeleteService("template"));
         /**заполняем стор документов*/
         documents.set(docs)

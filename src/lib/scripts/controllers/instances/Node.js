@@ -186,7 +186,6 @@ export default class Node extends Normolize{
 
             const dataToSend = {project_id, nodes: {}};
 
-
             this.#updateQueue.forEach( (obj) => {
                 for(let [key, data] of Object.entries(obj)){
                     dataToSend["nodes"][key] = data;

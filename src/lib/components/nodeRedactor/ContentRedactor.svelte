@@ -18,6 +18,8 @@
     let invalid = '';
     let input;
 
+    $: console.log('[contentRedactor]: value', value);
+
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
     /*$: console.log("[NODERedacto]: validity and disaply prop:  ", {
         validity,
