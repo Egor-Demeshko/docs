@@ -128,7 +128,6 @@ export default async function validation(data, options){
             /**ищем родительский блок */
 
             nodes.update( (nodes) => {
-
                 for(let i = 0; i < nodes.length; i++){
                     let node = nodes[i];
                     if(node["id"] !== data.parent_id) continue;

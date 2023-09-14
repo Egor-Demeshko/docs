@@ -1,6 +1,6 @@
 <script>
     export let id;
-    export let data_type = "";
+    export let data_type = null;
 
     $: isText = (data_type === "string") ? true : false;
    

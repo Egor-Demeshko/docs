@@ -34,11 +34,11 @@
             
         } else {
 
-            /*
+            
             let objTosend = controller.deleteNoBackendFields(data);
             controller.saveNourgentAsObj(data.id, objTosend);
             controller.sendDataInQueue();
-            */
+            
 
             trigger = false;
             closing_animation = true;
@@ -61,20 +61,6 @@
      * фактически мы выдераем прямую ссылку на обьект данных, конкретного элемента.
      */
     $: data = getBlockObj($blockClickedId);
-    
-
-    $: if(data){
-        // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
-        console.log("[NodeRedactor]: BEFORE {validation} check data", data);
-        validation(data);
-        
-        console.log("[NodeRedactor]: AFTER {validation} check data", data);
-        /*обновляем дом*/
-        elementsDataUpdate(data);
-        
-        not_valid = false;
-    } 
-
 
     /**этот блок тригерритсся когда мы меняем что-то в DOM компонета. на*/
    /* $: if(data){
@@ -102,15 +88,24 @@
      * когда меняется вцелом состояния стора $nodes мы просто перерисовываем состояние компонента
      *  через data = data. так как сам по себе data это прямая ссылка на нужные обьект в сторе.
     */
-    $: if($nodes){
-        if(data){
-            //;
-            data = data;
-            nodes.update( (nodes) => nodes);
-            //console.log("[NodeRedactor]: {$NODES} store changed, trigger", $nodes);
-        }
+    nodes.subscribe( (nodes) => {
+                console.log("[NodeRedactor]: {$NODES} store changed, trigger", nodes);
+                console.log("[NodeRedactor]: {$NODES} DATA STATUS", data);
+               
+                data = data;
+    });
+
+    $: if(data){
+        // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        console.log("[NodeRedactor]: BEFORE {validation} check data", data);
+        validation(data);
+        
+        console.log("[NodeRedactor]: AFTER {validation} check data", data);
+        /*обновляем дом*/
+       elementsDataUpdate(data);
+        
+        not_valid = false;
     }
-    
 
 
     /*$: console.log("[NodeRedactor]: updated ", $nodes);*/
@@ -199,19 +194,19 @@ class:not_valid>
 
             {#if node_type === "text" || node_type === "entry"}
                 <ContentRedactor id={data.id} display={"content"} {node_type} label={"Содержание блока"} rows={6}
-                placeholder={"Содержание отображается в тексте документа"} bind:value={data.content} bind:data_type={data.data_type}
+                placeholder={"Содержание отображается в тексте документа"} {data}
                 validity={data.validity}/>
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                placeholder={"Описание будет отображаться в анкете"} 
-                bind:value={data.description} rows={3} validity={data.validity}/>
+                placeholder={"Описание будет отображаться в анкете"} {data}
+                rows={3} validity={data.validity}/>
             {:else if node_type === "checkbox"}
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                bind:value={data.description} validity={data.validity}/>
+                validity={data.validity} {data}/>
             {:else if node_type === "select"}
                 <div class="select__wrapper">
-                    <List id={data.id} bind:options={data.options}/>
+                    <List id={data.id} {data}/>
                     <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                    bind:value={data.description} validity={data.validity}/>
+                    validity={data.validity} {data}/>
                 
                 </div>
             {/if}

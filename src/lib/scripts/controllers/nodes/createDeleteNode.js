@@ -24,7 +24,7 @@ export async function deleteNode(id, controller){
         }
 
         if(dataObj.id === id){
-            console.log("[blockToBeDelete]: id", id);
+            console.log("[createDeleteNode]: id", id);
             return false;
         }
 

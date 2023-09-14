@@ -11,6 +11,7 @@
     export let name;
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
+    $: console.log("[INPUTWITHLABEL]: input value: ", value);
 
     function isCurrentField(){
         let data = validity.err_data;
@@ -20,6 +21,12 @@
         }
 
         return false;
+    }
+
+
+    function inputHandle({target}){
+        console.log('[__TEST__ INPUT WITH LABEL]: target.value: ', target.value);
+        value = target.value;
     }
 
 
@@ -36,11 +43,11 @@
         </div>
 
         {#if type === "text"}
-            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
-            type = "text">
+            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} {value}
+            type = "text" on:input={inputHandle}>
         {:else if type === "number"}
-            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} bind:value={value}
-            type = "tel">
+            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} {value}
+            type = "tel" on:input={inputHandle}>
         {/if}
     </div>
 </label>

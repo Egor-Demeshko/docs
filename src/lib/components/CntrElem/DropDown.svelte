@@ -96,8 +96,8 @@
                     //TODO delete this
                     //let nodesData = get(nodes);
                     const filedsToBeUpdate = controller.normolize(name, elem.value);
+                    //console.log("[DROPDOWN]: filedsToBeUpdate", filedsToBeUpdate);
                     syncDataInNodesStore(id, null, null, filedsToBeUpdate);
-                    console.log("[DROPDOWN]: filedsToBeUpdate", filedsToBeUpdate);
                     //controller.saveNourgentAsObj(id, filedsToBeUpdate);
                     //let result = controller.sendDataInQueue();
 

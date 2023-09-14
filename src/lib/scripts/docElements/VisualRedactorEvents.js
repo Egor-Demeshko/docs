@@ -158,7 +158,7 @@ export default class visualRedactorEvents{
                         //console.log("[simpleText]: CONTENT updated");
                         if(arrNodes[i]["options"] && arrNodes[i]["options"].length > 0){
                             arrNodes[i]["options"][0] = text;
-                            //console.log("[simpleText]: arrNodes[i][options][0] updated");
+                            //console.log("[simpleText]: arrNodes[i][options][0] updated: ", arrNodes);
                         }
 
                     }

@@ -30,7 +30,7 @@
     const controller = getContext("controller");
 
     nodes.subscribe( (allBlocks) => {
-
+        //console.log("[LINE]: subscribe NODES: ", allBlocks);
         let parentToFind;   
        
         for(let i = 0; i < allBlocks.length; i++){
@@ -174,7 +174,7 @@ async function deleteLine(){
 
 
     nodes.update( function(allNodes){
-            /*console.log('[Line]: nodes.update:', {
+            /*console.log('[Line]: DELETE LINE nodes.update:', {
                 startId,
                 parentId
             });*/
@@ -197,7 +197,10 @@ async function deleteLine(){
      * тут уж такая архитектурная реализация.
     */
     setTimeout(() => {
-        nodes.update( (nodes) => nodes);
+        nodes.update( (nodes) => {
+            //console.log("[LINE]: TIMEOUT UPDATE: NODES", nodes);
+            return nodes;
+        });
     }); 
 
     deleteLineFunction.set(false);

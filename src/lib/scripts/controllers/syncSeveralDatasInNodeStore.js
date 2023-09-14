@@ -6,9 +6,9 @@ import { nodes, storeForSimpleTexts } from "$lib/scripts/stores";
  * хорошо для работы со динамическими списками
  */
 export default function syncSeveralDatasInNodeStore(id, data){
-    console.log("[syncSeveralDatasInNodeStore]: arguments options: ",  data);
-    /*
-    nodes.update( (nodes) => {
+ 
+    
+    /*nodes.subscribe( (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
             const element = nodes[i];
             
@@ -18,6 +18,9 @@ export default function syncSeveralDatasInNodeStore(id, data){
             nodes[i]["content"] = data.content;
             break;
         }
+
+        debugger;
+        console.log("[syncSeveralDatasInNodeStore]: arguments options: ",  outernode);
         return nodes;
     });*/
     
@@ -27,7 +30,7 @@ export default function syncSeveralDatasInNodeStore(id, data){
         for(let i = 0; i < arr.length; i++){
             if(arr[i]['id'] !== id) continue;
 
-            debugger;
+            //d
             if(data["content"]){
                 arr[i].setTextData({content: data.content});
             }

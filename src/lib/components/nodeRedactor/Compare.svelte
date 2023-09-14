@@ -34,6 +34,7 @@
             --background-hover="var(--light-gray-blue)"
             --border-width="2px"
             --font-size=".875rem"
+            --placeholder="var(--faded-gray-blue)"
             />
         <!--</div>-->
     </div>

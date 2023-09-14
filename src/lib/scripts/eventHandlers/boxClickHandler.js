@@ -46,7 +46,6 @@ export default function boxClickHandler(endforLineId){
 
                 
                 nodes.update( (blocks) => {
-                    
                     /**сохранить айди парента, куда идет линия. это endId */
                     blocks.forEach( (obj) => {
                         if(obj.id === startBlockForLineID){

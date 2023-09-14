@@ -8,11 +8,11 @@ import { nodes } from "$lib/scripts/stores";
                                                 //TODO нужно переделать, понимать обьект, элементов которые должны 
                                                 //быть изменены
 export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdate){
-    /*console.log("[syncDataInNodesStore]: arguments: ",  {
+    console.log("[syncDataInNodesStore]: arguments: ",  {
                                                             id,
                                                             fieldName,
                                                             value
-                                                        });*/
+                                                        });
         
     if(fieldName && value){
         
@@ -40,7 +40,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
         });
 
     } else if(fieldsToUpdate) {
-
+        
         nodes.update( (nodesData) => {
     
             for(let i = 0; i < nodesData.length; i++){
@@ -49,7 +49,6 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                 if(node["id"] === id){
                     
                     for(let [fieldName, value] of Object.entries(fieldsToUpdate)){
-
                         /**есть ли ключ в node, например, может options отсутствовать*/
                         if(!Object.hasOwn(node, fieldName)) {
                             node[fieldName] = value; 
@@ -60,16 +59,17 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                             
                             if(key === fieldName){  
                                 node[key] = value;
-                                console.log("[syncDataInNodesStores]: node that effected: ", node);
+                                
                                 break;
                             }
                         }
+                        
 
                     }
                     break;
                 }
             }
-            //console.log("[SYNC]: nodesData: ", nodesData);
+            console.log("[SYNC]: NEW   nodesData: ", nodesData);
             return nodesData;
         });
 

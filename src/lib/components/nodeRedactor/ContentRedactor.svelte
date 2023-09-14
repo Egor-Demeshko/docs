@@ -6,10 +6,10 @@
     export let label ="Название блока";
     export let rows = 1;
     export let node_type;
-    export let value = '';
     export let id = '';
-    export let data_type = '';
     export let validity;
+    /**@description обьект узла*/
+    export let data;
 
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
     import { storeForSimpleTexts } from "$lib/scripts/stores";
@@ -18,7 +18,6 @@
     let invalid = '';
     let input;
 
-    $: console.log('[contentRedactor]: value', value);
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
     /*$: console.log("[NODERedacto]: validity and disaply prop:  ", {
@@ -79,17 +78,26 @@
 
         <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
         там где он есть сделан больший паддинг справа. это регулируется классом -->
-        <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
-        bind:value={value}
-        class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
-        on:focus={focusTextArea}
-        on:blur={blurTextArea}
-        ></textarea>
+        {#if display === "content"}
+            <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
+            bind:value={data.content}
+            class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
+            on:focus={focusTextArea}
+            on:blur={blurTextArea}
+            ></textarea>
+        {:else}
+            <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
+            bind:value={data.description}
+            class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
+            on:focus={focusTextArea}
+            on:blur={blurTextArea}
+            ></textarea>
+        {/if}
 
         <!-- Некоторые текстовые поля имеют переключатели -->
         {#if display === "content"}
             <div class="toggle__position">
-                <Toggle bind:data_type={data_type}/>
+                <Toggle bind:data_type={data.data_type}/>
             </div>
         {/if}
 

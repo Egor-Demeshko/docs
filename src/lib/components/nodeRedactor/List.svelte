@@ -5,16 +5,24 @@
 
 
     export let id = "";
-    export let options = "";
     export let data;
+    let options = data.options;
 
     let wrapper;
-    console.log("[list] value change", data);
+
     $: if(options){
-        //options = options;
+        options = options;
         /**обновлени dom  элементов*/
-        syncSeveralDatasInNodeStore(id, { "options": [...options], "content": options[0]});
+        //debugger;
+        //обновляем поле content, по стандарту в случае select должно быть равно хначению первого элемента
+        if(options[0]) {
+            data.content = options[0];
+            data.options = options;
+        };
+
+
         
+        syncSeveralDatasInNodeStore(id, { "options": [...options], "content": options[0]});
     }
 
 
@@ -69,7 +77,7 @@
     <span class="list__name">Элементы списка</span>
 
     <div class="list" >
-        {#if options}
+        <!--{#if options} -->
             {#each options as value, i (i)}
 
             <!-- первый элемент должен быть с надписью значение по умолчанию. Остальные идут отдельным списком, без подписи.
@@ -97,11 +105,11 @@
                 </div>
                 {/if}
             {/each}
-        {/if}    
+        <!-- {/if} -->
 
         <!-- повторно делаем each по тому же массиву, чтобы сформировать список остальных возможных опций. первый элемент
         отрисовывать не надо -->
-        {#if options}
+        <!--{#if options} -->
             <div class="list__options">
                 <span class="list__additional">Дополнительные значения:</span>
                 {#each options as value, i (i)}
@@ -140,7 +148,7 @@
 
                 {/each}
             </div>
-        {/if}    
+       <!-- {/if}-->
         
         <button on:click={addInput} type="button">Добавить элемент</button>
 

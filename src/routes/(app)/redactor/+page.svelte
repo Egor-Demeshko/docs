@@ -25,7 +25,6 @@
     //console.log('[page]: data: ', data);
     let {templates, id: project_id, project_name, nodes: serverNode} = data;
     let cleanHtml = '';
-    
     let graph = serverNode;
 
     /**добавляем в обьект данных project_Id*/

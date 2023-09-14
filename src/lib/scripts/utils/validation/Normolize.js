@@ -27,7 +27,7 @@ export default class Normolize extends NodeConsistencyValidation{
     
         if(fieldName === "node_type"){
             if(value === "select") {
-                debugger;
+                //debugger;
                 if(node.data_type !== "string" && node.data_type !== "integer") fieldsToUpdate.data_type = "string";
 
                 if(node.content && node.data_type !== "bool") {
@@ -50,9 +50,7 @@ export default class Normolize extends NodeConsistencyValidation{
             } else if (value === "text" || value === "entry") {
 
                 fieldsToUpdate.data_type = (node.data_type === "integer") ? "integer" : "string";
-                if(node.content && node.data_type !== "bool") {
-                    fieldsToUpdate.content = node.content;
-                } else {
+                if(node.data_type === "bool"){
                     fieldsToUpdate.content = "по-умолчанию";
                 }
 
@@ -73,7 +71,7 @@ export default class Normolize extends NodeConsistencyValidation{
     }
 
     deleteNoBackendFields(obj){
-        debugger;
+        //debugger;
         const newObj = {...obj};
         delete newObj.validity;
         delete newObj.id;
