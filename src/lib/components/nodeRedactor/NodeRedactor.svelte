@@ -10,17 +10,20 @@
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
     import validation from "$lib/scripts/utils/validation/validation";
-	import { getContext } from "svelte";
+	import { getContext, setContext } from "svelte";
+    import { get } from "svelte/store";
 
     let trigger = false;
     let closing_animation = false;
 
     let open = false;
     let not_valid = false;
+    let keyChange = true;
     
     //TODO сохранение состояния по комбинации cntl + S
     const controller = getContext("controller");
 
+    
     /**обработка анимации открытия*/
     function arrowClicked(){
         open = !open;
@@ -34,10 +37,11 @@
             
         } else {
 
-            
-            let objTosend = controller.deleteNoBackendFields(data);
-            controller.saveNourgentAsObj(data.id, objTosend);
-            controller.sendDataInQueue();
+            if(data){
+                let objTosend = controller.deleteNoBackendFields(data);
+                controller.saveNourgentAsObj(data.id, objTosend);
+                controller.sendDataInQueue();
+            }
             
 
             trigger = false;
@@ -54,9 +58,10 @@
         not_valid = false;
     }
 
+
     /**получаем текущий активный node_type. выбирается на <FiledTypePicker> это дропдаун*/
     $: node_type = gainNodeType($nodeOptions);
-    
+
     /** получаем обьект data выбранного сейчас блока, для получения данных и перерисовки интерфейса
      * фактически мы выдераем прямую ссылку на обьект данных, конкретного элемента.
      */
@@ -91,18 +96,19 @@
     nodes.subscribe( (nodes) => {
                 console.log("[NodeRedactor]: {$NODES} store changed, trigger", nodes);
                 console.log("[NodeRedactor]: {$NODES} DATA STATUS", data);
-               
+                keyChange = !keyChange;
                 data = data;
     });
 
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        
         console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
         
         console.log("[NodeRedactor]: AFTER {validation} check data", data);
         /*обновляем дом*/
-       elementsDataUpdate(data);
+       //elementsDataUpdate(data);
         
         not_valid = false;
     }
@@ -120,9 +126,14 @@
     function getBlockObj(activeBlockId){
         //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
+        
+        
         for(let i = 0; i < $nodes.length; i++){
+            
             if($nodes[i]["id"] === activeBlockId){
                 controller.setActiveNode($nodes[i]);
+                keyChange = !keyChange;
+                node_type = $nodes[i].node_type;
                 return $nodes[i];
             }
         }
@@ -159,7 +170,7 @@ class:not_valid>
         <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>
     </div>
 
-    {#if trigger}
+    {#if trigger && data}
         <div class="controls">
             <FieldTypePicker id={data.id}/>
 
@@ -191,26 +202,31 @@ class:not_valid>
         <div class="redactors">
             <!--Реадктор по умолчанию имеет три различных визуализации. 
                 выбор, что показывать, основан на типе узла который выбран-->
-
+            
             {#if node_type === "text" || node_type === "entry"}
                 <ContentRedactor id={data.id} display={"content"} {node_type} label={"Содержание блока"} rows={6}
-                placeholder={"Содержание отображается в тексте документа"} {data}
-                validity={data.validity}/>
+                placeholder={"Содержание отображается в тексте документа"}
+                validity={data.validity} content={data.content} description={data.description} data_type={data.data_type}/>
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                placeholder={"Описание будет отображаться в анкете"} {data}
+                placeholder={"Описание будет отображаться в анкете"} content={data.content} description={data.description} 
                 rows={3} validity={data.validity}/>
             {:else if node_type === "checkbox"}
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                validity={data.validity} {data}/>
+                validity={data.validity} description={data.description}/>
             {:else if node_type === "select"}
+                
                 <div class="select__wrapper">
-                    <List id={data.id} {data}/>
+                    <List id={data.id} options = {data.options}/>
                     <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                    validity={data.validity} {data}/>
+                    validity={data.validity} description={data.description}/>
                 
                 </div>
+                
             {/if}
-        
+        </div>
+    {:else if trigger && !data}
+        <div>
+            <h3>Выбирете блок</h3>
         </div>
     {/if}
     

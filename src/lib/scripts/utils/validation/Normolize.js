@@ -19,6 +19,7 @@ export default class Normolize extends NodeConsistencyValidation{
      * @returns {object}
      */
     normolize( fieldName, value ){
+        debugger;
         const node = this.#activeNodeData;
         const fieldsToUpdate = {
         };
@@ -30,9 +31,7 @@ export default class Normolize extends NodeConsistencyValidation{
                 //debugger;
                 if(node.data_type !== "string" && node.data_type !== "integer") fieldsToUpdate.data_type = "string";
 
-                if(node.content && node.data_type !== "bool") {
-                    fieldsToUpdate.content = node.content;
-                } else {
+                if(node.data_type === "bool") {
                     fieldsToUpdate.content = "по-умолчанию";
                 }
                 
@@ -68,6 +67,12 @@ export default class Normolize extends NodeConsistencyValidation{
     setActiveNode(node){
         super.setActiveNode(node);
         this.#activeNodeData = {...node};
+    }
+
+
+    clearSavedNode(){
+        super.clearSavedNode();
+        this.#activeNodeData = null;
     }
 
     deleteNoBackendFields(obj){

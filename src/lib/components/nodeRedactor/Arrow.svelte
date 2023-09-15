@@ -18,12 +18,13 @@
             dispatch("arrow_clicked");
             return;
         }
-
         if(controller.wasValidated){
             dispatch("arrow_clicked");
         } else {
+
             let result = controller.consistencyCheck();
             if(result){
+                
                 dispatch("arrow_clicked");
             } else {
                 return;
@@ -33,6 +34,7 @@
     }
 
     function keypress(){
+
         dispatch("arrow_clicked"); 
     }
 

@@ -5,7 +5,7 @@
 
     export let forId = "condition_rule";
     export let id;
-    export let trigger;
+    export let trigger = "";
     export let validity;
 
 </script>

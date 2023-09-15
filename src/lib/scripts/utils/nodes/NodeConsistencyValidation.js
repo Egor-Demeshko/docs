@@ -23,12 +23,18 @@ export default class NodeConsistencyValidation{
         return this.#wasValidated;
     }
 
+
+    clearSavedNode(){
+        this.#activeNodeData = null;
+    }
+
     /**использутеся для сравнения измененого обьекта данных после взаимодействия с node_redactor и с первоначальным, 
      * который хранится в activeNodeData. это свойство задается в момент клика по узлу и срабатывания реактивности стора
      * activeBlockId. пользуем один раз, для блокировки закрытия окна редактора узла.
      * @returns {boolean}
      */
-    consistencyCheck(){        
+    consistencyCheck(){   
+        if(!this.#activeNodeData) return true; 
         if(this.#wasValidated) {
             this.refreshStatus();
         };
@@ -124,5 +130,7 @@ export default class NodeConsistencyValidation{
     refreshStatus(){
         this.#wasValidated = false;
     }
+
+
 }
 

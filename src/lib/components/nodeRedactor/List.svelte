@@ -5,23 +5,13 @@
 
 
     export let id = "";
-    export let data;
-    let options = data.options;
+    export let options;
 
     let wrapper;
 
+
     $: if(options){
-        options = options;
-        /**обновлени dom  элементов*/
-        //debugger;
-        //обновляем поле content, по стандарту в случае select должно быть равно хначению первого элемента
-        if(options[0]) {
-            data.content = options[0];
-            data.options = options;
-        };
-
-
-        
+        debugger;
         syncSeveralDatasInNodeStore(id, { "options": [...options], "content": options[0]});
     }
 

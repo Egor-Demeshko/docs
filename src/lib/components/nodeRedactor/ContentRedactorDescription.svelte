@@ -3,7 +3,7 @@
     import { storeForSimpleTexts } from "$lib/scripts/stores";
 	import { getContext } from "svelte";
     
-    export let display = "content";
+   let display = "description";
     export let placeholder = "Описание будет отбражаться в анкете";
     export let required = false;
     export let pattern = '.*';
@@ -12,9 +12,21 @@
     export let node_type;
     export let id = '';
     export let validity;
-    export let content;
-    export let description;
-    export let data_type;
+    export let data;
+
+    /**@description обьект узла*/
+    $: if(data){
+        
+        console.log("[CONTENT REDACTOR]", data);
+    }
+
+    let description = data.description;
+
+
+
+    $: data.description = description;
+
+
 
 
     let valid = '';
@@ -81,28 +93,13 @@
 
         <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
         там где он есть сделан больший паддинг справа. это регулируется классом -->
-        {#if display === "content"}
-            <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
-            bind:value={content}
-            class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
-            on:focus={focusTextArea}
-            on:blur={blurTextArea}
-            ></textarea>
-        {:else}
             <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
             bind:value={description}
             class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
             on:focus={focusTextArea}
             on:blur={blurTextArea}
             ></textarea>
-        {/if}
 
-        <!-- Некоторые текстовые поля имеют переключатели -->
-        {#if display === "content"}
-            <div class="toggle__position">
-                <Toggle bind:data_type={data_type}/>
-            </div>
-        {/if}
 
     </div>
 </label>

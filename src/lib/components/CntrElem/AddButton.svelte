@@ -1,5 +1,4 @@
 <script>
-    import {nodeOptions} from "$lib/scripts/stores";
     import TooltipWithOptions from "$lib/components/CntrElem/TooltipWithOptions.svelte";
     import { fly } from "svelte/transition";
 
