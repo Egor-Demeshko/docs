@@ -52,7 +52,7 @@ export default function boxClickHandler(endforLineId){
                             obj.parent = endforLineId;
                         }
                         
-                        return obj;
+                       return obj;
                     });
                     
                     return blocks;

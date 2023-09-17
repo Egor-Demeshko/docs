@@ -14,7 +14,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                                                             value
                                                         });
         
-    if(fieldName && value){
+    if(fieldName && (value || value === "" )){
         
         nodes.update( (nodesData) => {
     
@@ -22,17 +22,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                 let node = nodesData[i];
                 if(node["id"] !== id) continue;
                 if(node["id"] === id){
-                    
-                    for(let [key, nodeValue] of Object.entries(node)){
-
-                        if(key === fieldName){
-                            
-                            node[key] = value;
-                            console.log("[syncDataInNodesStores]: node that effected: ", node);
-                            break;
-                        }
-                    }
-                    
+                    node[fieldName] = value;
                 }
             }
             //console.log("[SYNC]: nodesData: ", nodesData);

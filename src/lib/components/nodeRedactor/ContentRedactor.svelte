@@ -2,6 +2,7 @@
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
     import { storeForSimpleTexts } from "$lib/scripts/stores";
 	import { getContext } from "svelte";
+    import { createEventDispatcher } from "svelte";
     
     export let display = "content";
     export let placeholder = "Описание будет отбражаться в анкете";
@@ -20,7 +21,25 @@
     let valid = '';
     let invalid = '';
     let input;
+    const dispatch = createEventDispatcher();
+    
 
+    $: console.log("content: ", content);
+    $: if(content){
+        let displayChangedObj = {};
+        displayChangedObj["content"] = content;
+        displayChangedObj["id"] = id;
+        dispatch("data-changed", displayChangedObj);
+        displayChangedObj = null;
+    }
+
+    $: if(description){
+        let displayChangedObj = {};
+        displayChangedObj["description"] = description;
+        displayChangedObj["id"] = id;
+        dispatch("data-changed", displayChangedObj);
+        displayChangedObj = null;
+    }
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
     /*$: console.log("[NODERedacto]: validity and disaply prop:  ", {

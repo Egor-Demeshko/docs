@@ -22,7 +22,7 @@ export async function load({ cookies }){
     });
 
     const {success, data} = await client.getFullInfo(jwt, {project_id: Number(project_id)}, "no-cors");
-    //console.log('[page.server.js]: after request: ', data);
+    console.log('[page.server.js]: after request: ', data);
     if(success) return data;
     if(!success){
         throw redirect("307", "/projects");

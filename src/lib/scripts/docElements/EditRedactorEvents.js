@@ -114,7 +114,7 @@ export default class RedactorEvents{
                 nodes.update( (allNodes) => {
                         for(let i = 0; i < allNodes.length; i++ ){
                                 if(allNodes[i]['id'] !== this.#id) continue;
-
+                                
                                 allNodes[i]['content'] = textToAppend;
                                 break;
                         }

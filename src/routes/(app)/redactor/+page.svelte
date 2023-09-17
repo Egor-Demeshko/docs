@@ -35,7 +35,7 @@
     setContext("controller", $nodeController);
 
     //console.log("HTML: ", html);
-    console.log("GRAPH: ", graph);
+    console.log("GRAPH: ", JSON.stringify(graph));
 
     
     /*if(locals.error){

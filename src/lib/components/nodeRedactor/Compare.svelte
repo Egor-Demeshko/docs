@@ -24,7 +24,7 @@
         <!--<div style="width: 100%">-->
 
             <Input {id} placeholder={"значение"}
-            bind:value={trigger} name={"trigger"}
+            value={trigger} name={"trigger"}
             {validity}
             --border-color="var(--light-blue)"
             --border-color-hover="var(--light-gray-blue)"

@@ -7,7 +7,7 @@ import { nodes, storeForSimpleTexts } from "$lib/scripts/stores";
  */
 export default function syncSeveralDatasInNodeStore(id, data){
     
-   /* nodes.subscribe( (nodes) => {
+   /*nodes.subscribe( (nodes) => {
         for (let i = 0; i < nodes.length; i++) {
             const element = nodes[i];
             
@@ -22,7 +22,7 @@ export default function syncSeveralDatasInNodeStore(id, data){
 
         
        // console.log("[syncSeveralDatasInNodeStore]: arguments options: ",  outernode);
-        return nodes;
+       // return nodes;
     });*/
     
     /**обновляем обьекты simpletext для правильного отображения в редакторе документов */

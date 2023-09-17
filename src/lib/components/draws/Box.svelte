@@ -100,9 +100,10 @@
 
   /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
   nodes.subscribe( (allBlocksValues) => {
-
+      
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
+     // debugger;
        /* console.log("[BOX]: nodes.subsdcrive obj.x: ", obj.x);
         console.log("[BOX]: nodes.subscribe x: ", x);*/
         if(x != obj.x) x = obj.x;
@@ -116,7 +117,9 @@
         width = obj.width  || width;
         height = obj.height || height;
         validity = obj.validity || validity;
+
     });
+
   });
 
 

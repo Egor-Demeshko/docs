@@ -12,6 +12,7 @@
     import validation from "$lib/scripts/utils/validation/validation";
 	import { getContext, setContext } from "svelte";
     import { get } from "svelte/store";
+    import generateUUID from "$lib/scripts/utils/generateUUID.js";
 
     let trigger = false;
     let closing_animation = false;
@@ -103,10 +104,10 @@
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         
-        console.log("[NodeRedactor]: BEFORE {validation} check data", data);
+        //console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
         
-        console.log("[NodeRedactor]: AFTER {validation} check data", data);
+        //console.log("[NodeRedactor]: AFTER {validation} check data", data);
         /*обновляем дом*/
        //elementsDataUpdate(data);
         
@@ -156,6 +157,18 @@
     }
 
 
+    function dataChanged({detail}){
+        console.log("~~~TEST [NodeRedactor]: detail changed", detail);
+        if(data.id === detail.id){
+            for (const key of Object.keys(detail)) {
+                if(key === "id") continue;
+                data[key] = detail[key];
+            }
+        }
+        console.log("~~~TEST [NodeRedactor]: data changed", data);
+    }
+
+
 </script>
 
 <svelte:document on:error={handleError}></svelte:document>
@@ -175,7 +188,7 @@ class:not_valid>
             <FieldTypePicker id={data.id}/>
 
             <Compare id={data.id} 
-            bind:trigger={data.trigger} validity={data.validity}/>
+            trigger={data.trigger} validity={data.validity}/>
 
             <InputwithLabel bind:value={data.name} id={data.id}
             name={"name"}
@@ -191,10 +204,12 @@ class:not_valid>
             />
 
             {#if node_type === "checkbox"}
-                <CheckBoxWithLabel bind:isChecked={data.content}/>
+                <CheckBoxWithLabel id={data.id} isChecked={data.content} 
+                on:data-changed={dataChanged}/>
             {/if}
             {#if node_type === "select"}
-                <ToggleWhite id={data.id} bind:view_type={data.view_type}/>
+                <ToggleWhite id={data.id} view_type={data.view_type}
+                on:data-changed={dataChanged}/>
             {/if}
 
         </div>
@@ -206,19 +221,23 @@ class:not_valid>
             {#if node_type === "text" || node_type === "entry"}
                 <ContentRedactor id={data.id} display={"content"} {node_type} label={"Содержание блока"} rows={6}
                 placeholder={"Содержание отображается в тексте документа"}
-                validity={data.validity} content={data.content} description={data.description} data_type={data.data_type}/>
+                validity={data.validity} content={data.content} data_type={data.data_type}
+                on:data-changed={dataChanged}/>
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                placeholder={"Описание будет отображаться в анкете"} content={data.content} description={data.description} 
-                rows={3} validity={data.validity}/>
+                placeholder={"Описание будет отображаться в анкете"} description={data.description} 
+                rows={3} validity={data.validity} 
+                on:data-changed={dataChanged}/>
             {:else if node_type === "checkbox"}
                 <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                validity={data.validity} description={data.description}/>
+                validity={data.validity} description={data.description} on:data-changed={dataChanged}/>
             {:else if node_type === "select"}
                 
                 <div class="select__wrapper">
-                    <List id={data.id} options = {data.options}/>
+                    <List id={data.id}
+                    on:data-changed={dataChanged}
+                    />
                     <ContentRedactor id={data.id} display={"description"} {node_type} label={"Описание блока"} 
-                    validity={data.validity} description={data.description}/>
+                    validity={data.validity} description={data.description} on:data-changed={dataChanged}/>
                 
                 </div>
                 

@@ -27,6 +27,9 @@
         return false;
     }
 
+    /**если пустая строка, то с сервера может не вернутся поле совсем, тогда влазит undefined*/
+    $: value = (value === undefined) ? '' : value;
+
 
     function startValidation(){
         let reg = new RegExp(pattern);

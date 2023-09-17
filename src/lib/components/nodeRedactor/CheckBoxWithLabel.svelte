@@ -1,5 +1,20 @@
 <script>
-    export let isChecked = true;
+    import { createEventDispatcher } from "svelte";
+    
+    export let isChecked;
+    export let id;
+
+    $: console.log("[CHECKBOX]: id", id);
+
+    const dispatch = createEventDispatcher();
+
+    $: {
+        let displayChangedObj = {};
+        displayChangedObj["content"] = (isChecked) ? true : false;
+        displayChangedObj["id"] = id;
+        dispatch("data-changed", displayChangedObj);
+        displayChangedObj = null;
+    }
 
     function keypress(e){
         e.stopPropagation();

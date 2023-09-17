@@ -39,7 +39,7 @@
     }
 
     function pointerEnterDelete(e){   
-        console.log('[BoxButton]: pointerenter node create: ', e.target);
+        //console.log('[BoxButton]: pointerenter node create: ', e.target);
 
         showTooltip.update( () => {
             return {

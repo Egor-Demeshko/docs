@@ -13,7 +13,7 @@
 
     for(let i = 0; i < options.length; i++){
         let option = options[i];
-        
+        console.log("~~~ TEST ~~~[]", options);
         if(option === data.content){
             derivedOptions.push( {
                 selected: true,

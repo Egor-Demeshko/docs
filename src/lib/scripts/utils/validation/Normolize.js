@@ -19,7 +19,6 @@ export default class Normolize extends NodeConsistencyValidation{
      * @returns {object}
      */
     normolize( fieldName, value ){
-        debugger;
         const node = this.#activeNodeData;
         const fieldsToUpdate = {
         };
@@ -53,6 +52,8 @@ export default class Normolize extends NodeConsistencyValidation{
                     fieldsToUpdate.content = "по-умолчанию";
                 }
 
+                if(node.data_type === "select" && !node?.content) fieldsToUpdate.content = node.options[0];
+
                 fieldsToUpdate.options = null;
                 fieldsToUpdate.view_type = null;
             }
@@ -80,6 +81,11 @@ export default class Normolize extends NodeConsistencyValidation{
         const newObj = {...obj};
         delete newObj.validity;
         delete newObj.id;
+        debugger;
+        /**для нормального рендера компонента noderedactor приходится в list добавлять влюбом
+         * случае поле options = []; даже когда node_type != select. 
+         */
+        if(obj.node_type !== "select" && obj.options) newObj.options = null;
         return newObj;
     }
 }

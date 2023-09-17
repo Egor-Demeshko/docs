@@ -2,18 +2,56 @@
     import DynamicInput from "$lib/components/CntrElem/DynamicInput.svelte";
     import InputwithLabel from "../CntrElem/InputwithLabel.svelte";
     import syncSeveralDatasInNodeStore from "$lib/scripts/controllers/syncSeveralDatasInNodeStore.js";
+    import { createEventDispatcher } from "svelte";
+    import { get } from "svelte/store";
+    import { nodes } from "$lib/scripts/stores"; 
 
 
     export let id = "";
-    export let options;
+    let options = [""];
+    let firstMount = true;
 
+    $: if(id){
+        const nodeList = get(nodes);
+        options.length = 0;
+
+        for (let i = 0; i < nodeList.length; i++) {
+            const element = nodeList[i];
+            if (element.id === id) {
+                if(element.options){
+                    options = [...element.options];
+                } else {
+                    options = [""];
+                }
+            }            
+        }
+    }
+
+    const dispatch = createEventDispatcher();
     let wrapper;
 
+    $: syncSeveralDatasInNodeStore(id, { "options": [...options], "content": options[0]});
 
-    $: if(options){
-        debugger;
-        syncSeveralDatasInNodeStore(id, { "options": [...options], "content": options[0]});
+    $: {
+        if(!firstMount){
+            let displayChangedObj = {};
+
+            if(options.length >= 1){
+                displayChangedObj["content"] = options[0];
+            } else if(options.length === 0){
+                displayChangedObj["content"] = "";
+            }
+
+            displayChangedObj["options"] = [...options];
+            displayChangedObj["id"] = id;
+            dispatch("data-changed", displayChangedObj);
+            displayChangedObj = null;
+        } else {
+            firstMount = false;
+        }
+
     }
+    
 
 
     /** TODO сделать сохранение куда-то, пока мы только в runtime добавляем в массив*/
@@ -23,6 +61,7 @@
         options = options;
         
         if(options.length === 1){
+            
             setTimeout( () => {
                 if(!wrapper) return;
 
@@ -54,8 +93,6 @@
                 return true;
             });
         }
-
-        //console.log('[List]: deleteItem function: listElements: ', listElements);
     }
 </script>
 
@@ -67,7 +104,7 @@
     <span class="list__name">Элементы списка</span>
 
     <div class="list" >
-        <!--{#if options} -->
+       <!-- {#if options } -->
             {#each options as value, i (i)}
 
             <!-- первый элемент должен быть с надписью значение по умолчанию. Остальные идут отдельным списком, без подписи.
@@ -138,7 +175,7 @@
 
                 {/each}
             </div>
-       <!-- {/if}-->
+      <!-- {/if} -->
         
         <button on:click={addInput} type="button">Добавить элемент</button>
 

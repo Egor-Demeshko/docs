@@ -1,14 +1,22 @@
 <script>
-    export let id;
-    export let view_type = '';
+    import { createEventDispatcher } from "svelte";
 
-    $: isText = false;
-    $: view_type = (isText) ? "radiobutton" : "drop_list";
+    export let id;
+    export let view_type;
+    const dispatch = createEventDispatcher();
+
+    $: {
+        let displayChangedObj = {};
+        displayChangedObj["view_type"] = view_type;
+        displayChangedObj["id"] = id;
+        dispatch("data-changed", displayChangedObj);
+        displayChangedObj = null;
+    }
     
 
 
     function clickHandle(){
-        isText = !isText;
+        view_type = (view_type === "radiobutton") ? "drop_list" : "radiobutton";
     }
 
     function keypress(e){
@@ -16,7 +24,7 @@
         if(e.key === "Enter" || e.key === " "){
             let input = e.target.querySelector("input");
             input.checked = !input.checked;
-            isText = !isText;
+            view_type = (view_type === "radiobutton") ? "drop_list" : "radiobutton";
         };
     }  
 </script>
@@ -24,13 +32,15 @@
 
 <label tabindex="0" role="button" on:keypress={keypress}>
     <span>Отображать элементы в анкете...</span>
-    <input {id} type="checkbox" name="view_type" value={ (isText) ? "radiobutton" : "drop_list"}
+    <input {id} type="checkbox" name="view_type" 
+    value={ (view_type === "radiobutton") ? false : true}
+    checked={ (view_type === "radiobutton") ? false : true}
         on:click={clickHandle}
         tabindex="-1">
     <div class="toggle__tray">
         <div class="toggle__element">
     
-                <span class="toggle__text">{(isText) ? "группой радиокнопок" : "выпадающим списком"}</span>
+                <span class="toggle__text">{(view_type === "radiobutton") ? "группой опций" : "выпадающим списком"}</span>
     
         </div>      
     </div>
