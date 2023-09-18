@@ -11,8 +11,7 @@
     import List from "./List.svelte";
     import validation from "$lib/scripts/utils/validation/validation";
 	import { getContext, setContext } from "svelte";
-    import { get } from "svelte/store";
-    import generateUUID from "$lib/scripts/utils/generateUUID.js";
+    import DataSaver from "./DataSaver.svelte";
 
     let trigger = false;
     let closing_animation = false;
@@ -128,7 +127,7 @@
         
         //console.log("[NodeRedactor]: AFTER {validation} check data", data);
         /*обновляем дом*/
-       //elementsDataUpdate(data);
+        elementsDataUpdate(data);
         
         not_valid = false;
     }
@@ -146,6 +145,7 @@
     function getBlockObj(activeBlockId){
         //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
+        if(open) controller.saveDataBeforeChange(data.id, {...data});
         
         
         for(let i = 0; i < $nodes.length; i++){
@@ -269,6 +269,8 @@ class:not_valid>
     {/if}
     
 </form>
+
+<!--<DataSaver id={data?.id} data={{...data}} isRedactorOpen={open}/>-->
 
 
 <style>

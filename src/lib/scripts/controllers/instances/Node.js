@@ -254,4 +254,41 @@ export default class Node extends NodeLocalOperations{
     updateCallBack(){
         this.#updateCallBack();
     }
+
+
+    async saveDataBeforeChange( id, data ){
+        const nonCriticalFields = ["name", "description", "view_type"];
+        const nonUrgentData = {};
+        const urgentData = {};
+        const savedData = {...this.activeNodeData};
+
+        if(data.id !== savedData.id) return;
+
+        if(data.validity.status === "valid" && savedData){
+
+            for(let [key, value] of Object.entries(data)){
+
+                if(key === "id" || key === "validity") continue;
+
+                if(data[key] !== savedData[key]){
+                    if(nonCriticalFields.includes(key)){
+                        nonUrgentData[key] = value;
+                    } else {
+                        urgentData[key] = value;
+                    }   
+                }
+            }
+
+            this.saveNourgentAsObj(id, {...nonUrgentData});
+
+            for (const key of Object.keys(urgentData)) {
+                if(!key) break;
+
+                this.saveNourgentAsObj(id, {...urgentData});
+                let result = await this.sendDataInQueue();
+                console.log('[SAVEDATABEFORECHANGE]: result: ', result);
+                break;
+            }
+        } 
+    }
 }

@@ -63,6 +63,10 @@ export default class Normolize extends NodeConsistencyValidation{
         return fieldsToUpdate;
     }
 
+    get activeNodeData(){
+        return this.#activeNodeData;
+    }
+
 
     setActiveNode(node){
         super.setActiveNode(node);
