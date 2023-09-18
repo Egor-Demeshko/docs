@@ -42,7 +42,6 @@ export default async function createNewBlock(whatBlockToCreate, controller){
     storeForSimpleTexts.update( (elements) => [...elements, newTextElement]);
 
     //TODO new block
-    debugger;
     let result = await controller.create(newBlock);
     console.log("[createNewBlock]: reslut: ", result);
 }

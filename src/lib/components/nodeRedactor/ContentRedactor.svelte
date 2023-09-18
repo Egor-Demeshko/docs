@@ -41,6 +41,14 @@
         displayChangedObj = null;
     }
 
+    $: if(data_type){
+        let displayChangedObj = {};
+        displayChangedObj["data_type"] = data_type;
+        displayChangedObj["id"] = id;
+        dispatch("data-changed", displayChangedObj);
+        displayChangedObj = null;
+    }
+
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
     /*$: console.log("[NODERedacto]: validity and disaply prop:  ", {
         validity,

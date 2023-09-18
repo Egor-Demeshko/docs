@@ -1,7 +1,15 @@
 import SimpleText from "$lib/scripts/docElements/simpleText.js";
 import { storeForSimpleTexts } from "$lib/scripts/stores"; 
 
-
+/**
+ * Generates text elements and modifies the provided HTML markup by replacing
+ * placeholders with corresponding elements and objects.
+ *
+ * @param {Array} graph - an array of objects describing the elements in the
+ *     document
+ * @param {Array} html - an array of objects describing the document html string
+ * @return {Array} the modified HTML markup
+ */
 export default function generateTextElements(graph, html){
     let arr = [];   //массив для нами созданных элементов и добавленных в разметку html текста(полученного из docx). 
                     //Эти элементы управляются классами simpleTexts или SimplifiedSimpleTexts, 

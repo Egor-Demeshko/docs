@@ -2,7 +2,7 @@ import { blockClickedId, activeBlocks, nodes, storeForSimpleTexts } from "/src/l
 import EditRedactorEvents from "./EditRedactorEvents";
 import VisualRedactorEvents from "./VisualRedactorEvents";
 
-export default class SimpleText {
+export default class SimpleText{
     #domLinks = [];
     #id = "";
     #content = "";
@@ -17,6 +17,21 @@ export default class SimpleText {
         this.#content = content;
         this.#visualRedactorEvents = new VisualRedactorEvents();
         this.#editRedactorEvents = new EditRedactorEvents();
+    }
+
+    /**
+     * @description функция призвана изменить значение классов на dom элементах
+     * в зависимости от состояния поля active
+     * @param {boolean} activeState - состояние поля active из графа nodes[i-ое]; 
+     */
+    changeVisibility(activeState){
+        this.#domLinks.forEach( (element) => {
+            if(activeState){
+                element.classList.remove("no_display");
+            } else {
+                element.classList.add("no_display");
+            }
+        });
     }
 
     connect(root){

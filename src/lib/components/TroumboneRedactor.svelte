@@ -37,18 +37,23 @@
     /** эта подписка используется для перерисовки редактора, в случае если был выбран другой документ
     */
     documents.subscribe( (docs) => {
+    
         if(!docs) return;
         let freshId = docs.getActiveDocumentId();
-
+        debugger;
+        //TODO undefined === undefined когда нет документа и первая загрузка
         if(freshId === activeDocumentId) return;
         
 
         html = docs.gainActiveHtml() || '';
+        
         let isDocumentInialized = docs.isActiveInitialized();
         
         console.log("[TROUMBOUNE]: {document changed}. isInialized  ", isDocumentInialized);
 
+        
         if(isDocumentInialized) {
+            
             showModalDocumentCreator.set(false);
         } else {
             showModalDocumentCreator.set(true);

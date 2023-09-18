@@ -20,6 +20,11 @@
     let open = false;
     let not_valid = false;
     let keyChange = true;
+    /**
+     * @description используется для отображения сообщения о том, что блок не может быть сохранен
+     * показывается однокартное сообщение
+     */
+    let messageWasShown = false;
     
     //TODO сохранение состояния по комбинации cntl + S
     const controller = getContext("controller");
@@ -27,6 +32,15 @@
     
     /**обработка анимации открытия*/
     function arrowClicked(){
+        /** проверяем поля на требования устанавливыемые, например, с data_type 
+         * и устанавливаем значение флага messageWasShown чтобы сообщение было показано
+         *  только один раз
+        */
+        if(open && messageWasShown === false && !controller.checkDataTypeAndFields({...data})){
+            messageWasShown = true;
+            return;
+        }
+
         open = !open;
         
         if(open){              
@@ -37,14 +51,17 @@
             }, 650);     
             
         } else {
+            let objTosend = controller.deleteNoBackendFields(data);
 
-            if(data){
-                let objTosend = controller.deleteNoBackendFields(data);
-                controller.saveNourgentAsObj(data.id, objTosend);
-                controller.sendDataInQueue();
+            /**проверяем, если данные типа integer, то преобразуем в int, иначе сервер не примет*/
+            if(objTosend.data_type === "integer"){
+                controller.forceContentToBeInt(objTosend);
             }
             
-
+            controller.saveNourgentAsObj(data.id, objTosend);
+            controller.sendDataInQueue();
+            messageWasShown = false;
+            
             trigger = false;
             closing_animation = true;
             
@@ -55,6 +72,8 @@
             
         }
     }
+
+
     $: if(!open){
         not_valid = false;
     }

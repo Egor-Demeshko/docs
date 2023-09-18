@@ -103,7 +103,6 @@
       
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
-     // debugger;
        /* console.log("[BOX]: nodes.subsdcrive obj.x: ", obj.x);
         console.log("[BOX]: nodes.subscribe x: ", x);*/
         if(x != obj.x) x = obj.x;
@@ -112,7 +111,9 @@
         if(node_type !== obj.node_type) node_type = obj.node_type;
         if(condition !== obj.condition) condition = obj.condition;
         if(trigger !== obj.trigger) trigger = obj.trigger;
-        
+        if (active !== obj.active) active = obj.active; 
+        if(active === undefined) throw new Error("[BOX]: undefined 'active' field");
+
         parent = obj.parent || parent;
         width = obj.width  || width;
         height = obj.height || height;
@@ -484,13 +485,28 @@ async function secondStepOnParentConnect(e){
 }
 
 
-function secondStepOnChildConnect(e){
-
+async function secondStepOnChildConnect(e){
+  
     childConnection.update( (connectObj) => {
-        connectObj.end = id;
-        console.log('[BOX]: {secondStep}, setting end id. received object', connectObj)
-        return connectObj;
+      connectObj.end = id;
+      console.log('[BOX]: {secondStep}, setting end id. received object', connectObj)
+      return connectObj;
     });
+    
+    let store = $childConnection;
+    
+    /**перед тем как обновить данные в самом приложении, отправляем данные на сервер
+    * connectObj.start айди блока в котором необходимо установить parent_id
+    */
+    let {success} = await controller.update({
+            node_id: store.end, 
+            field_name: "parent_id", 
+            field_value: store.start
+          });
+
+    childConnection.set(false);
+
+    if(!success)return;
 
 
     /**обновляем данные в графе nodes*/
@@ -500,20 +516,19 @@ function secondStepOnChildConnect(e){
 
             if(element['id'] !== id) continue;
 
-            element.parent_id = $childConnection.start;
+            element.parent_id = store.start;
             return nodes;
         }
     });
 
     linesStore.update( ( lines ) => {
       lines.push({
-          startId: $childConnection.end,
-          endId: $childConnection.start
+          startId: store.end,
+          endId: store.start
         });
       return lines;
     });
 
-    childConnection.set(false);
 }
 
 

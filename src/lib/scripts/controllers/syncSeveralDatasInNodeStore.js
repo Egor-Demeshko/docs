@@ -12,7 +12,6 @@ export default function syncSeveralDatasInNodeStore(id, data){
             const element = nodes[i];
             
             if(element["id"] !== id) continue;
-            debugger;
             element.options = data.options;
             if(nodes[i]["content"] !== data.content){
                 nodes[i]["content"] = data.content;

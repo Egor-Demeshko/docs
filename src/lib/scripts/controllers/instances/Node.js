@@ -1,9 +1,10 @@
 import HTTPnode from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPnode.js";
 import DataServise from "$lib/scripts/controllers/instances/DataServise.js";
 import JWT from "$lib/scripts/controllers/instances/JWT.js";
-import Normolize from "$lib/scripts/utils/validation/Normolize.js";
+import NodeLocalOperations from "$lib/scripts/utils/nodes/NodeLocalOperations.js";
 
-export default class Node extends Normolize{
+
+export default class Node extends NodeLocalOperations{
     #client;
     #saveData;
     #jwt;
@@ -197,6 +198,7 @@ export default class Node extends Normolize{
             console.log("[NODE]: {sendDataInQueue} result: ", result);
             if(result.success){
                 this.clearQueue();
+                this.isUpdateNeeded(result.data.nodes);
                 return result;
             }
         }
@@ -236,6 +238,12 @@ export default class Node extends Normolize{
 
         const obj = await this.#client.update(token, dataToBeSend);
         console.log('[NODEHTTP]: {after update request}, result', obj);
+        let {success, data} = obj;
+
+        if(success){
+            
+            this.isUpdateNeeded(data.nodes);
+        }
 
         return obj;
     }

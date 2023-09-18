@@ -80,7 +80,6 @@ export default class NodeConsistencyValidation{
 
         /** проверка наличия данных */
         this.#vitalFields.forEach( (fieldName) => {
-            //debugger;
             if((!localNode[fieldName] && globalNode[fieldName]) 
             || (localNode[fieldName] && !globalNode[fieldName])){
                 result = false;
@@ -96,7 +95,6 @@ export default class NodeConsistencyValidation{
         });
 
         /**проверка типа контента */
-        //debugger;
         if( typeof localNode.content !== typeof globalNode.content && typeof localNode.content === "string" ){
             result = false;
             messages.err_data.push({

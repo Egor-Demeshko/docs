@@ -25,8 +25,10 @@
 
     function errorHandle({ detail }){
         let data = detail.err_data;
+        
         //console.log("[MessagesContainer]: errorHandel before push: ", data);
         for(let i = 0; i < data.length; i++){
+            
             let {blockId, message, err_id, err_type} = data[i];
 
             //проблема. при первой валидации, если две ошибки сразу, то вторая не добавляется

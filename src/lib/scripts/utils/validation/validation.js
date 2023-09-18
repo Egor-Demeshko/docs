@@ -91,7 +91,7 @@ export default async function validation(data, options){
             data.validity = {
                 status: "invalid",
                 err_data: [...data.validity.err_data, {
-                    field: "",
+                    field: "trigger",
                     message: "Не указан родительский блок, нет связи",
                     blockId: data.id,
                     err_id: 802,

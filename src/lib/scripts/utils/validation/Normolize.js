@@ -27,7 +27,6 @@ export default class Normolize extends NodeConsistencyValidation{
     
         if(fieldName === "node_type"){
             if(value === "select") {
-                //debugger;
                 if(node.data_type !== "string" && node.data_type !== "integer") fieldsToUpdate.data_type = "string";
 
                 if(node.data_type === "bool") {
@@ -77,16 +76,53 @@ export default class Normolize extends NodeConsistencyValidation{
     }
 
     deleteNoBackendFields(obj){
-        //debugger;
         const newObj = {...obj};
         delete newObj.validity;
         delete newObj.id;
-        debugger;
+        
         /**для нормального рендера компонента noderedactor приходится в list добавлять влюбом
          * случае поле options = []; даже когда node_type != select. 
          */
         if(obj.node_type !== "select" && obj.options) newObj.options = null;
         return newObj;
+    }
+
+
+    /**
+     * Checks the node data_type and others fields of the given data object .
+     *
+     * @param {Object} data - The data to be checked.
+     * @return {boolean} Returns true if the data is valid, false otherwise.
+     */
+    checkDataTypeAndFields(data){
+        if(data.validity.status === "invalid"){
+            const err_data = data.validity.err_data;
+
+            for (let i = 0; i < err_data.length; i++) {
+                
+                const element = err_data[i];
+                /**с несотвествующим значение content и data_type сервер не примет данные*/
+                if(element.field === "content"){
+                    document.dispatchEvent( new CustomEvent("error", {
+                        detail: {
+                            err_data: [{
+                                blockId: data.id,
+                                message: "Изменения в красных полях могут быть утеряны. Если это не проблема повторно закройте редактор",
+                                err_id: 1010,
+                                err_type: "emergency",
+                            }],
+                        }
+                    }));
+                    return false;
+                }            
+            };                    
+            }
+        return true;
+    }
+
+
+    forceContentToBeInt(obj){
+        obj.content = +obj.content;
     }
 }
 

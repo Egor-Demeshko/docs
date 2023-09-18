@@ -21,7 +21,6 @@
         
         showSpinner = false;*/
         let docClass = get(documents);
-        
         showModalDocumentCreator.set(false);
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
 
