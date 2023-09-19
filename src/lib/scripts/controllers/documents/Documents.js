@@ -3,7 +3,10 @@ import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
 import { documents } from "$lib/scripts/stores";
 import generateUUID from "$lib/scripts/utils/generateUUID.js";
 import generateName from "$lib/scripts/utils/documents/generateName";
+import { saving } from "$lib/scripts/stores";
+import { get } from "svelte/store";
 
+//const changeSavingSing = get( saving );
 
 /*описание полей см. в stores. один из первых сторов, documents */
 export default class Documents{
@@ -82,6 +85,8 @@ export default class Documents{
 
 
     async delete({documentId}){
+        saving.set(true);
+        debugger;
         this.#docs = this.#docs.filter( (docObj) => {
             if (docObj["id"] === documentId) return false;
             return true;
@@ -99,7 +104,7 @@ export default class Documents{
                                                 });
 
         console.log("[document]: setting first element active");
-
+        saving.set(false);
         if(status.success && document) {
             this.#callSubscribes();
             
@@ -135,7 +140,7 @@ export default class Documents{
 
     isActiveInitialized(){
         let arr = this.#docs;
-        debugger;
+
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];
             if(element["active"] && !element?.not_initialized) return true;   
@@ -197,6 +202,7 @@ export default class Documents{
      * html пустой параграф. сервер ждет обязательные данные 
      * */
     async handleCreateRequest({name, html}){
+        saving.set(true);
         if(!html) html = "<p></p>";
 
         if(!name) name = this.getActiveDocumentName() || generateName(Array.from(this.#docs));
@@ -216,7 +222,7 @@ export default class Documents{
 
             this.#callSubscribes();
         }
-
+        saving.set(false);
         return response;
     }
 
@@ -264,6 +270,7 @@ export default class Documents{
 
 
     async saveHeading(template_id, name){
+        saving.set(true);
         let docs = this.#docs;
 
         for (let i = 0; i < docs.length; i++) {
@@ -280,6 +287,7 @@ export default class Documents{
                         name
                     });
         console.log('[DOCUMENTS]: result after NAME CHANGE ', result);
+        saving.set(false);
         return result;
     }
 
@@ -313,9 +321,10 @@ export default class Documents{
 
         docs = null;
     }
-
+    
 
     async sendFile(formData){
+        saving.set(true);
         formData.append("project_id", this.#projectId);
 
         let {success, data:{html, id, name}} = await this.#saveDeleteService.sendFile(formData);
@@ -329,7 +338,7 @@ export default class Documents{
             /**дергаем стор чтобы обновить отображение */
             documents.update( (docs) => docs);
         }
-
+        saving.set(false);
         return success;
     }
 

@@ -213,3 +213,7 @@ export const anketaGraphController = writable();
  * контроллер графа на странице редактора, отдельная логика от графа anketaGraphController
  */
 export const nodeController = writable();
+
+/**устанавливает имя проекта которое отображается в layout 
+ * {id, name}*/
+export const projectName = writable();

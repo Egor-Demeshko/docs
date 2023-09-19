@@ -1,12 +1,13 @@
 <script>
 	import { onMount } from "svelte";
-    import { saving } from "$lib/scripts/stores";
+    import { saving, projectsStore, projectName } from "$lib/scripts/stores";
     import { goto } from "$app/navigation";
+    import { afterNavigate} from "$app/navigation";
 
-    let value = "введите название";
     let span;
     let showHeading = false;
     let showName = true;
+    $: value = $projectName?.name || 'Имя проекта';
 
     /**
      * @type {number}
@@ -29,17 +30,43 @@
         clearInterval(interval);
     }
 
-
     
     function handleUp(e){
         value = span.textContent;
     }
 
 
+    async function saveName(){
+        saving.set(true);
+        const id = $projectName.id;
+
+        projectName.set({id, name: value});
+        await $projectsStore.changeName({project_id: id, name: value});
+
+        saving.set(false);
+    }
+
+
     onMount( () => {
         let urlString = window.location.toString();
         
-        if(urlString.includes("redactor") || urlString.includes("anketa") ) showHeading = true;
+        if(urlString.includes("redactor") || urlString.includes("anketa") ) {
+            showHeading = true;
+            showName = true;
+        };
+        if(urlString.includes("projects")) {
+            showHeading = true;
+            showName = false;
+        }
+    });
+
+    afterNavigate( ()=> {
+        let urlString = window.location.toString();
+        
+        if(urlString.includes("redactor") || urlString.includes("anketa") ) {
+            showHeading = true;
+            showName = true;
+        };
         if(urlString.includes("projects")) {
             showHeading = true;
             showName = false;
@@ -56,7 +83,8 @@
     {#if showHeading}
         {#if showName}
         <div class="document_name">
-            <span contenteditable="true" on:keyup={handleUp} bind:this={span} >{value}</span>
+            <span contenteditable="true" on:keyup={handleUp} on:blur={saveName} 
+            bind:this={span} >{value}</span>
             <svg>
                 <use href="/assets/icons/all.svg#pen"></use>
             </svg>
@@ -106,7 +134,8 @@
     }
 
     .status{
-        font-size: .875rem;
+        font-size: 1rem;
+        line-height: 100%;
         font-style: italic;
         color: var(--faded-gray-blue);
     }

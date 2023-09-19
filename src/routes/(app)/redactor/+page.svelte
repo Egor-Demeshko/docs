@@ -18,12 +18,13 @@
     import Node from "$lib/scripts/controllers/instances/Node.js";
 	import { onDestroy, setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
+    import { projectName } from "$lib/scripts/stores";
 
     //receiving data from load function
     export let data;
 
     //console.log('[page]: data: ', data);
-    let {templates, id: project_id, project_name, nodes: serverNode} = data;
+    let {templates, id: project_id, name, nodes: serverNode} = data;
     let cleanHtml = '';
     let graph = serverNode;
     let length = 0;
@@ -34,6 +35,7 @@
     /**контроллер работы в целом с проектом*/
 
     setContext("controller", $nodeController);
+    projectName.set({id: project_id, name});
 
     //console.log("HTML: ", html);
     console.log("GRAPH: ", JSON.stringify(graph));
@@ -74,6 +76,7 @@
         /**в контроллере могут быть данные поставленные в очередь, для последующей отправки*/
         $nodeController.sendDataInQueue();
     });
+
 
     /**функция коллбэк для получения обновления массива документов*/
     function arrUpdatedCallback(arr){

@@ -2,6 +2,7 @@ import HTTPnode from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPnode.js";
 import DataServise from "$lib/scripts/controllers/instances/DataServise.js";
 import JWT from "$lib/scripts/controllers/instances/JWT.js";
 import NodeLocalOperations from "$lib/scripts/utils/nodes/NodeLocalOperations.js";
+import { saving } from "$lib/scripts/stores";
 
 
 export default class Node extends NodeLocalOperations{
@@ -65,6 +66,7 @@ export default class Node extends NodeLocalOperations{
 
 
     async delete(id){
+        saving.set(true);
         /**
          * {
                 "project_id": 1,
@@ -88,9 +90,11 @@ export default class Node extends NodeLocalOperations{
         try{
             let json = await this.#client.delete(token, dataToBeSend);
             console.log("[NODE]: {delete}: result(resoponse json): ", json);
+            saving.set(false);
             if(json.success) this.#updateCallBack();
             return json;
         } catch (e){
+            saving.set(false);
             console.log("[NODE]: не удалось сохранить новый узел");
         }
     }
@@ -181,6 +185,7 @@ export default class Node extends NodeLocalOperations{
 
 
     async sendDataInQueue(){
+        saving.set(true);
         if(this.#updateQueue.length > 0){
             let project_id = this.#project_id;
             let token = await this.getToken();
@@ -196,6 +201,7 @@ export default class Node extends NodeLocalOperations{
             console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
             let result = await this.#client.update(token, dataToSend);
             console.log("[NODE]: {sendDataInQueue} result: ", result);
+            saving.set(false);
             if(result.success){
                 this.clearQueue();
                 this.isUpdateNeeded(result.data.nodes);
@@ -206,6 +212,7 @@ export default class Node extends NodeLocalOperations{
 
 
     async update({node_id, field_name, field_value}){
+        saving.set(true);
         /**
          * {
                 "project_id": 1,
@@ -239,7 +246,7 @@ export default class Node extends NodeLocalOperations{
         const obj = await this.#client.update(token, dataToBeSend);
         console.log('[NODEHTTP]: {after update request}, result', obj);
         let {success, data} = obj;
-
+        saving.set(false);
         if(success){
             
             this.isUpdateNeeded(data.nodes);
