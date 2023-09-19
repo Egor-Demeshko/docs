@@ -8,6 +8,7 @@
     import Spinner from "$lib/components/Spinner.svelte";
     import RedactorContainer from '$lib/components/RedactorContainer.svelte';
     import initRedactor from "$lib/scripts/utils/redactor/initRedactor.js";
+    import { get } from "svelte/store";
 
 
     let html = '';
@@ -33,11 +34,12 @@
         createListenersForNodeAddition();
     }
 
+    $documents.subscribeForDocsArrUpdate(docsArrayUpdated);
+
 
     /** эта подписка используется для перерисовки редактора, в случае если был выбран другой документ
     */
     documents.subscribe( (docs) => {
-    
         if(!docs) return;
         let freshId = docs.getActiveDocumentId();
         
@@ -46,8 +48,6 @@
         
         html = docs.gainActiveHtml() || '';
         let isDocumentInialized = docs.isActiveInitialized();
-        
-        console.log("[TROUMBOUNE]: {document changed}. isInialized  ", isDocumentInialized);
 
         
         if(isDocumentInialized) {
@@ -142,6 +142,14 @@
         //console.log("SPINNER");
         let detail = e.detail;
         if(detail === "redactor") spinner = !spinner;
+    }
+
+    /**функция используется как response на обновления массива документов.
+     * коллбэк вызывается мануально из класса documents */
+    function docsArrayUpdated(){
+        let docs = get(documents);
+        let isDocumentInialized = docs.isActiveInitialized();
+        no_elements = (isDocumentInialized) ? false : true;
     }
 
  

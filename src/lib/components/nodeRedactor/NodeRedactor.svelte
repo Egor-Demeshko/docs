@@ -177,14 +177,13 @@
 
 
     function dataChanged({detail}){
-        console.log("~~~TEST [NodeRedactor]: detail changed", detail);
+
         if(data.id === detail.id){
             for (const key of Object.keys(detail)) {
                 if(key === "id") continue;
                 data[key] = detail[key];
             }
         }
-        console.log("~~~TEST [NodeRedactor]: data changed", data);
     }
 
 

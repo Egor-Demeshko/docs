@@ -135,7 +135,7 @@ export default class Documents{
 
     isActiveInitialized(){
         let arr = this.#docs;
-
+        debugger;
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];
             if(element["active"] && !element?.not_initialized) return true;   
