@@ -267,7 +267,7 @@ export default class Node extends NodeLocalOperations{
         if(data.validity.status === "valid" && savedData){
 
             for(let [key, value] of Object.entries(data)){
-
+                
                 if(key === "id" || key === "validity") continue;
 
                 if(data[key] !== savedData[key]){
@@ -278,7 +278,7 @@ export default class Node extends NodeLocalOperations{
                     }   
                 }
             }
-
+            
             this.saveNourgentAsObj(id, {...nonUrgentData});
 
             for (const key of Object.keys(urgentData)) {

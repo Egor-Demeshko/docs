@@ -23,7 +23,6 @@
         let docClass = get(documents);
         showModalDocumentCreator.set(false);
         document.dispatchEvent(new CustomEvent("spinner", {detail: "redactor"}));
-
         let result = await docClass.handleCreateRequest({name: undefined, html: undefined});
 
         //отключаем спиннер

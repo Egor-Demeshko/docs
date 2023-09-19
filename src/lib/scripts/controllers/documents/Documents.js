@@ -7,18 +7,32 @@ import generateName from "$lib/scripts/utils/documents/generateName";
 
 /*описание полей см. в stores. один из первых сторов, documents */
 export default class Documents{
+    /**
+     * @type {Array}
+     * @description массив документов
+     * каждый документ представлен обьектом
+     * {
+     *      active: true || false,
+     *      id,
+     *      name,
+     *      string - это html строка
+     * }
+     */
     #docs = [];
     #saveDeleteService; //дл взаимодействия по html
     #projectId;
+    /**для вызова функций заинтересованных подписчиков */
+    #callbacks = [];
 
-    constructor(data, graph, saveDeleteService){
+    constructor(data, graph, saveDeleteService, project_id, docsCallback){
         const clearHtmlArr = this.generateElements(data, graph);
         //console.log("[DOCUMENTS]: ", clearHtmlArr);
         if(clearHtmlArr[0]) clearHtmlArr[0].active = true;
         console.log(clearHtmlArr[0]);
         this.#docs = clearHtmlArr;
         this.#saveDeleteService = saveDeleteService;
-        this.#projectId = clearHtmlArr[0]?.project_id || null;
+        this.#projectId = clearHtmlArr[0]?.project_id || project_id;
+        this.#callbacks.push(docsCallback);
     }
 
     get docs(){
@@ -27,6 +41,11 @@ export default class Documents{
 
     get projectId(){
         return this.#projectId;
+    }
+
+
+    #callSubscribes(){
+        this.#callbacks.forEach( (fn) => fn([...this.#docs]));
     }
 
 
@@ -57,8 +76,8 @@ export default class Documents{
         /**несмотря на то */
         this.setActive(newId);
 
-        console.log("[dpcuments]: AFTER create New Document: ", newdocumentObj);
-        documents.update( (docs) => docs);
+        console.log("[documents]: AFTER create New Document: ", newdocumentObj);
+        documents.update( (docs) => docs );
     }
 
 
@@ -82,6 +101,7 @@ export default class Documents{
         console.log("[document]: setting first element active");
 
         if(status.success && document) {
+            this.#callSubscribes();
             
             /**отправляем событие error, это событие улавливает блок MessagesContainer, который выводит уведомление */
             document.dispatchEvent(new CustomEvent("error", {
@@ -180,17 +200,33 @@ export default class Documents{
         if(!html) html = "<p></p>";
 
         if(!name) name = this.getActiveDocumentName() || generateName(Array.from(this.#docs));
-        return await this.#saveDeleteService.createRequestWithToken({project_id: this.#projectId, name, html});
+        let response = await this.#saveDeleteService.createRequestWithToken({project_id: this.#projectId, name, html});
+        
+        if(response.success){
+            /** {data} = response
+             * { id, name} = data;
+             */
+            const {id, name} = response.data;
+            this.#docs.push({
+                id,
+                name,
+                string: html,
+                active: true
+            });
+
+            this.#callSubscribes();
+        }
+
+        return response;
     }
 
 
-        /**при получении данных, в момент загрузки файла, это функция обеспечивает синхронизацию
+    /**при получении данных, в момент загрузки файла, это функция обеспечивает синхронизацию
      * данных с уже созданных временным обьектом нового документа
      * через метод createNewDocument
      */
     normolizeNewDocument(id, name, html){
         this.initDocument();
-
         const docs = this.#docs;
 
         for(let i = 0; i < docs.length; i++){
@@ -295,6 +331,13 @@ export default class Documents{
         }
 
         return success;
+    }
+
+
+    subscribeForDocsArrUpdate(callback){
+        if(callback instanceof Function){
+            this.#callbacks.push(callback);
+        }
     }
 
 }

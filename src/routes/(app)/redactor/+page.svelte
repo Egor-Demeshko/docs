@@ -26,6 +26,7 @@
     let {templates, id: project_id, project_name, nodes: serverNode} = data;
     let cleanHtml = '';
     let graph = serverNode;
+    let length = 0;
 
     /**добавляем в обьект данных project_Id*/
     let html = optimizeDATA(templates, project_id);
@@ -42,8 +43,7 @@
         prompt(locals.error.message);
     }*/
 
-
-
+    
     setupData();
 ;
     function setupData(){
@@ -54,9 +54,11 @@
         nodes.set(graph);
     
     
-        const docs = new Documents(html, graph, saveDeleteService("template"));
+        const docs = new Documents(html, graph, saveDeleteService("template"), project_id, 
+            arrUpdatedCallback);
         /**заполняем стор документов*/
-        documents.set(docs)
+        documents.set(docs);
+        length = docs.docs.length;
     }
 
 
@@ -72,6 +74,14 @@
         /**в контроллере могут быть данные поставленные в очередь, для последующей отправки*/
         $nodeController.sendDataInQueue();
     });
+
+    /**функция коллбэк для получения обновления массива документов*/
+    function arrUpdatedCallback(arr){
+        if(arr instanceof Array){
+            length = arr.length;
+        }
+    }
+
 
 </script>
 
@@ -90,7 +100,7 @@
         <!--<div class="devider"></div>-->
 
         <div class="element">
-            {#if $documents.docs.length > 0}
+            {#if length > 0}
                 <Tabs tabsPosition={"document"} docsArr={$documents.docs}/>
             {/if}
             <DocWriter />

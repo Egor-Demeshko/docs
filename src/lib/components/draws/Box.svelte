@@ -228,17 +228,21 @@
 */
 function startDraging(e){
     e.stopPropagation();
-    let newX = x + 1;
-    let newY = y + 1;
+    let newX = x;
+    let newY = y;
+    let xToCompare = x;
+    let yToCompare = y;
 
     if(e.target.tagName === "DIV" || e.target.tagName === "SPAN"){
         root.addEventListener("pointerup", () => {
           /**показываем поле с кнопками удалить, выделить текст на узле*/
           showButtons = true;
           root.removeEventListener("mousemove", coordinate); 
-          //тут сохранение данных кординат
-          controller.saveNourgent({node_id: id, field_name: "x", field_data: newX});
-          controller.saveNourgent({node_id: id, field_name: "y", field_data: newY});
+          if(xToCompare !== x && yToCompare !== y){
+            //тут сохранение данных кординат
+            controller.saveNourgent({node_id: id, field_name: "x", field_data: newX});
+            controller.saveNourgent({node_id: id, field_name: "y", field_data: newY});
+          }
           newX, newY = null;      
         }, {once: true});
 

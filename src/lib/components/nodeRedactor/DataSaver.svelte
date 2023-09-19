@@ -34,7 +34,6 @@
     */
 
     $: if( id && isRedactorOpen) {
-        debugger;
         if(data.validity.status === "valid" && savedData){
             collectData();
 
@@ -48,7 +47,6 @@
     function collectData(){
 
         for(let [key, value] of Object.entries(data)){
-            debugger;
             if(data[key] !== savedData[key]){
                 if(nonCriticalFields.includes(key)){
                     nonUrgentData[key] = value;

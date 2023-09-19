@@ -40,13 +40,11 @@
     
         if(!docs) return;
         let freshId = docs.getActiveDocumentId();
-        debugger;
+        
         //TODO undefined === undefined когда нет документа и первая загрузка
-        if(freshId === activeDocumentId) return;
+        if(freshId !== undefined && activeDocumentId !== undefined && freshId === activeDocumentId) return;
         
-
         html = docs.gainActiveHtml() || '';
-        
         let isDocumentInialized = docs.isActiveInitialized();
         
         console.log("[TROUMBOUNE]: {document changed}. isInialized  ", isDocumentInialized);

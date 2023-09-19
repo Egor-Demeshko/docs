@@ -7,6 +7,7 @@ export default function generateName(arr){
     while(true){
         name = ( i === 1 ) ? "Новый документ" : `Новый документ ${i}`;
 
+        if(arr.length === 0) return name;
         for (let j = 0; j < arr.length; j++){
             const docObj = arr[j];
 
