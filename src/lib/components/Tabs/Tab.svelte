@@ -41,6 +41,7 @@
         /**меняем id активного документа. в сетактив таже будет сохраняться состояние html редактора*/
         documents.update( (docs) => {
             docs.saveHtmlState();
+            docs.sendHtmlState();
             docs.setActive(documentId);
             //console.log("[TAB]: handle click");
             return docs;

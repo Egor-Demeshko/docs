@@ -1,27 +1,33 @@
 <script>
     export let container;
-    import { beforeUpdate } from "svelte";
+    import { beforeNavigate } from "$app/navigation";
     import { documents } from "$lib/scripts/stores";
     import { get } from "svelte/store";
+    
+    const docClass = get(documents);
 
-    /*
-beforeUpdate( () => {
-    console.log("[RedactorContainer], {beforeupdate} activeDocumentId", activeDocumentId);
-});*/
-
+    beforeNavigate( () => {
+        docClass.sendHtmlState();
+    });
 
 
 function saveHtml(){
-    const docClass = get(documents);
-
     docClass.saveHtmlState();
+    docClass.setDocumentUpdated();
 }
+
+function blur(){
+    docClass.saveHtmlState();
+    docClass.sendHtmlState();
+}
+
+
 </script>
 
 <svelte:window on:unload={saveHtml}></svelte:window>
 
 
 
-<div id="container" bind:this={container} on:keypress={saveHtml}>
+<div id="container" bind:this={container} on:keypress={saveHtml} on:blur={blur}>
 
 </div>

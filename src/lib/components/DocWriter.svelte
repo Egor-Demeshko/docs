@@ -43,6 +43,7 @@
         min-width: 600px;
         border-left: 2px solid var(--black);
         position: relative;
+        border-radius: 20px 0 0 0;
     }
     
 

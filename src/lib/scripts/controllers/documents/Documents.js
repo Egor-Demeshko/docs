@@ -19,6 +19,9 @@ export default class Documents{
      *      id,
      *      name,
      *      string - это html строка
+     *      isUpdated - <boolean> - ставится true при изменении
+     *      is_initialized? - <boolean> - используется только в момент, когда уже создана новая вкладка
+     *      ориентир для работы модального окна на редакторе
      * }
      */
     #docs = [];
@@ -86,7 +89,7 @@ export default class Documents{
 
     async delete({documentId}){
         saving.set(true);
-        debugger;
+
         this.#docs = this.#docs.filter( (docObj) => {
             if (docObj["id"] === documentId) return false;
             return true;
@@ -137,6 +140,17 @@ export default class Documents{
         }
     }
 
+    /**
+     * Checks if the document is updated.
+     * @return {boolean} Returns true if the document is updated, otherwise false.*/
+    isDocumentUpdated(){
+        let arr = this.#docs;
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"]) return element?.isUpdated || false;
+        }
+    }
+
 
     isActiveInitialized(){
         let arr = this.#docs;
@@ -168,6 +182,19 @@ export default class Documents{
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];
             if(element["active"]) return element["name"];            
+        }
+    }
+
+    /**
+     * Returns the active document object from the list of documents.
+     *
+     * @return {Object} The active document object.
+     */
+    getActiveDocumentObject(){
+        const arr = this.#docs;
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element["active"]) return element;
         }
     }
 
@@ -237,6 +264,7 @@ export default class Documents{
 
         for(let i = 0; i < docs.length; i++){
             let obj = docs[i];
+
             if(obj.active === true){
                 obj.name = name;
                 obj.id = id;
@@ -245,11 +273,21 @@ export default class Documents{
                 break;
             }
         }
+
+        if(docs.length === 0){
+            this.#docs.push({
+                id,
+                name,
+                string: html,
+                active: true,
+                isUpdated: false
+            });  
+        }
     }
 
-
+    /**@description сохраняет изменения локально и ставит фланг isUpdated */
     saveHtmlState(){
-        //TODO когда будет реализовать отправку по http сделать проверку, сохранился ли прошлый результат
+        console.log("[Documents]: saveHtmlState");
         let arr = this.#docs;
         let html = window.jQuery(document.getElementById("container")).trumbowyg('html');
         //console.log("[Documents]: gained html");
@@ -321,6 +359,21 @@ export default class Documents{
 
         docs = null;
     }
+
+
+    setDocumentUpdated(){
+        const docs = this.#docs;
+
+        for (let i = 0; i < docs.length; i++) {
+            const element = docs[i];
+            if(!element.active)continue;
+            if(!element?.isUpdated) {
+
+                console.log("[Documents]: setDocumentUpdated");
+                element.isUpdated = true;
+            };
+        }
+    }
     
 
     async sendFile(formData){
@@ -337,9 +390,38 @@ export default class Documents{
             this.normolizeNewDocument(id, name, html);
             /**дергаем стор чтобы обновить отображение */
             documents.update( (docs) => docs);
+            this.#callSubscribes();
         }
         saving.set(false);
         return success;
+    }
+
+
+    async sendHtmlState(){
+        saving.set(true);
+        //если флаг true, то отправляем, false возрат пустой
+        if(!this.isDocumentUpdated()) {
+            saving.set(false);
+            return;
+        };
+
+        const activeDoc = this.getActiveDocumentObject();
+        const {string, id, name} = activeDoc;
+        //ставим флаг для документ false, после успешной отправки
+        const dataToBeSend = {
+            project_id: this.#projectId,
+            template_id: id,
+            name,
+            html: string
+        }
+
+        const result = await this.#saveDeleteService.changeInstanceWithToken(dataToBeSend);
+        console.log('[DOCUMENTS]: result after STATE CHANGE ', result);
+        if(result.success){
+            debugger;
+            activeDoc.isUpdated = false;  
+        }
+        saving.set(false);      
     }
 
 

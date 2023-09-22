@@ -91,6 +91,7 @@ $: lines = $linesStore;
         background-repeat: repeat;
         background-color: var(--white-blue);
         background-origin: border-box;
+        scrollbar-color: var(--gray-blue);
     }
 
     .close{
@@ -120,5 +121,21 @@ $: lines = $linesStore;
         height: 100%;
         transform: rotateZ(45deg);
         fill: var(--white-blue);
+    }
+
+
+    /**webkit scrollbar */
+    .svg_wrapper::-webkit-scrollbar{
+        width: 8px;
+        height: 120px;
+    }
+
+    .svg_wrapper::-webkit-scrollbar-thumb{
+        background-color: var(--gray-blue);
+        border-radius: 4px;
+    }
+
+    .svg_wrapper::-webkit-scrollbar-button{
+        display: none;
     }
 </style>

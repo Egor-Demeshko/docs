@@ -184,12 +184,10 @@
 <style>
     .editor{
         background-color: var(--white);
-        box-shadow: 0 0 4px var(--black);
         height: 100%;
-        border-radius: 18px 0 0 0;
-        overflow-y: scroll;
         caret-color: red;
         position: relative;
+        border-radius: 20px 0 0 0;
     }
 
     .editor *{
@@ -221,7 +219,24 @@
     :global(.editor .trumbowyg-box){
         background-color: var(--white-blue);
         height: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
+        scrollbar-color: var(--gray-blue);
+        scrollbar-width: 8px;
+        border-radius: 20px 0 0 0;
+    }
+
+    :global(.editor .trumbowyg-box::-webkit-scrollbar){
+        display: block;
+        width: 8px;
+        height: 120px;
+    }
+
+    :global(.editor .trumbowyg-box::-webkit-scrollbar-thumb){
+        background-color: var(--gray-blue);
+    }
+
+    :global(.editor .trumbowyg-box::-webkit-scrollbar-button){
+        display: none;
     }
 
     :global(.editor.no_elements .trumbowyg-editor-box){
@@ -240,8 +255,12 @@
         position: sticky;
         top: 0;
         left: 0;
+        gap: .5rem;
     }
 
+    :global(.trumbowyg-button-pane .trumbowyg-button-group){
+        gap: .2rem;
+    }
 
     :global(.trumbowyg-button-pane button svg){
         fill:var(--light-blue);

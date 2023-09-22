@@ -2,9 +2,9 @@
     export let name = "file";
     export let accept = ".docx";
     export let text = "Стандартный текст";
-    import { documents } from "$lib/scripts/stores";
+    //import { documents } from "$lib/scripts/stores";
 
-    const projectID = $documents.projectId;
+    //const projectID = $documents.projectId;
 
 
 </script>

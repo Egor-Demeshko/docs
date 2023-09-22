@@ -2,8 +2,9 @@ import { storeForSimpleTexts } from "$lib/scripts/stores";
 import globalCopyHandle from "$lib/scripts/docElements/utils/globalCopyHandle.js";
 import { nextElementForward, previousNode } from "$lib/scripts/docElements/utils/nextElement.js";
 import stack from "$lib/scripts/docElements/utils/stack.js";
-import { setNewHtml } from "$lib/scripts/docWriter/redactor.js";
+import { documents } from "$lib/scripts/stores.js";
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
+import { get } from "svelte/store";
 
 
 export default function createOnDocumentRedactorEvents(redactorRoot){
@@ -16,11 +17,12 @@ export default function createOnDocumentRedactorEvents(redactorRoot){
 
 
 function cutHandle(e, stack){
+    const doc = get(documents);
       /** 
        *  когда идет вырезание большого куска текста. мы сохраняем узлы, кроме крайних
        *  крайние элементы должны быть очищены от тега span, оставлены просто текстом.
-       *  узлы попавшие целиком, сохраняют разметку автоматом, благодаря редактору. после вставки текста
-       * с разметкой включающей наше элементы(узлы) достаточно обеспечить реконнект.
+       *  узлы попавшие целиком, сохраняют разметку автоматом, благодаря редактору. после вставки текста,
+       * текст вставляется с разметкой включающей наши элементы(узлы), достаточно обеспечить реконнект.
        * желательно чтобы кусочки копировались, но не меняли содержимого узла, при этом кусочки были чисты и невинные 
        * и вставлялись как текст    
        */
@@ -58,8 +60,10 @@ function cutHandle(e, stack){
         if(!(anchorParent.classList.contains("doc_elements")) && 
           !(focusParent.classList.contains("doc_elements"))){
 
-              reconnect();
-              return;
+                reconnect();
+                doc.saveHtmlState();
+                doc.setDocumentUpdated();      
+                return;
         }
 
         
@@ -90,6 +94,9 @@ function cutHandle(e, stack){
         textTowriteToBUffer = sanitizeHTML(textTowriteToBUffer);
         e.clipboardData.setData("text/html", textTowriteToBUffer);
 
+        //сохраняем состояние документа 
+        doc.setDocumentUpdated();   
+        doc.saveHtmlState();
 
         /**
          * Базовый случай, это когда мы идем просто по нодам
@@ -349,7 +356,6 @@ function cutHandle(e, stack){
     
     
 function pasteHandle(e, stack, redactorRoot){
-    console.log("[GlobalRedactor events]: pasteHandle");
     /*if(stack.isActive()){
         stack.saveString();
         stack.disableFlag();
@@ -358,6 +364,12 @@ function pasteHandle(e, stack, redactorRoot){
     
     
     reconnect();
+    {
+        //сохраняем состояние документа
+        const doc = get(documents);
+        doc.saveHtmlState();
+        doc.setDocumentUpdated();
+    }
 }
 
 

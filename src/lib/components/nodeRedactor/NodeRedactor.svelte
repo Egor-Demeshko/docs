@@ -145,7 +145,7 @@
     function getBlockObj(activeBlockId){
         //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
-        if(open) controller.saveDataBeforeChange(data.id, {...data});
+        if(open && data) controller.saveDataBeforeChange(data.id, {...data});
         
         
         for(let i = 0; i < $nodes.length; i++){
