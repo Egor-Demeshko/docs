@@ -121,17 +121,17 @@
 <style>
 
     .element{
-        flex: 2;
+        flex: 3;
         width: 100%;
         position: relative;
     }
 
     .element__left{
-        flex: 3;
+        flex: 2.4;
         height: 100%;
         display: flex;
         flex-direction: column;
-        display: relative;
+        position: relative;
 
     }
 

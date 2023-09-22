@@ -1,18 +1,18 @@
 <script>
     import LogoAndName from "$lib/components/LogoAndName.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
-	import { onMount } from "svelte";
-    import { setUpdate, destroyUpdate } from "$lib/scripts/utils/automaticTokenUpdate.js";
+    import {onNavigate} from "$app/navigation";
 
-    onMount( () => {
-       // setUpdate();
-        
-        return () => {  
-            //destroyUpdate();
-        }
+    onNavigate( (navigation) => {
+        if(!document.startViewTransition) return;
+
+        return new Promise( (resolve) => {
+            document.startViewTransition( async () => {
+                resolve();
+                await navigation.complete;
+            });
+        });
     });
-
-
 </script>
 
 
@@ -53,6 +53,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 0;
+    view-transition-name: "background";
 }
 
 .logo_position{
@@ -61,6 +62,13 @@
     position: relative;
     display: flex;
     justify-content: space-between;
+    view-transition-name: background;
+}
+
+@media print{
+        .logo_position{
+            display: none;
+        }
 }
 
 </style>

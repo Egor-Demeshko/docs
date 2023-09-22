@@ -235,7 +235,7 @@ export default class Documents{
 
         if(!name) name = this.getActiveDocumentName() || generateName(Array.from(this.#docs));
         let response = await this.#saveDeleteService.createRequestWithToken({project_id: this.#projectId, name, html});
-        
+        debugger;
         if(response.success){
             /** {data} = response
              * { id, name} = data;
@@ -262,6 +262,7 @@ export default class Documents{
             
             this.#callSubscribes();
         }
+
         saving.set(false);
         return response;
     }
@@ -431,7 +432,6 @@ export default class Documents{
         const result = await this.#saveDeleteService.changeInstanceWithToken(dataToBeSend);
         console.log('[DOCUMENTS]: result after STATE CHANGE ', result);
         if(result.success){
-            debugger;
             activeDoc.isUpdated = false;  
         }
         saving.set(false);      

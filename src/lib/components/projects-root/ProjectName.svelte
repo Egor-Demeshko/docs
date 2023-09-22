@@ -101,7 +101,6 @@
         const target = e.target;
         const name = target.textContent;
 
-
         let result = await $projectsStore.changeName({project_id: project.id, name});
         saving.set(false);
     }

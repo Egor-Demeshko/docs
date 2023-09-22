@@ -208,6 +208,7 @@ export default class Node extends NodeLocalOperations{
                 return result;
             }
         }
+        saving.set(false);
     }
 
 

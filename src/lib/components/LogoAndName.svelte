@@ -39,7 +39,6 @@
     async function saveName(){
         saving.set(true);
         const id = $projectName.id;
-
         projectName.set({id, name: value});
         await $projectsStore.changeName({project_id: id, name: value});
 

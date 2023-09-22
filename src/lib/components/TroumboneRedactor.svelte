@@ -225,12 +225,6 @@
         border-radius: 20px 0 0 0;
     }
 
-    :global(.editor .trumbowyg-box::-webkit-scrollbar){
-        display: block;
-        width: 8px;
-        height: 120px;
-    }
-
     :global(.editor .trumbowyg-box::-webkit-scrollbar-thumb){
         background-color: var(--gray-blue);
     }
@@ -278,6 +272,15 @@
     
     :global(.blockinteraction){
         pointer-events: none;
+    }
+
+
+    @media print{
+
+        @page{
+            size: A4;
+            margin: 10mm 10mm 10mm 20mm;
+        }
     }
 
 </style>
