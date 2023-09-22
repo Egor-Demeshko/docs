@@ -232,6 +232,7 @@ export default class Documents{
         saving.set(true);
         if(!html) html = "<p></p>";
 
+
         if(!name) name = this.getActiveDocumentName() || generateName(Array.from(this.#docs));
         let response = await this.#saveDeleteService.createRequestWithToken({project_id: this.#projectId, name, html});
         
@@ -240,13 +241,25 @@ export default class Documents{
              * { id, name} = data;
              */
             const {id, name} = response.data;
-            this.#docs.push({
-                id,
-                name,
-                string: html,
-                active: true
-            });
 
+            /**это срабатывает,когда создаем новый документ, и еще нет ниодного документа. 
+             * новый пустой проект!*/
+            if(this.#docs.length === 0){
+                this.#docs.push({
+                    id,
+                    name,
+                    string: html,
+                    active: true
+                });
+            } else {
+                //новый template создан через плюс, уже есть еще какие-то template
+                //тогда найти текущий активный документ, и заменить в нем id
+                const activeDoc = this.getActiveDocumentObject();
+                activeDoc.id = id;
+                activeDoc.html = html;
+                delete activeDoc.not_initialized;
+            }
+            
             this.#callSubscribes();
         }
         saving.set(false);
