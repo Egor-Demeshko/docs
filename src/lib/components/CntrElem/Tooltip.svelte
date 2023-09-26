@@ -63,4 +63,10 @@
     .above{
         transform: translate(-50%, -180%);
     }
+
+    @media print{
+        div{
+            display: none;
+        }
+    }
 </style>

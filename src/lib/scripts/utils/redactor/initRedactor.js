@@ -1,4 +1,7 @@
 import jQuery from "jquery";
+import print from "$lib/scripts/utils/redactor/printFlow.js";
+import {printCallback} from "$lib/scripts/stores";
+import { get } from "svelte/store";
 
 export default async function initRedactor(container){
     if (!window.jQuery) window.jQuery = jQuery;
@@ -10,7 +13,10 @@ export default async function initRedactor(container){
         tagsToKeep: ['span'],
         btnsDef: {
             print: {
-                fn: () => window.print(),
+                fn: () => { 
+                    const callback = get( printCallback );
+                    callback();
+                 },
                 title: 'Напечатать',
                 text: 'Print',
                 class: '',

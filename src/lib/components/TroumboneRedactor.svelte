@@ -9,6 +9,9 @@
     import RedactorContainer from '$lib/components/RedactorContainer.svelte';
     import initRedactor from "$lib/scripts/utils/redactor/initRedactor.js";
     import { get } from "svelte/store";
+    import { updateLineBreaks } from "$lib/scripts/utils/redactor/LineBreakers/lineBreakesOperations.js";
+
+
 
 
     let html = '';
@@ -135,6 +138,7 @@
         console.log('{renderEditor} after html implementint, document id: ', activeDocumentId);
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
         $storeForSimpleTexts.forEach( (element) => element.createListeners());
+        updateLineBreaks();
     }
 
 
@@ -212,9 +216,31 @@
     }
     
     :global(.editor .trumbowyg-box .trumbowyg-editor){
-        max-width: 21cm;
+        width: 21cm;
         background-color: var(--white);
     }
+
+    :global(.trumbowyg-box i.line_break){
+        border-bottom: 2px dashed var(--middle-blue);
+        display: block;
+        position: absolute;
+        width: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    :global(.trumbowyg-box i.line_break::before){
+        content: "[новая страница]";
+        position: absolute;
+        top: 50%;
+        left: 0;;
+        transform: translate(-150%, -50%) rotateZ(180deg);
+        writing-mode: vertical-rl; 
+        color: var(--middle-blue);
+        pointer-events: none;
+    }
+
 
     :global(.editor .trumbowyg-box){
         background-color: var(--white-blue);
@@ -235,6 +261,7 @@
 
     :global(.editor.no_elements .trumbowyg-editor-box){
         background-color: var(--light-blue);
+        position: relative;
     }
     
     :global(.editor.no_elements .trumbowyg-editor){
@@ -272,15 +299,6 @@
     
     :global(.blockinteraction){
         pointer-events: none;
-    }
-
-
-    @media print{
-
-        @page{
-            size: A4;
-            margin: 10mm 10mm 10mm 20mm;
-        }
     }
 
 </style>

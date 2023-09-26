@@ -19,6 +19,7 @@
 	import { onDestroy, setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import { projectName } from "$lib/scripts/stores";
+	import PrintModule from "$lib/components/PrintModule.svelte";
 
     //receiving data from load function
     export let data;
@@ -114,6 +115,7 @@
 <Tooltip --bg="var(--white)"
 --color="var(--faded-gray-blue)"/>
 <Modal />
+<PrintModule />
 
 
 
@@ -159,7 +161,7 @@
     }*/
 
     @media print{
-        .logo_position{
+        .redactors{
             display: none;
         }
 
@@ -167,8 +169,12 @@
             display: none;
         }
 
-        .background{
-            display: none;
+        .element{
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     }
 </style>

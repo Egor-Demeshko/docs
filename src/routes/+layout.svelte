@@ -74,5 +74,16 @@
         background-color: var(--spinner-back);
         z-index: 100;
     }
+
+    @media print{
+        main{
+            padding: 0;
+            margin: 0;
+        }
+
+        .spinner_wrapper{
+            display: none;
+        }
+    }
     
 </style>

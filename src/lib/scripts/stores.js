@@ -217,3 +217,6 @@ export const nodeController = writable();
 /**устанавливает имя проекта которое отображается в layout 
  * {id, name}*/
 export const projectName = writable();
+
+/** для хранения ссылки на фукнцию callback модуля печати */
+export const printCallback = writable();

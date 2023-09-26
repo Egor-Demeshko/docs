@@ -69,6 +69,10 @@
         .logo_position{
             display: none;
         }
+
+        .background{
+            display: none;
+        }
 }
 
 </style>

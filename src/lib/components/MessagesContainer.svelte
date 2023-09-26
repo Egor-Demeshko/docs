@@ -84,4 +84,10 @@
         gap: 1.5rem;
         align-items: end;
     }
+
+    @media print{
+        .messages{
+            display: none;
+        }
+    }
 </style>

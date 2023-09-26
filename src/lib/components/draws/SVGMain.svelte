@@ -83,7 +83,7 @@ $: lines = $linesStore;
 
 <style>
     .svg_wrapper{
-        overflow: scroll;
+        overflow-y: scroll;
         width: 100%;
         height: 100%;
         flex: 1;
@@ -127,7 +127,6 @@ $: lines = $linesStore;
     /**webkit scrollbar */
     .svg_wrapper::-webkit-scrollbar{
         width: 8px;
-        height: 120px;
     }
 
     .svg_wrapper::-webkit-scrollbar-thumb{
@@ -137,5 +136,9 @@ $: lines = $linesStore;
 
     .svg_wrapper::-webkit-scrollbar-button{
         display: none;
+    }
+
+    .svg_wrapper::-webkit-scrollbar-track{
+        background-color: transparent;
     }
 </style>

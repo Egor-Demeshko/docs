@@ -123,4 +123,10 @@
     .icon:hover{
         fill: var(--orange);
     }
+
+    @media print{
+        .wrapper{
+            display: none;
+        }
+    }
 </style>

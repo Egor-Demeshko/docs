@@ -40,8 +40,6 @@
     section{
         height: 100%;
         width: 100%;
-        min-width: 600px;
-        border-left: 2px solid var(--black);
         position: relative;
         border-radius: 20px 0 0 0;
     }
@@ -92,11 +90,5 @@
         transform: scale(107%) translate(0);
         z-index: 1;
         box-shadow: 0 0 2px var(--middle-blue);
-    }
-
-    /**doc redactor*/
-    :global(.ql-snow){
-        background-color: var(--white);
-        margin-bottom: 1rem;
     }
 </style>
