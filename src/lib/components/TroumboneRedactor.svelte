@@ -224,7 +224,7 @@
         border-bottom: 2px dashed var(--middle-blue);
         display: block;
         position: absolute;
-        width: 80%;
+        width: min(17.5cm ,58vh);
         left: 50%;
         transform: translateX(-50%);
         pointer-events: none;

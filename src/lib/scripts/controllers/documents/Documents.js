@@ -383,8 +383,21 @@ export default class Documents{
             if(!element.active)continue;
             if(!element?.isUpdated) {
 
-                console.log("[Documents]: setDocumentUpdated");
                 element.isUpdated = true;
+            };
+        }
+    }
+
+
+    setDocumentNotUpdated(){
+        const docs = this.#docs;
+
+        for (let i = 0; i < docs.length; i++) {
+            const element = docs[i];
+            if(!element.active)continue;
+            if(element.isUpdated) {
+
+                element.isUpdated = false;
             };
         }
     }
@@ -419,6 +432,8 @@ export default class Documents{
             return;
         };
 
+        this.setDocumentNotUpdated();
+
         const activeDoc = this.getActiveDocumentObject();
         const {string, id, name} = activeDoc;
         //ставим флаг для документ false, после успешной отправки
@@ -433,6 +448,11 @@ export default class Documents{
         console.log('[DOCUMENTS]: result after STATE CHANGE ', result);
         if(result.success){
             activeDoc.isUpdated = false;  
+        } else {
+            /**вернуть состояние обновлен. если документ обновлен, это значит
+             * в нем новый контент!! и он не отправлен
+             */
+            this.setDocumentUpdated();
         }
         saving.set(false);      
     }
