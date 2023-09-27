@@ -29,7 +29,6 @@
     let cleanHtml = '';
     let graph = serverNode;
     let length = 0;
-
     /**добавляем в обьект данных project_Id*/
     let html = optimizeDATA(templates, project_id);
     nodeController.set(new Node(project_id, graphUpdate));

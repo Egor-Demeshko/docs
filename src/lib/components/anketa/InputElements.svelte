@@ -37,5 +37,28 @@
         flex-direction: column;
         gap: 1.5rem;
         padding: 2rem 1.5rem;
+        /**firefox*/
+        scrollbar-color: var(--gray-blue);
+        scrollbar-width: 8px;
     }
+
+
+    /**webkit scrollbar*/
+    div::-webkit-scrollbar{
+        width: 8px;
+    }
+
+    div::-webkit-scrollbar-thumb{
+        background-color: var(--gray-blue);
+    }
+
+    div::-webkit-scrollbar-button{
+        display: none;
+    }
+
+    div::-webkit-scrollbar-track{
+        background-color: transparent;
+    }
+
+
 </style>

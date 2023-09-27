@@ -50,9 +50,9 @@
         if(freshId !== undefined && activeDocumentId !== undefined && freshId === activeDocumentId) return;
         
         html = docs.gainActiveHtml() || '';
+        ;
         let isDocumentInialized = docs.isActiveInitialized();
 
-        
         if(isDocumentInialized) {
             
             showModalDocumentCreator.set(false);

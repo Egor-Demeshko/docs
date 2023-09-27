@@ -149,7 +149,7 @@
         <TopControll />
     
         <div class="projects" bind:this={projectElement}>
-            <div class="projects__left">
+            <div class="projects__left" class:showRight>
                 <ul class="project__list">
                     {#each projects as project}
                     <ProjectName {project}/>
@@ -284,8 +284,12 @@
         flex: 3;
         display: flex;
         flex-direction: column;
-        border-radius: 0 20px 0 0;
+        border-radius: 0;
         position: relative;
+    }
+
+    .projects__left.showRight{
+        border-radius: 0 20px 0 0;
     }
 
     .projects__right.showRight{
