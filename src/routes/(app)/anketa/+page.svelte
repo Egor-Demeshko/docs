@@ -11,7 +11,8 @@
 	import InputElements from "$lib/components/anketa/InputElements.svelte";
     import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
 	import { onMount, onDestroy } from "svelte";
-    import DynamicGraphController from "$lib/scripts/controllers/nodes/anketa/controller/DynamicGraphController.js"
+    import DynamicGraphController from "$lib/scripts/controllers/nodes/anketa/controller/DynamicGraphController.js";
+    import PrintModule from "$lib/components/PrintModule.svelte";
 
     //receiving data from load function
     export let data;
@@ -76,6 +77,7 @@
 <Tooltip --bg="var(--white)"
 --color="var(--faded-gray-blue)"/>
 <Modal />
+<PrintModule />
 
 
 
@@ -121,7 +123,7 @@
     }*/
 
     @media print{
-        .logo_position{
+        .redactors{
             display: none;
         }
 
@@ -129,8 +131,12 @@
             display: none;
         }
 
-        .background{
-            display: none;
+        .element{
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     }
 </style>

@@ -50,17 +50,4 @@
 </div>
 
 <style>
-    @media print{
-        #container{
-            display: block;
-            padding: 0 10mm 0 20mm; 
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        @page{
-            size: A4;
-            margin: 0 0 0 0;
-        }
-    }
 </style>
