@@ -7,6 +7,7 @@
 
     export let id = '';
     export let node_type = "text";
+    export let box_inactive;
 
     const controller = getContext('controller');
 
@@ -138,7 +139,7 @@
         <use href="/assets/icons/all.svg#box_cancel"></use>
     </svg>
     
-    {#if node_type !== "checkbox"}
+    {#if !(node_type === "checkbox" || box_inactive === "box_inactive")}
         <svg class="buttons__icons"
         on:pointerleave={pointerLeave}
         on:pointerenter={pointerEnter}

@@ -1,6 +1,6 @@
 <script>
     import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
-    import { storeForSimpleTexts } from "$lib/scripts/stores";
+    import { storeForSimpleTexts, documents } from "$lib/scripts/stores";
 	import { getContext } from "svelte";
     import { createEventDispatcher } from "svelte";
     
@@ -90,7 +90,7 @@
 
             break;
         }
-
+        
         elements = null;
     }
 </script>

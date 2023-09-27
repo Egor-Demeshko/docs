@@ -2,7 +2,7 @@
     export let container;
     import { beforeNavigate } from "$app/navigation";
     import { documents } from "$lib/scripts/stores";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
     import { get } from "svelte/store";
     import {initBreakers, deleteBreakers} from '$lib/scripts/utils/redactor/LineBreakers/LineBreaker.js';
     
@@ -25,9 +25,17 @@
         docClass.setDocumentUpdated();
     }
 
-    function blur(){
-        docClass.saveHtmlState();
+    async function blur(){
+        await docClass.saveHtmlState();
         docClass.sendHtmlState();
+    }
+
+    function redactorChanged(){
+        console.log("[REDACTOR]: redactorChanged");
+        /**помечаем что документ обновился, чтобы в дальнейшем он мог сохраниться*/
+        /** сохраняем изменения в макете*/
+        $documents.setDocumentUpdated();
+        $documents.saveHtmlState();
     }
 
 

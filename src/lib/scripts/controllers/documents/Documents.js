@@ -4,6 +4,7 @@ import { documents } from "$lib/scripts/stores";
 import generateUUID from "$lib/scripts/utils/generateUUID.js";
 import generateName from "$lib/scripts/utils/documents/generateName";
 import { saving } from "$lib/scripts/stores";
+import { getHtml } from "$lib/scripts/docWriter/redactor.js";
 import { get } from "svelte/store";
 
 //const changeSavingSing = get( saving );
@@ -299,12 +300,12 @@ export default class Documents{
         }
     }
 
-    /**@description сохраняет изменения локально и ставит фланг isUpdated */
-    saveHtmlState(){
-        console.log("[Documents]: saveHtmlState");
+    /**@description сохраняет изменения локально*/
+    async saveHtmlState(){
+        //console.log("[Documents]: saveHtmlState");
         let arr = this.#docs;
-        let html = window.jQuery(document.getElementById("container")).trumbowyg('html');
-        //console.log("[Documents]: gained html");
+        let html = await getHtml();
+        //console.log("[Documents]: gained html", html);
         
 
         for (let i = 0; i < arr.length; i++) {

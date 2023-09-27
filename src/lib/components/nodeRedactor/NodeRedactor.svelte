@@ -4,14 +4,13 @@
 	import Compare from "./Compare.svelte";
 	import ContentRedactor from "./ContentRedactor.svelte";
     import FieldTypePicker from "./FieldTypePicker.svelte";
-    import { nodeOptions, blockClickedId, nodes, storeForSimpleTexts } from "$lib/scripts/stores";
+    import { nodeOptions, blockClickedId, nodes, documents } from "$lib/scripts/stores";
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
     import validation from "$lib/scripts/utils/validation/validation";
-	import { getContext, setContext } from "svelte";
-    import DataSaver from "./DataSaver.svelte";
+	import { getContext} from "svelte";
 
     let trigger = false;
     let closing_animation = false;
@@ -141,7 +140,6 @@
                                                             });*/
 
 
-
     function getBlockObj(activeBlockId){
         //console.log("[NodeRedactor]: getBlockObj running. Arguments: ", activeBlockId);
         //console.log("[NodeRedactor]: getBlockObj running. nodes: ", $nodes);
@@ -184,6 +182,23 @@
                 data[key] = detail[key];
             }
         }
+
+        /**помечаем что документ обновился, чтобы в дальнейшем он мог сохраниться*/
+        /** сохраняем изменения в макете
+         * редактор также создает свое событие на изменение, но он их регистрирует на jquery
+         * так как он глобально висит, и по доке не понятно как удалять события. 
+         * мы их не стали создавать
+        */
+        $documents.setDocumentUpdated();
+        $documents.saveHtmlState();
+    }
+
+
+    function saveChanges(){
+        console.log("[nodeRedactor]: POINTERLEAVE");
+        if(data && data?.id){
+            controller.saveDataBeforeChange(data.id, {...data});
+        }
     }
 
 
@@ -195,7 +210,8 @@
 class:open 
 class:trigger 
 class:closing_animation
-class:not_valid>
+class:not_valid
+on:pointerleave={saveChanges}>
     
     <div class="arrow__position">
         <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>

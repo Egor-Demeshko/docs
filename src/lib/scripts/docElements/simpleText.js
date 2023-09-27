@@ -41,7 +41,7 @@ export default class SimpleText{
         }
 
         if(!this.root){
-            throw new CustomError("No element to connect");
+            throw new Error("No element to connect");
         }
         // ;
         /*console.log("SIMPLE TEXT", {id: this.id, name: this.name, content: this.content, root: this.root});*/
@@ -125,6 +125,7 @@ export default class SimpleText{
         this.#domLinks.forEach( (domElement) => {
             domElement.textContent = content;
         });
+        this.#content = content;
         
     }
 

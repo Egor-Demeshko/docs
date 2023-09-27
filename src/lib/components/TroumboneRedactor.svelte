@@ -99,7 +99,7 @@
 
 
         function storeEvent(e){
-            console.log("[troumbone]: selection changed, ");
+            console.log("[TROUMBONE]: selection changed, ", eventSelection);
             eventSelection = e;
         }       
     }

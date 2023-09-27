@@ -533,6 +533,7 @@ async function secondStepOnChildConnect(e){
       return lines;
     });
 
+    controller.updateCallBack();
 }
 
 
@@ -604,7 +605,7 @@ async function secondStepOnChildConnect(e){
 
     {#if showButtons}
           <foreignObject  width="16" {height} x="{x + width + 6}" {y}>
-              <BoxButtons {id} {node_type}/>
+              <BoxButtons {id} {node_type} {box_inactive}/>
           </foreignObject>
     {/if}
 

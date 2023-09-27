@@ -1,5 +1,6 @@
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
-import {storeForSimpleTexts, docRoot} from "$lib/scripts/stores";
+import {storeForSimpleTexts, docRoot, documents} from "$lib/scripts/stores";
+import { get } from "svelte/store";
 
 
 export function processSelection(callerId, eventSelection){
@@ -55,6 +56,7 @@ export function processSelection(callerId, eventSelection){
     }
 
     {   
+        const docClassController = get( documents );
         /**@description корректирующие индексы, из селекшена */
         let startIndex = ( selection.anchorOffset <= selection.focusOffset )    ? selection.anchorOffset 
                                                                                 : selection.focusOffset;
@@ -78,6 +80,7 @@ export function processSelection(callerId, eventSelection){
 
         //исправленная строка применяется к элементов в котором находился узел и селекшон
         parentElement.innerHTML = parentHtml;
+        docClassController.saveHtmlState();
     }
 
     

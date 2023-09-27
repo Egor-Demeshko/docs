@@ -10,8 +10,9 @@
 
     printCallback.set(startPrintingProcess);
 
-    function startPrintingProcess(){
-        let html = getHtml();
+    async function startPrintingProcess(){
+        /**фсинхронно чтобы обновиться внутреннее состояние редактора, до того как пойдет на печать*/
+        let html = await getHtml();
         wrapper.classList.add("show");
         page.innerHTML = html;
 
