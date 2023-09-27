@@ -5,7 +5,7 @@ import generateUUID from "$lib/scripts/utils/generateUUID.js";
 import generateName from "$lib/scripts/utils/documents/generateName";
 import { saving } from "$lib/scripts/stores";
 import { getHtml } from "$lib/scripts/docWriter/redactor.js";
-import { get } from "svelte/store";
+import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js"
 
 //const changeSavingSing = get( saving );
 
@@ -306,7 +306,7 @@ export default class Documents{
         let arr = this.#docs;
         let html = await getHtml();
         //console.log("[Documents]: gained html", html);
-        
+        html = sanitizeHTML(html);
 
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];

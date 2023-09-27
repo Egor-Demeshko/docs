@@ -91,4 +91,16 @@
         z-index: 1;
         box-shadow: 0 0 2px var(--middle-blue);
     }
+
+    @media print{
+        :global(.doc_elements){
+            background-color: none;
+        }
+
+        :global(.doc_active){
+            transform: none;
+            box-shadow: none;
+            background-color: none; 
+        } 
+    }
 </style>
