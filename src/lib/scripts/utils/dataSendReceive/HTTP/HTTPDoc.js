@@ -6,7 +6,7 @@ export default class HTTPDoc extends HTTPprojects{
     }
 
     async createDocFromHtml(token, name, html){
-        const route = "/document/from-html";
+        const route = "/document/from-html/";
 
         const objToSend = {
             name,
@@ -18,7 +18,7 @@ export default class HTTPDoc extends HTTPprojects{
 
 
     async downloadFromHtml(token, project_id, name, html){
-        const route = "/document/download";
+        const route = "/document/download/";
 
         const objToSend = {
             project_id,
@@ -32,7 +32,7 @@ export default class HTTPDoc extends HTTPprojects{
 
 
     async saveDocumentToProject(token, project_id, name, html){
-        const route = "document/from-html/save";
+        const route = "document/from-html/save/";
 
         const objToSend = {
             project_id,

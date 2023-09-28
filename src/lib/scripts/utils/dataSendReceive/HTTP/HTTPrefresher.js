@@ -16,7 +16,7 @@ export default class HTTPrefresher extends HTTPBaseServise{
     */
     async refresh(token){
         console.log('[HTTPlogin]: refreshing token');
-        const end = "/auth/refresh";
+        const end = "/auth/refresh/";
 
         try{
             let result = await this.postRefresh(JSON.stringify(token), end);

@@ -14,14 +14,14 @@ export default class HTTPprojects extends HTTPrefresher{
 
     async getList(token){
         try{
-            return await super.getWithTokenInHeader({token, route: '/projects'});
+            return await super.getWithTokenInHeader({token, route: '/projects/'});
         } catch (e){
             console.log(e.message);
         }
     }
 
     async changeName(token, data){
-        const route ="/update";
+        const route ="/update/";
         try{
             return await super.patch(token, JSON.stringify(data), route);
         } catch (e){
@@ -31,7 +31,7 @@ export default class HTTPprojects extends HTTPrefresher{
 
 
     async create(token, data){
-        const route = "/create";
+        const route = "/create/";
 
         try{
             return await super.postWithHeader(token, JSON.stringify(data), route);
@@ -42,7 +42,7 @@ export default class HTTPprojects extends HTTPrefresher{
 
 
     async delete(token, data){
-        const route = "/delete";
+        const route = "/delete/";
 
         try{
             let json = await super.delete(token, JSON.stringify(data), route);
@@ -54,7 +54,7 @@ export default class HTTPprojects extends HTTPrefresher{
     }
 
     async getFullInfo(token, data, cors){
-        const route = "/detail";
+        const route = "/detail/";
 
         try{
             return await super.postWithHeader(token, JSON.stringify(data), route, cors);
@@ -66,7 +66,7 @@ export default class HTTPprojects extends HTTPrefresher{
 
 
     async getOnlyActive(token, data, cors){
-        const route = "/form";
+        const route = "/form/";
 
         try {
             return await super.postWithHeader(token, JSON.stringify(data), route, cors);

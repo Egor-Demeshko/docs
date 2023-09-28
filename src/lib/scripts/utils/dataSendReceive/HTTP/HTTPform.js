@@ -9,7 +9,7 @@ export default class HTTPform extends HTTPrefresher{
     }
 
     async update(token, data){
-        const route = '/form';
+        const route = '/form/';
 
         return await super.patch(token, JSON.stringify(data), route);
     }

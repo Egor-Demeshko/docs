@@ -14,7 +14,7 @@ export default class HTTPtemplate extends HTTPrefresher{
     }
 
     async delete(token, data){
-        const route = "/delete";
+        const route = "/delete/";
 
         try{
             let response = await super.delete(token, JSON.stringify(data), route);
@@ -32,7 +32,7 @@ export default class HTTPtemplate extends HTTPrefresher{
 
 
     async postWithToken(token, data){
-        const route = '/create';
+        const route = '/create/';
 
         try{
             let response = await super.postWithHeader(token, JSON.stringify(data), route);
@@ -47,7 +47,7 @@ export default class HTTPtemplate extends HTTPrefresher{
 
 
     async updateWithToken(token, data){
-        const route = "/update";
+        const route = "/update/";
 
         try{
             let response = await super.patch(token, JSON.stringify(data), route);

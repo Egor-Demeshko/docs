@@ -19,7 +19,8 @@
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",
 		"svelte": "^4.2.1",
-		"vite": "^4.4.9"
+		"vite": "^4.4.9",
+		"@vitejs/plugin-basic-ssl": "^1.0.1"
 	},
 	"type": "module",
 	"dependencies": {

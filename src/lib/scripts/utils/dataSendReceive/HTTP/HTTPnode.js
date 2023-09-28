@@ -9,7 +9,7 @@ export default class HTTPnode extends HTTPrefresher{
     }
 
     async update(token, data){
-        const route = "/node/update";
+        const route = "/node/update/";
         
         if(token){
             try{
@@ -25,7 +25,7 @@ export default class HTTPnode extends HTTPrefresher{
 
 
     async create(token, data){
-        const route = "/node/create";
+        const route = "/node/create/";
         
         if(token){
             try{
@@ -40,7 +40,7 @@ export default class HTTPnode extends HTTPrefresher{
 
 
     async delete(token, data){
-        const route = "/node/delete";
+        const route = "/node/delete/";
         
         if(token){
             try{

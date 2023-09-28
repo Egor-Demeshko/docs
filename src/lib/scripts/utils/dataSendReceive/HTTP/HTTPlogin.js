@@ -13,7 +13,7 @@ export default class HTTPLogin extends HTTPrefresher{
 
 
     async post(data, reg){
-        let end = (reg) ? "/register" : "/login";
+        let end = (reg) ? "/register/" : "/login/";
 
         let result;
 
