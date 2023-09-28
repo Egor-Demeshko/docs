@@ -1,4 +1,5 @@
 import HTTPBaseServise from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPBaseServise.js";
+import { PUBLIC_BACK_HOST } from "$env/static/public";
 
 
 export default class HTTPrefresher extends HTTPBaseServise{
@@ -38,7 +39,7 @@ export default class HTTPrefresher extends HTTPBaseServise{
     }
 
     async postRefresh(data, endroute){
-        const origin = "http://constructor.crabdance.com/";
+        const origin = PUBLIC_BACK_HOST;
         
         let url = new URL(origin + this.path + endroute);
         console.log("{url}", url.href);
