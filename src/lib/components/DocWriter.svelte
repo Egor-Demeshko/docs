@@ -3,6 +3,7 @@
     import createOnDocumentRedactorEvents from "$lib/scripts/docElements/GlobalRedactorEvents";
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
+    import Button2 from "$lib/components/CntrElem/Button2.svelte";
 
     
     /** @description разметка документа */
@@ -33,6 +34,32 @@
     <TroumboneRedactor />
 
     <Modal />
+
+    <div class="doc__buttons">
+        <Button2 name={"Сохранить"}
+        --bg="transparent"
+        --color="var(--white-blue)"
+        --border="2px solid var(--white-blue)"
+        --font-size=".875rem"
+        --padding=".25rem 1rem"
+        --bg-hover="var(--gray-blue)"
+        --color-hover="var(--white-blue)"
+        --border-hover="2px solid var(--white-blue)"
+        --focus-border="2px solid var(--orange)"
+        --focus-outline="none"
+        />
+        <Button2 name={"Скачать"}
+        --bg="transparent"
+        --color="var(--white-blue)"
+        --border="2px solid var(--white-blue)"
+        --font-size=".875rem"
+        --padding=".25rem 1rem"
+        --bg-hover="var(--gray-blue)"
+        --color-hover="var(--white-blue)"
+        --border-hover="2px solid var(--white-blue)"
+        --focus-border="2px solid var(--orange)"
+        --focus-outline="none"/>
+    </div>
 </section>
 
 
@@ -42,6 +69,16 @@
         width: 100%;
         position: relative;
         border-radius: 20px 0 0 0;
+    }
+
+    .doc__buttons{
+        position: absolute;
+        top: .8rem;
+        right: 1.5rem;
+        display: flex;
+       /* max-height: 1.5rem;*/
+        gap: 1rem;
+        z-index: 100;
     }
     
 

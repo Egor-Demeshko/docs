@@ -121,6 +121,7 @@
 
     /*правильное добавление gap*/
     $: if(!showRight && projectElement){
+        debugger;
         setTimeout(() => {
             projectElement.style.gap = "0";
         }, 350);

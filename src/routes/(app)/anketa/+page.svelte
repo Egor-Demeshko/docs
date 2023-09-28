@@ -2,7 +2,7 @@
     import DocumentsWithSimpleText from "$lib/scripts/controllers/documents/DocumentsWithSimpleTexts";
 	import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import { nodes, documents, anketaGraphController } from "$lib/scripts/stores";
+    import { nodes, documents, anketaGraphController, docxController } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import TabsWithoutEvents from "$lib/components/Tabs/TabsWithoutEvents.svelte";
@@ -28,6 +28,7 @@
     */
     anketaGraphController.set( new DynamicGraphController({project_id, saveClient: "local"}));
     $anketaGraphController.subscribe(updateGraph);
+    $docxController.setProjectId(project_id);
 
     /**делаем из графа массив*/
     /* также задаем значения по умолчанию, если их нет*/

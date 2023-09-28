@@ -1,5 +1,6 @@
 import { writable, readable } from "svelte/store";
 import { Projects } from "$lib/scripts/controllers/instances/Projects.js";
+import DocHandler from "$lib/scripts/controllers/instances/DocHandler.js";
 
 
 
@@ -220,3 +221,5 @@ export const projectName = writable();
 
 /** для хранения ссылки на фукнцию callback модуля печати */
 export const printCallback = writable();
+
+export const docxController = readable( new DocHandler() );

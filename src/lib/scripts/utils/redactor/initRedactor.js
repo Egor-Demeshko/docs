@@ -1,6 +1,6 @@
 import jQuery from "jquery";
 import print from "$lib/scripts/utils/redactor/printFlow.js";
-import {printCallback} from "$lib/scripts/stores";
+import {printCallback, docxController} from "$lib/scripts/stores";
 import { get } from "svelte/store";
 
 export default async function initRedactor(container){
@@ -22,6 +22,15 @@ export default async function initRedactor(container){
                 class: '',
                 hasIcon: true,
                 ico: "print"
+            },
+            download: {
+                fn: () => { 
+                    const doc = get( docxController );
+                    doc.createDocFromHtml();
+                 },
+                title: 'Скачать документ',
+                text: 'Download',
+                class: '',
             },
         },
         btns: [

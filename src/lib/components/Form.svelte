@@ -35,18 +35,21 @@
             }
 
 
-            let {success, data, detail} = await servise.createInstance(dataToSend);
+            try{
+                let {success, data, detail} = await servise.createInstance(dataToSend);
 
-            if(!success && detail.error_type === "param_error"){
-                //TODO show error
+                if(success && data && $userStore){
+                let result = $userStore.saveData(data);
+                if(result) goto("/projects");
+            }
+            } catch (e){
+                console.log("[LOGIN]: ", e.message);
+                disabled = false;
             }
 
            console.log("[AFTER login]: data ", data);
 
-            if(data && $userStore){
-                let result = $userStore.saveData(data);
-                if(result) goto("/projects");
-            }
+
 
             disabled = false;
         }         

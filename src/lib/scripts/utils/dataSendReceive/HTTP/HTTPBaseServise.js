@@ -1,5 +1,7 @@
+import { PUBLIC_BACK_HOST } from "$env/static/public";
+
 export default class HTTPBaseServise{
-    #origin = "http://constructor.crabdance.com/";
+    #origin = PUBLIC_BACK_HOST;
     constructor(){
 
     }
@@ -148,5 +150,25 @@ export default class HTTPBaseServise{
         });
         
         return await response.json();
+    }
+
+
+    async postForReadebleStream(token, data, route, cors="cors"){
+        const url = new URL(this.#origin + this.path + route); 
+
+        const headers = {
+            "Content-type": "application/json",
+        };
+
+        if(token) headers.jwt = token;
+
+        const response = await fetch(url, {
+            method: "POST",
+            mode: cors,
+            headers,
+            body: data
+        });
+
+        return response;
     }
 }

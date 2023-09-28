@@ -8,6 +8,10 @@ export default class HTTPprojects extends HTTPrefresher{
         super();
     }
 
+    get secondPath(){
+        return this.secondPath;
+    }
+
     async getList(token){
         try{
             return await super.getWithTokenInHeader({token, route: '/projects'});
