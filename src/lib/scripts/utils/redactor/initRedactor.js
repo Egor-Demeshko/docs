@@ -23,15 +23,6 @@ export default async function initRedactor(container){
                 hasIcon: true,
                 ico: "print"
             },
-            download: {
-                fn: () => { 
-                    const doc = get( docxController );
-                    doc.createDocFromHtml();
-                 },
-                title: 'Скачать документ',
-                text: 'Download',
-                class: '',
-            },
         },
         btns: [
             ['undo', 'redo'], 

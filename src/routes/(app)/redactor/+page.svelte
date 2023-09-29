@@ -20,6 +20,7 @@
     import { beforeNavigate } from "$app/navigation";
     import { projectName } from "$lib/scripts/stores";
 	import PrintModule from "$lib/components/PrintModule.svelte";
+    import { docxController } from "$lib/scripts/stores"; 
 
     //receiving data from load function
     export let data;
@@ -35,6 +36,7 @@
     /**контроллер работы в целом с проектом*/
 
     setContext("controller", $nodeController);
+    setContext("templateController", $docxController);
     projectName.set({id: project_id, name});
 
     //console.log("HTML: ", html);

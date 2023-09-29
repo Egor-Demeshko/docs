@@ -28,8 +28,15 @@ export default class DocHandler {
         const token = await this.getToken();
 
         const result = await this.#client.createDocFromHtml(token, name, html);
+        return result;
+    }
 
-        debugger;
+
+    async saveDocument(project_id, name, html){
+        const token = await this.getToken();
+
+        const result = await this.#client.saveDocumentToProject(token, project_id, name, html);
+        return result;
     }
 
 

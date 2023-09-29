@@ -17,11 +17,11 @@ export default class HTTPLogin extends HTTPrefresher{
 
         let result;
 
-        try{
+        try {
              result = await super.post(JSON.stringify(data), end);
              console.log("[HTTPlogin]: data", data);
              return result;
-        } catch(e){
+        } catch(e) {
             console.log("[Логин]: не удалось залогиниться!");
             throw e;
         }

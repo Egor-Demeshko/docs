@@ -13,7 +13,18 @@ export default class HTTPDoc extends HTTPprojects{
             html
         }
 
-        const result = await super.postForReadebleStream(token, JSON.stringify(objToSend), route); 
+        try{
+
+            const result = await super.postForStreamWithSecondPath(token, JSON.stringify(objToSend), route); 
+            const blob = await result.blob();
+            return URL.createObjectURL(blob);
+        } catch (e){
+            console.log("[HTTPDOC]: ошибка при создании документа ", e.message);
+            throw e;
+        }
+        
+
+        return result;
     }
 
 
@@ -26,8 +37,8 @@ export default class HTTPDoc extends HTTPprojects{
             html
         }
 
-        const result = await super.postForReadebleStream(token, JSON.stringify(objToSend), route);
-
+        const result = await super.postForStreamWithSecondPath(token, JSON.stringify(objToSend), route);
+        return result;
     }
 
 
@@ -41,5 +52,6 @@ export default class HTTPDoc extends HTTPprojects{
         }
 
         const result = await super.postForReadebleStream(token, JSON.stringify(objToSend), route);
+        return result;
     }
 }

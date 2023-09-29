@@ -1,9 +1,16 @@
 <script>
-	import { onMount } from "svelte";
+	import { getContext, onMount } from "svelte";
+    import { documents } from "$lib/scripts/stores";
     import createOnDocumentRedactorEvents from "$lib/scripts/docElements/GlobalRedactorEvents";
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
+	import Download from "./Download.svelte";
+
+
+    const docCntl = getContext("templateController");
+    const document = $documents;
+    let url = "";
 
     
     /** @description разметка документа */
@@ -16,7 +23,39 @@
 
     onMount( async () => {
         createOnDocumentRedactorEvents(root);
+        return () =>{
+
+        }
     });
+
+
+    async function download(){
+        const name = document.getActiveDocumentName();
+        const html = document.gainActiveHtml();
+        
+        try{
+            url = await docCntl.createDocFromHtml(name, html);
+
+        } catch (e){
+            console.log('[DOCWRITER]: error: ', e.message);
+            //TODO показать сообзение об ошибке загрузки файла
+        }
+
+    }
+
+
+    async function save(){
+        const name = document.getActiveDocumentName();
+        const html = document.gainActiveHtml();
+        const project_id = document.getActiveProjectId();
+
+        try {
+            const result = await docCntl.saveDocument();
+        } catch (e){
+            console.log('[DOCWRITER]: error: ', e.message);
+            throw e;
+        }
+    }   
 
 
 
@@ -47,6 +86,7 @@
         --border-hover="2px solid var(--white-blue)"
         --focus-border="2px solid var(--orange)"
         --focus-outline="none"
+        on:click={save}
         />
         <Button2 name={"Скачать"}
         --bg="transparent"
@@ -58,9 +98,15 @@
         --color-hover="var(--white-blue)"
         --border-hover="2px solid var(--white-blue)"
         --focus-border="2px solid var(--orange)"
-        --focus-outline="none"/>
+        --focus-outline="none"
+        on:click={download}/>
     </div>
+
 </section>
+
+
+<Download bind:url={url} {document}/>
+
 
 
 <style>

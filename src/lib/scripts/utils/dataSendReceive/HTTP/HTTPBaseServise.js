@@ -27,7 +27,7 @@ export default class HTTPBaseServise{
             return result;
 
         } catch(e){
-            console.log('[Ошибка получения данных]: нет ответа от сервера.', e.message);
+            console.log('[Ошибка получения данных]: ошибка запроса', e.message);
         }
         
         console.log("[HTTPBaseServise]  POST DATA: ", result);
@@ -155,6 +155,25 @@ export default class HTTPBaseServise{
 
     async postForReadebleStream(token, data, route, cors="cors"){
         const url = new URL(this.#origin + this.path + route); 
+
+        const headers = {
+            "Content-type": "application/json",
+        };
+
+        if(token) headers.jwt = token;
+
+        const response = await fetch(url, {
+            method: "POST",
+            mode: cors,
+            headers,
+            body: data
+        });
+
+        return response;
+    }
+
+    async postForStreamWithSecondPath(token, data, route, cors="cors"){
+        const url = new URL(this.#origin + this.path + this.secondPath + route); 
 
         const headers = {
             "Content-type": "application/json",

@@ -4,7 +4,6 @@ import { storeForSimpleTexts } from "$lib/scripts/stores";
 
 export default function generateTextElements(graph, html){
     let arr = []; //массив для элементов
-    ;
     createJSRuleObject();
 
     storeForSimpleTexts.set(arr);
