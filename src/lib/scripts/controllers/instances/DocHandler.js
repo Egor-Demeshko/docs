@@ -40,6 +40,14 @@ export default class DocHandler {
     }
 
 
+    async downloadDocument(project_id, document_id){
+        const token = await this.getToken();
+
+        const result = await this.#client.downloadDocument(token, project_id, document_id);
+        return result;
+    }
+
+
     async getToken(){
         return await this.#jwt.getToken(); 
     }

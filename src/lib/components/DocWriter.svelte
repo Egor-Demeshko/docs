@@ -1,16 +1,17 @@
 <script>
+    import { page } from '$app/stores';
 	import { getContext, onMount } from "svelte";
     import { documents } from "$lib/scripts/stores";
     import createOnDocumentRedactorEvents from "$lib/scripts/docElements/GlobalRedactorEvents";
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
-	import Download from "./Download.svelte";
+	import Download, { downloadState } from "./Download.svelte";
 
 
     const docCntl = getContext("templateController");
-    const document = $documents;
-    let url = "";
+    const docStore = $documents;
+    const route = $page.route.id;
 
     
     /** @description разметка документа */
@@ -23,18 +24,16 @@
 
     onMount( async () => {
         createOnDocumentRedactorEvents(root);
-        return () =>{
-
-        }
     });
 
 
     async function download(){
-        const name = document.getActiveDocumentName();
-        const html = document.gainActiveHtml();
+        const name = docStore.getActiveDocumentName();
+        const html = docStore.gainActiveHtml();
         
         try{
-            url = await docCntl.createDocFromHtml(name, html);
+            let url = await docCntl.createDocFromHtml(name, html);
+            downloadState.set({url, name}); 
 
         } catch (e){
             console.log('[DOCWRITER]: error: ', e.message);
@@ -45,15 +44,37 @@
 
 
     async function save(){
-        const name = document.getActiveDocumentName();
-        const html = document.gainActiveHtml();
-        const project_id = document.getActiveProjectId();
+        const name = docStore.getActiveDocumentName();
+        const html = docStore.gainActiveHtml();
+        const project_id = docStore.projectId;
 
         try {
-            const result = await docCntl.saveDocument();
+            const result = await docCntl.saveDocument(project_id, name, html);
+            
+            if(result.success){
+                document.dispatchEvent( new CustomEvent("error", {detail: {
+                    err_data: [
+                        {
+                            blockId: 0,
+                            message: "Документ успешно сохранен!",
+                            err_id: 1000,
+                            err_type: "simple"
+                        }
+                    ]
+                }}));
+            }
         } catch (e){
-            console.log('[DOCWRITER]: error: ', e.message);
-            throw e;
+
+            document.dispatchEvent( new CustomEvent("error", {detail: {
+                    err_data: [
+                        {
+                            blockId: 0,
+                            message: "Сохранить документ не удалось. Попробуйте еще раз!",
+                            err_id: 1000,
+                            err_type: "emergency"
+                        }
+                    ]
+                }}));
         }
     }   
 
@@ -74,6 +95,7 @@
 
     <Modal />
 
+    {#if route.includes("anketa") }
     <div class="doc__buttons">
         <Button2 name={"Сохранить"}
         --bg="transparent"
@@ -101,11 +123,12 @@
         --focus-outline="none"
         on:click={download}/>
     </div>
+    {/if}
 
 </section>
 
 
-<Download bind:url={url} {document}/>
+<Download document={docStore}/>
 
 
 
@@ -119,10 +142,9 @@
 
     .doc__buttons{
         position: absolute;
-        top: .8rem;
-        right: 1.5rem;
+        top: .6rem;
+        right: 3.7rem;
         display: flex;
-       /* max-height: 1.5rem;*/
         gap: 1rem;
         z-index: 100;
     }

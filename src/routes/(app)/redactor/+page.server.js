@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import HTTPtemplate from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPtemplate.js";
 
 
-export async function load({ cookies }){
+export async function load({ cookies, route }){
     //console.log("[server load anketa]: cookies: ", await cookies.getAll());
     const cookiesArr = await cookies.getAll();
     const client = new HTTPprojects();
@@ -23,6 +23,7 @@ export async function load({ cookies }){
 
     const {success, data} = await client.getFullInfo(jwt, {project_id: Number(project_id)}, "no-cors");
     console.log('[page.server.js]: after request: ', data);
+    //data.route = route.id;
     if(success) return data;
     if(!success){
         throw redirect("307", "/projects");

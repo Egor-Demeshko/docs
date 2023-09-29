@@ -7,7 +7,6 @@
 	import NodeRedactor from "$lib/components/nodeRedactor/NodeRedactor.svelte";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import Tabs from "$lib/components/Tabs/Tabs.svelte";
-
 	import AddButton from "$lib/components/CntrElem/AddButton.svelte";
     import MessagesContainer from "$lib/components/MessagesContainer.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
@@ -16,7 +15,7 @@
     import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
     import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
     import Node from "$lib/scripts/controllers/instances/Node.js";
-	import { onDestroy, setContext } from "svelte";
+	import { setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import { projectName } from "$lib/scripts/stores";
 	import PrintModule from "$lib/components/PrintModule.svelte";
@@ -27,7 +26,6 @@
 
     //console.log('[page]: data: ', data);
     let {templates, id: project_id, name, nodes: serverNode} = data;
-    let cleanHtml = '';
     let graph = serverNode;
     let length = 0;
     /**добавляем в обьект данных project_Id*/

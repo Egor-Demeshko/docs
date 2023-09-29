@@ -18,8 +18,8 @@
 <div class="list" class:list_show use:enablelist>
     {#if documentsToShow}
         {#if documentsToShow.length > 0}
-            {#each documentsToShow as document}
-                <DocName {document}/>
+            {#each documentsToShow as documentObj}
+                <DocName {documentObj}/>
             {/each}
         {:else}
             <div class="list__empty">
@@ -31,7 +31,6 @@
         {/if}
     {/if}
 </div>
-
 
 <style>
     .list{

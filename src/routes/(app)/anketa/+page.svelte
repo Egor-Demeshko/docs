@@ -10,9 +10,10 @@
     import Modal from "$lib/components/Modal.svelte";
 	import InputElements from "$lib/components/anketa/InputElements.svelte";
     import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
-	import { onMount, onDestroy } from "svelte";
+	import { setContext, onDestroy } from "svelte";
     import DynamicGraphController from "$lib/scripts/controllers/nodes/anketa/controller/DynamicGraphController.js";
     import PrintModule from "$lib/components/PrintModule.svelte";
+	import MessagesContainer from "../../../lib/components/MessagesContainer.svelte";
 
     //receiving data from load function
     export let data;
@@ -29,6 +30,7 @@
     anketaGraphController.set( new DynamicGraphController({project_id, saveClient: "local"}));
     $anketaGraphController.subscribe(updateGraph);
     $docxController.setProjectId(project_id);
+    setContext("templateController", $docxController);
 
     /**делаем из графа массив*/
     /* также задаем значения по умолчанию, если их нет*/
@@ -79,6 +81,9 @@
 --color="var(--faded-gray-blue)"/>
 <Modal />
 <PrintModule />
+<div id="messages_anchor">
+    <MessagesContainer />
+</div>
 
 
 
@@ -109,6 +114,13 @@
         gap: 1.5rem;
         height: calc(100% - 5.5rem);
         width: 100%;
+    }
+
+    #messages_anchor{
+        position: fixed;
+        bottom: 1rem;
+        right: 0;
+        transform: translateX(-200%);
     }
 
 

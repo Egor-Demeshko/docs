@@ -1,5 +1,6 @@
 <script>
-    import { showTooltip } from "$lib/scripts/stores";
+    import { showTooltip, docxController } from "$lib/scripts/stores";
+    import { downloadState } from "$lib/components/Download.svelte";
     
     /**
     * @description массив документов, полученных от сервера
@@ -10,7 +11,8 @@
             "created_at": <{Date}>
         }
      */
-    export let document;
+    export let documentObj;
+
 
     function pointerEvent(e){
         let {x, y} = e;
@@ -54,16 +56,57 @@
     function pointerLeave(){
         showTooltip.set(false);
     }
+
+
+    function clickWithLock(){
+
+        let lock = false;
+
+        return goDownload;
+        async function goDownload(){
+            if(lock) return;
+            
+            lock = true;
+            
+            const {project_id, id: document_id, name} = documentObj;
+            try {
+                let url = await $docxController.downloadDocument(project_id, document_id);
+
+                downloadState.set({url, name: name});
+                lock = false; 
+                
+            } catch(e) {
+                console.log("[DOCNAME]: error on download: ", e.message);
+                lock = false;
+
+                document.dispatchEvent( new CustomEvent( "error", {detail: {
+                    err_data: [
+                        {
+                            blockId: 0,
+                            message: "Ошибка! Не удалось загрузить документ! Попробуйте еще раз",
+                            err_id: 1000,
+                            err_type: "emergency"
+                        }
+                    ]
+                }} ) );
+            }
+        }
+    }
+
+    const click = clickWithLock();
+
+
 </script>
 
 
 <div class="doc_name" tabindex="0"
 on:pointerenter={pointerEvent}
-on:pointerleave={pointerLeave}>
+on:pointerleave={pointerLeave}
+on:click={click}>
     <svg class="icon">
         <use href="/assets/icons/all.svg#doc"></use>
     </svg>
-    <span class="name">{document.name}</span>
+    <span class="name">{documentObj.name}</span>
 </div>
 
 <style>

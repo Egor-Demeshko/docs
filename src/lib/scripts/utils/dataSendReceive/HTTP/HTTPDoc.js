@@ -28,22 +28,22 @@ export default class HTTPDoc extends HTTPprojects{
     }
 
 
-    async downloadFromHtml(token, project_id, name, html){
+    async downloadDocument(token, project_id, document_id){
         const route = "/document/download/";
 
         const objToSend = {
             project_id,
-            name,
-            html
+            document_id
         }
 
         const result = await super.postForStreamWithSecondPath(token, JSON.stringify(objToSend), route);
-        return result;
+        const blob = await result.blob();
+        return URL.createObjectURL(blob);
     }
 
 
     async saveDocumentToProject(token, project_id, name, html){
-        const route = "document/from-html/save/";
+        const route = "/document/from-html/save/";
 
         const objToSend = {
             project_id,
@@ -51,7 +51,7 @@ export default class HTTPDoc extends HTTPprojects{
             html
         }
 
-        const result = await super.postForReadebleStream(token, JSON.stringify(objToSend), route);
+        const result = await super.postWithHeader(token, JSON.stringify(objToSend), route);
         return result;
     }
 }

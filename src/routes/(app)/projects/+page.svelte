@@ -7,10 +7,11 @@
     import { subscribeOnProjectListSet } from "$lib/components/projects-root/ProjectName.svelte";
     import { get } from "svelte/store";
 	import { onMount } from "svelte";
-    import { userStore, projectsStore, showTooltip } from "$lib/scripts/stores";
+    import { projectsStore, showTooltip } from "$lib/scripts/stores";
     import Modal from "$lib/components/Modal.svelte";
     import ModalWithInput from "$lib/components/ModalWithInput.svelte";
-
+	import Download from "$lib/components/Download.svelte";
+	import MessagesContainer from "$lib/components/MessagesContainer.svelte";
 
     /*TODO получаем список проектов этого пользователя*/
     /**@description  [
@@ -201,9 +202,22 @@
     </div>
     
 </ModalWithInput>
+<Download/>
+
+<div id="messages_anchor">
+    <MessagesContainer/>
+</div>
+
 
 
 <style>
+    #messages_anchor{
+        position: fixed;
+        bottom: 1rem;
+        right: 0;
+        transform: translateX(-200%);
+    }
+
     .modal_input{
         border: 2px solid var(--middle-blue);
         border-radius: 15px;
