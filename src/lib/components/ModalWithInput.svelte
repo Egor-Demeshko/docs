@@ -57,7 +57,7 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        padding: .875rem 1.75rem 1.5rem 1rem;
+        padding: 1.5rem 1.75rem 1.5rem 1rem;
         background-color: var(--white-blue);
         pointer-events: all;
         min-width: 400px;

@@ -18,6 +18,8 @@
 
     /**@description input модалки*/
     let input;
+    /**@description текст ошибки*/
+    let spanText = '';
 
     
     /** @description разметка документа */
@@ -30,6 +32,11 @@
     let invalid = false;
     let disabled = true;
     let wrapper_invalid = false;
+    $: if(!active){
+        disabled = false;
+        wrapper_invalid = false;
+        invalid = false;
+    }
 
 
     onMount( async () => {
@@ -97,6 +104,7 @@
                     //await tick();
                     previousName = input.value;
                     disabled = true;
+                    spanText = "Документ с таким именем уже существует!";
                 } else {
                     document.dispatchEvent( new CustomEvent("error", {detail: {
                         err_data: [
@@ -109,6 +117,7 @@
                         ]
                     }}))
                     wrapper_invalid = true;
+                    spanText = "Ошибка запроса сохранения документа! Попробуйте еще раз";
                 }
                 }
                 
@@ -146,8 +155,15 @@
     }
 
 
-
-
+    function keyPress(event) {
+        if (event.key === 'Enter' && !disabled) {
+            save();
+        } else if (event.key === 'Escape') {
+            disabled = true;
+            previousName = "";
+            active = false;
+        }
+    }
 
 </script>
 
@@ -202,10 +218,10 @@
         
         bind:active={active}
         bind:wrapper_invalid={wrapper_invalid}
-        text={"Под каким именем сохранить Ваш документ на сервере?"}
+        text={"Введите уникальное имя для сохранения на сервере"}
         >
         
-        <div slot="inner" class="modal_controls">
+        <div slot="inner" class="modal_controls" on:keydown={ keyPress }>
             <div class="modal_row">
                 {#if invalid}
                     <div class="modal_error">
@@ -219,8 +235,10 @@
                 bind:this={input}
                 on:input={ modalInput }
                 on:invalid={ () => invalid = true}/>
+                <span class="modal_message" 
+                class:invalid
+                class:wrapper_invalid>{spanText}</span>
             </div>
-            <span class="modal_message" class:invalid></span>
             <div class="modal_row">
                 <button on:click={save} class="modal_button" {disabled}>Сохранить</button>
                 <button on:click={ () => {active = false; wrapper_invalid = false} } 
@@ -336,6 +354,7 @@
     input.modal_input:focus,
     .modal_button_with_ouline:focus{
         border: 2px solid var(--deep-blue);
+        background-color: transparent;
     }
 
     input.modal_input:focus-visible,
@@ -360,6 +379,14 @@
     .modal_message{
         display: none;
         position: absolute;
+    }
+
+    .modal_message.invalid,
+    .modal_message.wrapper_invalid{
+        display: inline;
+        color: var(--pumpkin);
+        bottom: 0;
+        transform: translateY(150%);
     }
 
     
