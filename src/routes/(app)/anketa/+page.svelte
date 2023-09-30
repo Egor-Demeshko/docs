@@ -13,7 +13,7 @@
 	import { setContext, onDestroy } from "svelte";
     import DynamicGraphController from "$lib/scripts/controllers/nodes/anketa/controller/DynamicGraphController.js";
     import PrintModule from "$lib/components/PrintModule.svelte";
-	import MessagesContainer from "../../../lib/components/MessagesContainer.svelte";
+	import MessagesContainer from "$lib/components/MessagesContainer.svelte";
 
     //receiving data from load function
     export let data;
@@ -84,7 +84,6 @@
 <div id="messages_anchor">
     <MessagesContainer />
 </div>
-
 
 
 

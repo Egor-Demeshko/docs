@@ -34,6 +34,7 @@
     let projectElement;
     let showRight = false;
     let invalid = false;
+    let wrapper_invalid = false;
 
     /**флаг для отображения модалки создания нового проекта*/
     let active = false;
@@ -191,6 +192,7 @@
 <ModalWithInput
     
     bind:active={active}
+    bind:wrapper_invalid={wrapper_invalid}
     text={"Введите название нового проекта"}
     >
     

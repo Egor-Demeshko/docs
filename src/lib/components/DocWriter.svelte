@@ -1,17 +1,23 @@
 <script>
     import { page } from '$app/stores';
-	import { getContext, onMount } from "svelte";
+	import { getContext, onMount, tick } from "svelte";
     import { documents } from "$lib/scripts/stores";
     import createOnDocumentRedactorEvents from "$lib/scripts/docElements/GlobalRedactorEvents";
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
 	import Download, { downloadState } from "./Download.svelte";
+    import ModalWithInput from "$lib/components/ModalWithInput.svelte";
 
 
     const docCntl = getContext("templateController");
     const docStore = $documents;
     const route = $page.route.id;
+    /**@description прошлое имя документа. для сравнения с текущим*/
+    let previousName = '';
+
+    /**@description input модалки*/
+    let input;
 
     
     /** @description разметка документа */
@@ -20,6 +26,10 @@
 
     /** @description корневой элемент документа*/
     let root;
+    let active = false;
+    let invalid = false;
+    let disabled = true;
+    let wrapper_invalid = false;
 
 
     onMount( async () => {
@@ -44,14 +54,18 @@
 
 
     async function save(){
-        const name = docStore.getActiveDocumentName();
+        const name = input.value;
         const html = docStore.gainActiveHtml();
         const project_id = docStore.projectId;
+        invalid = false;
+
 
         try {
             const result = await docCntl.saveDocument(project_id, name, html);
             
             if(result.success){
+                previousName = '';
+                active = false;
                 document.dispatchEvent( new CustomEvent("error", {detail: {
                     err_data: [
                         {
@@ -62,9 +76,47 @@
                         }
                     ]
                 }}));
+            } else if (!result.success){
+                const {details} = result;
+                
+                for(let i = 0; i < details.length; i++){
+                    const errorObj = details[i];
+                    const {message} = errorObj;
+                    if(message === "Document name already exist"){
+                    document.dispatchEvent( new CustomEvent("error", {detail: {
+                        err_data: [
+                            {
+                                blockId: 0,
+                                message: "Документ с таким именем уже существует!",
+                                err_id: 1000,
+                                err_type: "emergency"
+                            }
+                        ]
+                    }}));
+                    invalid = true;
+                    //await tick();
+                    previousName = input.value;
+                    disabled = true;
+                } else {
+                    document.dispatchEvent( new CustomEvent("error", {detail: {
+                        err_data: [
+                            {
+                                blockId: 0,
+                                message: "Ошибка запроса сохранения документа! Попробуйте еще раз",
+                                err_id: 1001,
+                                err_type: "emergency"
+                            }
+                        ]
+                    }}))
+                    wrapper_invalid = true;
+                }
+                }
+                
             }
         } catch (e){
-
+            
+            previousName = "";
+            wrapper_invalid = true;
             document.dispatchEvent( new CustomEvent("error", {detail: {
                     err_data: [
                         {
@@ -76,7 +128,22 @@
                     ]
                 }}));
         }
-    }   
+    }
+    
+    
+    function modalInput(e){
+        wrapper_invalid = false;
+        const target = e.target;
+        if(target.value.length > 0 && previousName !== target.value){
+            disabled = false;
+            invalid = false;
+        } else if (previousName === target.value){
+            invalid = true;
+            disabled = true;
+        } else {
+            disabled = true;
+        }
+    }
 
 
 
@@ -108,7 +175,7 @@
         --border-hover="2px solid var(--white-blue)"
         --focus-border="2px solid var(--orange)"
         --focus-outline="none"
-        on:click={save}
+        on:click={ () => active = true }
         />
         <Button2 name={"Скачать"}
         --bg="transparent"
@@ -130,6 +197,39 @@
 
 <Download document={docStore}/>
 
+{#if route.includes("anketa") }
+    <ModalWithInput
+        
+        bind:active={active}
+        bind:wrapper_invalid={wrapper_invalid}
+        text={"Под каким именем сохранить Ваш документ на сервере?"}
+        >
+        
+        <div slot="inner" class="modal_controls">
+            <div class="modal_row">
+                {#if invalid}
+                    <div class="modal_error">
+                        <svg>
+                            <use href="/assets/icons/all.svg#ex_mark"></use>
+                        </svg>
+                    </div>
+                {/if}
+                <input type="text" class="modal_input" required 
+                class:invalid placeholder={"Введите имя документа"}
+                bind:this={input}
+                on:input={ modalInput }
+                on:invalid={ () => invalid = true}/>
+            </div>
+            <span class="modal_message" class:invalid></span>
+            <div class="modal_row">
+                <button on:click={save} class="modal_button" {disabled}>Сохранить</button>
+                <button on:click={ () => {active = false; wrapper_invalid = false} } 
+                    class="modal_button_with_ouline">Отмена</button>
+            </div>
+        </div>
+        
+</ModalWithInput>
+{/if}
 
 
 <style>
@@ -148,6 +248,120 @@
         gap: 1rem;
         z-index: 100;
     }
+
+    /** МОДАЛКА */
+    .modal_error{
+        width: calc(15px * 1.125);
+        height: 100%;
+        border-radius: 15px 0 0 15px;
+        background-color: var(--pumpkin);
+        position: absolute;
+        left: 1px;
+        top: 0;
+    }
+
+    .modal_error svg{
+        fill: var(--light-blue);
+        width: 2px;
+        max-height: 11px;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .modal_controls{
+        display: flex;
+        flex-direction: column;
+        gap: 1.7rem;
+    }
+
+    .modal_row{
+        display: flex;
+        gap: 1rem;
+        position: relative;
+    }
+
+    input.modal_input{
+        border: 2px solid var(--light-blue);
+        background: var(--light-blue);
+        border-radius: 15px;
+        padding: .5rem 1rem .5rem 1.5rem;
+        width: 100%;
+        color: var(--deep-blue);
+        transition: border 400ms ease, background 400ms ease;
+        outline: none;
+        line-height: normal;
+        font-size: .875rem;
+    }
+
+    .modal_button_with_ouline,
+    .modal_button{  
+        padding: .5rem 1rem;
+        border-radius: 15px;
+        width: 100%;
+        cursor: pointer;
+        transition: background 400ms ease, border 400ms ease;
+        outline: none;
+    }   
+
+    .modal_button{
+        border: 2px solid var(--middle-blue);
+        background-color: var(--middle-blue);
+        font-size: .875rem;
+    }
+
+    .modal_button_with_ouline{
+        border: 2px solid var(--middle-blue);
+        color: var(--middle-blue);
+        background-color: transparent;
+    }
+
+    .modal_button:disabled{
+        background-color: var(--light-gray-blue);
+        color: var(--light-blue);
+        border: 2px solid var(--light-gray-blue);
+        cursor: auto;
+        pointer-events: none;
+    }
+
+    input.modal_input::placeholder{
+        color: var(--faded-gray-blue);
+    }
+
+    .modal_button_with_ouline:hover{
+        background-color: var(--light-gray-blue);
+    }
+
+    input.modal_input:focus,
+    .modal_button_with_ouline:focus{
+        border: 2px solid var(--deep-blue);
+    }
+
+    input.modal_input:focus-visible,
+    .modal_button_with_ouline:focus-visible{
+        border: 2px solid var(--orange);
+    }
+
+    input.modal_input.invalid{
+        border: 2px solid var(--pumpkin);
+    }
+
+    input.modal_input:hover{
+        border: 2px solid var(--light-gray-blue);
+        background-color: var(--light-gray-blue);
+    }
+
+    input.modal_input:hover:focus{
+        border: 2px solid var(--orange);
+        background-color: var(--light-gray-blue);
+    }
+
+    .modal_message{
+        display: none;
+        position: absolute;
+    }
+
     
 
     /* не удалять этот класс. на него валидируемся при событии*/

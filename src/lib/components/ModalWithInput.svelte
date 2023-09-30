@@ -5,10 +5,12 @@
 
     export let active = false;
     export let text = '';
+    export let wrapper_invalid = false;
 
 
     function closeModal(){
         active = false;
+        wrapper_invalid = false;
     }
 
 </script>
@@ -21,7 +23,8 @@
         }
     }}>
         <div class="elements" in:fly={{y: 100, duration: 600}}
-        out:fly={{y: 100, duration: 600}}>
+        out:fly={{y: 100, duration: 600}}
+        class:wrapper_invalid>
             <span>{text}</span>
             <div class="buttons">
                 <slot name="inner" {value}></slot>
@@ -54,13 +57,18 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        padding: .875rem 1rem 1.5rem 1rem;
+        padding: .875rem 1.75rem 1.5rem 1rem;
         background-color: var(--white-blue);
         pointer-events: all;
         min-width: 400px;
         border: 2px solid var(--middle-blue);
         border-radius: 15px;
         position: relative;
+        transition: border 400ms ease;
+    }
+
+    .elements.wrapper_invalid{
+        border: 2px solid var(--pumpkin);
     }
 
     .elements>span{
@@ -69,6 +77,7 @@
         pointer-events: none;
         font-size: 1rem;
         text-align: center;
+        font-weight: 500;
     } 
 
     .buttons{
