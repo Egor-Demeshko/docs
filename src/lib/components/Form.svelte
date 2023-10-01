@@ -94,7 +94,7 @@
     }
 </script>
 
-<form on:submit={ (e) => e.preventDefault()}>
+<form on:submit|preventDefault>
     <h1>Вход в личный кабинет</h1>
     <div class="controls">
 
@@ -189,6 +189,7 @@
     form{
         padding: 5rem 2.5rem;
         background-color: var(--white-blue);
+        width: 37rem;
         width: clamp(32rem, 32vw , 39rem);
         border-radius: 20px;
     }
@@ -200,13 +201,16 @@
         color: var(--middle-blue);
         margin: 0;
         margin-bottom: 3rem; 
+        margin-bottom: clamp(1.8rem, 2.62vw, 3rem); 
     }
 
     .controls{
         display: flex;
         flex-flow: column;
         gap: 2.7rem;
+        gap: clamp(2rem, 2.62vw, 2.7rem);
         margin-bottom: 3.25rem;
+        margin-bottom: clamp(1.9rem, 2.81vw, 3.25rem);
     }
 
     .controls__group{

@@ -151,7 +151,7 @@
 
 </script>
 
-<form>
+<form on:submit|preventDefault>
     <h1>Регистрация</h1>
     <div class="controls">
         <div class="controls__group">
@@ -319,6 +319,7 @@
 <style>
     form{
         padding: 5rem 2.5rem;
+        padding: clamp(2.5rem, 4.34vw, 5rem) clamp(1.5rem, 2.17vw, 2.5rem);
         background-color: var(--white-blue);
         width: clamp(32rem, 32vw , 39rem);
         border-radius: 20px;
@@ -331,13 +332,16 @@
         color: var(--middle-blue);
         margin: 0;
         margin-bottom: 2.69rem; 
+        margin-bottom: clamp(1.7rem ,2.33vw ,2.69rem); 
     }
 
     .controls{
         display: flex;
         flex-flow: column;
         gap: 2.67rem;
+        gap: clamp(1.8rem, 2.33vw, 2.67rem);
         margin-bottom: 5.2rem;
+        margin-bottom: clamp(2.9rem, 4.5vw, 5.2rem);
     }
 
     .controls__group{
