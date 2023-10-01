@@ -10,23 +10,23 @@
 
     let dispatch = createEventDispatcher();
     let validData = {login: {value: "", validity: false}, password: {value: "", validity: false}};
-    let disabled = false;
+    let disabled = true;
+    let generealText = '';
+    let generalInvalid = false;
+    let error_password = '';
+    let error_log = '';
+    $: console.log(error_log);
+
 
 
     async function logIn(e){
         e.preventDefault();
+
+        if(disabled) return;
+
         disabled = true;
         const servise = new saveDeleteService("login");
         console.log("[LOGIN]: START LOGGINING");
-
-
-        /**проверяем валидность полей ввода*/
-        for(let key of Object.keys(validData)){
-            if(!validData[key].validity) {
-                disabled = false;
-                return;
-            };
-        }
 
         {
             const dataToSend ={
@@ -37,66 +37,100 @@
 
             try{
                 let {success, data, detail} = await servise.createInstance(dataToSend);
+                disabled=false;
 
                 if(success && data && $userStore){
-                let result = $userStore.saveData(data);
-                if(result) goto("/projects");
-            }
+                    generealText = "";
+                    let result = $userStore.saveData(data);
+                    if(result) goto("/projects");
+                }
+
+                if(!success){
+                    generealText = "Неверный логин или пароль";
+                    generalInvalid = true;
+                    disabled = false;
+                }
             } catch (e){
-                console.log("[LOGIN]: ", e.message);
+                generealText = "Ошибка сети, попробуйте еще раз";
                 disabled = false;
             }
-
-           console.log("[AFTER login]: data ", data);
-
-
-
             disabled = false;
         }         
     }
 
 
     function inputChange(e){
-
+        generealText = "";
         const target = e.target;
         let id = target.name;
 
         if(id){
             validData[id]["value"] = target.value;
         }
+    }
 
-        console.log("[validData]", validData);
+
+    function invalidHandle(){
+        disabled = true;
     }
 
 
     function validHandle(e){
+        generalInvalid = false;
+        generealText = "";
         const {id, validity} = e.detail;
 
         validData[id]["validity"] = validity;
+
+                /**проверяем валидность полей ввода*/
+        for(let key of Object.keys(validData)){
+            if(!validData[key].validity) {
+                disabled = true;
+                return;
+            };
+        }
+
+        disabled = false;
     }
 </script>
 
-<form>
+<form on:submit={ (e) => e.preventDefault()}>
     <h1>Вход в личный кабинет</h1>
     <div class="controls">
+
+    <div class="controls__group">
         <InputLogIn id={"login"} name={"login"} placeholder={"Введите ваш логин"}
         type={'text'}
         pattern={"[a-zA-Z_0-9]{4,}"}
         required={true}
+        bind:text={error_log}
         on:valid={validHandle}
+        on:invalid={invalidHandle}
         --border-width="2px"
         --border-color="var(--middle-blue)"
         --font-size="1.125rem"
         --color="var(--deep-blue)"
         --background="var(--white-blue)"
         --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
-        on:input={inputChange}/>
+        --border-color-hover="var(--light-slate-gray)"
+        --border-color-focus="var(--faded-middle-blue)"
+        --background-hover="var(--faded-light-blue)"
+        --background-focus="var(--faded-light-blue)"
+        --padding=".625rem 1.75rem"
+        --error-background="var(--light-blue)"
+        on:input={inputChange}
+        invalid={generalInvalid}/>
+
+        {#if error_log}
+            <span class="error_text">{error_log}</span>
+        {/if}
+    </div>
         
+    <div class="controls__group">
         <InputWithEye id={"password"} name={"password"} placeholder={"Введите ваш пароль"}
         pattern={".{5,}"}
         required={true}
+        bind:text={error_password}
         on:valid={validHandle}
         --border-width="2px"
         --border-color="var(--middle-blue)"
@@ -104,15 +138,30 @@
         --color="var(--deep-blue)"
         --background="var(--white-blue)"
         --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
+        --border-color-hover="var(--light-slate-gray)"
+        --border-color-focus="var(--faded-middle-blue)"
+        --background-hover="var(--faded-light-blue)"
+        --background-focus="var(--faded-light-blue)"
+        --padding=".625rem 1.75rem"
+        --error-background="var(--light-blue)"
         type={"password"}
-        on:input={inputChange}/>
+        on:input={inputChange}
+        invalid={generalInvalid}/>
 
+        {#if error_password}
+            <span class="error_text">{error_password}</span>
+        {/if}
+    </div>
+
+        <span class="genereal-text">{generealText}</span>
+    </div>
+
+    <div class="buttons">
         <Button name={"Войти"} 
         fnToRunOnClick={logIn}
         {disabled}
         --bg="var(--middle-blue)" 
+        --bg-active="var(--light-slate-gray)"
         --color="var(--white-blue)"
         --bg-hover="var(--gray-blue)"
         --color-hover="var(--white-blue)"
@@ -120,27 +169,27 @@
         --border-hover="2px solid var(--gray-blue)"
         --font-size="1.125rem"
         />
+
+        <Button name={"Зарегистрироваться"}
+        --bg="var(--light-blue)" 
+        --bg-active="var(--light-blue)"
+        --color="var(--middle-blue)"
+        --bg-hover="var(--light-gray-blue)"
+        --color-hover="var(--middle-blue)"
+        --color-active="var(--light-slate-gray)"
+        --border="2px solid var(--light-blue)"
+        --border-hover="2px solid var(--light-gray-blue)"
+        --font-size="1.125rem"
+        fnToRunOnClick={ () => dispatch("switch_to_registration")}
+        on:switch_to_registration/>
     </div>
-
-
-    <Button name={"Зарегистрироваться"}
-    --bg="var(--light-blue)" 
-    --color="var(--middle-blue)"
-    --bg-hover="var(--light-gray-blue)"
-    --color-hover="var(--middle-blue)"
-    --border="2px solid var(--light-blue)"
-    --border-hover="2px solid var(--light-gray-blue)"
-    --font-size="1.125rem"
-    fnToRunOnClick={ () => dispatch("switch_to_registration")}
-    on:switch_to_registration/>
-
 </form>
 
 <style>
     form{
         padding: 5rem 2.5rem;
-        background-color: var(--white);
-        width: 30rem;
+        background-color: var(--white-blue);
+        width: clamp(32rem, 32vw , 39rem);
         border-radius: 20px;
     }
 
@@ -150,13 +199,39 @@
         text-align: center;
         color: var(--middle-blue);
         margin: 0;
-        margin-bottom: 1.5rem; 
+        margin-bottom: 3rem; 
     }
 
     .controls{
         display: flex;
         flex-flow: column;
-        gap: 1rem;
+        gap: 3rem;
         margin-bottom: 2rem;
+    }
+
+    .controls__group{
+        position: relative;
+    }
+
+    .genereal-text{
+        color: var(--pumpkin);
+        transform: translateY(-8px);
+        height: 1rem;
+        font-size: 1rem;
+    }
+
+    .buttons{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .error_text{
+        color: var(--middle-blue);
+        font-size: 1rem;
+        position: absolute;
+        bottom: -0.5rem;
+        transform: translateY(100%);
+        left: 0;
     }
 </style>

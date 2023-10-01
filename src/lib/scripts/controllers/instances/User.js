@@ -33,7 +33,7 @@ export default class User{
     }
 
     async registrate(data, reg){
-        this.#login.post(data, reg);
+        return await this.#login.post(data, reg);
     }
 
 

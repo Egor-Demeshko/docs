@@ -10,9 +10,12 @@
     export let value = '';
     export let name = '';
     export let validity;
+    export let text = '';
+    
+    
 
     let valid = '';
-    let invalid = '';
+    export let invalid = false;
     export let input;
     let passwordVisible = false;
     const dispatcher = createEventDispatcher();
@@ -48,21 +51,16 @@
 
     function setValid(){
         invalid = false;
-        valid = true; 
+        text = "";
+
         dispatcher("valid", {id, validity: true});
         showTooltip.set(false);
     }
 
 
     function setInvalid(){
-        dispatcher("valid", {id, validity: false});
-        const coors = input.getBoundingClientRect();
-        showTooltip.set({show: true, 
-            coors: {x: coors.x + input.offsetWidth/2, y: coors.y + 20}, 
-            text: "Минимум 5 символoв. Латинские буквы, цифры, _", 
-            place: "under"});
-
-        valid = false;
+        dispatcher("invalid", {id, validity: false});
+        text = "Минимум 5 символoв. Латинские буквы, цифры, _";
         invalid = true;
     }
 
@@ -84,15 +82,28 @@
         }
     }
 
+
+    function inputHandle(){
+        startValidation();
+    }
+
 </script> 
 
 <div class="input_wrapper" class:not_valid on:click={clickHandle}>
 
+    <div class="error_mark" class:invalid>
+        <svg>
+            <use href="/assets/icons/all.svg#ex_mark"></use>
+        </svg>
+    </div>
+
     <input {placeholder} {id} {name} {required} {pattern} {type} {value}
     class:not_valid
     class:invalid
+    class:text
     minlength={5}
     on:blur={blurHandler}
+    on:input={inputHandle}
     on:input
     bind:this={input}
     />
@@ -111,6 +122,8 @@
             <path d="M21.7699 2.22988C21.4699 1.92988 20.9799 1.92988 20.6799 2.22988L2.22988 20.6899C1.92988 20.9899 1.92988 21.4799 2.22988 21.7799C2.37988 21.9199 2.56988 21.9999 2.76988 21.9999C2.96988 21.9999 3.15988 21.9199 3.30988 21.7699L21.7699 3.30988C22.0799 3.00988 22.0799 2.52988 21.7699 2.22988Z" />
         </svg>
     {/if}
+
+
 </div>
 
 <style>
@@ -131,11 +144,9 @@
         transition: border 400ms ease, background 400ms ease;
     }
 
-    input.not_valid,
-    input.invalid{
-        border: var(--border-width) solid var(--pumpkin);
+    input.text{
+        background-color: var(--error-background);
     }
-
 
     input::placeholder{
         color: var(--placeholder);
@@ -148,10 +159,16 @@
     }
 
     input:focus{
-        background-color: var(--background);
-        border: var(--border-width) solid var(--orange);
+        background-color: var(--background-focus);
+        border: var(--border-width) solid var(--border-color-focus);
         outline: none;
     }
+
+    input.not_valid,
+    input.invalid{
+        border: var(--border-width) solid var(--pumpkin);
+    }
+
 
     svg{
         position: absolute;
@@ -165,11 +182,36 @@
     }
 
     svg:hover{
-        fill: var(--pale-orange);
+        fill: var(--faded-middle-blue);
     }
 
     svg:focus{
         outline: none;
-        fill: var(--pale-orange);
+        fill: var(--faded-middle-blue);
+    }
+
+    .error_mark{
+        width: calc(18px * 1.125);
+        height: 100%;
+        border-radius: 30px 0 0 30px;
+        background-color: var(--pumpkin);
+        position: absolute;
+        left: 1px;
+        top: 0;
+        display: none;
+    }
+
+    .error_mark svg{
+        fill: var(--light-blue);
+        width: 2px;
+        max-height: 11px;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .error_mark.invalid{
+        display: flex;
     }
 </style>

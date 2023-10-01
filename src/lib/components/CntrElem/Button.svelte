@@ -56,9 +56,15 @@
         border: 2px solid var(--orange);
     }
 
+    button:active{
+        color: var(--color-active);
+        background-color: var(--bg-active);
+    }
+
     button:disabled{
         cursor: auto;
         background-color: var(--light-gray-blue);
         border: 2px solid var(--light-gray-blue);
+        pointer-events: none;
     }
 </style>

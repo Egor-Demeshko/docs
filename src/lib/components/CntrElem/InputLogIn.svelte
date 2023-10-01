@@ -11,10 +11,11 @@
     export let name = '';
     export let autocomplete = "on";
     export let validity;
+    export let text = '';
+    export let invalid = '';
 
 
     let valid = '';
-    let invalid = '';
     let input;
     const dispatcher = createEventDispatcher();
 
@@ -50,47 +51,54 @@
     function setValid(){
         dispatcher("valid", {id, validity: true});
         showTooltip.set({show: false});
-
+        text="";
         invalid = false;
-        valid = true; 
     }
 
 
     function setInvalid(){
-        dispatcher("valid", {id, validity: false});
-        const coors = input.getBoundingClientRect();
-        if(id !== "reg_mail"){
-            showTooltip.set({show: true, coors: {x: coors.x + input.offsetWidth/2, y: coors.y}, text: "Минимум 4 символа. Латинские буквы, цифры, _", place: "above"});
-        } else if (id === "reg_name"){
-            showTooltip.set({show: true, coors: {x: coors.x + input.offsetWidth/2, y: coors.y}, text: "Минимум 4 символа. Можно кирилицу, латиницу. Буквы, цифры, _", place: "above"});
-        } else {
-            showTooltip.set({
-                show: true, 
-                coors: {x: coors.x + input.offsetWidth/2, y: coors.y + 20},
-                 text: "Почта должна быть вида example@mail.ex", place: "under"});
-        }
+        dispatcher("invalid", {id, validity: false});
 
-        valid = false;
+        if (id === "reg_name"){
+            text = "Латинские или кирилические буквы, цифры, не менее четырех";
+        } else if (id !== "reg_mail"){
+            text = "Латинские буквы, цифры и спецсимволы, не менее четырех";
+        } else {
+            text = "Почта должна быть вида example@mail.ex";
+        }
+        
         invalid = true;
     }
 
 
     function blurHandler(){
-        showTooltip.set({show: false});
+        startValidation();
+    }
+
+
+    function inputEvent(){
         startValidation();
     }
 </script> 
 
 <div class="input_wrapper" class:not_valid>
 
+    <div class="error_mark" class:invalid>
+        <svg>
+            <use href="/assets/icons/all.svg#ex_mark"></use>
+        </svg>
+    </div>
+
     <input {placeholder} id={id} {name} {required} {pattern} {type} {value} {autocomplete}
     class:not_valid
     class:invalid
     minlength={4} maxlength={30}
+    class:text
     on:blur={blurHandler}
     on:focus
     on:mouseenter
     on:mouseleave
+    on:input={inputEvent}
     on:input
     bind:this={input}
     />
@@ -114,11 +122,6 @@
         transition: border 400ms ease, background 400ms ease;
     }
 
-    input.not_valid,
-    .invalid{
-        border: var(--border-width) solid var(--pumpkin);
-    }
-
     input::placeholder{
         color: var(--placeholder);
         font-style: italic;
@@ -130,8 +133,43 @@
     }
 
     input:focus{
-        background-color: var(--background);
-        border: var(--border-width) solid var(--orange);
+        background-color: var(--background-focus);
+        border: var(--border-width) solid var(--border-color-focus);
         outline: none;
+    }
+
+    input.not_valid,
+    input.invalid{
+        border: var(--border-width) solid var(--pumpkin);
+    }
+
+    input.text{
+        background-color: var(--error-background);
+    }
+
+
+    .error_mark{
+        width: calc(18px * 1.125);
+        height: 100%;
+        border-radius: 30px 0 0 30px;
+        background-color: var(--pumpkin);
+        position: absolute;
+        left: 1px;
+        top: 0;
+        display: none;
+    }
+
+    .error_mark svg{
+        fill: var(--light-blue);
+        width: 2px;
+        max-height: 11px;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .error_mark.invalid{
+        display: flex;
     }
 </style>

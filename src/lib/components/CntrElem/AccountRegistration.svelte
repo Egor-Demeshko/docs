@@ -12,26 +12,28 @@
                     reg_password: {value: "", validity: false}, 
                     reg_password_repeat: {value: "", validity: false}};
                     
-    let disabled = false;
+    let disabled = true;
     let bothPasswordValid = {status: "valid"};
     /**инпут для показа сообщени об ошибки в случае если поля не равны*/
     let firstPassword;
     let secondPassword;
+    let err_name = '';
+    let err_login = '';
+    let err_mail = '';
+    let err_password = '';
+    let err_both_passwords = '';
 
 
     async function registrate(e){
         e.preventDefault();
         disabled = true;
+        
         // надо проверить сначала два поля регистрации, одинаковые ли они
         // надо проверить валидность всех полей
         if(validData.reg_password.value !== validData.reg_password_repeat.value){
             bothPasswordValid = {status: "invalid"};
-            let coors = firstPassword.getBoundingClientRect();
 
-            showTooltip.set({show: true, 
-                            coors: {x: coors.x + firstPassword.offsetWidth /2, y: coors.y}, 
-                            text: "Пароли не совпадают", 
-                            place: "above"});
+            err_both_passwords = "Пароли не совпадают";
             disabled = false;
             return;
         }
@@ -61,30 +63,44 @@
                 "name": validData.reg_name.value,
                 "login": validData.reg_login.value
             }
-            console.log("[STARTING REG]");
-            let {success} = await new Promise( (resolve) => setTimeout( () => resolve({
-                "success": true,
-                "data": {
-                    "user_id": 2,
-                    "name": "new_user2",
-                    "email": "new_user2@google.com",
-                    "login": "user_login2"
-                },
-                "details": null
-            }), 1000));
-            //await $userStore.registrate(dataToSend, true);
-            if(success){
-                dispatch("switch_to_login");
+
+            err_mail = "";
+
+            try{
+                let {success, details} = await $userStore.registrate(dataToSend, true);
+                if(success){
+                    dispatch("switch_to_login");
+                }
+
+                if(!success){
+                    
+                    for(let i = 0; i < details.length; i++){
+                        const {message} = details[i];
+
+                        if(message === "Email is already exist"){
+                            
+                            err_mail = "Пользователь с таким email уже существует";    
+                        }
+                    }
+                }
+            } catch (e){
+                console.log("ACCOUNT ERROR", e);
             }
         }
 
-        showTooltip.set({show: false});
         bothPasswordValid = {status: "valid"};
         disabled = false;
     }
 
 
     function validHandle(e){
+        const {id, validity} = e.detail;
+
+        validData[id]["validity"] = validity;
+    }
+
+
+    function passwordInvalid(e){
         const {id, validity} = e.detail;
 
         validData[id]["validity"] = validity;
@@ -108,16 +124,26 @@
             let second = validData["reg_password_repeat"].value;
 
             if(first !== second){
-                showTooltip.set({show: true, 
-                            coors: {x: coors.x + firstPassword.offsetWidth /2, y: coors.y}, 
-                            text: "Пароли не совпадают", 
-                            place: "above"});
+                err_both_passwords = "Пароли не совпадают";
             } else {
-                showTooltip.set({show: false});
+                err_both_passwords = "";
+            }
+        }
+        
+        isAllValid();
+        console.log("[validData]", validData);
+    }
+
+
+    function isAllValid(){
+        for( let key of Object.keys(validData)){
+            if(!validData[key].validity) {
+                disabled = true;
+                return;
             }
         }
 
-        console.log("[validData]", validData);
+        disabled = false;
     }
 
 
@@ -128,88 +154,143 @@
 <form>
     <h1>Регистрация</h1>
     <div class="controls">
-        <InputLogIn id={"reg_login"} placeholder={"Введите ваш логин"}
-        name={"reg_login"}
-        type={'text'}
-        pattern={"[a-zA-Z_0-9]{4,}"}
-        --border-width="2px"
-        --border-color="var(--middle-blue)"
-        --font-size="1.125rem"
-        --color="var(--deep-blue)"
-        --background="var(--white-blue)"
-        --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
-        on:valid={validHandle}
-        on:input={inputChange}/>
+        <div class="controls__group">
+            <InputLogIn id={"reg_name"} placeholder={"Введите ваше Имя"}
+            name={"reg_name"}
+            type={'text'}
+            pattern={"[a-zA-Z_0-9а-яА-Я]{4,}"}
+            --border-width="2px"
+            --border-color="var(--middle-blue)"
+            --font-size="1.125rem"
+            --color="var(--deep-blue)"
+            --background="var(--white-blue)"
+            --placeholder="var(--gray-blue)"
+            --border-color-hover="var(--light-slate-gray)"
+            --border-color-focus="var(--faded-middle-blue)"
+            --background-hover="var(--faded-light-blue)"
+            --background-focus="var(--faded-light-blue)"
+            --padding=".625rem 1.75rem"
+            --error-background="var(--white-blue)"
+            on:valid={validHandle}
+            on:input={inputChange}
+            bind:text={err_name}/>
 
-        <InputLogIn id={"reg_name"} placeholder={"Введите ваше Имя"}
-        name={"reg_name"}
-        type={'text'}
-        pattern={"[a-zA-Z_0-9а-яА-Я]{4,}"}
-        --border-width="2px"
-        --border-color="var(--middle-blue)"
-        --font-size="1.125rem"
-        --color="var(--deep-blue)"
-        --background="var(--white-blue)"
-        --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
-        on:valid={validHandle}
-        on:input={inputChange}/>
+            <InputLogIn id={"reg_login"} placeholder={"Введите ваш логин"}
+            name={"reg_login"}
+            type={'text'}
+            pattern={"[a-zA-Z_0-9]{4,}"}
+            --border-width="2px"
+            --border-color="var(--middle-blue)"
+            --font-size="1.125rem"
+            --color="var(--deep-blue)"
+            --background="var(--white-blue)"
+            --placeholder="var(--gray-blue)"
+            --border-color-hover="var(--light-slate-gray)"
+            --border-color-focus="var(--faded-middle-blue)"
+            --background-hover="var(--faded-light-blue)"
+            --background-focus="var(--faded-light-blue)"
+            --padding=".625rem 1.75rem"
+            --error-background="var(--white-blue)"
+            on:valid={validHandle}
+            on:input={inputChange}
+            bind:text={err_login}/>
 
-        <InputLogIn id={"reg_mail"} placeholder={"Введите вашу почту"}
-        name={"reg_mail"}
-        type={'text'}
-        pattern={"^[0-9A-Za-z._-]+@[0-9A-Za-z._-]+\\.[a-z]+$"}
-        --border-width="2px"
-        --border-color="var(--middle-blue)"
-        --font-size="1.125rem"
-        --color="var(--deep-blue)"
-        --background="var(--white-blue)"
-        --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
-        on:valid={validHandle}
-        on:input={inputChange}/>
-        
-        <InputWithEye id={"reg_password"} placeholder={"Введите ваш пароль"}
-        name={"reg_password"}
-        pattern={".{5,}"}
-        required={true}
-        --border-width="2px"
-        --border-color="var(--middle-blue)"
-        --font-size="1.125rem"
-        --color="var(--deep-blue)"
-        --background="var(--white-blue)"
-        --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
-        type={"password"}
-        on:valid={validHandle}
-        on:input={inputChange}
-        bind:input={firstPassword}/>
+            {#if err_login || err_name}
+                <span class="warning_text">{ (err_login) ? err_login : err_name }</span>
+            {/if}
+        </div>
 
-        <InputWithEye id={"reg_password_repeat"} placeholder={"Повторите ваш пароль"}
-        name={"reg_password_repeat"}
-        pattern={".{5,}"}
-        required={true}
-        --border-width="2px"
-        --border-color="var(--middle-blue)"
-        --font-size="1.125rem"
-        --color="var(--deep-blue)"
-        --background="var(--white-blue)"
-        --placeholder="var(--gray-blue)"
-        --border-color-hover="var(--pale-orange)"
-        --background-hover="var(--white-blue)"
-        type={"password"}
-        on:valid={validHandle}
-        on:input={inputChange}
-        bind:input={secondPassword}/>
+        <div class="controls__group">
+            <InputLogIn id={"reg_mail"} placeholder={"Введите вашу почту"}
+            name={"reg_mail"}
+            type={'text'}
+            pattern={"^[0-9A-Za-z._-]+@[0-9A-Za-z._-]+\\.[a-z]+$"}
+            invalid={ (() => {if(err_mail) return true})() }
+            --border-width="2px"
+            --border-color="var(--middle-blue)"
+            --font-size="1.125rem"
+            --color="var(--deep-blue)"
+            --background="var(--white-blue)"
+            --placeholder="var(--gray-blue)"
+            --border-color-hover="var(--light-slate-gray)"
+            --border-color-focus="var(--faded-middle-blue)"
+            --background-hover="var(--faded-light-blue)"
+            --background-focus="var(--faded-light-blue)"
+            --padding=".625rem 1.75rem"
+            --error-background="var(--white-blue)"
+            on:valid={validHandle}
+            on:input={inputChange}
+            bind:text={err_mail}/>
 
+            {#if err_mail}
+                <span class="emergency_text">{ err_mail }</span>
+            {/if}
+        </div>
+
+        <div class="controls__group">
+            <InputWithEye id={"reg_password"} placeholder={"Введите ваш пароль"}
+            name={"reg_password"}
+            pattern={".{5,}"}
+            required={true}
+            invalid={ (err_both_passwords) ? true : false }
+            --border-width="2px"
+            --border-color="var(--middle-blue)"
+            --font-size="1.125rem"
+            --color="var(--deep-blue)"
+            --background="var(--white-blue)"
+            --placeholder="var(--gray-blue)"
+            --border-color-hover="var(--light-slate-gray)"
+            --border-color-focus="var(--faded-middle-blue)"
+            --background-hover="var(--faded-light-blue)"
+            --background-focus="var(--faded-light-blue)"
+            --padding=".625rem 1.75rem"
+            --error-background="var(--white-blue)"
+            type={"password"}
+            on:valid={validHandle}
+            on:input={inputChange}
+            on:invalid={passwordInvalid}
+            bind:input={firstPassword} 
+            bind:text={err_password}/>
+
+            <InputWithEye id={"reg_password_repeat"} placeholder={"Повторите ваш пароль"}
+            name={"reg_password_repeat"}
+            pattern={".{5,}"}
+            required={true}
+            invalid={ (err_both_passwords) ? true : false }
+            --border-width="2px"
+            --border-color="var(--middle-blue)"
+            --font-size="1.125rem"
+            --color="var(--deep-blue)"
+            --background="var(--white-blue)"
+            --placeholder="var(--gray-blue)"
+            --border-color-hover="var(--light-slate-gray)"
+            --border-color-focus="var(--faded-middle-blue)"
+            --background-hover="var(--faded-light-blue)"
+            --background-focus="var(--faded-light-blue)"
+            --padding=".625rem 1.75rem"
+            --error-background="var(--light-blue)"
+            type={"password"}
+            on:valid={validHandle}
+            on:input={inputChange}
+            on:invalid={passwordInvalid}
+            bind:input={secondPassword}
+            bind:text={err_password}/>
+
+            {#if err_password && !err_both_passwords}
+                <span class="warning_text">{ err_password }</span>
+            {/if}
+
+            {#if err_both_passwords }
+                <span class="emergency_text">{ err_both_passwords }</span>
+            {/if}
+        </div>
+    </div>
+
+    <div class="buttons">
         <Button name={"Зарегистрироваться"} 
         {disabled}
         --bg="var(--middle-blue)" 
+        --bg-active="var(--light-slate-gray)"
         --color="var(--white-blue)"
         --bg-hover="var(--gray-blue)"
         --color-hover="var(--white-blue)"
@@ -217,27 +298,29 @@
         --border-hover="2px solid var(--gray-blue)"
         --font-size="1.125rem"
         fnToRunOnClick={registrate}/>
+
+
+        <Button name={"Есть аккаунт? Залогиниться"}
+        --bg="var(--light-blue)" 
+        --bg-active="var(--light-blue)"
+        --color="var(--middle-blue)"
+        --bg-hover="var(--light-gray-blue)"
+        --color-hover="var(--middle-blue)"
+        --color-active="var(--light-slate-gray)"
+        --border="2px solid var(--light-blue)"
+        --border-hover="2px solid var(--light-gray-blue)"
+        --font-size="1.125rem"
+        fnToRunOnClick={ () => dispatch("switch_to_login")}
+        on:switch_to_login/>
     </div>
-
-
-    <Button name={"Есть аккаунт? Залогиниться"}
-    --bg="var(--light-blue)" 
-    --color="var(--middle-blue)"
-    --bg-hover="var(--light-gray-blue)"
-    --color-hover="var(--middle-blue)"
-    --border="2px solid var(--light-blue)"
-    --border-hover="2px solid var(--light-gray-blue)"
-    --font-size="1.125rem"
-    fnToRunOnClick={ () => dispatch("switch_to_login")}
-    on:switch_to_login/>
 
 </form>
 
 <style>
     form{
         padding: 5rem 2.5rem;
-        background-color: var(--white);
-        width: 30rem;
+        background-color: var(--white-blue);
+        width: clamp(32rem, 32vw , 39rem);
         border-radius: 20px;
     }
 
@@ -247,13 +330,43 @@
         text-align: center;
         color: var(--middle-blue);
         margin: 0;
-        margin-bottom: 1.5rem; 
+        margin-bottom: 2.69rem; 
     }
 
     .controls{
         display: flex;
         flex-flow: column;
+        gap: 2.67rem;
+        margin-bottom: 5.2rem;
+    }
+
+    .controls__group{
+        display: flex;
+        flex-direction: column;
         gap: 1rem;
-        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .buttons{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .warning_text, 
+    .emergency_text{    
+        font-size: 1rem;
+        position: absolute;
+        bottom: -0.5rem;
+        transform: translateY(100%);
+        left: 0;
+    }
+
+    .warning_text{
+        color: var(--middle-blue);
+    }
+
+    .emergency_text{
+        color: var(--pumpkin);
     }
 </style>

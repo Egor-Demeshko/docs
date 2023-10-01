@@ -29,8 +29,6 @@ export default class HTTPBaseServise{
         } catch(e){
             console.log('[Ошибка получения данных]: ошибка запроса', e.message);
         }
-        
-        console.log("[HTTPBaseServise]  POST DATA: ", result);
     }
 
 

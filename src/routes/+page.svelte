@@ -7,26 +7,26 @@
 
     let logIn_open = false;
     let registration_open = false;
+    let keep_open = false;
 
     function logIn(){
-        console.log("login");
+        keep_open = true;
         registration_open = false;
-        logIn_open = true;
-        
+        setTimeout( () => {logIn_open = true; keep_open = false}, 500);
     }
 
     function goToRegistration(){
-        console.log("registration")
+        keep_open = true;
         logIn_open = false;
-        registration_open = true;
+        setTimeout( () => {registration_open = true; keep_open = false}, 500);
     }
 
 </script>
 
 
-<div>
 
-    <section class:registration_open class:logIn_open>
+
+    <section class:registration_open class:logIn_open class:keep_open>
         <div class="heading">
             <svg>
                 <use href="/assets/icons/all.svg#logo"></use>
@@ -34,7 +34,7 @@
             <h1>Contract Constructor</h1>
         </div>
 
-        {#if !logIn_open && !registration_open}
+        {#if !logIn_open && !registration_open && !keep_open}
         <div out:fade={{duration: 300}}
         class="buttons">
             <Button name={"Войти в личный кабинет"}
@@ -60,29 +60,31 @@
         </div>
         {/if}
 
-        <div class="forms">
-            {#if logIn_open}
-                <div class="forms__form" in:fade={{duration: 400, delay: 800}}
-                    out:fade={{duration: 400}}>
-                    <Form on:switch_to_registration={goToRegistration}/>
-                </div>      
-            {/if}
-
-            {#if registration_open}
-                <div class="forms__form" in:fade={{duration: 400, delay: 800}}
-                    out:fade={{duration: 400}}>
-                    <AccountRegistration on:switch_to_login={logIn}/>
-                </div>      
-            {/if}
-        <div>
-
     </section>
+
+    <div class="forms">
+        {#if logIn_open}
+            <div class="forms__form" in:fade={{duration: 400}}
+                out:fade={{duration: 400}}>
+                <Form on:switch_to_registration={goToRegistration}/>
+            </div>      
+        {/if}
+
+        {#if registration_open}
+            <div class="forms__form" in:fade={{duration: 400}}
+                out:fade={{duration: 400}}>
+                <AccountRegistration on:switch_to_login={logIn}/>
+            </div>      
+        {/if}
+    </div>
+
+
 
     <Tooltip --bg="var(--faded-gray-blue)"
     --color="var(--white-blue)"/>
 
 
-</div>
+
 
 
 <style>
@@ -93,14 +95,15 @@
         left: 50%;
         display: flex;
         flex-direction: column;
-        width: 30rem;
+        width: clamp(26rem, 26vw , 32rem);
         transform: translate(-50%);
         gap: 5rem;
     }
 
     section.logIn_open,
-    section.registration_open{
-        animation-name: moveup;
+    section.registration_open,
+    section.keep_open{
+        animation-name: moveleft;
         animation-timing-function: ease-in-out;
         animation-duration: 600ms;
         animation-fill-mode: forwards;
@@ -108,12 +111,15 @@
     }
 
     .forms{
-        position: relative;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-55%);
     }
 
 
     .forms__form{
-        position: absolute;
+        position: relative;
     }
 
 
@@ -132,7 +138,7 @@
 
 
     h1{
-        font-size: 3.75rem;
+        font-size: clamp(2.75rem, 3.5vw, 3.75rem);
         line-height: 97%;
         font-weight: 500;
         margin: 0;
@@ -141,18 +147,18 @@
 
 
     svg{
-        height: 100%;
+        height: clamp(5.5rem, 5.4vw, 7.7rem);;
         fill: var(--white-blue);
     }
 
 
-    @keyframes moveup{
+    @keyframes moveleft{
         0% {
-            top: 37%;
+            transform: translate(-50%);
         }
 
         100%{
-            top: 19%;
+            transform: translateX(-130%);
         }
     }
 
