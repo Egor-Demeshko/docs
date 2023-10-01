@@ -205,8 +205,8 @@
     .controls{
         display: flex;
         flex-flow: column;
-        gap: 3rem;
-        margin-bottom: 2rem;
+        gap: 2.7rem;
+        margin-bottom: 3.25rem;
     }
 
     .controls__group{
