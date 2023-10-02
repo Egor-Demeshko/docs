@@ -73,13 +73,15 @@
                 }
 
                 if(!success){
-                    
+                    debugger;
                     for(let i = 0; i < details.length; i++){
                         const {message} = details[i];
 
                         if(message === "Email is already exist"){
                             
                             err_mail = "Пользователь с таким email уже существует";    
+                        } else if(message === "Login is already exist") {
+                            err_login = "Пользователь с таким логин уже существует";
                         }
                     }
                 }
@@ -100,7 +102,7 @@
     }
 
 
-    function passwordInvalid(e){
+    function invalidHandle(e){
         const {id, validity} = e.detail;
 
         validData[id]["validity"] = validity;
@@ -119,12 +121,13 @@
         /**валидация соотвествия паролей*/
         if(validData["reg_password"].value.length > 0 && validData["reg_password_repeat"].value.length > 0){
             
-            let coors = secondPassword.getBoundingClientRect();
             let first = validData["reg_password"].value;
             let second = validData["reg_password_repeat"].value;
 
             if(first !== second){
                 err_both_passwords = "Пароли не совпадают";
+                disabled = true;
+                return;
             } else {
                 err_both_passwords = "";
             }
@@ -173,12 +176,14 @@
             --error-background="var(--white-blue)"
             on:valid={validHandle}
             on:input={inputChange}
+            on:invalid={invalidHandle}
             bind:text={err_name}/>
 
             <InputLogIn id={"reg_login"} placeholder={"Введите ваш логин"}
             name={"reg_login"}
             type={'text'}
             pattern={"[a-zA-Z_0-9]{4,}"}
+            invalid={ (() => {if(err_login) return true})() }
             --border-width="2px"
             --border-color="var(--middle-blue)"
             --font-size="1.125rem"
@@ -193,6 +198,7 @@
             --error-background="var(--white-blue)"
             on:valid={validHandle}
             on:input={inputChange}
+            on:invalid={invalidHandle}
             bind:text={err_login}/>
 
             {#if err_login || err_name}
@@ -206,6 +212,7 @@
             type={'text'}
             pattern={"^[0-9A-Za-z._-]+@[0-9A-Za-z._-]+\\.[a-z]+$"}
             invalid={ (() => {if(err_mail) return true})() }
+            required={true}
             --border-width="2px"
             --border-color="var(--middle-blue)"
             --font-size="1.125rem"
@@ -220,6 +227,7 @@
             --error-background="var(--white-blue)"
             on:valid={validHandle}
             on:input={inputChange}
+            on:invalid={invalidHandle}
             bind:text={err_mail}/>
 
             {#if err_mail}
@@ -248,7 +256,7 @@
             type={"password"}
             on:valid={validHandle}
             on:input={inputChange}
-            on:invalid={passwordInvalid}
+            on:invalid={invalidHandle}
             bind:input={firstPassword} 
             bind:text={err_password}/>
 
@@ -272,7 +280,7 @@
             type={"password"}
             on:valid={validHandle}
             on:input={inputChange}
-            on:invalid={passwordInvalid}
+            on:invalid={invalidHandle}
             bind:input={secondPassword}
             bind:text={err_password}/>
 

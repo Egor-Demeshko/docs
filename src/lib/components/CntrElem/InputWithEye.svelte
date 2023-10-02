@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, tick } from "svelte";
     import { showTooltip } from "$lib/scripts/stores";
 
     export let id = "login";
@@ -11,12 +11,9 @@
     export let name = '';
     export let validity;
     export let text = '';
-    
-    
-
-    let valid = '';
     export let invalid = false;
     export let input;
+
     let passwordVisible = false;
     const dispatcher = createEventDispatcher();
 
@@ -33,7 +30,7 @@
     }
 
 
-    function startValidation(){
+    async function startValidation(){
         let reg = new RegExp(pattern);
 
         if(!input.value && !required) {
@@ -54,7 +51,6 @@
         text = "";
 
         dispatcher("valid", {id, validity: true});
-        showTooltip.set(false);
     }
 
 
@@ -66,7 +62,6 @@
 
 
     function blurHandler(){
-        showTooltip.set({show: false});
         startValidation();
     }
 
@@ -102,7 +97,6 @@
     class:invalid
     class:text
     minlength={5}
-    on:blur={blurHandler}
     on:input={inputHandle}
     on:input
     bind:this={input}
