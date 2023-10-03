@@ -82,7 +82,7 @@
         
         root.addEventListener("pointerdown", function createNodePointerDown(){
             /** теперь отслеживаем выделение текста и при измернение выделения, отправляем на создание*/
-
+            
             document.addEventListener("selectionchange", storeEvent);
 
             root.addEventListener("pointerup", () => {

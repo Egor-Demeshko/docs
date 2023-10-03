@@ -37,6 +37,8 @@
 
     function handelClick(){
         /**меняем номер активной вкладки*/
+        if($activeTabId.document ===  tabId) return;
+        
         activeTabId.update( (obj) => ({...obj, [parentId]: tabId}));
         /**меняем id активного документа. в сетактив таже будет сохраняться состояние html редактора*/
         documents.update( (docs) => {
@@ -66,14 +68,14 @@
 
     /**сохраняем нахвание template или на enter или если blur */
     async function saveHeading(e){
-        const name = e.target.textContent;
-
+        const newName = e.target.textContent;
+        if(name === newName) return;
         if(e.code === 'Enter'){
             e.preventDefault();
         }
 
         if(e.code && e.code === 'Enter' || e instanceof FocusEvent && e.type === "blur"){
-            let result = await $documents.saveHeading(documentId, name);
+            let result = await $documents.saveHeading(documentId, newName);
             if(e.code) { 
                 
                 e.target.blur();
