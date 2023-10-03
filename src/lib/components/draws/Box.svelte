@@ -1,3 +1,8 @@
+<script context="module">
+    export let changeName;
+</script>
+
+
 <script>
   import { getContext, onMount } from "svelte";
   import { drawRoot, nodes } from "$lib/scripts/stores"
@@ -97,7 +102,11 @@
   $: box_inactive = (active) ? "" : "box_inactive";
   $: not_valid = (validity?.status === "invalid") ? true : false; 
 
-
+  /**функция из модуля для изменения имени блока*/
+  changeName = function changeName(newId, newName){
+      if(newId !== id) return;
+      name = newName;
+  }
   /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
   nodes.subscribe( (allBlocksValues) => {
       

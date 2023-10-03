@@ -11,6 +11,7 @@
     import List from "./List.svelte";
     import validation from "$lib/scripts/utils/validation/validation";
 	import { getContext} from "svelte";
+    import { changeName } from "$lib/components/draws/Box.svelte";
 
     let trigger = false;
     let closing_animation = false;
@@ -18,6 +19,7 @@
     let open = false;
     let not_valid = false;
     let keyChange = true;
+    let blockName = '';
     /**
      * @description используется для отображения сообщения о том, что блок не может быть сохранен
      * показывается однокартное сообщение
@@ -135,6 +137,11 @@
         /*обновляем дом*/
         elementsDataUpdate(data);
         
+        if(data.name !== blockName) {
+            changeName(data.id, data.name);
+            blockName = data.name;
+        };
+
         not_valid = false;
     }
 
