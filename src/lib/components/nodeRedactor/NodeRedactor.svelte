@@ -112,18 +112,25 @@
      *  через data = data. так как сам по себе data это прямая ссылка на нужные обьект в сторе.
     */
     nodes.subscribe( (nodes) => {
-                console.log("[NodeRedactor]: {$NODES} store changed, trigger", nodes);
-                console.log("[NodeRedactor]: {$NODES} DATA STATUS", data);
+                //console.log("[NodeRedactor]: {$NODES} store changed, trigger", nodes);
+                //console.log("[NodeRedactor]: {$NODES} DATA STATUS", data);
                 keyChange = !keyChange;
-                data = data;
+                const id = data?.id;
+
+                for( let i = 0; i < nodes.length; i++){
+                    if( nodes[i].id === id){
+                        if(data){
+                            data = nodes[i];
+                        }
+                    }
+                }
     });
 
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         
-        //console.log("[NodeRedactor]: BEFORE {validation} check data", data);
+        console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
-        
         //console.log("[NodeRedactor]: AFTER {validation} check data", data);
         /*обновляем дом*/
         elementsDataUpdate(data);
@@ -175,7 +182,37 @@
 
 
     function dataChanged({detail}){
+        
+        //проверяем дейсвительно ли надо обновлять
+        //так при открытие редактора трегирится изменение блока
+        for (const key of Object.keys(data)) {
+            if(key === "id" && data.id !== detail.id) return;
+            if(key === "id") continue;
+            
+            if(data[key] === detail[key]){
+                delete detail[key];
+            }
 
+            if(detail[key] instanceof Array && data[key] instanceof Array && detail[key]){
+                
+                const arr = data[key];
+                const detailArr = detail[key];
+                let notEqual = false;
+
+                const finalIndex = Math.max(arr.length, detailArr.length);
+                for(let i = 0; i < finalIndex; i++){
+                    
+                    if(arr[i] !== detailArr[i]){
+                        notEqual = true;
+                        break;
+                    }   
+                }
+                
+                if(!notEqual) delete detail[key];
+            }
+        }
+        
+        //обновляем данные
         if(data.id === detail.id){
             for (const key of Object.keys(detail)) {
                 if(key === "id") continue;
@@ -195,8 +232,20 @@
 
 
     function saveChanges(){
-        console.log("[nodeRedactor]: POINTERLEAVE");
+        //console.log("[nodeRedactor]: POINTERLEAVE");
+        //сохранить состояние в nodes 
+        //и обьекта в текущем режиме.
         if(data && data?.id){
+            /*nodes.update( (allNodes) => {
+                for(let i = 0; i < allNodes.length; i++){
+                    if(allNodes[i]["id"] === data.id){
+                        allNodes[i] = data;
+                        break;
+                    }
+                }
+
+                return allNodes;
+            });*/
             controller.saveDataBeforeChange(data.id, {...data});
         }
     }
@@ -211,7 +260,7 @@ class:open
 class:trigger 
 class:closing_animation
 class:not_valid
-on:pointerleave={saveChanges}>
+on:pointerleave|stopPropagation={saveChanges}>
     
     <div class="arrow__position">
         <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>
@@ -222,7 +271,8 @@ on:pointerleave={saveChanges}>
             <FieldTypePicker id={data.id}/>
 
             <Compare id={data.id} 
-            trigger={data.trigger} validity={data.validity}/>
+            trigger={data.trigger} validity={data.validity}
+            on:data-changed={dataChanged}/>
 
             <InputwithLabel bind:value={data.name} id={data.id}
             name={"name"}

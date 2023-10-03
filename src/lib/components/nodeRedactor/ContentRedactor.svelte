@@ -27,7 +27,15 @@
     $: console.log("content: ", content);
     $: if(content){
         let displayChangedObj = {};
+        if(data_type === "integer"){
+            if(!isNaN(+content)){
+                content = +content;
+            }
+        } 
+        
         displayChangedObj["content"] = content;
+        
+
         displayChangedObj["id"] = id;
         dispatch("data-changed", displayChangedObj);
         displayChangedObj = null;

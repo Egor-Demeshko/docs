@@ -38,7 +38,7 @@ export default class NodeLocalOperations extends Normolize{
          * @description { id, active } далее этот обьект используется для обновления store для dom 
          * элементов*/
         const idsToUpdate = [];
-
+        
         nodes.update( (nodes) => {
             
             for (let i = 0; i < nodes.length; i++) {
@@ -49,8 +49,9 @@ export default class NodeLocalOperations extends Normolize{
                  * @param {string} key - id of node
                  * @param {object} value {} node data
                  */
-                for(let [key, value] of Object.entries(updatedNodes)){
+                for(let [key, value] of Object.entries(updatedNodes)){   
                     if(node["id"] === key){
+                        
                         if(node.active !== value.active){
                             const obj = {};
                             obj["id"] = key;
@@ -60,6 +61,15 @@ export default class NodeLocalOperations extends Normolize{
 
                             node.active = value.active;
                         } 
+
+                        for(let nodeKey of Object.keys(node)){       //key = id, value = node 
+                            if(nodeKey === "id" || nodeKey === "width"
+                            || nodeKey === "height" || nodeKey === "validity") continue;
+
+                            if(node[nodeKey] !== updatedNodes[key][nodeKey]){
+                                node[nodeKey] === updatedNodes[key][nodeKey];
+                            }
+                        }
                     } 
                 }
             }

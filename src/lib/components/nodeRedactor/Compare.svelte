@@ -1,12 +1,43 @@
 <script>
 	import DropDown from "../CntrElem/DropDown.svelte";
     import Input from "$lib/components/CntrElem/Input.svelte";
-    import { compareOptions } from "$lib/scripts/stores"; 
+    import { compareOptions } from "$lib/scripts/stores";
+    import { createEventDispatcher } from "svelte";
 
     export let forId = "condition_rule";
     export let id;
     export let trigger = "";
     export let validity;
+
+    const dispatch = createEventDispatcher();
+
+
+    function dataChanged({detail}){
+        /**
+         * проверить какой блока выбран через compareOptions
+         * если блок один из 
+         * condition === "gt" || condition === "lt" 
+         * || condition === "gte" || condition === "lte"
+         * 
+         * то пробовать преобразовать в int, то что в data-changed
+         * пробросить событие data-changed
+        */
+        let josenOption= '';
+        const intOptions = ["gt", "lt", "gte", "lte"];
+
+        $compareOptions.forEach( (obj) => {
+            if(obj.selected){
+                josenOption = obj.value;
+            }
+        });
+
+
+        if(intOptions.includes(josenOption)){
+            detail.trigger = (isNaN(+detail.trigger)) ? detail.trigger : +detail.trigger;
+        }
+
+        dispatch("data-changed", detail);
+    }
 
 </script>
 
@@ -26,6 +57,7 @@
             <Input {id} placeholder={"значение"}
             value={trigger} name={"trigger"}
             {validity}
+            on:data-changed={dataChanged} 
             --border-color="var(--light-blue)"
             --border-color-hover="var(--light-gray-blue)"
             --padding=".1rem .1rem .1rem .875rem"

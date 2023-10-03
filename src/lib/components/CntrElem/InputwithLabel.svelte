@@ -25,7 +25,7 @@
 
 
     function inputHandle({target}){
-        console.log('[__TEST__ INPUT WITH LABEL]: target.value: ', target.value);
+        ///console.log('[__TEST__ INPUT WITH LABEL]: target.value: ', target.value);
         value = target.value;
     }
 

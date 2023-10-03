@@ -11,7 +11,6 @@ export default class GeneralElementsOperations{
      * @param {Array} idsToUpdate 
      */
     static updateDomElementsVisibility(idsToUpdate){
-       
         const simpleTexts = get(storeForSimpleTexts);
 
         //иттерируемся по simpleTexts через цикл for.

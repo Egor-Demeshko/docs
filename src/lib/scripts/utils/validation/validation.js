@@ -7,15 +7,18 @@ import validateSiblingsWithoutMessage from "$lib/scripts/utils/validation/valida
  * @param {Object} options? - опции
  */
 export default async function validation(data, options){
-    const reqFieldsList = ["name", "data_type", "node_type"];
-    
+    const reqFieldsList = ["name", "data_type", "node_type"]; 
+   //TODO const dataToWorkWith = {...data};
     /**err_type используется для последующей стилизации сообщений смотрим message.svelte messagesContainer.svelte */
-    data.validity = {
-        status: "valid",
-        err_data: [],
-        blockId: null,
-        err_type: "emergency"
+    if(data?.validity || !data.validity){
+        data.validity = {
+            status: "valid",
+            err_data: [],
+            blockId: null,
+            err_type: "emergency"
+        }
     }
+    
 
     //делать очистку строки на name, content, description, trigger
     //само поле validity имеет status и errors [{[data.field.name], [message]}]
@@ -51,7 +54,6 @@ export default async function validation(data, options){
         
         //определить что ввели,  
         let whatIn = +data.content;
-
         if(isNaN(whatIn) && data.data_type === "integer"){
             data.validity = {
                 status: "invalid",
@@ -101,7 +103,7 @@ export default async function validation(data, options){
             }
         }
 
-
+        //if(data.id === "2eb0d071-726f-46ad-8905-1f1528eda152") debugger;
         if(data.trigger && data.condition){
             let condition = data.condition;
             //;
@@ -109,6 +111,7 @@ export default async function validation(data, options){
             //console.log("[validation]: {trigger} wrong type for CONDITION");
 
             if(condition === "gt" || condition === "lt" || condition === "gte" || condition === "lte"){
+                
                 if(isNaN(+data.trigger)) data.validity = {
                                             status: "invalid",
                                             err_data: [...data.validity.err_data, {
@@ -126,7 +129,7 @@ export default async function validation(data, options){
 
         if(data.parent_id){
             /**ищем родительский блок */
-
+            //TODO подумать может тут поставить subscribe
             nodes.update( (nodes) => {
                 for(let i = 0; i < nodes.length; i++){
                     let node = nodes[i];

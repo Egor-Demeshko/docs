@@ -165,12 +165,10 @@ export default class Node extends NodeLocalOperations{
             
             /**есть ли по ключу обьект */
             if(!data[id]) continue;
-
+            
             data[id] = {...data[id], ...obj};
-            console.log("[NODE]: {saveAsOBJ}: ", data);
             console.log("[NODE]: {queue}:", this.#updateQueue);
-            console.log("instanceof", typeof data);
-            break;
+            return {success: true};
         }
 
         /**если в массиве не нашлось обьект с ключом node_id, тогда создаем новый */
@@ -204,6 +202,7 @@ export default class Node extends NodeLocalOperations{
             saving.set(false);
             if(result.success){
                 this.clearQueue();
+                
                 this.isUpdateNeeded(result.data.nodes);
                 return result;
             }
@@ -270,6 +269,8 @@ export default class Node extends NodeLocalOperations{
         const nonUrgentData = {
             length: 0,
         };
+
+        
         const urgentData = {};
         const savedData = {...this.activeNodeData};
         if((data.id || id) !== savedData.id) return;
@@ -281,6 +282,7 @@ export default class Node extends NodeLocalOperations{
                 if(key === "id" || key === "validity") continue;
 
                 if(data[key] !== savedData[key]){
+                    
                     if(nonCriticalFields.includes(key)){
                         nonUrgentData[key] = value;
                         nonUrgentData.length = nonUrgentData.length + 1;
@@ -297,10 +299,10 @@ export default class Node extends NodeLocalOperations{
 
             for (const key of Object.keys(urgentData)) {
                 if(!key) break;
-
                 this.saveNourgentAsObj(id, {...urgentData});
+
                 let result = await this.sendDataInQueue();
-                if(result.success) this.updateCallBack();
+                //if(result.success) this.updateCallBack();
                 console.log('[SAVEDATABEFORECHANGE]: result: ', result);
                 break;
             }

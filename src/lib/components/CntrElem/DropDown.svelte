@@ -36,7 +36,7 @@
             activeOption = $nodes[i][name];
             break;
         }
-
+        
         //теперь из стора опций для дропдауна, делаем нашу опцию активной.
         options.update( (options) => {
             for(let i = 0; i < options.length; i++){
@@ -56,7 +56,6 @@
             return options;
         });
     }
-
 
     //$: console.log("[DropDown]: options state:  ", $options);
 
@@ -88,6 +87,7 @@
 
         options.update( (array) => {
             array.forEach( (elem) => {
+                
                 if(elem.value === type) {
                     
                     elem.selected = true;
@@ -96,6 +96,7 @@
                     //let nodesData = get(nodes);
                     const filedsToBeUpdate = controller.normolize(name, elem.value);
                     //console.log("[DROPDOWN]: filedsToBeUpdate", filedsToBeUpdate);
+                    
                     syncDataInNodesStore(id, null, null, filedsToBeUpdate);
                     //controller.saveNourgentAsObj(id, filedsToBeUpdate);
                     //let result = controller.sendDataInQueue();

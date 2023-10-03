@@ -1,4 +1,6 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+
     export let id = "login";
     export let type = "text";
     export let placeholder = "Логин";
@@ -13,15 +15,16 @@
     let valid = '';
     let invalid = '';
     let input;
+    const dispatch = createEventDispatcher();
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
 
     function isCurrentField(){
         let data = validity.err_data;
-        console.log("[input]: data: ", data);
-        console.log("[input]: name: ", name);
+        //console.log("[input]: data: ", data);
+        console.log("[INPUT]: value: ", value);
         for(let i=0; i < data.length; i++){
-            if(data[i]?.field === name) return true;
+            if(data[i]?.field === name || data[i]?.field === "condition") return true;
         }
 
         return false;
@@ -65,7 +68,9 @@
 
 
     function changeHandle(e){
-        syncDataInNodesStores(id, name, e.target.value);
+
+        dispatch("data-changed", {id, [name]: e.target.value});
+        //syncDataInNodesStores(id, name, e.target.value);
     }
 </script> 
 
@@ -84,6 +89,7 @@
         position: relative;
     }
 
+
     input{
         border: var(--border-width) solid var(--border-color);
         padding: var(--padding);
@@ -97,6 +103,7 @@
         transition: border 400ms ease, background 400ms ease;
     }
 
+
     input.not_valid{
         border: var(--border-width) solid var(--pumpkin);
     }
@@ -107,10 +114,12 @@
         font-style: italic;
     }
 
+
     input:hover{
         background-color: var(--background-hover);
         border: var(--border-width) solid var(--border-color-hover);
     }
+
 
     input:focus{
         background-color: var(--background);

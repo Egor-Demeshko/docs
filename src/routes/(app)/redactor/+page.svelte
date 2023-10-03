@@ -26,6 +26,7 @@
 
     //console.log('[page]: data: ', data);
     let {templates, id: project_id, name, nodes: serverNode} = data;
+
     let graph = serverNode;
     let length = 0;
     /**добавляем в обьект данных project_Id*/
@@ -68,7 +69,11 @@
         let {nodes} = await $projectsStore.getFullData(project_id);
         if(nodes) graph = nodes;
         console.log("[page]: {graphUpdate}, graph after update", graph);
+        //достаем айди активного документ, это надо для отображения вкладок как надо
+        //const id = $documents.getActiveDocumentId();
         setupData();
+        //$documents.setActive(id);
+        //documents.update( (docs) => docs);
     }
 
 

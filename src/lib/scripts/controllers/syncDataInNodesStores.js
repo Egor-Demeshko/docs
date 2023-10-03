@@ -23,6 +23,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                 if(node["id"] !== id) continue;
                 if(node["id"] === id){
                     node[fieldName] = value;
+                    break;
                 }
             }
             //console.log("[SYNC]: nodesData: ", nodesData);
@@ -30,7 +31,6 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
         });
 
     } else if(fieldsToUpdate) {
-        
         nodes.update( (nodesData) => {
     
             for(let i = 0; i < nodesData.length; i++){
@@ -41,6 +41,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                     for(let [fieldName, value] of Object.entries(fieldsToUpdate)){
                         /**есть ли ключ в node, например, может options отсутствовать*/
                         if(!Object.hasOwn(node, fieldName)) {
+
                             node[fieldName] = value; 
                             continue;
                         }
@@ -48,8 +49,8 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                         for(let [key, nodeValue] of Object.entries(node)){
                             
                             if(key === fieldName){  
-                                node[key] = value;
                                 
+                                node[key] = value;
                                 break;
                             }
                         }
