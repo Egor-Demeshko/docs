@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 
 
 export function processSelection(callerId, eventSelection){
+
     if(!eventSelection) return;
     let root;
     /**@description HTMLElement, элемент, в котором находится node, попавшая в selection */
@@ -66,7 +67,8 @@ export function processSelection(callerId, eventSelection){
         /**идекс узла(а точнее его текста) куда происходит вставка */
         let index = parentHtml.indexOf(anchorNode.nodeValue);
 
-        if(index === -1) throw new Error("Couldn't find place to insert new text");
+        if(index === -1) index = 0;
+        //throw new Error("Couldn't find place to insert new text");
 
         let leftHand = parentHtml.slice(0, index + startIndex);
         let rightHand = parentHtml.slice(index + startIndex + (endIndex - startIndex));

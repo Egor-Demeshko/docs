@@ -224,9 +224,9 @@
         border-bottom: 2px dashed var(--middle-blue);
         display: block;
         position: absolute;
-        width: min(17.5cm ,58vh);
+        width: min(2.5cm ,2.5vh);
         left: 50%;
-        transform: translateX(-50%);
+        transform:translateX(-340px);
         pointer-events: none;
     }
 
@@ -234,8 +234,8 @@
         content: "[новая страница]";
         position: absolute;
         top: 50%;
-        left: 0;;
-        transform: translate(-150%, -50%) rotateZ(180deg);
+        left: -150%;
+        transform: translate(0, -50%) rotateZ(180deg);
         writing-mode: vertical-rl; 
         color: var(--middle-blue);
         pointer-events: none;

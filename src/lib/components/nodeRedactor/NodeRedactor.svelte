@@ -36,9 +36,11 @@
          * и устанавливаем значение флага messageWasShown чтобы сообщение было показано
          *  только один раз
         */
-        if(open && messageWasShown === false && !controller.checkDataTypeAndFields({...data})){
-            messageWasShown = true;
-            return;
+        if(data){
+            if(open && messageWasShown === false && !controller.checkDataTypeAndFields({...data})){
+                messageWasShown = true;
+                return;
+            }
         }
 
         open = !open;
@@ -51,15 +53,19 @@
             }, 650);     
             
         } else {
-            let objTosend = controller.deleteNoBackendFields(data);
-
-            /**проверяем, если данные типа integer, то преобразуем в int, иначе сервер не примет*/
-            if(objTosend.data_type === "integer"){
-                controller.forceContentToBeInt(objTosend);
+            if(data){
+                let objTosend = controller.deleteNoBackendFields(data);
+    
+                /**проверяем, если данные типа integer, то преобразуем в int, иначе сервер не примет*/
+                if(objTosend.data_type === "integer"){
+                    controller.forceContentToBeInt(objTosend);
+                }
+                
+                controller.saveNourgentAsObj(data.id, objTosend);
+                controller.sendDataInQueue();
             }
-            
-            controller.saveNourgentAsObj(data.id, objTosend);
-            controller.sendDataInQueue();
+
+
             messageWasShown = false;
             
             trigger = false;
