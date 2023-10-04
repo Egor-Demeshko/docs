@@ -4,17 +4,18 @@
 	import Compare from "./Compare.svelte";
 	import ContentRedactor from "./ContentRedactor.svelte";
     import FieldTypePicker from "./FieldTypePicker.svelte";
-    import { nodeOptions, blockClickedId, nodes, documents } from "$lib/scripts/stores";
+    import { storeForSimpleTexts, nodeOptions, blockClickedId, nodes, documents } from "$lib/scripts/stores";
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
     import validation from "$lib/scripts/utils/validation/validation";
-	import { getContext} from "svelte";
+	import { getContext, onMount} from "svelte";
     import { changeName } from "$lib/components/draws/Box.svelte";
 
     let trigger = false;
     let closing_animation = false;
+    let form;
 
     let open = false;
     let not_valid = false;
@@ -264,6 +265,39 @@
     }
 
 
+    function pointerEnter(){
+        if(!data || !data?.id)return;
+        
+        for(let i = 0; i < $storeForSimpleTexts.length; i++){
+            
+            if($storeForSimpleTexts[i].id === data.id){
+                $storeForSimpleTexts[i].setActive(data.id); 
+                break;       
+            }
+        }
+        
+    }
+
+    function pointerLeave(){
+        if(!data || !data?.id)return;
+
+        for(let i = 0; i < $storeForSimpleTexts.length; i++){
+            if($storeForSimpleTexts[i].id === data.id){
+                $storeForSimpleTexts[i].setInactive(data.id); 
+                break;       
+            }
+        }
+    }
+
+    onMount( () => {
+        form.addEventListener("pointerenter", pointerEnter);
+        form.addEventListener("pointerleave", pointerLeave);
+        return () => {
+            form.removeEventListener("pointerenter", pointerEnter);
+            form.removeEventListener("pointerleave", pointerLeave);
+        }
+    });
+
 </script>
 
 <svelte:document on:error={handleError}></svelte:document>
@@ -273,7 +307,8 @@ class:open
 class:trigger 
 class:closing_animation
 class:not_valid
-on:pointerleave|stopPropagation={saveChanges}>
+on:pointerleave|stopPropagation={saveChanges}
+bind:this={form}>
     
     <div class="arrow__position">
         <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>

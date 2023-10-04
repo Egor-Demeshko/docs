@@ -10,6 +10,7 @@ export default class visualRedactorEvents{
     #linkedUpdateCallback;
     #getContentCallback;
 
+
     createListeners(domLinks, id, updateContent, getContent){
         //создать focus nobubles обрабатывает для визуализации таб в основном
         //blur    blur nobubles  работает для визуализации таб в основном
@@ -29,6 +30,7 @@ export default class visualRedactorEvents{
 
             domLink.addEventListener("keyup", this.#keyupHandle.bind(this));
             domLink.addEventListener("keydown", this.#keyDown.bind(this));
+            domLink.addEventListener("keypress", this.#keyPress.bind(this));
             
         });
     }
@@ -38,6 +40,7 @@ export default class visualRedactorEvents{
         if(this.#id !== id) return;
         //console.log("[simpleText]: setting active: id=", id);
         this.#domLinks.forEach( (domElem, i) => {
+            
             domElem.classList.add("doc_active");
 
         });
@@ -63,7 +66,7 @@ export default class visualRedactorEvents{
         this.#domLinks.forEach( (domElem) => {
             domElem.classList.remove("doc_active");
         });
-    }
+    } 
 
 
     #focusHandle(e){
@@ -108,6 +111,7 @@ export default class visualRedactorEvents{
     }
 
     #keyDown(e){
+        return;
        const target = e.target;
 
        if(target.textContent === "_" && /[\w\d_!%&$*()]/.test(e.key)){
@@ -122,6 +126,8 @@ export default class visualRedactorEvents{
 
 
     #keyupHandle(e){
+        return;
+        /*
         let text = '';
         //console.log('[simpleTexts]: KEYUP');
         
@@ -139,6 +145,7 @@ export default class visualRedactorEvents{
          * флаг focusUpdateEvent используется для предотвращения создания нескольких 
          * слушателей
          */
+        /*
         if(!this.#focusUpdateEvent){
             this.#domLinks.forEach( (domLink) => {
                 domLink.addEventListener("blur", updateTextBlocks.bind(this), {"once": true});
@@ -148,11 +155,17 @@ export default class visualRedactorEvents{
 
 
         this.#linkedUpdateCallback(text);
-
+        debugger;
         /**обновляем хранилище nodes */
+        /*
         nodes.update( (arrNodes) => {
             for(let i = 0; i < arrNodes.length; i++){
                 if(arrNodes[i]["id"] !== this.#id) continue;
+                
+                if(arrNodes[i]["name"] !== text){
+                    arrNodes[i]["name"] = text;
+                }
+                /*
                     if(arrNodes[i]["content"] !== text){
                         arrNodes[i]["content"] = text;
                         //console.log("[simpleText]: CONTENT updated");
@@ -162,8 +175,8 @@ export default class visualRedactorEvents{
                         }
 
                     }
-
-                             
+                */
+                    /*         
                 break;
             }
 
@@ -175,7 +188,11 @@ export default class visualRedactorEvents{
             this.#domLinks.forEach( (textElem) => textElem.textContent = this.#getContentCallback() );
             this.#focusUpdateEvent = false;
             console.log("_-----[simpletext]: updateTextBlocks------");
-        }
+        }*/
+    }
+
+    #keyPress(){
+        return;
     }
 
 }

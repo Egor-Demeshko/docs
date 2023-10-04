@@ -15,7 +15,7 @@ export default class SimpleText{
         this.#id = id;
         this.#name = name;
         this.#content = content;
-        this.#visualRedactorEvents = new VisualRedactorEvents();
+        this.#visualRedactorEvents = new VisualRedactorEvents(id);
         this.#editRedactorEvents = new EditRedactorEvents();
     }
 
@@ -61,15 +61,8 @@ export default class SimpleText{
 
 
     createListeners(){
-        this.#visualRedactorEvents.createListeners(this.#domLinks, this.#id, function setContent (text){
-            this.#content = text;
-        }.bind(this),
-        function getContent(){
-            return this.#content;
-        }.bind(this)
-        );
-
-
+        
+        this.#visualRedactorEvents.createListeners(this.#domLinks, this.#id);
         this.#editRedactorEvents.createListeners(this.#domLinks, this.#id, this);
     }
 
@@ -108,7 +101,7 @@ export default class SimpleText{
 
         if(links.length > 0){
             links.forEach( (element) => {
-                element.textContent = this.#content ?? '';
+                element.textContent = this.#name ?? '';
             });
         }
 
@@ -121,9 +114,9 @@ export default class SimpleText{
         if(name && this.#name !== name) this.#name = name;
         
         /*если контент пустой. присыва */
-        if(content.length === 0) content = "___";
+        if(name.length === 0) name = "___";
         this.#domLinks.forEach( (domElement) => {
-            domElement.textContent = content;
+            domElement.textContent = name;
         });
         this.#content = content;
         

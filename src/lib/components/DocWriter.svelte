@@ -399,6 +399,7 @@
         transition: background 400ms ease, transform 400ms ease;
         padding: 2px 3px;
         border-radius: 4px;
+        cursor: default;
     }
 
     :global(.doc_elements:focus){
