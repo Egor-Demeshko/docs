@@ -6,6 +6,7 @@
     export let data;
 
     let {options, name, id} = data;
+    const controller = getContext("controller");
     console.log("[SelectInput]: {initizialization}: data", data);
 
     /**Более расширенная версия options с добавление selected, сразу тут помечаем какой элемент выбран*/
@@ -84,6 +85,8 @@
         });
 
         elementsDataUpdate({id, name, content});
+
+        $controller.saveData({node_id: data.id, content});
     }
 </script>
 

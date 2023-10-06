@@ -104,7 +104,7 @@ export default class SimpleTextForAnketa {
 
         if(links.length > 0){
             links.forEach( (element) => {
-                element.textContent = this.#name ?? '';
+                element.textContent = this.#content ?? '';
             });
         }
 
@@ -124,7 +124,7 @@ export default class SimpleTextForAnketa {
     }
 
 
-    setTextData({name, content}){
+    setTextData({name, content}){       
         if(this.#content === content && this.#name === name) return;
         if((typeof name === "string" || !name)  && typeof content === "string"){
             //console.log("[simpleText Obj]: setTextData method before this.#update ", {name, content});

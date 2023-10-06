@@ -86,6 +86,8 @@ export default class DocumentsWithSimpleText extends Documents{
                 if(node.id !== elementId) continue;
 
                 docElement.setDisplay(node.id);
+
+                docElement.setTextData({content: node.content});
             }
         }
     }
