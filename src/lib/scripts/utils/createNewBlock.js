@@ -27,7 +27,7 @@ export default async function createNewBlock(whatBlockToCreate, controller){
         "trigger": null,
         "x": 500,
         "y": 150,
-        "active": false,
+        "active": true,
         "width": +PUBLIC_BLOCKWIDTH,
         "height": +PUBLIC_BLOCKHEIGHT
     };

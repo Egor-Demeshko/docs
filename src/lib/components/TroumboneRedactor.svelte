@@ -132,17 +132,20 @@
         docRoot.set(root);
         renderEditor();
 
-
-        //собрать все ноды из текста, создать simpleTexts
-        try{
-            await populateSimpleTexts();
-        } catch (e) {
-            tryAgain = true;
-            throw e;
+        if(urlPath.includes("anketa")){
+            //собрать все ноды из текста, создать simpleTexts
+            try{
+                await populateSimpleTexts();
+            } catch (e) {
+                tryAgain = true;
+                throw e;
+            }
         }
+
 
         connect();
 
+        
         if(urlPath.includes("anketa")){
             //внутриполучаем узлы через nodes. определяем кого показывать кого нет.
             $documents.subscribeForNodesUpated();

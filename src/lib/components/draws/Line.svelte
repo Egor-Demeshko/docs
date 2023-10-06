@@ -1,3 +1,23 @@
+<script context="module">
+
+    export function populateLinesStore(graph){
+        const data = [];
+
+        graph.forEach( element => {
+            const {id, parent_id} = element;
+            if (id && parent_id){
+                data.push({
+                    startId: id,
+                    endId: parent_id
+                });
+            }
+        });
+
+
+        linesStore.set(data);
+    }
+</script>
+
 <script>
   import { nodes, linesStore, showDeleteStore, deleteLineFunction } from "$lib/scripts/stores";
   import { getContext } from "svelte";

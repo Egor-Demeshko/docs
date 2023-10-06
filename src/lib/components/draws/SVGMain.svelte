@@ -32,6 +32,7 @@ $: linesLength = lines.length;
 $: showDelete = $showDeleteStore;
 $: deleteLine = $deleteLineFunction;
 $: lines = $linesStore;
+$: console.log("~~~~TEST LINES~~~~,", {lines});
 //$: if(lines) lines = lines;
 //$: if(allNodes) allNodes = allNodes;
 //$: console.log("[SVGMAIN]: allNodes: ", allNodes);

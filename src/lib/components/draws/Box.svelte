@@ -136,18 +136,29 @@
   /** если при первоначальное загрузке есть связь с блоком родителя, 
    * то рисуем линию, рисуется через стор
   */
-  if(parent){
-    linesStore.update( (arrayOfDataObj) => {
-      //console.log("[BOX]: saving lines data: ", arrayOfDataObj);
+  /*
+  linesStore.update( (arrayOfDataObj) => {
+    //console.log("[BOX]: saving lines data: ", arrayOfDataObj);
+    console.log(`~~~~ linesStore: TEST 142~~~ [BOX]`, {lines: arrayOfDataObj});
+    debugger;
+    for(let i = 0; i < arrayOfDataObj.length; i++){
+        const element = arrayOfDataObj[i];
+        const {startId, endId} = element;
+        
+        if (startId === id && endId === parent) continue;
+        
+        
+        arrayOfDataObj.push({
+          startId: id,
+          endId: parent
+        });
+    }
 
-      arrayOfDataObj.push({
-        startId: id,
-        endId: parent
-      });
+    return arrayOfDataObj;
+  });
+  */
 
-      return arrayOfDataObj;
-    });
-  }
+  $: console.log('~~~ TEST   [BOX 152]: ', {lines: $linesStore});
 
 
   onMount( () => {
@@ -174,7 +185,7 @@
         return element["parent_id"];      
       }
       
-      return parent  ;  
+      return parent ;  
   }
 
 

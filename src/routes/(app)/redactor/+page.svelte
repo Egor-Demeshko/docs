@@ -15,11 +15,12 @@
     import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
     import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
     import Node from "$lib/scripts/controllers/instances/Node.js";
+	import PrintModule from "$lib/components/PrintModule.svelte";
 	import { setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import { projectName } from "$lib/scripts/stores";
-	import PrintModule from "$lib/components/PrintModule.svelte";
     import { docxController } from "$lib/scripts/stores"; 
+    import { populateLinesStore } from "$lib/components/draws/Line.svelte";
 
     //receiving data from load function
     export let data;
@@ -62,6 +63,7 @@
         /**заполняем стор документов*/
         documents.set(docs);
         length = docs.docs.length;
+        populateLinesStore(graph);
     }
 
 

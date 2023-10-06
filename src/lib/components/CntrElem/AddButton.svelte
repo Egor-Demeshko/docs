@@ -5,6 +5,7 @@
     let open = false;
 
     function clickHandle(e){
+        
         const target = e.target;
 
         if(target.tagName === "svg" || target.tagName === "use" || target.classList.contains("icon")){
