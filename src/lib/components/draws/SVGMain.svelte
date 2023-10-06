@@ -3,6 +3,7 @@
     import Line from "$lib/components/draws/Line.svelte";
     import Box from "$lib/components/draws/Box.svelte";
 	import PresentationLine from "$lib/components/draws/PresentationLine.svelte";
+	import { onDestroy } from "svelte";
 
 let height = 3000;
 let width = "100%";
@@ -34,7 +35,9 @@ $: lines = $linesStore;
 //$: if(lines) lines = lines;
 //$: if(allNodes) allNodes = allNodes;
 //$: console.log("[SVGMAIN]: allNodes: ", allNodes);
-
+    onDestroy( () => {
+        linesStore.set([]);
+    });
 
 </script>
 

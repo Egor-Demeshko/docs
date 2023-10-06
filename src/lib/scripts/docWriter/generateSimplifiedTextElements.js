@@ -4,9 +4,10 @@ import { storeForSimpleTexts } from "$lib/scripts/stores";
 
 export default function generateTextElements(graph, html){
     let arr = []; //массив для элементов
-    createJSRuleObject();
+    //описание почему коммент ниже
+    //createJSRuleObject();
 
-    storeForSimpleTexts.set(arr);
+    //storeForSimpleTexts.set(arr);
 
 
     /**меняет в разметке метки с айди на нужные элементы и объекты*/
@@ -16,13 +17,11 @@ export default function generateTextElements(graph, html){
 
         graph.forEach( (obj) => {
             let id = obj.id;
-            let active = obj.active;
-    
-            if(active){
-                string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements" data-element="${id}" tabindex="0"></span>`);
-            } else {
-                string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements no_display" data-element="${id}" tabindex="0"></span>`);            
-            }
+
+            //TODO нежнуная строка
+            string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements" data-element="${id}" tabindex="0"></span>`)
+                            .replaceAll(`no_display`, ``);
+            
         });
 
         htmlObj.string = string;
@@ -32,9 +31,13 @@ export default function generateTextElements(graph, html){
 
     return html;
     
+    /**в анкете убираем генерацию элементов на этом моменте. необходимо загрузить все элементы видимыми
+     * подключить dom, применить стили к не видимым. но строка html уже должна быть в dom/
+     * тут она еще не в дом
+     */
     /**генерируем JS обьекты, которые будут управлять элементами на документе*/
     function createJSRuleObject(){
-        ;
+        
         graph.forEach( (obj) => {
             arr.push(new SimpleTextForAnketa(obj));
         });

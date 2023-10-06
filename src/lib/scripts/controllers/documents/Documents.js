@@ -217,7 +217,12 @@ export default class Documents{
         }
     }
 
-
+    /**
+     * 
+     * @param {*} data 
+     * @param {*} graph 
+     * @returns 
+     */
     generateElements(data, graph){
         return generateTextElements(graph, sanitizeManyHtml(data))
     }

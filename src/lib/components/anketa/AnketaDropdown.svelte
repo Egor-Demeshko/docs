@@ -122,6 +122,8 @@
                 elem.selected = true;
                 /**обновление элементов в тексте*/
                 elementsDataUpdate({id: data.id, name: data.name, content: type});
+                
+                //AnketaGraphController
                 $controller.saveData({node_id: data.id, content: target.value});
             } else {
                 elem.selected = false;

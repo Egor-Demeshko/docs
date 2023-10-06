@@ -23,7 +23,6 @@
     graph = active_nodes;
 
     let html = optimizeDATA(templates, project_id);
-
     /**динамик граф контроллер отвечает за подготовку данных и их отправку через http так и получение
      * некотоырх данных из локального хранилища. 
     */
@@ -38,7 +37,7 @@
     /* сохраняем граф в стор*/
     $: nodes.set(graph);
     
-    const docs = new DocumentsWithSimpleText(html, graph, saveDeleteService("anketa"));
+    const docs = new DocumentsWithSimpleText(html, graph, saveDeleteService("anketa"), project_id);
 	console.log("[PAGE]: docs CLASS", docs);
     /**заполняем стор документов*/
     documents.set(docs);

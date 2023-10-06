@@ -111,7 +111,6 @@ export default class visualRedactorEvents{
     }
 
     #keyDown(e){
-        return;
        const target = e.target;
 
        if(target.textContent === "_" && /[\w\d_!%&$*()]/.test(e.key)){

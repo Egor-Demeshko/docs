@@ -111,15 +111,14 @@ export default class SimpleText{
 
     /**функция запускается после валидации данных */
     #update(name, content){
-        if(name && this.#name !== name) this.#name = name;
-        
-        /*если контент пустой. присыва */
-        if(name.length === 0) name = "___";
+        if(name && this.#name !== name) this.setNameOnly(name);
+        /*
+        if(name?.length === 0) name = "___";
         this.#domLinks.forEach( (domElement) => {
+            debugger;
             domElement.textContent = name;
-        });
+        });*/
         this.#content = content;
-        
     }
 
 
@@ -128,6 +127,17 @@ export default class SimpleText{
         if((typeof name === "string" || !name)  && typeof content === "string"){
             //console.log("[simpleText Obj]: setTextData method before this.#update ", {name, content});
             this.#update(name, content);
+        }
+    }
+
+    setNameOnly(name){
+        if(name !== undefined && name !== null && typeof name === "string"){
+            this.#name = name;
+
+            /** устанавливаем в документе именно название блока. не контетент */
+            this.#domLinks.forEach( (domElement) => {
+                domElement.textContent = name;
+            });
         }
     }
 

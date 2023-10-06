@@ -56,6 +56,16 @@ export default class visualRedactorEvents{
     }
 
 
+    setNoDisplay(){
+        this.#domLinks.forEach( (elem) => elem.classList.add("no_display"));
+    }
+
+
+    setDisplay(){
+        this.#domLinks.forEach( (elem) => elem.classList.remove("no_display"));
+    }
+
+    
     #focusHandle(){
 
         blockClickedId.set(this.#id);

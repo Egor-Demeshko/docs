@@ -8,6 +8,7 @@ export default class SimpleTextForAnketa {
     #content = "";
     #name = "";
     #visualRedactorEvents;
+    #nodeUnsubscribe;
     /*#editRedactorEvents;*/
 
     chainedElement
@@ -19,6 +20,12 @@ export default class SimpleTextForAnketa {
         /*this.#editRedactorEvents = new EditRedactorEvents();*/
     }
 
+    addLinks(arr){
+        if(!(arr instanceof Array)) return;
+        arr = [...arr];
+        this.#domLinks = arr;
+    }
+
     connect(root){
         /**every element receive link to it's holding element */
         if(root){
@@ -28,6 +35,8 @@ export default class SimpleTextForAnketa {
         if(!this.root){
             throw new CustomError("No element to connect");
         }
+
+        if(this.#nodeUnsubscribe) this.#nodeUnsubscribe();
         /*console.log("SIMPLE TEXT", {id: this.id, name: this.name, content: this.content, root: this.root});*/
         let links = this.root.querySelectorAll(`span[data-element="${this.#id}"]`);
         //console.log("[simpleText]: root: ", links);
@@ -40,7 +49,7 @@ export default class SimpleTextForAnketa {
             throw new Error("text elements: couldn't connect elements with document");
         }
 
-        nodes.subscribe( this.validityStatusChanger.bind(this) );
+        this.#nodeUnsubscribe = nodes.subscribe( this.validityStatusChanger.bind(this) );
     }
 
 
@@ -71,6 +80,13 @@ export default class SimpleTextForAnketa {
         this.#visualRedactorEvents.setInactive(id);
     }
 
+    setNoDisplay(){
+        this.#visualRedactorEvents.setNoDisplay();
+    }
+
+    setDisplay(){
+        this.#visualRedactorEvents.setDisplay();
+    }
 
     setHoverLike(){
         this.#domLinks.forEach( (elem) => elem.classList.add("documents_hoverlike"));
@@ -121,6 +137,7 @@ export default class SimpleTextForAnketa {
     }
 
 /**функция для обновления всех полей класса */
+/**TODO можно переделать, через subscribe */
     updateFromGraph(){
         //бежим по графу. если данные отлчичаютя меняем
         //если актив false ставим класс, no visible

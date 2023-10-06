@@ -29,6 +29,7 @@
     let no_elements = false;
     /*управляет спиннером*/
     let spinner = false;
+    let tryAgain = false;
 
     /** меняет цвет заднего фона при старте процесс добавление переменной*/
     $: active_bg = ($addExcitingNodeToRedator.status === "start") ? true : false;
@@ -63,6 +64,7 @@
 
         if(redactorInitialized){
             renderEditor();
+            connect();
         }
 
         no_elements = (isDocumentInialized) ? false : true;
@@ -129,16 +131,48 @@
         redactorInitialized = true;
         docRoot.set(root);
         renderEditor();
+
+
+        //собрать все ноды из текста, создать simpleTexts
+        try{
+            await populateSimpleTexts();
+        } catch (e) {
+            tryAgain = true;
+            throw e;
+        }
+
+        connect();
+
+        if(urlPath.includes("anketa")){
+            //внутриполучаем узлы через nodes. определяем кого показывать кого нет.
+            $documents.subscribeForNodesUpated();
+        }
+       
+
+        return () => {
+            $documents.unsubscribe();
+        }
     });
+
+
+    function connect(){
+        $storeForSimpleTexts.forEach( (element) => element.connect(root));
+        $storeForSimpleTexts.forEach( (element) => element.createListeners());
+        updateLineBreaks();
+    }
+
+
+    async function populateSimpleTexts(){
+        tryAgain = false;
+        await $documents.populateSimpleTexts();
+    };
 
 
     function renderEditor(){
         console.log('{renderEditor} starting');
         editor = window.jQuery(container).trumbowyg('html', html);
         console.log('{renderEditor} after html implementint, document id: ', activeDocumentId);
-        $storeForSimpleTexts.forEach( (element) => element.connect(root));
-        $storeForSimpleTexts.forEach( (element) => element.createListeners());
-        updateLineBreaks();
+
     }
 
 
@@ -170,6 +204,11 @@
     {#if $showModalDocumentCreator}
         <ModalDocumentCreator />
     {/if}
+
+    {#if tryAgain}
+        <ModalTryAgain on:click={populateSimpleTexts}/>
+    {/if}
+
     {#if spinner}
         <div class="spinner">
             <Spinner/>
