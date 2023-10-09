@@ -118,7 +118,7 @@
     function openedProject({data}){
         documentsToShow = (data) ? data : null;
         
-        console.log('[page.svelte]: ', data);
+        //console.log('[page.svelte]: ', data);
     }
 
     /*правильное добавление gap*/

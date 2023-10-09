@@ -3,7 +3,7 @@
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { projectsStore, modalFieldsStore } from "$lib/scripts/stores";
-    import { goto, preloadData } from "$app/navigation";
+    import { goto, preloadCode } from "$app/navigation";
     import Storage from "$lib/scripts/controllers/instances/Storage.js";
 
 
@@ -32,12 +32,13 @@
     }
 
     async function preloadRedactor(){
+        console.log("~~~TEST ~~~");
         let token = await $projectsStore.getToken();
 
         document.cookie = `jwt=${token}; max-age=900; samesite=lax`;
         document.cookie = `project_id=${id}; max-age=900; samesite=lax`;
 
-        preloadData("/redactor");
+        preloadCode("/redactor");
     }
 
     /** отправляет в редактор по id из пропса, устанавливает куки */
@@ -101,7 +102,7 @@
         //если удачно, послать событие listupdated
         //projects запросит новый списко
         let result = await $projectsStore.delete(id);
-        console.log('[ButtonsRow]: result: ', result);
+
         if(result.success){
             document.dispatchEvent( new CustomEvent("project_delete"))
         }
