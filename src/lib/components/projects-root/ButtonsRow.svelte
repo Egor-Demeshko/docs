@@ -32,7 +32,7 @@
     }
 
     async function preloadRedactor(){
-        console.log("~~~TEST ~~~");
+        
         let token = await $projectsStore.getToken();
 
         document.cookie = `jwt=${token}; max-age=900; samesite=lax`;
