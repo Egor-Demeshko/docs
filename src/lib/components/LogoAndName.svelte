@@ -84,7 +84,7 @@
         <div class="document_name">
             <span contenteditable="true" on:keyup={handleUp} on:blur={saveName} 
             bind:this={span} >{value}</span>
-            <svg>
+            <svg style="fill: var(--white-blue)">
                 <use href="/assets/icons/all.svg#pen"></use>
             </svg>
         </div>

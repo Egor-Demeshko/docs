@@ -344,7 +344,7 @@ export default class Documents{
                         template_id,
                         name
                     });
-        console.log('[DOCUMENTS]: result after NAME CHANGE ', result);
+    
         saving.set(false);
         return result;
     }

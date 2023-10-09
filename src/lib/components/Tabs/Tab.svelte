@@ -7,6 +7,10 @@
     export let parentId = '';
     export let documentId = null;
 
+    let openEnter = false;
+    let spanElement;
+    let truncElement;
+
     /**
      * активность вкладки определяется от активного докуметна.
      * если айди документа равно активному документу, то вкладка активная
@@ -28,6 +32,7 @@
                     (tabId === $activeTabId[parentId] && tabId === 0) ? "rightShadow" : "leftShadow";
     $: zIndex = (tabId === $activeTabId[parentId]) ? $tabsQuantity[parentId] :
                 (tabId > $activeTabId[parentId]) ? $tabsQuantity[parentId] - tabId : tabId;
+
     /*$: console.log(`activetab, ${parentId}`, { 
                                                 "parent_ID": parentId,
                                                 "activeTab id": $activeTabId[parentId], 
@@ -69,6 +74,24 @@
     /**сохраняем нахвание template или на enter или если blur */
     async function saveHeading(e){
         const newName = e.target.textContent;
+
+        if(newName.length > 0) {
+            openEnter = false;
+        } else {
+            openEnter = true;
+
+            document.dispatchEvent( new CustomEvent("error", {detail: {
+                    err_data: [
+                        {
+                            blockId: 0,
+                            message: "Пустоe название нельзя сохранить!",
+                            err_id: 1000,
+                            err_type: "emergency"
+                        }
+                    ]
+                }}));
+            return;
+        }
         if(name === newName) return;
         if(e.code === 'Enter'){
             e.preventDefault();
@@ -84,6 +107,50 @@
     }
 
 
+    function openEmptyRegistrarion(e){
+        const text = e.target.textContent;
+
+        if(text.length === 0){
+            openEnter = true;
+        }      
+    }
+
+
+    function changeViewOfText({target}){
+
+        if(target.textContent.length === 0) return;
+        if(target.tagName !== "SPAN") return;
+        const text = target.textContent;
+        target.textContent = text;
+    }
+
+
+    function deactiveTrunc(){
+        const text = spanElement.textContent;
+        truncElement.style.display = "none";
+        spanElement.style.visibility = "visible";
+        spanElement.focus();
+    }
+
+
+    function doTruncate({target}){
+        const text = target.textContent;
+
+        if(text.length < 25) {
+            truncElement.textContent = "";
+
+            truncElement.style.display = "none";
+            spanElement.style.visibility = "visible";
+            return;
+        }
+        
+        spanElement.style.visibility = "hidden";
+        
+        truncElement.textContent = text.slice(0, 22) + "...";
+        truncElement.style.display = "block";
+    }
+
+
     /**hover like события*/
     let pointerEnterClose = (e) => showTooltip.set( {
         show: true,
@@ -95,6 +162,7 @@
         place: "above" 
     } )
     let pointerLeaveClose = () => showTooltip.set(false);
+
 </script>
 
 
@@ -109,10 +177,22 @@
 
 
     <li class={activeTab}>
-        <span contenteditable={active} on:keypress={saveHeading} on:blur={saveHeading}>{name}</span>
+        <span class="full_text"
+        contenteditable={active}
+        class:openEnter
+        on:keypress={saveHeading} 
+        on:blur={saveHeading}
+        on:blur={changeViewOfText}
+        on:blur={doTruncate}
+        bind:this={spanElement}
+        >{name}</span>
+        <span class="truncated" bind:this={truncElement} 
+        on:click={deactiveTrunc}></span>
     
         {#if active}
-            <svg class="icons pen">
+            <svg class="icons pen"
+            class:openEnter
+            on:click={openEmptyRegistrarion}>
                 <use href="/assets/icons/all.svg#pen"></use>
             </svg>
         {/if}
@@ -228,10 +308,39 @@
     }
 
 
-    span{
+    span.full_text{
         overflow: hidden;
         white-space: nowrap;
-        text-overflow: ellipsis;
+        transform: translateY(2px);
+        outline: none;
+        border-bottom: 1px solid transparent;
+    }
+
+    span.full_text:active,
+    span.full_text:focus{
+        border-bottom: 1px solid var(--orange);
+    }
+
+    span.full_text.openEnter{
+        width: 100%;
+        border-bottom: 1px solid var(--pumpkin);
+        animation: open;
+        animation-duration: 400ms;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+    }
+
+    span.truncated{
+        position: absolute;
+        top: .44rem;
+        left: 1rem;
+        transform: translateY(2px);
+        outline: none;
+        border-bottom: 1px solid transparent;
+    }
+
+    .pen.openEnter{
+        fill: var(--pumpkin);
     }
 
     .ordinary>span{
@@ -245,6 +354,11 @@
         flex: 0 0 1.2rem;
     }
 
+    svg.pen{
+        transition: fill 400ms ease;
+        fill: var(--white-blue);
+        transform: translateY(1px);
+    }
 
     svg.close{
         transform: translateY(-50%) rotateZ(45deg);
@@ -252,8 +366,8 @@
         width: .6rem;
         top: 50%;
         right: 0;
-        fill: var(--white-blue);
         cursor: pointer;
+        fill: var(--white-blue);
     }
 
 
@@ -264,5 +378,15 @@
 
     .close:hover{
         filter: drop-shadow(0 0 4px var(--orange));
+    }
+
+    @keyframes open{
+        0%{
+            width: 0%;
+        }
+
+        100%{
+            width: 100%;
+        }
     }
 </style>

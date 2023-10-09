@@ -3,7 +3,7 @@
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { projectsStore, modalFieldsStore } from "$lib/scripts/stores";
-    import { goto } from "$app/navigation";
+    import { goto, preloadData } from "$app/navigation";
     import Storage from "$lib/scripts/controllers/instances/Storage.js";
 
 
@@ -29,6 +29,15 @@
             easing: params.easing || cubicInOut,
             css: (t, u) => `height: ${t * 28}px; margin-top: ${t * 10}px;`
         };
+    }
+
+    async function preloadRedactor(){
+        let token = await $projectsStore.getToken();
+
+        document.cookie = `jwt=${token}; max-age=900; samesite=lax`;
+        document.cookie = `project_id=${id}; max-age=900; samesite=lax`;
+
+        preloadData("/redactor");
     }
 
     /** отправляет в редактор по id из пропса, устанавливает куки */
@@ -116,7 +125,8 @@
             --border-hover="2px solid var(--middle-blue)"
             --font-size=".875rem"
             --padding=".3rem 1rem"
-            --bg-hover="var(--light-gray-blue)"/>
+            --bg-hover="var(--light-gray-blue)"
+            on:pointerenter={ preloadRedactor }/>
             <Button 
             name={"Заполнить анкеты"}
             no_wrap={true}

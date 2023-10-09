@@ -21,7 +21,7 @@
 
 </script>
 
-<button on:submit={console.log} on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap {disabled}>
+<button on:submit={console.log} on:pointerenter on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap {disabled}>
     {name}    
 </button>
 
