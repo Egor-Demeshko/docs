@@ -224,6 +224,7 @@ export default class Documents{
      * @returns 
      */
     generateElements(data, graph){
+        
         return generateTextElements(graph, sanitizeManyHtml(data))
     }
 

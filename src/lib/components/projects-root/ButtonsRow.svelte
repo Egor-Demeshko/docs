@@ -14,7 +14,7 @@
 
 
     $: if(directionOfanimation){
-        setTimeout( () => show = true, 600);
+        setTimeout( () => show = true, 600 );
     } else {
         show = false;
     }

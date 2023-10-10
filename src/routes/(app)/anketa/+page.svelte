@@ -42,10 +42,12 @@
     /**заполняем стор документов*/
     documents.set(docs);
 
-    onDestroy( () => {
+    onDestroy( async () => {
         /**очищаем данные контроллера, и зануляем стор контроллера*/
         $anketaGraphController.clearAll();
         anketaGraphController.set(null);
+        await $documents.unsubscribe();
+        documents.set(null);
     })
 
 

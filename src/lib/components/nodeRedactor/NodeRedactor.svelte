@@ -138,7 +138,7 @@
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         
-        console.log("[NodeRedactor]: BEFORE {validation} check data", data);
+        //console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
         //console.log("[NodeRedactor]: AFTER {validation} check data", data);
         /*обновляем дом*/
@@ -196,7 +196,6 @@
 
 
     function dataChanged({detail}){
-        
         //проверяем дейсвительно ли надо обновлять
         //так при открытие редактора трегирится изменение блока
         for (const key of Object.keys(data)) {
@@ -233,7 +232,6 @@
                 data[key] = detail[key];
             }
         }
-
         /**помечаем что документ обновился, чтобы в дальнейшем он мог сохраниться*/
         /** сохраняем изменения в макете
          * редактор также создает свое событие на изменение, но он их регистрирует на jquery

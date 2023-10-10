@@ -35,7 +35,9 @@
         if(intOptions.includes(josenOption)){
             detail.trigger = (isNaN(+detail.trigger)) ? detail.trigger : +detail.trigger;
         }
-
+        
+        if(detail.trigger === "true") detail.trigger = true;
+        if(detail.trigger === "false") detail.trigger = false;
         dispatch("data-changed", detail);
     }
 

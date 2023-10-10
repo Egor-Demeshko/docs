@@ -195,7 +195,7 @@ export default class Node extends NodeLocalOperations{
                     dataToSend["nodes"][key] = data;
                 }
             });
-            
+
             console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
             let result = await this.#client.update(token, dataToSend);
             console.log("[NODE]: {sendDataInQueue} result: ", result);
@@ -269,7 +269,6 @@ export default class Node extends NodeLocalOperations{
         const nonUrgentData = {
             length: 0,
         };
-
         
         const urgentData = {};
         const savedData = {...this.activeNodeData};
@@ -300,7 +299,7 @@ export default class Node extends NodeLocalOperations{
             for (const key of Object.keys(urgentData)) {
                 if(!key) break;
                 this.saveNourgentAsObj(id, {...urgentData});
-
+                
                 let result = await this.sendDataInQueue();
                 //if(result.success) this.updateCallBack();
                 console.log('[SAVEDATABEFORECHANGE]: result: ', result);

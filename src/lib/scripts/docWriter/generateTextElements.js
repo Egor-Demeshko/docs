@@ -15,7 +15,7 @@ export default function generateTextElements(graph, html){
                     //Эти элементы управляются классами simpleTexts или SimplifiedSimpleTexts, 
                     //которые используется в анкете
     createJSRuleObject();
-
+    
     storeForSimpleTexts.set(arr);
 
     /*html массив обьектов описывающих один одокумент. состав полей описано в /scripts/stores => переменная documents  */

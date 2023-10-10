@@ -45,6 +45,7 @@
     */
     documents.subscribe( (docs) => {
         if(!docs) return;
+        
         let freshId = docs.getActiveDocumentId();
         
         //TODO undefined === undefined когда нет документа и первая загрузка
@@ -159,6 +160,7 @@
 
 
     function connect(){
+        if(!$storeForSimpleTexts) return;
         $storeForSimpleTexts.forEach( (element) => element.connect(root));
         $storeForSimpleTexts.forEach( (element) => element.createListeners());
         updateLineBreaks();

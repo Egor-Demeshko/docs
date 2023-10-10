@@ -76,7 +76,7 @@
 
     .icon{
         height: 100%;
-        width: 1.25rem;
+        flex: 0 0 1.25rem;
     }
 
 

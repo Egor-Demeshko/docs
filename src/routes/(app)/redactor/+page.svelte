@@ -1,7 +1,6 @@
 <script>
-    import generateTextElements from "$lib/scripts/docWriter/generateTextElements";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import { nodes, documents, nodeController, projectsStore } from "$lib/scripts/stores";
+    import { nodes, documents, nodeController, projectsStore, storeForSimpleTexts } from "$lib/scripts/stores";
     import SVGMain from "$lib/components/draws/SVGMain.svelte";
     import createMassive from "$lib/scripts/createMassive";
 	import NodeRedactor from "$lib/components/nodeRedactor/NodeRedactor.svelte";
@@ -16,7 +15,7 @@
     import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
     import Node from "$lib/scripts/controllers/instances/Node.js";
 	import PrintModule from "$lib/components/PrintModule.svelte";
-	import { setContext } from "svelte";
+	import { onDestroy, setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import { projectName } from "$lib/scripts/stores";
     import { docxController } from "$lib/scripts/stores"; 
@@ -40,13 +39,7 @@
     projectName.set({id: project_id, name});
 
     //console.log("HTML: ", html);
-    console.log("GRAPH: ", JSON.stringify(graph));
-
-    
-    /*if(locals.error){
-        prompt(locals.error.message);
-    }*/
-
+    //console.log("GRAPH: ", JSON.stringify(graph));
     
     setupData();
 ;
@@ -56,7 +49,6 @@
         graph = createMassive(graph);
         /* сохраняем граф в стор*/
         nodes.set(graph);
-    
     
         const docs = new Documents(html, graph, saveDeleteService("template"), project_id, 
             arrUpdatedCallback);
@@ -79,20 +71,25 @@
     }
 
 
-    beforeNavigate(() => {
-        /**в контроллере могут быть данные поставленные в очередь, для последующей отправки*/
-        $nodeController.sendDataInQueue();
-    });
-
-
     /**функция коллбэк для получения обновления массива документов*/
     function arrUpdatedCallback(arr){
         if(arr instanceof Array){
             length = arr.length;
         }
     }
+    
+
+    onDestroy( () => {
+        documents.set(null);
+        storeForSimpleTexts.set(null);
+    });
 
 
+    beforeNavigate(() => {
+        /**в контроллере могут быть данные поставленные в очередь, для последующей отправки*/
+        $nodeController.sendDataInQueue();
+    });
+    
 </script>
 
 

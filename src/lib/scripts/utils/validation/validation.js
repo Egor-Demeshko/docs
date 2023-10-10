@@ -140,6 +140,23 @@ export default async function validation(data, options){
 
                         let parentData = node;
 
+                        if(typeof data.trigger === "boolean" 
+                        && (typeof parentData.content !== "boolean" )){
+                            
+                            data.validity = {
+                                status: "invalid",
+                                err_data: [...data.validity.err_data, {
+                                    field: "trigger",
+                                    message: "Родительский блок должен иметь запись вида <true> (активно) или <false> (пассивно)",
+                                    blockId: data.id,
+                                    err_id: 805,
+                                    err_type: "emergency"
+                                }
+                                ],
+                            }
+                            break;
+                        }
+
                         if(isNaN(+parentData.content) !== isNaN(+data.trigger) ){
                             //console.log("[validation]: {trigger} wrong type for PARENT AND CHILD");
 
@@ -154,8 +171,8 @@ export default async function validation(data, options){
                                 }
                                 ],
                             }
-                        }   
-                        
+                        }
+
                     break;
                 }
 
