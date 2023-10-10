@@ -2,8 +2,9 @@
     import AnketaInput from "$lib/components/anketa/AnketaInput.svelte";
     import SelectInput from "$lib/components/anketa/SelectInput.svelte";
     import AnketaDropdown from "$lib/components/anketa/AnketaDropdown.svelte";
+    import AnketaCheckbox from "$lib/components/anketa/AnketaCheckbox.svelte";
     import { nodes } from "$lib/scripts/stores";
-	import { onMount, setContext } from "svelte";
+	import { setContext } from "svelte";
     import { anketaGraphController } from "$lib/scripts/stores";
 
     $: console.log("[INPUTELEMENTS]: nodes", $nodes);
@@ -14,17 +15,15 @@
 
 <div>
     {#each $nodes as data}
-
         {#if data.node_type === "text" || data.node_type === "entry"}
-            <AnketaInput {data}/>
+            <AnketaInput id={data.id} {data}/>
         {:else if data.node_type === "select" && data.view_type === "radiobutton"}
-            <SelectInput {data}/>
+            <SelectInput id={data.id} {data}/>
         {:else if data.node_type === "select" && data.view_type === "drop_list"}
-            <AnketaDropdown {data} />
+            <AnketaDropdown id={data.id} {data} />
+        {:else if data.node_type === "checkbox"}
+            <AnketaCheckbox id={data.id} {data}/>
         {/if}
-
-
-
     {/each}
 </div>
 

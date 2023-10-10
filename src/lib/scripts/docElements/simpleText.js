@@ -115,7 +115,7 @@ export default class SimpleText{
         /*
         if(name?.length === 0) name = "___";
         this.#domLinks.forEach( (domElement) => {
-            debugger;
+            
             domElement.textContent = name;
         });*/
         this.#content = content;

@@ -140,7 +140,7 @@
   linesStore.update( (arrayOfDataObj) => {
     //console.log("[BOX]: saving lines data: ", arrayOfDataObj);
     console.log(`~~~~ linesStore: TEST 142~~~ [BOX]`, {lines: arrayOfDataObj});
-    debugger;
+
     for(let i = 0; i < arrayOfDataObj.length; i++){
         const element = arrayOfDataObj[i];
         const {startId, endId} = element;

@@ -1,3 +1,12 @@
+<script context="module">
+    export function getCors(){
+        const svgMain = document.getElementById("playground");
+
+        return svgMain.getBoundingClientRect();
+    }
+</script>
+
+
 <script>
     import { drawRoot, linesStore, nodes, showDeleteStore, deleteLineFunction } from "$lib/scripts/stores";
     import Line from "$lib/components/draws/Line.svelte";
@@ -84,6 +93,7 @@ $: console.log("~~~~TEST LINES~~~~,", {lines});
         {/if}
     </svg>
 </div>
+
 
 <style>
     .svg_wrapper{

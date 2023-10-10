@@ -103,7 +103,7 @@ export default async function validation(data, options){
             }
         }
 
-        //if(data.id === "2eb0d071-726f-46ad-8905-1f1528eda152") debugger;
+        //if(data.id === "2eb0d071-726f-46ad-8905-1f1528eda152")
         if(data.trigger && data.condition){
             let condition = data.condition;
             //;

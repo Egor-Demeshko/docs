@@ -4,18 +4,20 @@
     
     /*обьект данных из графа, конкретный для инпута*/
     export let data;
+    export let id;
 
     let name = data.name;
+    
 
 
     /*описывает hover сосотояние на элементе в текстовом редакторе.*/
     function setHoverLike(){
-        setElementHoverLike(data.id);
+        setElementHoverLike(id);
     }
 
     /*описывает removehover сосотояние на элементе в текстовом редакторе.*/
     function removeHoverLike(){
-        removeElementHoverLike(data.id);
+        removeElementHoverLike(id);
     }
 </script>
 

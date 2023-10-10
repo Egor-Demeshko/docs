@@ -1,4 +1,4 @@
-import { blockClickedId, activeBlocks, nodes, storeForSimpleTexts } from "/src/lib/scripts/stores";
+import { nodes } from "/src/lib/scripts/stores";
 /*import EditRedactorEvents from "./EditRedactorEvents";*/
 import SimpleVisualRedactorEvents from "$lib/scripts/docElements/SimpleVisualRedactorEvents.js";
 

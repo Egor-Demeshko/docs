@@ -38,7 +38,7 @@ export default class Storage{
 
     getTokenExp(){
         const data = localStorage.getItem(PUBLIC_CHAIN);
-        
+ 
         return JSON.parse(data)?.expired;
     }
 

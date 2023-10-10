@@ -154,7 +154,7 @@ export default class visualRedactorEvents{
 
 
         this.#linkedUpdateCallback(text);
-        debugger;
+        
         /**обновляем хранилище nodes */
         /*
         nodes.update( (arrNodes) => {

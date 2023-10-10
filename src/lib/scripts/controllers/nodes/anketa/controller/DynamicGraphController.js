@@ -1,5 +1,6 @@
 import HTTPform from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPform.js";
 import DataService from "$lib/scripts/controllers/instances/DataServise.js";
+import JWT from "$lib/scripts/controllers/instances/JWT.js";
 
     /** @description 
         * динамик граф контроллер отвечает за подготовку данных и их отправку через http так и получение
@@ -13,12 +14,14 @@ export default class DynamicGraphController extends HTTPform{
      * Этот массив регистрирует все такие изменения.
      */
     #changedElements = {};
+    #JWT;
 
     constructor({project_id, saveClient}){
         super();
         this.#project_id = project_id;
 
         this.#saveClient = new DataService({save: saveClient});
+        this.#JWT = new JWT({saveService: this.#saveClient}, this);
     }
 
     subscribe(fn){
@@ -46,10 +49,10 @@ export default class DynamicGraphController extends HTTPform{
             project_id: this.#project_id,
             contents: this.#changedElements
         }
-        const token = this.#saveClient.getToken("jwt");
-
-        console.log('[DynamicGraphController]: {saveData}', {token, dataToSend});
+        
+        const token = this.#JWT.getToken("jwt");
         let data = await super.update(token, dataToSend);
+
         console.log("[DynamicGraphController]: {saveData} after request: ", data);
 
         if(data.success){

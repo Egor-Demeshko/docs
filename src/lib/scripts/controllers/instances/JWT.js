@@ -15,7 +15,7 @@ export default class JWT{
     isTokenFresh(){
         let expiredStamp = this.#saveService.getTokenExp();
         if(expiredStamp){
-
+            
             if( Math.floor(Date.now()/1000) - expiredStamp >= 0 ){
                 this.#saveService.delete();
                 return false;

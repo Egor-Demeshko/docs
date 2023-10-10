@@ -4,8 +4,9 @@
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
 
     export let data;
+    export let id;
 
-    let {options, name, id} = data;
+    let {options, name} = data;
     const controller = getContext("controller");
     console.log("[SelectInput]: {initizialization}: data", data);
 
