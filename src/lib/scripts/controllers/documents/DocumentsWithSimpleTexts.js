@@ -73,6 +73,8 @@ export default class DocumentsWithSimpleText extends Documents{
     updateDocElementsVisibility(newGraph){
         const simplTexts = get(storeForSimpleTexts);
 
+        if(simplTexts === null || simplTexts === undefined) return;
+
         simplTexts.forEach( (docElement) => {
             docElement.setNoDisplay(docElement.id);
         })

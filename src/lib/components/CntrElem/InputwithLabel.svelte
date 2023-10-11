@@ -1,5 +1,4 @@
 <script>
-    import { createEventDispatcher } from "svelte";
     export let id = "id";
     export let placeholder = "Введите данные";
     export let required = false;
@@ -101,7 +100,6 @@
         position: relative;
         width: 100%;
     }
-
 
 
     /**отрисовка стилей ошибки*/

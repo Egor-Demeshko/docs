@@ -49,8 +49,8 @@ export default class DynamicGraphController extends HTTPform{
             project_id: this.#project_id,
             contents: this.#changedElements
         }
-        
-        const token = this.#JWT.getToken("jwt");
+
+        const token = await this.#JWT.getToken("jwt");
         let data = await super.update(token, dataToSend);
 
         console.log("[DynamicGraphController]: {saveData} after request: ", data);

@@ -2,6 +2,7 @@
     import RadioLabel from "$lib/components/anketa/RadioLabel.svelte";
     import { setElementHoverLike, removeElementHoverLike, setElementActive, setElementInactive } from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess";
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
+    import {getContext} from "svelte";
 
     export let data;
     export let id;

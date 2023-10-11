@@ -1,7 +1,18 @@
+<script context="module">
+    const regexp = /<span[^>]*class="[^"]*no_display[^"]*"[^>]*>(.*?)<\/span>/g;
+
+    /**@description функция удаляет элементы из html, которые, например, неактивны в данный момент*/
+    export function deleteElements(html){
+        return html.replaceAll(regexp, "");
+    }
+</script>
+
+
 <script>
     import { page } from '$app/stores';
 	import { getContext, onMount, tick } from "svelte";
     import { documents } from "$lib/scripts/stores";
+    import { getHtml } from "$lib/scripts/docWriter/redactor.js";
     import createOnDocumentRedactorEvents from "$lib/scripts/docElements/GlobalRedactorEvents";
     import Modal from "$lib/components/Modal.svelte";
 	import TroumboneRedactor from "./TroumboneRedactor.svelte";
@@ -46,8 +57,9 @@
 
     async function download(){
         const name = docStore.getActiveDocumentName();
-        const html = docStore.gainActiveHtml();
-        
+        let html = await getHtml();
+        html = deleteElements(html);
+
         try{
             let url = await docCntl.createDocFromHtml(name, html);
             downloadState.set({url, name}); 
@@ -62,7 +74,9 @@
 
     async function save(){
         const name = input.value;
-        const html = docStore.gainActiveHtml();
+        let html = await getHtml();
+        html = deleteElements(html);
+
         const project_id = docStore.projectId;
         invalid = false;
 
@@ -394,7 +408,7 @@
     /* не удалять этот класс. на него валидируемся при событии*/
     :global(.doc_elements){
         position: relative;
-        display: inline-block;
+        display: inline;
         background-color: var(--doc-element-bg);
         transition: background 400ms ease, transform 400ms ease;
         padding: 2px 3px;

@@ -16,7 +16,7 @@
     {#each $nodeOptions as option}
         <li on:click={() => handleClick(option.value)}>
             <svg>
-            <use href="/assets/icons/all.svg#{option.value}"/>
+                <use href="/assets/icons/all.svg#{option.value}"/>
             </svg>
             <span>{option.text}</span>
         </li>

@@ -24,7 +24,9 @@ export default function sanitizeManyHtml(arr){
         if(!matchArr) return html;
         cleanHtml = matchArr[0];
         cleanHtml = cleanHtml.replace(/<body>/, "<div>")
-                    .replace(/<\/body>/, "</div>");   
+                    .replace(/<\/body>/, "</div>")
+                    .replaceAll("doc_active", "")
+                    .replaceAll("doc_hoverlike", "");   
         return cleanHtml;
     }
 }

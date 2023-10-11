@@ -12,7 +12,7 @@
     export let rows = 1;
     export let validity;
     export let node_id;
-
+    export let data_type;
 
     let textarea;
     const controller = getContext("controller");
@@ -29,10 +29,14 @@
 
     function changeHandle(e){
         const target = e.target;
-        //console.log("[TextArea]: changeHandler, ", {id, name, content: target.value});
-        /*обновляем элементы dom*/
+        let value = target.value;
+
+        if(data_type === "integer"){
+            value = parseInt(value);
+        }
+
         elementsDataUpdate({id, name, content: target.value});
-        $controller.saveData({node_id, content: target.value});
+        $controller.saveData({node_id, content: value});
     }
 </script>
 

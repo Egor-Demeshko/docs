@@ -131,7 +131,7 @@ function clickHandle(e){
 
 
     deleteButtonX = e.pageX - width / 2;
-    deleteButtonY = e.layerY - height * 1.5;
+    deleteButtonY = e.offsetY - height * 1.5;
 
     showDeleteStore.set({
         deleteButtonX,

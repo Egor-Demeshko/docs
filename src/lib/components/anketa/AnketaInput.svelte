@@ -43,7 +43,8 @@ on:pointerleave={removeHoverLike}>
         node_id={data.id}
         id={data.id}
         name={data.name}
-        value={data.content}/>
+        value={data.content}
+        data_type={data.data_type}/>
     </div>
 </div>
 

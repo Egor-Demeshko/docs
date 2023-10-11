@@ -3,7 +3,6 @@
     import { nodes } from "$lib/scripts/stores";
     import syncDataInNodesStore from "$lib/scripts/controllers/syncDataInNodesStores.js";
     import { getContext } from "svelte";
-    import { get } from "svelte/store";
 
     export let options;    //стор типа узлов
     export let name = 'dropdown default';   //по нему определяем тип для которого отображается дроб даун

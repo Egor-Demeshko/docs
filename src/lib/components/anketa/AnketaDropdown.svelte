@@ -10,6 +10,7 @@
 
 
     export let data;
+    
     const controller = getContext("controller");
 
 
@@ -43,6 +44,8 @@
             } );
         }
     }
+
+    $:no_events = (derivedOptions[0]["text"]) ? false : true;
 
     /**
      * получаем отдельно опшинс, text
@@ -93,7 +96,9 @@
 
     function handleClick(){
         //console.log("[DropDown] click event target: ", e.target);
+        if(derivedOptions.length === 0) return;
         isOpened = !isOpened;
+
     }
 
 
@@ -185,7 +190,8 @@ on:pointerleave={elementPointerLeave}
         <span>{data.name}</span>
     </div>
 
-    <div class="dropdown" on:change={changeHandle}>
+    <div class="dropdown" class:no_events
+    on:change={changeHandle}>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <div class="main_view" on:click={handleClick} 
@@ -194,22 +200,30 @@ on:pointerleave={elementPointerLeave}
         on:blur={elementFocusOut}
         role="button" tabindex="0">
 
-            {#each derivedOptions as {text, selected}}
-                {#if selected}
-                <div class="main_label">
-                    <input class="main_input" type="radio" value={text} name={data.name} checked={selected}
-                    tabindex="-1"/>
+            {#if derivedOptions[0]["text"]}
+                {#each derivedOptions as {text, selected}}
+                    {#if selected}
+                    <div class="main_label">
+                        <input class="main_input" type="radio" value={text} name={data.name} checked={selected}
+                        tabindex="-1"/>
 
-                    <span class="main_name">
-                        {text}
-                    </span>
-                </div>
-                {/if}
-            {/each}
+                        <span class="main_name">
+                            {text}
+                        </span>
+                    </div>
+                    {/if}
+                {/each}
 
             <svg class="arrow" class:rotate>
                 <use href="/assets/icons/all.svg#arrow"></use>
             </svg>
+            {:else}
+                <div class="main_label" >
+                    <span class="main_name"> ПУСТО </span>
+                </div>
+            {/if}
+
+
         </div>
 
         {#if isOpened}
@@ -295,6 +309,10 @@ on:pointerleave={elementPointerLeave}
         transition: outline 400ms ease;
     }
 
+    .no_events .main_view{
+        background-color: var(--light-blue);
+    }
+
     .main_view:hover{
         background-color: var(--light-gray-blue);
     }
@@ -334,6 +352,11 @@ on:pointerleave={elementPointerLeave}
         text-overflow: clip;
         overflow: hidden;
         color: var(--middle-blue);
+    }
+
+
+    .no_events{
+        pointer-events: none;
     }
 
 

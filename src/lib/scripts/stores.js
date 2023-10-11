@@ -117,12 +117,12 @@ export const compareOptions = writable([
     {
         text: "не равно",
         value: "not_equal",
-        selected: false
+        selected: true
     },
     {
         text: "больше чем",
         value: "gt",
-        selected: true
+        selected: false
     },
     {
         text: "меньше чем",

@@ -14,7 +14,9 @@ import SimpleText from "$lib/scripts/docElements/simpleText.js";
 export default async function createNewBlock(whatBlockToCreate, controller){
     const id = generateUUID();
     const defaultName = "Новый блок";
-    const {y} = getCors();
+    let {y} = getCors();
+    y = Math.floor(y);
+
     let newTextElement = new SimpleText({id, name: "", content: defaultName});
 
     let newBlock = {
@@ -42,6 +44,7 @@ export default async function createNewBlock(whatBlockToCreate, controller){
     nodes.update(nodes => [...nodes, newBlock]);     
 
     storeForSimpleTexts.update( (elements) => [...elements, newTextElement]);
+
 
     let result = await controller.create(newBlock);
     console.log("[createNewBlock]: {SAVING NEW BLOCK DATA} reslut: ", result);
