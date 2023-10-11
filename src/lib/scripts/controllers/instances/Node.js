@@ -51,7 +51,8 @@ export default class Node extends NodeLocalOperations{
         console.log('[Node]: dataToBeSend: ', dataToBeSend);
 
         try{
-            let json = this.#client.create(token, dataToBeSend);
+            
+            let json = await this.#client.create(token, dataToBeSend);
             console.log("[NODE]: {create}: result(resoponse json): ", json);
         } catch (e){
             console.log("[NODE]: не удалось сохранить новый узел");

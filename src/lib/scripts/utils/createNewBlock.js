@@ -17,8 +17,6 @@ export default async function createNewBlock(whatBlockToCreate, controller){
     const {y} = getCors();
     let newTextElement = new SimpleText({id, name: "", content: defaultName});
 
-
-    debugger;
     let newBlock = {
         id,
         "name": defaultName,
@@ -45,7 +43,6 @@ export default async function createNewBlock(whatBlockToCreate, controller){
 
     storeForSimpleTexts.update( (elements) => [...elements, newTextElement]);
 
-    //TODO new block
     let result = await controller.create(newBlock);
-    console.log("[createNewBlock]: reslut: ", result);
+    console.log("[createNewBlock]: {SAVING NEW BLOCK DATA} reslut: ", result);
 }

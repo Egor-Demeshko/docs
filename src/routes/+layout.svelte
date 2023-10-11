@@ -16,7 +16,7 @@
        if(redirect){
             switch(path){
                 case ("projects"):
-                    goto("/projects")
+                    goto("/projects");
                     break;
                 case ("/"):
                     goto("/");
@@ -57,7 +57,7 @@
         position: relative;
         top: 0;
         left: 0;
-        background: url('/assets/images/background.svg');        
+        background: url('/assets/images/background.svg') 25% 25%;        
         height: 100vh;
         width: 100vw;
     }

@@ -126,13 +126,13 @@
 <style>
 
     .element{
-        flex: 3;
+        flex: 1;
         width: 100%;
         position: relative;
     }
 
     .element__left{
-        flex: 2.4;
+        flex: 1;
         height: 100%;
         display: flex;
         flex-direction: column;

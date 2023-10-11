@@ -40,6 +40,7 @@ export default async function validation(data, options){
             data.validity = {
                 status: "invalid",
                 err_data: [ ...data.validity.err_data, {
+                    blockId: data.id,
                     field_name: key,
                     message: "Поле обязательно для заполнения!",
                     err_id: 800,
@@ -140,8 +141,21 @@ export default async function validation(data, options){
 
                         let parentData = node;
 
-                        if(typeof data.trigger === "boolean" 
-                        && (typeof parentData.content !== "boolean" )){
+                        if(data.trigger === null || data.trigger === undefined ||
+                            data.trigger.length === 0){
+                            data.validity = {
+                                status: "invalid",
+                                err_data: [...data.validity.err_data, {
+                                    field: "trigger",
+                                    message: "Значение для сравнения не задано. Поле пустое",
+                                    blockId: data.id,
+                                    err_id: 805,
+                                    err_type: "emergency"
+                                }
+                                ],
+                            }
+                        } else if (typeof data.trigger === "boolean" 
+                        && (typeof parentData.content !== "boolean")){
                             
                             data.validity = {
                                 status: "invalid",

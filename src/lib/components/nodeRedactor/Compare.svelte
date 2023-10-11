@@ -62,7 +62,7 @@
             on:data-changed={dataChanged} 
             --border-color="var(--light-blue)"
             --border-color-hover="var(--light-gray-blue)"
-            --padding=".1rem .1rem .1rem .875rem"
+            --padding=".1rem .1rem .1rem .4rem"
             --color="var(--deep-blue)"
             --background="var(--light-blue)"
             --background-hover="var(--light-gray-blue)"
