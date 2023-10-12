@@ -297,7 +297,7 @@
 .trumbowyg-button-pane button:not(.trumbowyg-disable):hover,
 .trumbowyg-button-pane button:not(.trumbowyg-disable):focus,
 .trumbowyg-button-pane button.trumbowyg-active {
-  background-color: #fff;
+  background-color: transparent;
   outline: none;
 }
 .trumbowyg-button-pane .trumbowyg-open-dropdown::after {

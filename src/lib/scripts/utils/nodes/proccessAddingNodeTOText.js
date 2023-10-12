@@ -4,8 +4,10 @@ import { get } from "svelte/store";
 
 
 export function processSelection(callerId, eventSelection){
-
+    
     if(!eventSelection) return;
+    const docClassController = get( documents );
+    const specSymbols = {"&nbsp;": "┠"};
     let root;
     /**@description HTMLElement, элемент, в котором находится node, попавшая в selection */
     let parentElement = "";
@@ -56,17 +58,37 @@ export function processSelection(callerId, eventSelection){
         parentHtml = sanitizeHTML(parentHtml);
     }
 
+    /** обработаем отдельно случай, когда мы кликаем на пустой строке. */
+    if(parentElement.id === "container" && 
+        selection.anchorNode.tagName === "P" &&
+        (selection.anchorNode.children.length === 0 ||
+        selection.anchorNode.children.length === 1)){
+
+            handleEmptyLineClick( selection.anchorNode, callerId, selectionText);
+            
+            docClassController.saveHtmlState();
+            makeReconnect(root);
+            return;
+    }
+
+
     {   
-        const docClassController = get( documents );
         /**@description корректирующие индексы, из селекшена */
         let startIndex = ( selection.anchorOffset <= selection.focusOffset )    ? selection.anchorOffset 
                                                                                 : selection.focusOffset;
         let endIndex = ( selection.anchorOffset <= selection.focusOffset )  ? selection.focusOffset
                                                                             : selection.anchorOffset;
 
-        /**идекс узла(а точнее его текста) куда происходит вставка */
-        let index = parentHtml.indexOf(anchorNode.nodeValue);
+        let htmlWithWhiteSpaces = createWhiteSpaces(parentHtml, specSymbols); 
+        /**проверяем диапозан вставки на наличие спец. симповолов*/
+        parentHtml = removeSpecSymbol(parentHtml, specSymbols);
 
+        /**идекс узла(а точнее его текста) куда происходит вставка,
+         * если мы вставляем node в конец предложения, где уже есть наш узел, там будет пробел.
+         * почему-то отказывается и indexOf и search искать. при этом этот проблемы мы сами добавляем.
+         * так как тогда поиск вообще в это одной строкой считает.
+        */
+        let index = htmlWithWhiteSpaces.search(new RegExp(anchorNode.nodeValue.trim()));
         if(index === -1) index = 0;
         //throw new Error("Couldn't find place to insert new text");
 
@@ -77,25 +99,109 @@ export function processSelection(callerId, eventSelection){
         //console.log("[troumboune]: BEFORE parentHTML", parentHtml);            
             
         parentHtml = leftHand + `<span class="doc_elements" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
-                        + rightHand;
+                        + ((rightHand.length > 0) ? " " : "") + rightHand;
        
-
+        parentHtml = restoreSpecSymbols(parentHtml, specSymbols);
         //исправленная строка применяется к элементов в котором находился узел и селекшон
         parentElement.innerHTML = parentHtml;
         docClassController.saveHtmlState();
     }
 
     
-    //у симпл текста запустить коннект, addEventListenets. для соединения с узлами на тексте.
-    storeForSimpleTexts.update( ( elements ) => {
-
-        for(let i = 0; i < elements.length; i++){
-            const element = elements[i];
-            element.connect(root);
-            element.createListeners();
-        }
-        return elements;
-    });
+    makeReconnect(root);
 }
 
+function createWhiteSpaces(html, specSymbols /** @type {Object} */) {
+    for(let key of Object.keys(specSymbols)){
+        html = html.replaceAll(new RegExp(key, "g"), " ");
+    }
+
+    return html;
+}
+
+
+function handleEmptyLineClick(node, callerId, selectionText) {
+    /**удаляем наследников */
+    const children = Array.from(node.children);
+    children.forEach( (el) => el.remove() );
+    
+    /**вставляем наш элемент */
+    node.innerHTML = `<span class="doc_elements" data-element="${callerId}" tabindex="0">${selectionText}</span>`;
+}
+
+
+/**
+ * Initializes a reconnection process by calling conect function
+ *
+ * @return {void} Returns nothing.
+ */
+function makeReconnect(root){
+        //у симпл текста запустить коннект, addEventListenets. для соединения с узлами на тексте.
+        storeForSimpleTexts.update( ( elements ) => {
+
+            for(let i = 0; i < elements.length; i++){
+                const element = elements[i];
+                element.connect(root);
+                element.createListeners();
+            }
+            return elements;
+        });
+}
+
+function restoreSpecSymbols(html, specSymbol){
+    for( let [key, value] of Object.entries(specSymbol)){
+        html = html.replaceAll(value, key);
+    }
+    return html;
+}
+
+
+
+
+/**удаляем спец.символы так как Selection в offset считает их отдельными элементами, а в 
+ * строки HTML они идут всем набором, влияет на длинну.
+ * Меня на редкие элементы, а не на пробелы чтобы знать потом куда эти спец. символы вернуть
+ */
+function removeSpecSymbol(html, specSymbols){ 
+    for( let [key, value] of Object.entries(specSymbols)){
+        html = html.replaceAll(new RegExp(key, "g"), value);
+
+    }
+
+    return html;
+    /*
+    for(let i = 0; i < specSymbols.length; i++){
+        let specIndex = html.indexOf(specSymbols[i]);
+        /**не нашли спец.символ, смотрим следующий */
+      /*  if(specIndex ===-1) continue;
+
+        checkAllSuchSymbols(specIndex, specSymbols[i], specSymbols[i].length);
+    }*/
+
+    return {startIndex, endIndex};
+
+    function checkAllSuchSymbols(specIndex, specSymbol , specSymbolLength){
+        let specialElementsFound = 1;
+        
+
+        while(true){
+            if(specIndex <= startIndex && startIndex + specSymbolLength < specIndex + specSymbolLength){
+                /**если наш стартовый индекс, куда должна осуществится вставка
+                 * попал на спец. элемент, то надо перепистить вставку на после спец. элемента
+                */
+                startIndex = specIndex + specSymbolLength;
+                /**если при этом стратовый индекс стал больше конечного,
+                 * а такое может быть, например, если у нас был клик в одну точки и мы попали на спец.
+                 * символ(длинный пробел), то надо конечный индекс прировнять к стартовому
+                 */
+                if(startIndex > endIndex) endIndex = startIndex;
+                break;
+            } else {
+                specIndex = html.indexOf(specSymbol, specIndex + specSymbolLength);
+                if(specIndex === -1) break;
+                startIndex = startIndex + specSymbolLength;
+            }
+        } 
+    }
+}
 
