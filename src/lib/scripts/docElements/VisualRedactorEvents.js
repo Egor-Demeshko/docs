@@ -28,9 +28,9 @@ export default class visualRedactorEvents{
             domLink.addEventListener("pointerenter", this.#pointerEnter.bind(this));
             domLink.addEventListener("pointerleave", this.#pointerLeave.bind(this));
 
-            domLink.addEventListener("keyup", this.#keyupHandle.bind(this));
+            //domLink.addEventListener("keyup", this.#keyupHandle.bind(this));
             domLink.addEventListener("keydown", this.#keyDown.bind(this));
-            domLink.addEventListener("keypress", this.#keyPress.bind(this));
+            //domLink.addEventListener("keypress", this.#keyPress.bind(this));
             
         });
     }
@@ -190,7 +190,8 @@ export default class visualRedactorEvents{
         }*/
     }
 
-    #keyPress(){
+    #keyPress(e){
+
         return;
     }
 

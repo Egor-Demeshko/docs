@@ -36,6 +36,14 @@
     $: if($addExcitingNodeToRedator.status === "start"){
         callerId = $addExcitingNodeToRedator.id;
         createListenersForNodeAddition();
+    } else {
+        /**есть в box обработчик на клик, который ставит addExcitingNodeToRedator в null
+         * если мы кликнули мимо редактора текста
+        */
+        if(root){
+            const container = root.querySelector("#container");
+            container.removeEventListener("pointerdown", createNodePointerDown, {once: true});
+        }
     }
 
     $documents.subscribeForDocsArrUpdate(docsArrayUpdated);
@@ -80,30 +88,23 @@
     /**ФУНКЦИИ В АЛФАВИТНОМ ПОРЯДКЕ*/
 
     function createListenersForNodeAddition(){
-        let eventSelection = null;
+        if(!root) return;
+
+        container.addEventListener("pointerdown", createNodePointerDown, {once: true});
+    }
+
+
+    function createNodePointerDown(){
+        const container = root.querySelector("#container");
         
-        root.addEventListener("pointerdown", function createNodePointerDown(){
-            /** теперь отслеживаем выделение текста и при измернение выделения, отправляем на создание*/
+        container.addEventListener("pointerup", () => {
             
-            document.addEventListener("selectionchange", storeEvent);
+            processSelection(callerId);
 
-            root.addEventListener("pointerup", () => {
-                document.removeEventListener("selectionchange", storeEvent);
-                
-                processSelection(callerId, eventSelection);
-
-                addExcitingNodeToRedator.set( {
-                    status: null
-                } );
-            }, {once:true});
-
-        }, {once: true});
-
-
-        function storeEvent(e){
-            console.log("[TROUMBONE]: selection changed, ", eventSelection);
-            eventSelection = e;
-        }       
+            addExcitingNodeToRedator.set( {
+                status: null
+            } );
+        }, {once:true});
     }
 
 

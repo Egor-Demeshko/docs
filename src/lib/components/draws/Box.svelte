@@ -305,7 +305,8 @@ function addConnection(e){
 }
 
 
-function focusIn(){
+function focusIn(e){
+  
     //console.log("[BOX]: focusin handler: id", id);
 
     /*activeBlocks.update( (set) => {
@@ -314,10 +315,12 @@ function focusIn(){
     });*/
     blockClickedId.set(id);
 
+
     $storeForSimpleTexts.forEach( (elObj) => {
         //console.log("[BOX]: trying to set active");
-        elObj.setActiveWithScroll(id);
+        elObj.setActive(id);
     });
+    
 
     showButtons = true;
 }

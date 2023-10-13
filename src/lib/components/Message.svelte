@@ -7,6 +7,7 @@
     /**айди блока от которого идет ошибка*/
     export let blockId = "";
     export let closeMessageCallback;
+    export let err_id;
 
     /**определяет стиль сообщения. emergency, simple, highlight*/
     export let err_type;
@@ -14,17 +15,19 @@
 
     onMount( () => {
         if(closeMessageCallback){
-            
-          setTimeout( () => {
-                closeMessageCallback(blockId, message);
-            }, 10000);
+            let block = blockId;
+            let err = err_id;
+
+            setTimeout( function(){
+                closeMessageCallback(block, err);
+            }, 6000);
 
         }
     });
 
 
     function closeClick(){
-        closeMessageCallback(blockId, message);
+        closeMessageCallback(blockId, err_id);
     }
 
 </script>

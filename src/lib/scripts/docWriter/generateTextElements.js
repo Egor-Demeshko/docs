@@ -25,17 +25,17 @@ export default function generateTextElements(graph, html){
 
         if(!string)return;
 
-
+        /*
         graph.forEach( (obj) => {
             let id = obj.id;
             let active = obj.active;
     
             if(active){
-                string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements" data-element="${id}" tabindex="0"></span>`);
+                string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements" contenteditable="false" data-element="${id}" tabindex="0"></span>`);
             } else {
-                string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements no_display" data-element="${id}" tabindex="0"></span>`);            
+                string = string.replaceAll(`%id=(${id})%`, `<span class="doc_elements no_display" contenteditable="false" data-element="${id}" tabindex="0"></span>`);            
             }
-        });
+        });*/
 
         htmlObj.string = string;
     });

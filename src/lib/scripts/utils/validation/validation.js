@@ -163,7 +163,7 @@ export default async function validation(data, options){
                                     field: "trigger",
                                     message: "Родительский блок должен иметь запись вида <true> (активно) или <false> (пассивно)",
                                     blockId: data.id,
-                                    err_id: 805,
+                                    err_id: 806,
                                     err_type: "emergency"
                                 }
                                 ],

@@ -74,6 +74,21 @@
             }
         }));
 
+        /**обработать клик мимо редактора*/
+        setTimeout( () => {
+            document.addEventListener("click", (e) => {
+            if(e.target.id === "container" || e.target.closest("#container")){
+                return;
+            }
+
+            addExcitingNodeToRedator.set( {
+                status: null,
+                id: null 
+            } );
+        }, {once: true});
+
+        }, 50);
+        
 
         addExcitingNodeToRedator.set( {
             status: "start",

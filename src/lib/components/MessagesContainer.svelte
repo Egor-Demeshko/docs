@@ -1,6 +1,6 @@
 <script>
     import Message from "$lib/components/Message.svelte";
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
 
     /**СООБЩЕНИЯ появляется при срабатывании события я error на document*/
 
@@ -33,12 +33,10 @@
 
             //проблема. при первой валидации, если две ошибки сразу, то вторая не добавляется
             for(let i = 0; i < messages.length; i++){
-                if(messages[i]["err_id"] !== err_id) continue;
-
-                if(messages[i]["err_id"] === err_id) return;
+                if(messages[i]["err_id"] === err_id && messages[i]["blockId"] === blockId) return;
             }
 
-            
+
             messages.push( {
                 blockId,
                 message,
@@ -53,13 +51,14 @@
     }
 
 
-    function deleteMessageFromList(id, inMessage){
+    async function deleteMessageFromList(id, err_id){
+        
         messages = messages.filter( (errObj) => {
-            if(errObj.message === inMessage && errObj.blockId === id)return false;
-            
+
+            if(errObj.err_id === err_id && errObj.blockId === id)return false;
             return true;
         });
-        
+        await tick();
         //console.log("[MessagesContainer]: delete elements from messages: ", messages);
     }
 </script>
@@ -69,8 +68,8 @@
 
 
 <div class="messages" style="bottom: {bottomCor}px">
-    {#each messages as {blockId, message, err_type}}
-        <Message {blockId} {message} {err_type} closeMessageCallback={ deleteMessageFromList }/>
+    {#each messages as {blockId, message, err_type, err_id}}
+        <Message {blockId} {message} {err_type} {err_id} closeMessageCallback={ deleteMessageFromList }/>
     {/each}
 </div>
 

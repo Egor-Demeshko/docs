@@ -21,8 +21,8 @@
     });
 
     function saveHtml(){
-        docClass.saveHtmlState();
         docClass.setDocumentUpdated();
+        docClass.saveHtmlState();
     }
 
     async function blur(){

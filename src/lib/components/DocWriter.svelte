@@ -410,10 +410,11 @@
         position: relative;
         display: inline;
         background-color: var(--doc-element-bg);
-        transition: background 400ms ease, transform 400ms ease;
+        transition: background 400ms ease, transform 400ms ease, box-shadow 400ms ease;
         padding: 2px 3px;
         border-radius: 4px;
         cursor: default;
+        box-shadow: 0 0 2px var(transparent);
     }
 
     :global(.doc_elements:focus){

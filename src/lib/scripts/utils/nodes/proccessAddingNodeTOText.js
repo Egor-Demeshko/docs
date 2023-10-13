@@ -3,9 +3,8 @@ import {storeForSimpleTexts, docRoot, documents} from "$lib/scripts/stores";
 import { get } from "svelte/store";
 
 
-export function processSelection(callerId, eventSelection){
+export function processSelection(callerId){
     
-    if(!eventSelection) return;
     const docClassController = get( documents );
     const specSymbols = {"&nbsp;": "┠"};
     let root;
@@ -66,8 +65,10 @@ export function processSelection(callerId, eventSelection){
 
             handleEmptyLineClick( selection.anchorNode, callerId, selectionText);
             
+            docClassController.setDocumentUpdated();
             docClassController.saveHtmlState();
             makeReconnect(root);
+            setCaret(parentElement);
             return;
     }
 
@@ -98,17 +99,19 @@ export function processSelection(callerId, eventSelection){
         //console.log("[troumboune]: selection text", selectionText);
         //console.log("[troumboune]: BEFORE parentHTML", parentHtml);            
             
-        parentHtml = leftHand + `<span class="doc_elements" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
+        parentHtml = leftHand + `<span class="doc_elements" contenteditable="false" range="true" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
                         + ((rightHand.length > 0) ? " " : "") + rightHand;
        
         parentHtml = restoreSpecSymbols(parentHtml, specSymbols);
         //исправленная строка применяется к элементов в котором находился узел и селекшон
         parentElement.innerHTML = parentHtml;
+        docClassController.setDocumentUpdated();
         docClassController.saveHtmlState();
     }
 
     
     makeReconnect(root);
+    setCaret(parentElement);
 }
 
 function createWhiteSpaces(html, specSymbols /** @type {Object} */) {
@@ -126,7 +129,7 @@ function handleEmptyLineClick(node, callerId, selectionText) {
     children.forEach( (el) => el.remove() );
     
     /**вставляем наш элемент */
-    node.innerHTML = `<span class="doc_elements" data-element="${callerId}" tabindex="0">${selectionText}</span>`;
+    node.innerHTML = `<span class="doc_elements" data-element="${callerId}" range="true" tabindex="0">${selectionText}</span>`;
 }
 
 
@@ -156,6 +159,30 @@ function restoreSpecSymbols(html, specSymbol){
 }
 
 
+function setCaret(parentElement){
+    const range = document.createRange();
+    const sel = window.getSelection();
+
+    const elem = parentElement.querySelector(`[range]`);
+
+    if(!elem) return;
+
+    if(elem.nextSibling){
+        range.setStartBefore(elem.nextSibling);
+    } else if(elem.previousSibling){
+        range.setStartAfter(elem.previousSibling);
+    } else {
+        range.setStartAfter(elem);
+    }
+
+
+    range.collapse();
+
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    elem.removeAttribute("range");
+}
 
 
 /**удаляем спец.символы так как Selection в offset считает их отдельными элементами, а в 
