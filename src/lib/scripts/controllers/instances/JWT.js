@@ -16,7 +16,8 @@ export default class JWT{
         let expiredStamp = this.#saveService.getTokenExp();
         if(expiredStamp){
             
-            if( Math.floor(Date.now()/1000) - expiredStamp >= 0 ){
+            let dateNow = Date.now()/1000;
+            if( Math.floor(dateNow) - expiredStamp >= 0 ){
                 this.#saveService.delete();
                 return false;
             }
@@ -45,6 +46,7 @@ export default class JWT{
         if(refreshToken){
             try{
                 /** {jwt, refresh} */
+                debugger;
                 const tokens = await this.#http.refresh(refreshToken);
                 if(tokens){
                     this.decodeJWT(tokens.jwt);
@@ -57,7 +59,7 @@ export default class JWT{
                     return false;
                 }
             } catch(e){
-                console.log("[JWT]: не удалось обновить токен: ", e.message);
+                console.log("[JWT]: не удалось обновить токен: ", e);
             }
         } else {
             throw new Error("не удалось получить токен из памяти");

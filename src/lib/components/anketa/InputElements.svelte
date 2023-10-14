@@ -16,7 +16,10 @@
 <div>
     {#each $nodes as data}
         {#if data.node_type === "text" || data.node_type === "entry"}
-            <AnketaInput id={data.id} {data}/>
+            <AnketaInput id={data.id} 
+            name={data.name}
+            content={data.content}
+            data_type={data.data_type}/>
         {:else if data.node_type === "select" && data.view_type === "radiobutton"}
             <SelectInput id={data.id} {data}/>
         {:else if data.node_type === "select" && data.view_type === "drop_list"}

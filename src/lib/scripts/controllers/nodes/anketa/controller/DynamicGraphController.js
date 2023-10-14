@@ -21,7 +21,7 @@ export default class DynamicGraphController extends HTTPform{
         this.#project_id = project_id;
 
         this.#saveClient = new DataService({save: saveClient});
-        this.#JWT = new JWT({saveService: this.#saveClient}, this);
+        this.#JWT = new JWT({saveService: this.#saveClient, http: this});
     }
 
     subscribe(fn){
@@ -50,11 +50,13 @@ export default class DynamicGraphController extends HTTPform{
             contents: this.#changedElements
         }
 
-        const token = await this.#JWT.getToken("jwt");
-        let data = await super.update(token, dataToSend);
-
+        const token = await this.#JWT.getToken();
+        let data;
+        if(token){
+            data = await super.update(token, dataToSend);
+        }
+        debugger;
         console.log("[DynamicGraphController]: {saveData} after request: ", data);
-
         if(data.success){
             this.#callbacks.forEach( (fn) => fn(data.data));
         }

@@ -114,7 +114,8 @@ export default class HTTPBaseServise{
 
     async postWithHeader(token = null, data, route, cors="cors"){
         const url = new URL(this.#origin + this.path + this.secondPath + route );
-        console.log('[http basic]: url: ', url.href);
+        //console.log('[http basic]: url: ', url.href);
+        
         console.log('[HTTP BASIC: ], data to send: ', data);
         const headers = {
             "Content-type": "application/json"

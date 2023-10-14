@@ -3,11 +3,10 @@
     import { setElementHoverLike, removeElementHoverLike} from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess.js"
     
     /*обьект данных из графа, конкретный для инпута*/
-    export let data;
     export let id;
-
-    let name = data.name;
-    
+    export let name;
+    export let content;
+    export let data_type;
 
 
     /*описывает hover сосотояние на элементе в текстовом редакторе.*/
@@ -40,11 +39,11 @@ on:pointerleave={removeHoverLike}>
         --background="var(--white-blue)"
         --background-hover="var(--white-blue)"
         --color="var(--deep-blue)"
-        node_id={data.id}
-        id={data.id}
-        name={data.name}
-        value={data.content}
-        data_type={data.data_type}/>
+        node_id={id}
+        id={id}
+        name={name}
+        value={content}
+        data_type={data_type}/>
     </div>
 </div>
 
