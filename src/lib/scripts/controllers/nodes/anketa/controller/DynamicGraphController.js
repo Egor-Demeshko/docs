@@ -55,7 +55,6 @@ export default class DynamicGraphController extends HTTPform{
         if(token){
             data = await super.update(token, dataToSend);
         }
-        debugger;
         console.log("[DynamicGraphController]: {saveData} after request: ", data);
         if(data.success){
             this.#callbacks.forEach( (fn) => fn(data.data));

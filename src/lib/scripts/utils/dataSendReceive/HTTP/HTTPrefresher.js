@@ -24,7 +24,6 @@ export default class HTTPrefresher extends HTTPBaseServise{
             let {success, data, details} = result;
 
             console.log("[HTTPLOGIN]: after request: ", {result});
-            debugger;
             if(success){
 
                 return  {jwt: data.jwt, refresh: data.refresh}; 
