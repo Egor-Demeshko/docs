@@ -1,6 +1,7 @@
 <script>
     import LogoAndName from "$lib/components/LogoAndName.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
+    import AccountButton from "$lib/components/CntrElem/AccountButton.svelte";
     import {onNavigate} from "$app/navigation";
 
     onNavigate( (navigation) => {
@@ -20,7 +21,11 @@
 </div>     
 <div class="logo_position">
     <LogoAndName/>
+
     <div class="header_right">
+        <div class="icon">
+            <AccountButton />
+        </div>
         <Button2
         on:click={() => {
             let url = new URL(window.location.origin + "/contact");
@@ -60,8 +65,16 @@
     background-color: transparent;
     position: relative;
     display: flex;
+    width: 100%;
     justify-content: space-between;
+    z-index: 1;
     view-transition-name: background;
+}
+
+.header_right{
+    display: flex;
+    gap: .5rem;
+    justify-content: end;
 }
 
 @media print{

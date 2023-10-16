@@ -67,7 +67,7 @@
             err_mail = "";
 
             try{
-                let {success, details} = await $userStore.registrate(dataToSend, true);
+                let {success, details} = await $userStore.registrate(dataToSend, "registrate");
                 if(success){
                     dispatch("switch_to_login");
                 }

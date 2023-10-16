@@ -32,6 +32,17 @@ export default class User{
         return await this.#jwtClient.processTokens();
     }
 
+
+    async logout(){
+        let token = await this.#jwtClient.getToken();
+
+        if(token){
+            return await this.#login.post(null, "logout", token);
+        } else {
+            return false;
+        }
+    }
+
     async registrate(data, reg){
         return await this.#login.post(data, reg);
     }
@@ -58,5 +69,6 @@ export default class User{
             console.log("[saving data error]: ", e.message);
         }   
     }
+
 
 }

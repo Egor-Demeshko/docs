@@ -12,15 +12,29 @@ export default class HTTPLogin extends HTTPrefresher{
     }
 
 
-    async post(data, reg){
-        let end = (reg) ? "/register/" : "/login/";
+    async post(data, reg, token){
+        let end = "";
 
-        let result;
+        switch(reg){
+            case("registrate"):
+            end = "/register/";
+            break;
+            case("logout"):
+            end = "/logout/";
+            break;
+            default:
+            end = "/login/";
+            break;
+        }
 
         try {
-             return await super.post(JSON.stringify(data), end);
+                if(reg !== "logout"){
+                    return await super.post(JSON.stringify(data), end);
+                } else {
+                    return await super.postWithHeader(token, null, end);
+                }
         } catch(e) {
-            console.log("[Логин]: не удалось залогиниться!");
+            console.log("[ERROR]: ошибка котроллера auth");
             throw e;
         }
     }
