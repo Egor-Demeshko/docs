@@ -52,7 +52,8 @@
         <DropDown {id} buildTypeid={forId} isWithIcon={false} name="condition" options={compareOptions}
         --padding=".125rem 1.8rem .125rem 1rem"
         --padding-options=".125rem 1rem"
-        --border="2px solid var(--light-blue)"/>
+        --border="2px solid var(--light-blue)"
+        --flex="1.5 0"/>
 
         <!--<div style="width: 100%">-->
 
@@ -69,6 +70,7 @@
             --border-width="2px"
             --font-size=".875rem"
             --placeholder="var(--faded-gray-blue)"
+            --flex="1 0"
             />
         <!--</div>-->
     </div>

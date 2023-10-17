@@ -143,7 +143,7 @@ export default async function validation(data, options){
 
                         if(data.trigger === null || data.trigger === undefined ||
                             data.trigger.length === 0){
-                            data.validity = {
+                            /*data.validity = {
                                 status: "invalid",
                                 err_data: [...data.validity.err_data, {
                                     field: "trigger",
@@ -153,7 +153,7 @@ export default async function validation(data, options){
                                     err_type: "emergency"
                                 }
                                 ],
-                            }
+                            }*/
                         } else if (typeof data.trigger === "boolean" 
                         && (typeof parentData.content !== "boolean")){
                             
@@ -171,7 +171,7 @@ export default async function validation(data, options){
                             break;
                         }
 
-                        if(isNaN(+parentData.content) !== isNaN(+data.trigger) ){
+                        if(data.condition && isNaN(+parentData.content) !== isNaN(+data.trigger) ){
                             //console.log("[validation]: {trigger} wrong type for PARENT AND CHILD");
 
                             data.validity = {

@@ -68,7 +68,6 @@
 
 
     function changeHandle(e){
-
         dispatch("data-changed", {id, [name]: e.target.value});
         //syncDataInNodesStores(id, name, e.target.value);
     }
@@ -87,6 +86,7 @@
 <style>
     .input_wrapper{
         position: relative;
+        flex: var(--flex);
     }
 
 
@@ -99,7 +99,6 @@
         height: 100%;
         color: var(--color);
         background-color: var(--background);
-        flex: 1 0;
         transition: border 400ms ease, background 400ms ease;
     }
 

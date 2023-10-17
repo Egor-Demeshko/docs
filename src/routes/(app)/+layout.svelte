@@ -67,7 +67,7 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    z-index: 1;
+    z-index: 15;
     view-transition-name: background;
 }
 

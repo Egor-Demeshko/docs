@@ -104,11 +104,11 @@ export const nodeOptions = writable([
 
 /**compare dropdown options */
 export const compareOptions = writable([
-    /*{
-        text: "условия",
+    {
+        text: "---",
         value: null,
         selected: true,
-    },*/
+    },
     {
         text: "равно",
         value: "equal",
@@ -117,7 +117,7 @@ export const compareOptions = writable([
     {
         text: "не равно",
         value: "not_equal",
-        selected: true
+        selected: false
     },
     {
         text: "больше чем",

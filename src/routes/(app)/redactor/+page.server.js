@@ -22,7 +22,6 @@ export async function load({ cookies, route }){
     });
 
     const {success, data} = await client.getFullInfo(jwt, {project_id: Number(project_id)}, "no-cors");
-    console.log('[page.server.js]: after request: ', data);
     //data.route = route.id;
     if(success) return data;
     if(!success){

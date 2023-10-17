@@ -26,13 +26,14 @@
     $: isOpened = false;
     $: rotate = (isOpened) ? true : false;
     $: if(id){
+        
         //по name получаем имя поля, которое считаем в data.
         //а затем по нему считаем значение этого поля из даты.
         let activeOption = '';
         for(let i = 0; i < $nodes.length; i++){
             if($nodes[i]["id"] !== id) continue;
-
             activeOption = $nodes[i][name];
+            
             break;
         }
         
@@ -42,8 +43,13 @@
                 /** при старте программы, есть значения по умолчанию, если
                  * убрать эту проверку, то далее они будут перезаписаны на false
                 */
-                if(!activeOption) return options;
-                
+                if( activeOption === undefined || activeOption === "") return options;
+
+                if(activeOption === null && options[i]["value"] === null) {
+                    options[i].selected = true;
+                    continue;
+                }
+
                 if(options[i]["value"] !== activeOption ){
                     options[i].selected = false;
                     continue;
@@ -86,7 +92,7 @@
 
         options.update( (array) => {
             array.forEach( (elem) => {
-                
+    
                 if(elem.value === type) {
                     
                     elem.selected = true;
@@ -100,7 +106,11 @@
                     //controller.saveNourgentAsObj(id, filedsToBeUpdate);
                     //let result = controller.sendDataInQueue();
 
-                } else {
+                } else if(elem.value === null && type === "") {
+                    elem.selected = true;
+                    const filedsToBeUpdate = {"condition": null};
+                    syncDataInNodesStore(id, null, null, filedsToBeUpdate);
+                }else {
                     elem.selected = false;
                 }
             });
@@ -198,7 +208,7 @@
         font-size: 0.875rem;
         position: relative;
         width: 100%;
-        flex: 1 0;
+        flex: var(--flex);
     }
 
 

@@ -95,7 +95,7 @@
   /**определяем какого вида границу блока рисовать. зависит от наличия условия триггера и condition в data <= $nodes
   */
   $: gotConditions = (condition && !(trigger == undefined || trigger == '' || trigger === null)) ? true : false;
-  //$: console.log("[Box]: gotConditions", gotConditions);
+  //$: console.log("[Box]: gotConditions", {condition, gotConditions, trigger});
   
   
 /**переопределние класса отображение неактивного блока, если флаг актив false*/
@@ -627,7 +627,11 @@ async function secondStepOnChildConnect(e){
     {/if}
 
     {#if showButtons}
-          <foreignObject  width="16" {height} x="{x + width + 6}" {y}>
+          <foreignObject  
+          class="show_buttons" 
+          width="16" {height} 
+          x="{x + width + 6}" 
+          {y}>
               <BoxButtons {id} {node_type} {box_inactive}/>
           </foreignObject>
     {/if}
@@ -719,5 +723,11 @@ async function secondStepOnChildConnect(e){
 
     .glow{
       filter: drop-shadow(0 0 6px var(--orange));
-    }    
+    }
+
+    /**Buttons*/
+    .show_buttons{
+        position: relative;
+        z-index: 15;
+    }
 </style>

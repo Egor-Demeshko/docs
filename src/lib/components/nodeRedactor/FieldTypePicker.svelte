@@ -15,7 +15,8 @@
     name="node_type" {id}
     --padding=".125rem 1.8rem .125rem 1rem"
     --padding-options=".125rem 1rem"
-    --border="2px solid var(--light-blue)"/>
+    --border="2px solid var(--light-blue)"
+    --flex="1 0"/>
 </div>
 
 <style>

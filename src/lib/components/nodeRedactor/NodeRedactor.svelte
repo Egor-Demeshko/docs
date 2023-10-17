@@ -224,7 +224,7 @@
                 if(!notEqual) delete detail[key];
             }
         }
-        
+
         //обновляем данные
         if(data.id === detail.id){
             for (const key of Object.keys(detail)) {
