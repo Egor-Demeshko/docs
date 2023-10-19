@@ -54,7 +54,7 @@
 <style>
     main{
         background-color: var(--main-bg);
-        position: relative;
+        position: fixed;
         top: 0;
         left: 0;
         background: url('/assets/images/background.svg') 25% 25%;        

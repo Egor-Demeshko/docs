@@ -247,6 +247,7 @@
         //console.log("[nodeRedactor]: POINTERLEAVE");
         //сохранить состояние в nodes 
         //и обьекта в текущем режиме.
+        
         if(data && data?.id){
             /*nodes.update( (allNodes) => {
                 for(let i = 0; i < allNodes.length; i++){

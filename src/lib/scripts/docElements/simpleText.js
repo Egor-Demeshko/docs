@@ -118,16 +118,15 @@ export default class SimpleText{
             
             domElement.textContent = name;
         });*/
-        this.#content = content;
+        if(content && typeof content === 'string' && this.#content !== content){
+            this.#content = content;
+        }
     }
 
 
     setTextData({name, content}){
         if(this.#content === content && this.#name === name) return;
-        if((typeof name === "string" || !name)  && typeof content === "string"){
-            //console.log("[simpleText Obj]: setTextData method before this.#update ", {name, content});
-            this.#update(name, content);
-        }
+        this.#update(name, content);
     }
 
     setNameOnly(name){

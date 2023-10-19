@@ -12,6 +12,7 @@ export function processSelection(callerId){
     let parentElement = "";
 
     let selection = window.getSelection();
+
     let anchorNode = selection.anchorNode;
 
     /**HTML строка, родителя node в который происходит вставка */
@@ -50,10 +51,13 @@ export function processSelection(callerId){
      */
     //санитизировать строку от скриптов
     {
-        parentElement = anchorNode.parentElement;
+        if(anchorNode.tagName === "P" && anchorNode.parentElement.id === "container"){
+            parentElement = anchorNode;
+        } else {
+            parentElement = anchorNode.parentElement;
+        }
+
         parentHtml = parentElement.innerHTML;
-
-
         parentHtml = sanitizeHTML(parentHtml);
     }
 
@@ -89,7 +93,19 @@ export function processSelection(callerId){
          * почему-то отказывается и indexOf и search искать. при этом этот проблемы мы сами добавляем.
          * так как тогда поиск вообще в это одной строкой считает.
         */
-        let index = htmlWithWhiteSpaces.search(new RegExp(anchorNode.nodeValue.trim()));
+        let index = null;
+        let stringEndIndex = htmlWithWhiteSpaces.length - 1;
+
+        if(anchorNode?.nodeValue){
+            index = htmlWithWhiteSpaces.search(new RegExp(anchorNode.nodeValue.trim()));
+        } else if(anchorNode.tagName === "P" && startIndex === 0 && endIndex === 0){
+            index = 0;
+        } else if(anchorNode.tagName === "P" &&
+            startIndex === stringEndIndex &&
+            endIndex === stringEndIndex) {
+            index = stringEndIndex;
+        }
+
         if(index === -1) index = 0;
         //throw new Error("Couldn't find place to insert new text");
 

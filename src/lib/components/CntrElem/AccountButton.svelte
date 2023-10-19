@@ -77,13 +77,14 @@
 </div>
 
 <style>
-    .wrapper{
-        height: 100%;
+    .wrapper{        
         position: relative;
-        transform: translate(0);
+        width: 1.7rem;
+        height: 1.7rem;
     }
 
     svg{
+        width: 100%;
         height: 100%;
         fill: var(--white-blue);
         transition: fill 400ms ease;
@@ -97,14 +98,16 @@
     .dropdown{
         position: absolute;
         top: 125%;
-        left: -50%;
+        left: 0;
         /*transform: translateX(50%);*/
         border-radius: 10px;
         background-color: var(--light-slate-gray);
         border: 2px solid var(--middle-blue);
-        padding: 1rem;
+        padding: .5rem 1rem;
         z-index: 2;
         transition: background 400ms ease;
+        transform: translate(-33%);
+        cursor: pointer;
     }
 
     .dropdown:hover{

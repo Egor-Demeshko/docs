@@ -302,6 +302,10 @@ export default class Node extends NodeLocalOperations{
                 this.saveNourgentAsObj(id, {...urgentData});
                 
                 let result = await this.sendDataInQueue();
+                if(result.success){
+
+                    this.setActiveNode(data);
+                }
                 //if(result.success) this.updateCallBack();
                 console.log('[SAVEDATABEFORECHANGE]: result: ', result);
                 break;

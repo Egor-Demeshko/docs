@@ -105,6 +105,7 @@ $: console.log("~~~~TEST LINES~~~~,", {lines});
         background-repeat: repeat;
         background-color: var(--white-blue);
         background-origin: border-box;
+        background-size: 24px;
         scrollbar-color: var(--gray-blue);
     }
 

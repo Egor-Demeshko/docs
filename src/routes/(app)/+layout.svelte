@@ -21,30 +21,31 @@
 </div>     
 <div class="logo_position">
     <LogoAndName/>
-
-    <div class="header_right">
-        <div class="icon">
-            <AccountButton />
-        </div>
-        <Button2
-        on:click={() => {
-            let url = new URL(window.location.origin + "/contact");
-            window.open(url, "_blank")
-        }}
-        --bg="transparent"
-        --color="var(--white-blue)"
-        --border="3px solid var(--white-blue)"
-        --font-size="1rem"
-        --padding=".5rem 1.25rem"
-        --bg-hover="var(--gray-blue)"
-        --color-hover="var(--white-blue)"
-        --border-hover="3px solid var(--white-blue)"
-        --focus-border="3px solid var(--orange)"
-        --focus-outline="none"
-        name={"Поддержка"}
-        />
-    </div>          
 </div>
+
+<div class="header_right">
+    <div class="icon">
+        <AccountButton />
+    </div>
+    <Button2
+    on:click={() => {
+        let url = new URL(window.location.origin + "/contact");
+        window.open(url, "_blank")
+    }}
+    --bg="transparent"
+    --color="var(--white-blue)"
+    --border="2px solid var(--white-blue)"
+    --font-size=".875rem"
+    --padding=".25rem 1.25rem .15rem"
+    --bg-hover="var(--gray-blue)"
+    --color-hover="var(--white-blue)"
+    --border-hover="2px solid var(--white-blue)"
+    --focus-border="2px solid var(--orange)"
+    --focus-outline="none"
+    name={"Поддержка"}
+    />
+</div>          
+
 
     <slot></slot>
 
@@ -65,16 +66,20 @@
     background-color: transparent;
     position: relative;
     display: flex;
-    width: 100%;
+    width: 50%;
     justify-content: space-between;
     z-index: 15;
     view-transition-name: background;
 }
 
 .header_right{
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    z-index: 20;
     display: flex;
     gap: .5rem;
-    justify-content: end;
+    align-items: center;
 }
 
 @media print{
