@@ -27,9 +27,9 @@ export default class SimpleText{
     changeVisibility(activeState){
         this.#domLinks.forEach( (element) => {
             if(activeState){
-                element.classList.remove("no_display");
+                element.classList.remove("doc_no_active");
             } else {
-                element.classList.add("no_display");
+                element.classList.add("doc_no_active");
             }
         });
     }
@@ -156,9 +156,9 @@ export default class SimpleText{
                     if(content && this.#content !== content) this.#content = content;
                     
                     if(active){
-                        this.#domLinks.forEach( (domElem) => domElem.classList.remove("no_display"));
+                        this.#domLinks.forEach( (domElem) => domElem.classList.remove("doc_no_active"));
                     } else {
-                        this.#domLinks.forEach( (domElem) => domElem.classList.add("no_display"));
+                        this.#domLinks.forEach( (domElem) => domElem.classList.add("doc_no_active"));
                     }
                 }
             });

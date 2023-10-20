@@ -444,6 +444,10 @@
 
 
     :global(.no_display){
+        display: none;
+    }
+
+    :global(.doc_no_active){
         background-color: var(--light-blue);
         color: var(--gray-blue);
     }
