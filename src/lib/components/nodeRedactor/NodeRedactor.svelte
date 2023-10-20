@@ -137,7 +137,6 @@
 
     $: if(data){
         // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
-        
         //console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
         //console.log("[NodeRedactor]: AFTER {validation} check data", data);

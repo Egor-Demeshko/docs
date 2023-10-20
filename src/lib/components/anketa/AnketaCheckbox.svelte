@@ -50,11 +50,12 @@ on:pointerleave={removeHoverLike}>
     
     <label class="name" for={id}>{name}</label>
     
-    <div class="checkbox" on:click={handleChanged}>
+    <div class="checkbox">
         <input {id} class="checkbox__input"
             type="checkbox"
             {name}
             checked={content}
+            on:change={handleChanged}
             />
         
             {#if isChecked}

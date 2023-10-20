@@ -90,7 +90,6 @@ export default class Documents{
 
     async delete({documentId}){
         saving.set(true);
-
         this.#docs = this.#docs.filter( (docObj) => {
             if (docObj["id"] === documentId) return false;
             return true;
@@ -99,6 +98,23 @@ export default class Documents{
         /*первый элемент делаем активным*/
         if(this.#docs.length > 0){
             this.#docs[0].active = true;
+        }
+
+        if(/.+-.{4}-.{4}-.{4}-.+/.test(documentId)){
+            document.dispatchEvent(new CustomEvent("error", {
+                detail: {
+                    err_data: [{
+                        message: "Вкладка закрыта", 
+                        err_id: 200, 
+                        err_type: "simple",
+                        blockId: 0
+                    }]
+                }
+            }));
+            this.#callSubscribes();
+            documents.update( (docs) => docs);
+
+            return;
         }
             
         
@@ -265,6 +281,7 @@ export default class Documents{
                 activeDoc.id = id;
                 activeDoc.html = html;
                 delete activeDoc.not_initialized;
+                documents.update( ( el ) => el);
             }
             
             this.#callSubscribes();

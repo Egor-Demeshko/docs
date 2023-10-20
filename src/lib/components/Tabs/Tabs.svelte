@@ -43,6 +43,11 @@
         {/each}
         
             <li class="add_tab__wrapper" class:hover>
+                <svg class="border-curve" 
+                viewBox="0 0 40 32" 
+                fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>
+                </svg>
                 <svg class="curve" viewBox="0 0 40 32" 
                 fill="none" >
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M40 32H0C12.2219 32 18.7403 27.8258 21.9995 16.1894C23.6304 6.96624 31.0695 0 40 0V32Z"/>
@@ -55,7 +60,8 @@
 
                 <svg class="curve" viewBox="0 0 40 32" fill="none">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M0 32H40C27.7781 32 21.2597 27.8258 18.0005 16.1894C16.3696 6.96624 8.93053 0 0 0V32Z"/>
-                </svg> 
+                </svg>
+                 
             </li>
 
            
@@ -118,23 +124,35 @@
         width: 2rem;
         position: relative;
         transition: background 400ms ease-in-out;
+        z-index: 5;
     }
 
     .add_tab__wrapper.hover .add_tab{
         background-color: var(--pale-orange);
     }
 
-
-
     .curve{
         display: inline;
         fill: var(--light-slate-gray);
+        transition: fill 400ms ease-in-out;
+        position: relative;
+    }
+
+    .border-curve{
+        fill: var(--faded-middle-blue);
+        position: absolute;
+        right: -2px;
+        z-index: 0;
         transition: fill 400ms ease-in-out;
     }
 
     .add_tab__wrapper.hover .curve{
         fill: var(--pale-orange);
-    }   
+    }  
+    
+    .add_tab__wrapper.hover .border-curve{
+        fill: var(--pale-orange);
+    }
 
     
     .add_tab_clicker{
