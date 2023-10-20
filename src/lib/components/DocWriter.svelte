@@ -444,7 +444,8 @@
 
 
     :global(.no_display){
-        display: none;
+        background-color: var(--light-blue);
+        color: var(--gray-blue);
     }
 
     :global(.doc_active){

@@ -189,8 +189,29 @@
         border-radius: 15px;
         background-color: var(--light-blue);
         padding: 1rem 1.5rem 1rem 1rem;
-        height: 100%;
+        max-height: 280px;
+        overflow-y: scroll;
     }
+
+    /**сделай стилизацию скролл бара для .list*/
+    .list::-webkit-scrollbar{
+        width: 8px;
+    }
+
+    .list::-webkit-scrollbar-thumb{
+        background-color: var(--gray-blue);
+        border-radius: 4px;
+    }
+
+    .list::-webkit-scrollbar-track{
+        background-color: transparent;
+    }
+
+    .list::-webkit-scrollbar-button{
+        display: none;
+    }
+
+
 
     .list__wrapper{
         display: flex;
