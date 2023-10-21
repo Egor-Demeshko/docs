@@ -1,5 +1,5 @@
 import generateTextElements from "$lib/scripts/docWriter/generateSimplifiedTextElements";
-import sanitizeManyHtml from "$lib/scripts/utils/sanitizeManyHtml.js";
+import sanitizeManyHtmlInAnketa from "$lib/scripts/utils/sanitizeManyHtmlInAnketa.js";
 import Documents from "./Documents";
 import SimpleTextForAnketa from "$lib/scripts/anketa/SimpleTextForAnketa.js";
 import { storeForSimpleTexts, nodes } from "$lib/scripts/stores";
@@ -17,8 +17,7 @@ export default class DocumentsWithSimpleText extends Documents{
 
     /**сейчас только чистим html */
     generateElements(data, graph){
-        
-        return generateTextElements(graph, sanitizeManyHtml(data))
+        return generateTextElements(graph, sanitizeManyHtmlInAnketa(data));
     }
 
 

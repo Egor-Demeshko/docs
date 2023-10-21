@@ -1,5 +1,5 @@
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
-import {storeForSimpleTexts, docRoot, documents} from "$lib/scripts/stores";
+import {storeForSimpleTexts, docRoot, documents, nodes} from "$lib/scripts/stores";
 import { get } from "svelte/store";
 
 
@@ -113,10 +113,20 @@ export function processSelection(callerId){
         let rightHand = parentHtml.slice(index + startIndex + (endIndex - startIndex));
 
         //console.log("[troumboune]: selection text", selectionText);
-        //console.log("[troumboune]: BEFORE parentHTML", parentHtml);            
+        //console.log("[troumboune]: BEFORE parentHTML", parentHtml);
+        
+        {
+            let isActive = checkNodeActivity(callerId);
+            if(isActive){
+                parentHtml = leftHand + `<span class="doc_elements" contenteditable="false" range="true" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
+                + ((rightHand.length > 0) ? " " : "") + rightHand;
+            } else {
+                parentHtml = leftHand + `<span class="doc_elements doc_no_active" contenteditable="false" range="true" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
+                + ((rightHand.length > 0) ? " " : "") + rightHand;
+            }
+        }
             
-        parentHtml = leftHand + `<span class="doc_elements" contenteditable="false" range="true" data-element="${callerId}" tabindex="0">${selectionText}</span>` 
-                        + ((rightHand.length > 0) ? " " : "") + rightHand;
+       
        
         parentHtml = restoreSpecSymbols(parentHtml, specSymbols);
         //исправленная строка применяется к элементов в котором находился узел и селекшон
@@ -245,6 +255,17 @@ function removeSpecSymbol(html, specSymbols){
                 startIndex = startIndex + specSymbolLength;
             }
         } 
+    }
+}
+
+
+function checkNodeActivity(callerId){
+    const nodesArr = get( nodes );
+
+    for(let i = 0; i < nodesArr.length; i++){
+        if(nodesArr[i].id === callerId){
+            return nodesArr[i].activity;
+        }
     }
 }
 

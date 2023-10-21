@@ -154,7 +154,7 @@
         <use href="/assets/icons/all.svg#box_cancel"></use>
     </svg>
     
-    {#if !(node_type === "checkbox" || box_inactive === "box_inactive")}
+    {#if !(node_type === "checkbox" )}
         <svg class="buttons__icons"
         on:pointerleave={pointerLeave}
         on:pointerenter={pointerEnter}
