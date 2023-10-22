@@ -145,7 +145,6 @@
         :global(.print__page){
             padding: 10mm 10mm 10mm 20mm;
             width: 210mm;
-            height: 297mm;
             page-break-before: always;
         }
 

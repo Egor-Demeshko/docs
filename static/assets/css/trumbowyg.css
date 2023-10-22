@@ -882,7 +882,7 @@ body.trumbowyg-body-fullscreen {
 
   .trumbowyg-editor{
     padding: 0;
-    height: 100%;
+    /*height: 100%;*/
     margin: 0;
   }
 
@@ -902,7 +902,7 @@ body.trumbowyg-body-fullscreen {
   .trumbowyg-editor-box{
     padding: 0;
     margin: 0;
-    height: 100%;
+    /*height: 100%;*/
   }
 
   .trumbowyg-dropdown-link .trumbowyg-dropdown .trumbowyg-fixed-top {
