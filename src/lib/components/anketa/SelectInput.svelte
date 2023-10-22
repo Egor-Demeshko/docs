@@ -103,7 +103,7 @@ on:focusout={focusOut}>
     <div class="inputs" on:input={inputHandler}>
 
         {#each derivedOptions as {text}}
-            <RadioLabel {name} {text}/>
+            <RadioLabel {name} {text} checked={text === data.content}/>
         {/each}
     </div>
 </div>

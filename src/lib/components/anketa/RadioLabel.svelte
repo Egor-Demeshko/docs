@@ -2,12 +2,13 @@
 
     export let text = 'Пример текста';
     export let name = "";
+    export let checked = false;
 
     /*все обработчики находятся на wrapper компоненте, куда жти элементы вставляются*/
 </script>
 
 <label>
-    <input type="radio" {name} tabindex="0" value={text}>
+    <input type="radio" {name} tabindex="0" value={text} {checked}>
     <div class="custom_input">
         <div class="custom_input__inner">
 

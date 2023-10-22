@@ -90,7 +90,6 @@ export default async function validation(data, options){
         
         if(data.trigger && data.condition && !data.parent_id){
            // console.log("[validation]: {trigger} NO PARENT BLOCK");
-           debugger;
             data.validity = {
                 status: "invalid",
                 err_data: [...data.validity.err_data, {
