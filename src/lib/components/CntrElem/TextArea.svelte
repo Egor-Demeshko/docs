@@ -40,8 +40,8 @@
     }
 </script>
 
-<div class="input_wrapper">
 
+<div class="input_wrapper">
     <textarea {placeholder} {id} {name} {required} {pattern} {type} {value}
     {rows}
     on:focus={focusIn}
@@ -49,8 +49,8 @@
     on:change={changeHandle}
     bind:this={textarea}
     />
-
 </div>
+
 
 <style>
     .input_wrapper{

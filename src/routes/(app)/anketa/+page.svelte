@@ -66,6 +66,7 @@
 
         <div class="element element__left">
             <TopControllBar />
+
             <InputElements />
         </div>
 
@@ -115,6 +116,7 @@
         height: calc(100% - 5.5rem);
         width: 100%;
     }
+
 
     #messages_anchor{
         position: fixed;

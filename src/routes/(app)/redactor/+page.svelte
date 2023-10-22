@@ -15,6 +15,7 @@
     import optimizeDATA from "$lib/scripts/utils/optimizeDATA.js";
     import Node from "$lib/scripts/controllers/instances/Node.js";
 	import PrintModule from "$lib/components/PrintModule.svelte";
+    import generateTextElements from "$lib/scripts/docWriter/generateTextElements.js";
 	import { onDestroy, setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import { projectName } from "$lib/scripts/stores";
@@ -49,7 +50,6 @@
         graph = createMassive(graph);
         /* сохраняем граф в стор*/
         nodes.set(graph);
-    
         const docs = new Documents(html, graph, saveDeleteService("template"), project_id, 
             arrUpdatedCallback);
         /**заполняем стор документов*/
@@ -60,14 +60,13 @@
 
 
     async function graphUpdate(){
-        let {nodes} = await $projectsStore.getFullData(project_id);
-        if(nodes) graph = nodes;
-        console.log("[page]: {graphUpdate}, graph after update", graph);
-        //достаем айди активного документ, это надо для отображения вкладок как надо
-        //const id = $documents.getActiveDocumentId();
-        setupData();
-        //$documents.setActive(id);
-        //documents.update( (docs) => docs);
+        let {nodes: nodesFromServer} = await $projectsStore.getFullData(project_id);
+        if(!nodesFromServer) return;
+        graph = nodesFromServer;
+        graph = createMassive(graph);
+        nodes.set(graph);
+        generateTextElements(graph);
+        populateLinesStore(graph);
     }
 
 

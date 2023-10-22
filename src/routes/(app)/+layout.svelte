@@ -90,6 +90,10 @@
         .background{
             display: none;
         }
+
+        .header_right{
+            display: none;
+        }
 }
 
 </style>

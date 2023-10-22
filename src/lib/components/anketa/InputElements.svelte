@@ -52,6 +52,7 @@
 
     div::-webkit-scrollbar-thumb{
         background-color: var(--gray-blue);
+        border-radius: 6px;
     }
 
     div::-webkit-scrollbar-button{
