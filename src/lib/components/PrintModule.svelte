@@ -110,6 +110,7 @@
 <div class="print__wrapper" bind:this={wrapper} class:show>
 
         <div class="print__page" bind:this={page}></div>
+        <!--<div style="break-after: always;"></div> -->
 
 </div>
 
@@ -138,20 +139,25 @@
             display: block;
         }
 
+
         .print__wrapper.show{
-            position: static;
+            position: relative;
+            left: 0;
+            top: 0;
         }
 
+
         :global(.print__page){
-            padding: 10mm 10mm 10mm 20mm;
-            width: 210mm;
+            position: relative;
             page-break-before: always;
         }
+
 
         :global(.print__page *){
             color: var(--deep-blue);
         }
 
+        
         @page{
             size: A4;
             margin:  0 0 0 0;

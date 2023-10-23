@@ -172,11 +172,7 @@
         }
 
         .element{
-            padding: 0;
-            margin: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
+            display: none;
         }
     }
 </style>

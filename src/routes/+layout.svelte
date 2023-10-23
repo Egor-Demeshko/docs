@@ -79,6 +79,7 @@
         main{
             padding: 0;
             margin: 0;
+            position: relative;
         }
 
         .spinner_wrapper{
