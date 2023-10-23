@@ -2,7 +2,7 @@ let lastPagesNumber = 0;
 let localContainer = null;
 
 //высота одной строницы  в инчах, с учетом отступа сверху
-const innerPageHeight = 10.9;
+const innerPageHeight = 11.7;
 
 export function createLineBreaks(container){
     if(container && localContainer !== container) localContainer = container;

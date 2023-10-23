@@ -22,7 +22,7 @@
          * относительно wrapper, вообще высота листа 11,7 инча, но 
          * у нас есть отступы по 1см сверху и снизу. учитываем отступ сверху
          * 1 см, получаем 11,3 инча*/
-        const innerPageHeight = 11.3;
+        const innerPageHeight = 11.7;
         const pixelRate = Math.floor(innerPageHeight * 96 / window.devicePixelRatio);
         /**высота области, где будет текст*/
         const pixelRateForPages = Math.floor((innerPageHeight - 0.394) * 96 / window.devicePixelRatio);
@@ -110,8 +110,6 @@
 <div class="print__wrapper" bind:this={wrapper} class:show>
 
         <div class="print__page" bind:this={page}></div>
-        <!--<div style="break-after: always;"></div> -->
-
 </div>
 
 <style>
@@ -149,7 +147,7 @@
 
         :global(.print__page){
             position: relative;
-            page-break-before: always;
+            break-after: page;
         }
 
 
