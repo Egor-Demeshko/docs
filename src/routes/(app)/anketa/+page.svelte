@@ -2,7 +2,7 @@
     import DocumentsWithSimpleText from "$lib/scripts/controllers/documents/DocumentsWithSimpleTexts";
 	import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import { nodes, documents, anketaGraphController, docxController } from "$lib/scripts/stores";
+    import { nodes, documents, anketaGraphController, docxController, projectName } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import TabsWithoutEvents from "$lib/components/Tabs/TabsWithoutEvents.svelte";
@@ -14,15 +14,28 @@
     import DynamicGraphController from "$lib/scripts/controllers/nodes/anketa/controller/DynamicGraphController.js";
     import PrintModule from "$lib/components/PrintModule.svelte";
 	import MessagesContainer from "$lib/components/MessagesContainer.svelte";
+    import EmptyRedactor from "$lib/components/EmptyRedactor.svelte";
 
     //receiving data from load function
     export let data;
     let graph;
+    let load = true;
     
     let {templates, project_id, project_name, active_nodes} = data;
     graph = active_nodes;
+    graph = createMassive(graph);
 
-    let html = optimizeDATA(templates, project_id);
+    if(!templates || templates?.length === 0){
+        load = false;
+    } else {
+        let html = optimizeDATA(templates, project_id);
+        const docs = new DocumentsWithSimpleText(html, graph, saveDeleteService("anketa"), project_id);
+        //console.log("[PAGE]: docs CLASS", docs);
+        /**заполняем стор документов*/
+        documents.set(docs);
+    }
+
+    projectName.set({id: project_id, name: project_name});
     /**динамик граф контроллер отвечает за подготовку данных и их отправку через http так и получение
      * некотоырх данных из локального хранилища. 
     */
@@ -33,14 +46,9 @@
 
     /**делаем из графа массив*/
     /* также задаем значения по умолчанию, если их нет*/
-    graph = createMassive(graph);
     /* сохраняем граф в стор*/
     $: nodes.set(graph);
     
-    const docs = new DocumentsWithSimpleText(html, graph, saveDeleteService("anketa"), project_id);
-	console.log("[PAGE]: docs CLASS", docs);
-    /**заполняем стор документов*/
-    documents.set(docs);
 
     onDestroy( async () => {
         /**очищаем данные контроллера, и зануляем стор контроллера*/
@@ -48,6 +56,7 @@
         anketaGraphController.set(null);
         await $documents.unsubscribe();
         documents.set(null);
+        projectName.set(null);
     })
 
 
@@ -73,8 +82,12 @@
         <!--<div class="devider"></div>-->
 
         <div class="element">
+            {#if load}
             <TabsWithoutEvents tabsPosition={"document"} documents={$documents.docs}/>
             <DocWriter />
+            {:else}
+            <EmptyRedactor />
+            {/if}
         </div>
 </div>  
 

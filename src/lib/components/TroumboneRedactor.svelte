@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     import {storeForSimpleTexts, docRoot, documents, showModalDocumentCreator} from '$lib/scripts/stores';
     import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
-    import { processSelection } from "$lib/scripts/utils/nodes/proccessAddingNodeTOText.js";
+    import { processSelection } from "$lib/scripts/utils/nodes/[test]addNodeToText.js";
     import ModalDocumentCreator from "$lib/components/CntrElem/ModalDocumentCreator.svelte";
     import Spinner from "$lib/components/Spinner.svelte";
     import RedactorContainer from '$lib/components/RedactorContainer.svelte';

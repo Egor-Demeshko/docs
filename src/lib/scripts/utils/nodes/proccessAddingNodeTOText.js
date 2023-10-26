@@ -1,12 +1,14 @@
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
 import {storeForSimpleTexts, docRoot, documents, nodes} from "$lib/scripts/stores";
 import { get } from "svelte/store";
+import { makeReconnect } from "$lib/scripts/utils/nodes/nodeToTextService.js";
 
 
 export function processSelection(callerId){
     
     const docClassController = get( documents );
-    const specSymbols = {"&nbsp;": "┠"};
+    const specSymbols = {"&nbsp;": "┠", "&gt;": "𐤊", "&lt;": "𐤋"};
+    const specText = {"<": "𐤋", ">": "𐤊"};
     let root;
     /**@description HTMLElement, элемент, в котором находится node, попавшая в selection */
     let parentElement = "";
@@ -88,16 +90,24 @@ export function processSelection(callerId){
         /**проверяем диапозан вставки на наличие спец. симповолов*/
         parentHtml = removeSpecSymbol(parentHtml, specSymbols);
 
+        /**так же для нормально поиска необходимо заменить в node value */
+        //repairNodeValues();
+
         /**идекс узла(а точнее его текста) куда происходит вставка,
          * если мы вставляем node в конец предложения, где уже есть наш узел, там будет пробел.
          * почему-то отказывается и indexOf и search искать. при этом этот проблемы мы сами добавляем.
          * так как тогда поиск вообще в это одной строкой считает.
         */
         let index = null;
-        let stringEndIndex = htmlWithWhiteSpaces.length - 1;
-
+        let stringEndIndex = parentHtml.length - 1;
+        
         if(anchorNode?.nodeValue){
-            index = htmlWithWhiteSpaces.search(new RegExp(anchorNode.nodeValue.trim()));
+            /**HTMLElements из редактора спец.символы выдают, как коды UTF
+             * NodeValue выдается как текст. приходится приводить все к одним символам
+             */
+            let clearedNodeValue = removeSpecSymbol(anchorNode.nodeValue.trim(), specText);
+            debugger;
+            index = parentHtml.indexOf( clearedNodeValue );
         } else if(anchorNode.tagName === "P" && startIndex === 0 && endIndex === 0){
             index = 0;
         } else if(anchorNode.tagName === "P" &&
@@ -159,23 +169,7 @@ function handleEmptyLineClick(node, callerId, selectionText) {
 }
 
 
-/**
- * Initializes a reconnection process by calling conect function
- *
- * @return {void} Returns nothing.
- */
-function makeReconnect(root){
-        //у симпл текста запустить коннект, addEventListenets. для соединения с узлами на тексте.
-        storeForSimpleTexts.update( ( elements ) => {
 
-            for(let i = 0; i < elements.length; i++){
-                const element = elements[i];
-                element.connect(root);
-                element.createListeners();
-            }
-            return elements;
-        });
-}
 
 function restoreSpecSymbols(html, specSymbol){
     for( let [key, value] of Object.entries(specSymbol)){
@@ -217,7 +211,7 @@ function setCaret(parentElement){
  */
 function removeSpecSymbol(html, specSymbols){ 
     for( let [key, value] of Object.entries(specSymbols)){
-        html = html.replaceAll(new RegExp(key, "g"), value);
+        html = html.replaceAll( new RegExp(key, "g"), value );
 
     }
 
@@ -264,7 +258,7 @@ function checkNodeActivity(callerId){
 
     for(let i = 0; i < nodesArr.length; i++){
         if(nodesArr[i].id === callerId){
-            return nodesArr[i].activity;
+            return nodesArr[i].active;
         }
     }
 }

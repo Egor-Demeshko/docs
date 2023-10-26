@@ -30,7 +30,7 @@
             }
         ]*/
     let projects = [];
-    $: console.log("[projects PAGE]: projects[]: ", projects);
+    //$: console.log("[projects PAGE]: projects[]: ", projects);
     let projectElement;
     let showRight = false;
     let invalid = false;
