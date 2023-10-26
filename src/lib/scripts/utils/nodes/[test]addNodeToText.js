@@ -66,7 +66,7 @@ export function processSelection(callerId){
     let endIndex = parentHtml.lastIndexOf(STARTSPECSYMBOL);
 
     if(startIndex < 0 || endIndex < 0){
-        showError("Не смог установить якорные точки", "warning", callerId);
+        showError("Не смог установить якорные точки", "emergency", callerId);
     }
 
     let leftHand = parentHtml.slice(0, startIndex);
