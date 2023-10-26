@@ -22,15 +22,20 @@ export function processSelection(callerId){
     //для anchorNode и focusNode находим ближайшего общего родителя
     parentElement = searchForTheSameParent(anchorNode, focusNode, true);
     if(!parentElement) return;
-    debugger;
+
     {
         //добавляем спец.символы.
         let addSymbol = function(node, offset){
             let value = node.nodeValue;
-            let left = value.slice(0, offset);
-            left += STARTSPECSYMBOL;
-            let right = value.slice(offset);
-            node.nodeValue = left + right;
+            try{
+                let left = value.slice(0, offset);
+                left += STARTSPECSYMBOL;
+                let right = value.slice(offset);
+                node.nodeValue = left + right;
+            } catch{
+                showError("Сюда нельзя добавить переменную", "warning", callerId);
+                return
+            }
         }
         addSymbol(anchorNode, anchorOffset);
         addSymbol(focusNode, focusOffset);
@@ -61,7 +66,7 @@ export function processSelection(callerId){
     let endIndex = parentHtml.lastIndexOf(STARTSPECSYMBOL);
 
     if(startIndex < 0 || endIndex < 0){
-        showError("Не смог установить якорные точки", "warning");
+        showError("Не смог установить якорные точки", "warning", callerId);
     }
 
     let leftHand = parentHtml.slice(0, startIndex);
@@ -95,7 +100,7 @@ function isSpanElement(...args){
 
         /**возможно якорный и фокусный элемент это сам спан */
         if(nodeElement?.tagName === "SPAN" && nodeElement.classList.has("doc_elements")){
-            showError("Нельзя вставить узел в переменную.", "highlight");
+            showError("Нельзя вставить узел в переменную.", "highlight", callerId);
             return true;
         }
     }
@@ -110,7 +115,10 @@ function isSpanElement(...args){
  */
 function searchForTheSameParent(firstElement, secondElement){
 
-    if(firstElement === secondElement) return firstElement;
+    if(firstElement instanceof HTMLElement && secondElement instanceof HTMLElement &&
+        firstElement === secondElement){
+        return firstElement;
+    }
 
     firstElement = firstElement.parentElement;
     secondElement = secondElement.parentElement;
@@ -127,7 +135,7 @@ function searchForTheSameParent(firstElement, secondElement){
     if(firstElement === secondElement) return firstElement;
 
 
-    showError("Не удалось установить связи с родителем.", "emergency");
+    showError("Не удалось установить связи с родителем.", "emergency", callerId);
     return false;
 }
 

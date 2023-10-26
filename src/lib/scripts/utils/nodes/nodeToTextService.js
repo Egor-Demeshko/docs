@@ -19,12 +19,12 @@ export function makeReconnect(root){
 }
 
 
-export function showError(message, err_type){
+export function showError(message, err_type, blockId){
     document.dispatchEvent(new CustomEvent("error", {
         detail: {
             err_data: [
                 {
-                    blockId: callerId,
+                    blockId,
                     message,
                     err_id: 1000,
                     err_type 
