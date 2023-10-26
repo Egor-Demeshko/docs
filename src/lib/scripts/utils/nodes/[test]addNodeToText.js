@@ -1,5 +1,6 @@
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
-import {storeForSimpleTexts, docRoot, documents, nodes} from "$lib/scripts/stores";
+import { storeForSimpleTexts, docRoot, documents, nodes } from "$lib/scripts/stores";
+import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
 import { get } from "svelte/store";
 import { makeReconnect, showError } from "$lib/scripts/utils/nodes/nodeToTextService.js";
 
@@ -13,19 +14,40 @@ export function processSelection(callerId){
     let parentElement = '';
     let selection = window.getSelection();
     const {anchorNode, focusNode, anchorOffset, focusOffset} = selection;
-    
    // const range = selection.getRangeAt(0);
     
-    
     //проверяем чтобы выделение не попадало на наш спан элемент
-    if(isSpanElement(anchorNode, focusNode)) return;
+    if(isSpanElement(anchorNode, focusNode, callerId)) {
+        addExcitingNodeToRedator.set({status: false});
+        return;
+    }
+    //в редких случае, особенно при обычном клике, anchorNode выбирается <p>, при этом
+    //если перед точкой, стоит еще один span элемент, получается ситуация, когда
+    //якорная нода это <p>, но при этом offset считается от span элемента, или от документа в целом.
+    //пока чаще всего это происходит в конце документа. выделим такое событие отдельно
+    if(anchorNode.tagName === "P" && focusNode.tagName === "P" && anchorNode === focusNode){
+        let html = sanitizeHTML(anchorNode.innerHTML);
+
+        if(checkNodeActivity(callerId)){
+            html += " " + `<span class="doc_elements" contenteditable="false" range="true" data-element="${callerId}" tabindex="0"></span>`;
+        } else {
+            html += " " + `<span class="doc_elements no_active" contenteditable="false" range="true" data-element="${callerId}" tabindex="0"></span>`;
+        }
+
+        anchorNode.innerHTML = html;
+        afterProcessing(docClassController, root);
+        return;
+    }
+
+
+
     //для anchorNode и focusNode находим ближайшего общего родителя
     parentElement = searchForTheSameParent(anchorNode, focusNode, true);
     if(!parentElement) return;
 
     {
         //добавляем спец.символы.
-        let addSymbol = function(node, offset){
+        let addSymbol = function(node, offset, callerId){
             let value = node.nodeValue;
             try{
                 let left = value.slice(0, offset);
@@ -33,12 +55,13 @@ export function processSelection(callerId){
                 let right = value.slice(offset);
                 node.nodeValue = left + right;
             } catch{
-                showError("Сюда нельзя добавить переменную", "warning", callerId);
+                showError("Сюда нельзя добавить переменную", "emergency", callerId);
                 return
             }
         }
-        addSymbol(anchorNode, anchorOffset);
-        addSymbol(focusNode, focusOffset);
+        addSymbol(anchorNode, anchorOffset, callerId);
+        addSymbol(focusNode, focusOffset, callerId);
+        
     }
 
     //теперь находим индекс нашего текста в родителем
@@ -84,22 +107,30 @@ export function processSelection(callerId){
     parentHtml = parentHtml.replaceAll(STARTSPECSYMBOL, "");
     parentElement.innerHTML = parentHtml;
 
-    docClassController.setDocumentUpdated();
-    docClassController.saveHtmlState();
+
+
+    afterProcessing(docClassController, root);
+}
+
+
+function afterProcessing(docController, root){
+    addExcitingNodeToRedator.set({status: false});
+    docController.setDocumentUpdated();
+    docController.saveHtmlState();
     makeReconnect(root);
-    
-    
 }
 
 
 /**мы в качестве нашего узла в тексте используем span элемент,
  *  проверить что частичное выделение не в нем */
 function isSpanElement(...args){
+    let callerId = args[args.length - 1];
+
     for(let i = 0; i < args.length; i++){
         const nodeElement = args[i];
-
+        if( typeof nodeElement === 'string' ) return;
         /**возможно якорный и фокусный элемент это сам спан */
-        if(nodeElement?.tagName === "SPAN" && nodeElement.classList.has("doc_elements")){
+        if(nodeElement?.tagName === "SPAN" && nodeElement.classList.contains("doc_elements")){
             showError("Нельзя вставить узел в переменную.", "highlight", callerId);
             return true;
         }
