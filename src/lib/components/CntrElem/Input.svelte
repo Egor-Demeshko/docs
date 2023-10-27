@@ -78,7 +78,7 @@
     <input {placeholder} {id} {name} {required} {pattern} {type} {value} {autocomplete}
     class:not_valid
     on:blur={blurHandler}
-    on:change={changeHandle}
+    on:input={changeHandle}
     bind:this={input}
     />
 </div>

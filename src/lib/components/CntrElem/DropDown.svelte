@@ -33,19 +33,17 @@
         for(let i = 0; i < $nodes.length; i++){
             if($nodes[i]["id"] !== id) continue;
             activeOption = $nodes[i][name];
-            
             break;
         }
-        
+
         //теперь из стора опций для дропдауна, делаем нашу опцию активной.
         options.update( (options) => {
             for(let i = 0; i < options.length; i++){
                 /** при старте программы, есть значения по умолчанию, если
                  * убрать эту проверку, то далее они будут перезаписаны на false
                 */
-                if( activeOption === undefined || activeOption === "") return options;
-
-                if(activeOption === null && options[i]["value"] === null) {
+                if( (activeOption === undefined || activeOption === "" || 
+                    activeOption === null) && options[i]["value"] === null) {
                     options[i].selected = true;
                     continue;
                 }

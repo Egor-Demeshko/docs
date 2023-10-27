@@ -94,7 +94,7 @@
 
   /**определяем какого вида границу блока рисовать. зависит от наличия условия триггера и condition в data <= $nodes
   */
-  $: gotConditions = (condition && !(trigger == undefined || trigger == '' || trigger === null)) ? true : false;
+  $: gotConditions = (condition && !(trigger === undefined || trigger === '' || trigger === null)) ? true : false;
   //$: console.log("[Box]: gotConditions", {condition, gotConditions, trigger});
   
   
@@ -131,34 +131,6 @@
     });
 
   });
-
-
-  /** если при первоначальное загрузке есть связь с блоком родителя, 
-   * то рисуем линию, рисуется через стор
-  */
-  /*
-  linesStore.update( (arrayOfDataObj) => {
-    //console.log("[BOX]: saving lines data: ", arrayOfDataObj);
-    console.log(`~~~~ linesStore: TEST 142~~~ [BOX]`, {lines: arrayOfDataObj});
-
-    for(let i = 0; i < arrayOfDataObj.length; i++){
-        const element = arrayOfDataObj[i];
-        const {startId, endId} = element;
-        
-        if (startId === id && endId === parent) continue;
-        
-        
-        arrayOfDataObj.push({
-          startId: id,
-          endId: parent
-        });
-    }
-
-    return arrayOfDataObj;
-  });
-  */
-
-  $: console.log('~~~ TEST   [BOX 152]: ', {lines: $linesStore});
 
 
   onMount( () => {
@@ -291,17 +263,6 @@ function startDraging(e){
         });
         
     }
-}
-
-
-/**
- * Логика добавления новой связи блока
-*/
-function addConnection(e){
-    //console.log("addconnection");
-    boxClickHandler(id);
-
-    e.stopPropagation();
 }
 
 
@@ -508,8 +469,8 @@ async function secondStepOnParentConnect(e){
 
   console.log('[box.svelte]: {secondStepOnParentConnect} stores were update, going to call callback update');
   controller.updateCallBack();
-  
 }
+/* [end] функция добавления связи*/
 
 
 async function secondStepOnChildConnect(e){
@@ -596,9 +557,6 @@ async function secondStepOnChildConnect(e){
               isLinked={ (parent) ? true : false }
             />
             </div>
-            
-          
-
     </foreignObject>
 
           

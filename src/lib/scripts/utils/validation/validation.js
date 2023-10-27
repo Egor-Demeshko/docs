@@ -153,8 +153,8 @@ export default async function validation(data, options){
                                 }
                                 ],
                             }*/
-                        } else if (typeof data.trigger === "boolean" 
-                        && (typeof parentData.content !== "boolean")){
+                        } else if (data.condition && (typeof data.trigger === "boolean" 
+                        && (typeof parentData.content !== "boolean"))){
                             
                             data.validity = {
                                 status: "invalid",
@@ -168,6 +168,21 @@ export default async function validation(data, options){
                                 ],
                             }
                             break;
+                        } else if (data.condition && (typeof data.trigger !== "boolean") && 
+                        (typeof parentData.content === "boolean")){
+                            data.validity = {
+                                status: "invalid",
+                                err_data: [...data.validity.err_data, {
+                                    field: "trigger",
+                                    message: `Родительский блок ждет <true> или <false>, а в текущем(дочернем) указано  ~~${data.trigger}~~`,
+                                    blockId: data.id,
+                                    err_id: 806,
+                                    err_type: "emergency"
+                                }
+                                ],
+                            }
+                            break;
+
                         }
 
                         if(data.condition && isNaN(+parentData.content) !== isNaN(+data.trigger) ){

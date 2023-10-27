@@ -266,12 +266,14 @@ export default class Node extends NodeLocalOperations{
 
     /** тоже отвечает за сохранение , но разделяет срочные и не срочные изменения */
     async saveDataBeforeChange( id, data ){
-        const nonCriticalFields = ["name", "description", "view_type"];
+        const nonCriticalFields = ["name", "description", "view_type", "x", "y"];
         const nonUrgentData = {
             length: 0,
         };
         
-        const urgentData = {};
+        const urgentData = {
+            length: 0,
+        };
         const savedData = {...this.activeNodeData};
         if((data.id || id) !== savedData.id) return;
 
@@ -279,15 +281,15 @@ export default class Node extends NodeLocalOperations{
 
             for(let [key, value] of Object.entries(data)){
                 
-                if(key === "id" || key === "validity") continue;
-
-                if(data[key] !== savedData[key]){
-                    
+                if(key === "id" || key === "validity" || key === "width" || key === "height") continue;
+                //проверка, есть ли изменение в значениях
+                if(data[key] !== savedData[key]){     
                     if(nonCriticalFields.includes(key)){
                         nonUrgentData[key] = value;
                         nonUrgentData.length = nonUrgentData.length + 1;
                     } else {
                         urgentData[key] = value;
+                        urgentData.length = urgentData.length + 1;
                     }   
                 }
             }
@@ -297,18 +299,21 @@ export default class Node extends NodeLocalOperations{
                 this.saveNourgentAsObj(id, {...nonUrgentData});
             }
 
-            for (const key of Object.keys(urgentData)) {
-                if(!key) break;
+            if(urgentData.length > 0){
+                delete urgentData.length;
                 this.saveNourgentAsObj(id, {...urgentData});
-                
                 let result = await this.sendDataInQueue();
-                if(result.success){
+                    if(result.success){
+                        //установить в активных датах новые данные
+                        const nodes = result.data.nodes;
 
-                    this.setActiveNode(data);
-                }
-                //if(result.success) this.updateCallBack();
-                console.log('[SAVEDATABEFORECHANGE]: result: ', result);
-                break;
+                        //сохраняем обновленные данные для активного блока, 
+                        //для нормализационных проверок
+                        for(let [receivedId, data] of Object.entries(nodes)){
+                            if(receivedId !== id) continue;
+                            this.setActiveNode({id, ...data});
+                        }
+                    }
             }
         } 
     }

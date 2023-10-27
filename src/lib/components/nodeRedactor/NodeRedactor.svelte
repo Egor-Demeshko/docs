@@ -76,7 +76,6 @@
                 closing_animation = false;
                 document.dispatchEvent(new CustomEvent("redactor-сhanged"));
             }, 650);  
-            
         }
     }
 
@@ -93,28 +92,6 @@
      * фактически мы выдераем прямую ссылку на обьект данных, конкретного элемента.
      */
     $: data = getBlockObj($blockClickedId);
-
-    /**этот блок тригерритсся когда мы меняем что-то в DOM компонета. на*/
-   /* $: if(data){
-        console.log("[NodeRedactor]: if data BLOCK. EMPTY BLOCK" , data);
-        /**
-         * обновляем узел в списке узлов
-        */
-       /*
-        nodes.update( (arrOfBlocksData) => {
-            for(let i = 0; i < arrOfBlocksData.length; i++){
-                if( data.id === arrOfBlocksData[i]["id"]){
-                    arrOfBlocksData[i] = data;
-
-                    break;
-                }
-            }
-            console.log("[NodeRedactor]: data updater, $: data: arrOfBlocksData", arrOfBlocksData);
-
-            return arrOfBlocksData;
-        });*/
-   /* }*/
-
 
     /**
      * когда меняется вцелом состояния стора $nodes мы просто перерисовываем состояние компонента
@@ -136,13 +113,10 @@
     });
 
     $: if(data){
-        // console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
+        //console.log("[NoedeRedactor]: before elementsupdate, check $nodes: ", $nodes);
         //console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
         //console.log("[NodeRedactor]: AFTER {validation} check data", data);
-        /*обновляем дом*/
-        elementsDataUpdate(data);
-        
         if(data.name !== blockName) {
             changeName(data.id, data.name);
             blockName = data.name;
@@ -201,10 +175,14 @@
             if(key === "id" && data.id !== detail.id) return;
             if(key === "id") continue;
             
+            /**если якобы измененное поле из события и значение поля даты совпадает,
+             * удалить это поле
+            */
             if(data[key] === detail[key]){
                 delete detail[key];
             }
 
+            /**такая же проверка для options*/
             if(detail[key] instanceof Array && data[key] instanceof Array && detail[key]){
                 
                 const arr = data[key];
@@ -224,11 +202,15 @@
             }
         }
 
+
         //обновляем данные
         if(data.id === detail.id){
             for (const key of Object.keys(detail)) {
                 if(key === "id") continue;
                 data[key] = detail[key];
+                if(key === "name" || key === "content"){
+                    elementsDataUpdate(data);
+                }
             }
         }
         /**помечаем что документ обновился, чтобы в дальнейшем он мог сохраниться*/
@@ -273,7 +255,6 @@
                 break;       
             }
         }
-        
     }
 
     function pointerLeave(){
@@ -320,8 +301,9 @@ bind:this={form}>
             trigger={data.trigger} validity={data.validity}
             on:data-changed={dataChanged}/>
 
-            <InputwithLabel bind:value={data.name} id={data.id}
+            <InputwithLabel value={data.name} id={data.id}
             name={"name"}
+            on:data-changed={dataChanged}
             validity={data.validity}
             --border-width="2px"
             --border-color="var(--light-blue)"

@@ -47,7 +47,7 @@ export default class NodeLocalOperations extends Normolize{
                 
                 /**
                  * @param {string} key - id of node
-                 * @param {object} value {} node data
+                 * @param {object} value - {} node data
                  */
                 for(let [key, value] of Object.entries(updatedNodes)){   
                     if(node["id"] === key){
@@ -58,10 +58,10 @@ export default class NodeLocalOperations extends Normolize{
                             obj["active"] = value.active;
 
                             idsToUpdate.push(obj);
-
                             node.active = value.active;
                         } 
 
+                        
                         for(let nodeKey of Object.keys(node)){       //key = id, value = node 
                             if(nodeKey === "id" || nodeKey === "width"
                             || nodeKey === "height" || nodeKey === "validity") continue;

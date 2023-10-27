@@ -31,6 +31,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
         });
 
     } else if(fieldsToUpdate) {
+
         nodes.update( (nodesData) => {
     
             for(let i = 0; i < nodesData.length; i++){
@@ -60,7 +61,7 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                     break;
                 }
             }
-            console.log("[SYNC]: NEW   nodesData: ", nodesData);
+            //console.log("[SYNC]: NEW   nodesData: ", nodesData);
             return nodesData;
         });
 

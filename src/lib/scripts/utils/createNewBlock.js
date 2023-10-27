@@ -26,7 +26,7 @@ export default async function createNewBlock(whatBlockToCreate, controller){
         "description": "",
         "data_type": (whatBlockToCreate === "checkbox") ? "bool" : "string",
         "node_type": whatBlockToCreate,
-        "content": "",
+        "content": (whatBlockToCreate === "checkbox") ? false : "",
         "condition": null,
         "trigger": null,
         "x": 500,

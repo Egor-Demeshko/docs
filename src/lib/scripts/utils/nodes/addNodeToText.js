@@ -6,21 +6,27 @@ import { makeReconnect, showError } from "$lib/scripts/utils/nodes/nodeToTextSer
 
 const STARTSPECSYMBOL = "ƈ";
 
+
+/**функция добавляет разметку узла в текст, 
+ * c помощью node ставятся две метки.
+ * затем получается html строку, текст до метки 1 и после метки 2 остается
+ * в середину вставлятся разметка узла
+ */
 export function processSelection(callerId){
     const docClassController = get( documents );
     const root = get(docRoot);
-    /**HTML строка, родителя node в который происходит вставка */
+    /**HTML строка, родителя обоих nodeValue, focus, anchor полученные из selection */
     let parentHtml = "";
     let parentElement = '';
     let selection = window.getSelection();
     const {anchorNode, focusNode, anchorOffset, focusOffset} = selection;
-   // const range = selection.getRangeAt(0);
     
     //проверяем чтобы выделение не попадало на наш спан элемент
     if(isSpanElement(anchorNode, focusNode, callerId)) {
         addExcitingNodeToRedator.set({status: false});
         return;
     }
+
     //в редких случае, особенно при обычном клике, anchorNode выбирается <p>, при этом
     //если перед точкой, стоит еще один span элемент, получается ситуация, когда
     //якорная нода это <p>, но при этом offset считается от span элемента, или от документа в целом.
@@ -39,14 +45,15 @@ export function processSelection(callerId){
         return;
     }
 
-
-
     //для anchorNode и focusNode находим ближайшего общего родителя
     parentElement = searchForTheSameParent(anchorNode, focusNode, true);
-    if(!parentElement) return;
+    if(!parentElement) {
+        showError("Не удалось вставить переменную", "highlight", callerId);
+        return;
+    }
 
     {
-        //добавляем спец.символы.
+        //добавляем спец.символы. 
         let addSymbol = function(node, offset, callerId){
             let value = node.nodeValue;
             try{
@@ -54,42 +61,33 @@ export function processSelection(callerId){
                 left += STARTSPECSYMBOL;
                 let right = value.slice(offset);
                 node.nodeValue = left + right;
-            } catch{
-                showError("Сюда нельзя добавить переменную", "emergency", callerId);
-                return
+            } catch {
+                throw new Error("Не удалось установить якорные точки");
             }
         }
-        addSymbol(anchorNode, anchorOffset, callerId);
-        addSymbol(focusNode, focusOffset, callerId);
-        
+
+        try{
+            addSymbol(anchorNode, anchorOffset, callerId);
+            addSymbol(focusNode, focusOffset, callerId);      
+        } catch {
+            showError("Сюда нельзя добавить переменную", "emergency", callerId);
+            return;
+        }
     }
 
-    //теперь находим индекс нашего текста в родителем
+
+    //теперь находим индекс нашего текста в родительском HTMLSTRING
     parentHtml = parentElement.innerHTML;
     parentHtml = sanitizeHTML(parentHtml);
-    
 
-
-
-    
-/**
-    //если
-    if(parentElement.id === "container"){
-        
-    } else {
-        findForStartNode(anchorNode, focusNode, anchorOffset, focusOffset, parentElement);
-    }*/
-   // range.extractContents();
-    //находим какой из node идет раньше, так как при выделении anchorNode может быть раньше,
-    //а может позже, если выделение идет в обратную сторону
-    
 
     //ищем индекс текста в родителе, вырезаем и меняем на разметку нашего элемента
     let startIndex = parentHtml.indexOf(STARTSPECSYMBOL);
     let endIndex = parentHtml.lastIndexOf(STARTSPECSYMBOL);
 
     if(startIndex < 0 || endIndex < 0){
-        showError("Не смог установить якорные точки", "emergency", callerId);
+        showError("Не получилось установить якорные точки", "emergency", callerId);
+        return;
     }
 
     let leftHand = parentHtml.slice(0, startIndex);
@@ -103,21 +101,20 @@ export function processSelection(callerId){
     }
 
     //убрать спец.символ
-    
     parentHtml = parentHtml.replaceAll(STARTSPECSYMBOL, "");
     parentElement.innerHTML = parentHtml;
-
-
 
     afterProcessing(docClassController, root);
 }
 
 
 function afterProcessing(docController, root){
+    //удаляем подстветку текстового поля
     addExcitingNodeToRedator.set({status: false});
     docController.setDocumentUpdated();
     docController.saveHtmlState();
     makeReconnect(root);
+    setCaret(root);
 }
 
 
@@ -136,6 +133,33 @@ function isSpanElement(...args){
         }
     }
 }
+
+//устанавливаем курсор рядом со вставкой блока
+function setCaret(parentElement){
+    const range = document.createRange();
+    const sel = window.getSelection();
+
+    const elem = parentElement.querySelector(`[range]`);
+
+    if(!elem) return;
+
+    if(elem.nextSibling){
+        range.setStartBefore(elem.nextSibling);
+    } else if(elem.previousSibling){
+        range.setStartAfter(elem.previousSibling);
+    } else {
+        range.setStartAfter(elem);
+    }
+
+
+    range.collapse();
+
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    elem.removeAttribute("range");
+}
+
 
 /**
  * Этот код определяет функцию с именем searchForTheSameParent, которая принимает два элемента 

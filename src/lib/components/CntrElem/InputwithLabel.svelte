@@ -1,4 +1,6 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+
     export let id = "id";
     export let placeholder = "Введите данные";
     export let required = false;
@@ -11,6 +13,8 @@
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
     $: console.log("[INPUTWITHLABEL]: input value: ", value);
+
+    let dispatch = createEventDispatcher();
 
     function isCurrentField(){
         let data = validity.err_data;
@@ -25,7 +29,11 @@
 
     function inputHandle({target}){
         ///console.log('[__TEST__ INPUT WITH LABEL]: target.value: ', target.value);
-        value = target.value;
+        if(name === "name"){
+            dispatch("data-changed", {id, name: target.value});
+        } else {
+            value = target.value;
+        }
     }
 
 
