@@ -23,7 +23,6 @@ export default class HTTPBaseServise{
             });
 
             result = await response.json();
-            debugger;
             console.log("[HTTPBaseService]: POST result", result);
             return result;
 
