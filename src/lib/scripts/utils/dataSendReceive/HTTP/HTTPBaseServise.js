@@ -17,7 +17,7 @@ export default class HTTPBaseServise{
                 method: "POST",
                 mode: "cors",
                 headers: {
-                    "Content-type": "application/json"
+                    "Content-Type": "application/json"
                 },
                 body: data
             });
@@ -64,7 +64,7 @@ export default class HTTPBaseServise{
         console.log("[HTTP basic]: {DELETE} data to be send", data);
 
         const headers = { 
-            "Content-type": "application/json"
+            "Content-Type": "application/json"
         }
 
         if(token) headers.jwt = token;
@@ -82,7 +82,7 @@ export default class HTTPBaseServise{
         const url = new URL(this.#origin + this.path + this.secondPath + route );
 
         const headers = {
-            "Content-type": "application/json"
+            "Content-Type": "application/json"
         };
         if(token) headers.jwt = token; 
         
@@ -118,7 +118,7 @@ export default class HTTPBaseServise{
         
         console.log('[HTTP BASIC: ], data to send: ', data);
         const headers = {
-            "Content-type": "application/json"
+            "Content-Type": "application/json"
         };
         if(token) headers.jwt = token; 
 
@@ -136,7 +136,7 @@ export default class HTTPBaseServise{
         console.log("[HTTP basic]: {patch} data to be send", URL);
 
         const headers = {
-            "Content-type": "application/json"
+            "Content-Type": "application/json"
         };
         if(token) headers.jwt = token; 
         
@@ -156,7 +156,7 @@ export default class HTTPBaseServise{
         const url = new URL(this.#origin + this.path + route); 
 
         const headers = {
-            "Content-type": "application/json",
+            "Content-Type": "application/json",
         };
 
         if(token) headers.jwt = token;
@@ -175,7 +175,7 @@ export default class HTTPBaseServise{
         const url = new URL(this.#origin + this.path + this.secondPath + route); 
 
         const headers = {
-            "Content-type": "application/json",
+            "Content-Type": "application/json",
         };
 
         if(token) headers.jwt = token;
