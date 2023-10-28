@@ -10,11 +10,10 @@
     $: console.log("[INPUTELEMENTS]: nodes", $nodes);
     
     setContext("controller", anketaGraphController);
-    
 </script>
 
 <div>
-    {#each $nodes as data}
+    {#each $nodes.filter( node => node.node_type !== "text") as data}
         {#if data.node_type === "text" || data.node_type === "entry"}
             <AnketaInput id={data.id} 
             name={data.name}

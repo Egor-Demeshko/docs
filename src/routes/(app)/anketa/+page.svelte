@@ -25,6 +25,7 @@
     graph = active_nodes;
     graph = createMassive(graph);
 
+    /**если tempaltes нет(т.е. нет документов, грузим на редакторе кода заглушку)*/
     if(!templates || templates?.length === 0){
         load = false;
     } else {
@@ -44,9 +45,8 @@
     $docxController.setProjectId(project_id);
     setContext("templateController", $docxController);
 
-    /**делаем из графа массив*/
-    /* также задаем значения по умолчанию, если их нет*/
     /* сохраняем граф в стор*/
+    /** node_type = "text" не отображаются в анкете */
     $: nodes.set(graph);
     
 

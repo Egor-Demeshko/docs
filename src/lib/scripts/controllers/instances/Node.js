@@ -126,6 +126,7 @@ export default class Node extends NodeLocalOperations{
     /**созраняет не срочные, не критичные данные локально, одиночно*/
     saveNourgent({node_id, field_name, field_data}){
         console.log("[Node] {saveNourgent} enter arguments: ", {node_id, field_name, field_data});
+
         if(node_id && field_name){
             let arr = this.#updateQueue;
 

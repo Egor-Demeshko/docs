@@ -416,15 +416,16 @@ async function secondStepOnParentConnect(e){
 
   let store = $parentConnection;
   parentConnection.set(false);
-
   /**перед тем как обновить данные в самом приложении, отправляем данные на сервер
    * connectObj.start айди блока в котором необходимо установить parent_id
   */
-  let {success} = await controller.update({
+  controller.saveNourgent({
             node_id: store.start, 
             field_name: "parent_id", 
-            field_value: store.end
+            field_data: store.end
           });
+
+  let {success} = await controller.sendDataInQueue();
 
   if(!success)return;
   
