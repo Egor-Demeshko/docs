@@ -19,9 +19,14 @@
         if(setFocus) button.focus();
     }
 
+    $: (setFocus) ? button?.focus() : null;
+
 </script>
 
-<button on:submit={console.log} on:pointerenter on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap {disabled}>
+<button
+on:pointerenter 
+on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap {disabled}
+data-arrow={name}>
     {name}    
 </button>
 

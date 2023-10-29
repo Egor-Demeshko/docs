@@ -13,6 +13,7 @@
 	import BoxInner from "./BoxInner.svelte";
   import BoxPoint from "./BoxPoint.svelte";
   import BoxButtons from "./BoxButtons.svelte";
+  import deleteFlow from "$lib/scripts/utils/nodes/deleteFlowForBox.js";
 
   const controller = getContext("controller");
 
@@ -522,6 +523,13 @@ async function secondStepOnChildConnect(e){
 }
 
 
+function startDelete(e){
+  if(e.key === "Delete"){
+    deleteFlow(id, controller);
+  }
+
+}
+
 
 </script>
 
@@ -547,6 +555,7 @@ async function secondStepOnChildConnect(e){
       on:pointerenter={ pointerEnter }
       on:pointerleave={ pointerLeave }
       on:dragstart={ (e) => e.preventDefault()}
+      on:keydown={ startDelete }
       >
             <div class="box"
              

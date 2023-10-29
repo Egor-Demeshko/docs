@@ -5,6 +5,24 @@
 
     var active = false;
     $: active = ($modalFieldsStore.show) ? true : false;
+    let deleteFocus = false;
+    let cancelFocus = true;
+
+
+    function arrowHandle(e){
+        //ArrowLeft
+        //ArrowRight
+        const target = e.target;
+        const key = e.key;
+
+        if(target.dataset.arrow === "Удалить" && key === "ArrowRight"){
+            deleteFocus = false;
+            cancelFocus = true;
+        } else if ( target.dataset.arrow === "Отмена" && key === "ArrowLeft"){
+            deleteFocus = true;
+            cancelFocus = false;
+        }
+    }
 
 
     function closeModal(){
@@ -33,7 +51,8 @@
 
 
 {#if active}
-    <div class="wrapper" aria-live="assertive" use:activateClickHandle>
+    <div class="wrapper" aria-live="assertive" use:activateClickHandle
+    on:keydown={ arrowHandle }>
         <div class="elements" in:fly={{y: 100, duration: 600}}
         out:fly={{y: 100, duration: 600}}>
             <span>{$modalFieldsStore.text}</span>
@@ -46,7 +65,8 @@
                 --bg-hover="var(--light-gray-blue)"
                 --color-hover="var(--middle-blue)"
                 --border-hover="2px solid var(--middle-blue)"
-                --font-size=".875rem"/>
+                --font-size=".875rem"
+                setFocus={deleteFocus}/>
                 <Button name={"Отмена"} fnToRunOnClick={($modalFieldsStore.errorCallback || closeModal)}
                 --color="var(--white-blue)"
                 --bg="var(--middle-blue)"
@@ -55,7 +75,7 @@
                 --bg-hover="var(--gray-blue)"
                 --border-hover="2px solid var(--gray-blue)"
                 --font-size=".875rem"
-                setFocus={true}/>
+                setFocus={cancelFocus}/>
             </div>
             <svg class="icon" on:click={closeModal}>
                 <use href="/assets/icons/all.svg#plus"></use>
