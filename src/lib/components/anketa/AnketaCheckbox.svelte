@@ -1,24 +1,41 @@
 <script>
     import { setElementHoverLike, removeElementHoverLike} from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess.js";
     import { getContext } from "svelte";
-    import { storeForSimpleTexts, nodes } from "$lib/scripts/stores";
+    import { showTooltip } from "$lib/scripts/stores";
     import { get } from "svelte/store";
 
     export let data;
 
-    let {content, name, id, parent_id} = data;
+    let {content, name, id, parent_id, description} = data;
     const controller = getContext("controller");
 
     
     
     /*описывает hover сосотояние на элементе в текстовом редакторе.*/
-    function setHoverLike(){
+    function setHoverLike(e){
+        const target = e.target;
+        let {x: targetX, y: targetY} = target.getBoundingClientRect();
+        targetY += 50;
+        let {clientX, clientY} = e;
+        let x, y;
         setElementHoverLike(id);
+        if(!description) return;
+        y = clientY;
+        x = clientX;
+        console.log({targetY, clientY});
+        if(targetY  > clientY){ 
+            showTooltip.set({show: true, coors: {x, y: y + 20}, text: description, place: "above"});
+        } else {
+            showTooltip.set({show: true, coors: {x, y: y - 40}, text: description, place: "above"});
+        }
+
+        
     }
     
     /*описывает removehover сосотояние на элементе в текстовом редакторе.*/
     function removeHoverLike(){
         removeElementHoverLike(id);
+        showTooltip.set({show: false});
     }
     
     
