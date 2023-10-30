@@ -54,7 +54,6 @@
         /**очищаем данные контроллера, и зануляем стор контроллера*/
         $anketaGraphController.clearAll();
         anketaGraphController.set(null);
-        await $documents.unsubscribe();
         documents.set(null);
         projectName.set(null);
     })

@@ -45,7 +45,7 @@
         }
     }
 
-    $:no_events = (derivedOptions[0]["text"]) ? false : true;
+    $:no_events = (derivedOptions[0]?.text) ? false : true;
 
     /**
      * получаем отдельно опшинс, text
@@ -200,7 +200,7 @@ on:pointerleave={elementPointerLeave}
         on:blur={elementFocusOut}
         role="button" tabindex="0">
 
-            {#if derivedOptions[0]["text"]}
+            {#if derivedOptions[0]?.text}
                 {#each derivedOptions as {text, selected}}
                     {#if selected}
                     <div class="main_label">

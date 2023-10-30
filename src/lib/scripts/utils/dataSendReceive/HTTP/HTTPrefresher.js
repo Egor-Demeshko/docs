@@ -34,7 +34,17 @@ export default class HTTPrefresher extends HTTPBaseServise{
             }
 
         } catch(e){
-            console.log(e.message);
+            document.dispatchEvent( new CustomEvent("error", {detail: {
+                err_data: [
+                    {
+                        blockId: 0,
+                        message: "Не удалось обновить сессию",
+                        err_id: 910,
+                        err_type: "emergency"
+                    }
+                ]
+            }}));
+            goto('/projects');
         }
     }
 

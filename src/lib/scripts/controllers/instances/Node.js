@@ -2,7 +2,7 @@ import HTTPnode from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPnode.js";
 import DataServise from "$lib/scripts/controllers/instances/DataServise.js";
 import JWT from "$lib/scripts/controllers/instances/JWT.js";
 import NodeLocalOperations from "$lib/scripts/utils/nodes/NodeLocalOperations.js";
-import { saving } from "$lib/scripts/stores";
+import { saving, nodes } from "$lib/scripts/stores";
 
 
 export default class Node extends NodeLocalOperations{
@@ -92,7 +92,10 @@ export default class Node extends NodeLocalOperations{
             let json = await this.#client.delete(token, dataToBeSend);
             console.log("[NODE]: {delete}: result(resoponse json): ", json);
             saving.set(false);
-            if(json.success) this.#updateCallBack();
+            if(json.success) {
+                this.#updateCallBack();
+                this.setFirstFocus();
+            }
             return json;
         } catch (e){
             saving.set(false);
@@ -181,6 +184,12 @@ export default class Node extends NodeLocalOperations{
             console.log("[NODE]: {saveNourgent}: queue data: ", this.#updateQueue);
             return {success: true};
         }
+    }
+
+
+    async setFirstFocus(){
+        let node = document.querySelector('.box_wrapper');
+        node.focus();
     }
 
 

@@ -68,9 +68,9 @@ $: console.log("~~~~TEST LINES~~~~,", {lines});
         
         {#key length}
         <g id="nodes">
-            {#each allNodes as node}
+            {#each allNodes as node, i}
                 
-                <Box {node} />
+                <Box {node} {i}/>
                 
             {/each}        
         </g>
