@@ -7,6 +7,7 @@
     export let setFocus = false;
     export let no_wrap = false;
     export let disabled = false;
+    export let inert = false;
 
     
     let button;
@@ -26,7 +27,7 @@
 <button
 on:pointerenter 
 on:click={fnToRunOnClick} aria-label="{labelName}" bind:this={button} class:no_wrap {disabled}
-data-arrow={name}>
+data-arrow={name} {inert}>
     {name}    
 </button>
 
@@ -67,9 +68,10 @@ data-arrow={name}>
     }
 
     button:disabled{
-        cursor: auto;
-        background-color: var(--light-gray-blue);
+        cursor: default;
+        background-color: var(--light-blue);
         border: 2px solid var(--light-gray-blue);
+        color: var(--light-gray-blue);
         pointer-events: none;
     }
 </style>

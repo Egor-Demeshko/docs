@@ -24,6 +24,7 @@
     import { projectsStore, saving } from "$lib/scripts/stores";
 
     export let project;
+    let { nodes_count } = project;
 
     /**
      * пробовал через subscribe, не получилоась
@@ -121,7 +122,7 @@
     
     <!-- svelte-ignore empty-block -->
    {#if open}
-        <ButtonsRow {directionOfanimation} id={project.id}/>
+        <ButtonsRow {directionOfanimation} id={project.id} inert={(nodes_count > 0) ? false : true}/>
     {/if}
 
     

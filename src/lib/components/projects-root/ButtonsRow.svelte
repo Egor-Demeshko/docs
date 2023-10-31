@@ -9,6 +9,7 @@
 
     export let directionOfanimation = false;
     export let id;
+    export let inert = false;
 
     let show = false;
 
@@ -131,6 +132,7 @@
             <Button 
             name={"Заполнить анкеты"}
             no_wrap={true}
+            disabled={inert}
             --bg="var(--light-blue)"
             --color="var(--middle-blue)"
             --color-hover="var(--middle-blue)"
