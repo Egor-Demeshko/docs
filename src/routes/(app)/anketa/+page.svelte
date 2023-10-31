@@ -50,7 +50,7 @@
     $: nodes.set(graph);
     
 
-    onDestroy( async () => {
+    onDestroy( () => {
         /**очищаем данные контроллера, и зануляем стор контроллера*/
         $anketaGraphController.clearAll();
         anketaGraphController.set(null);

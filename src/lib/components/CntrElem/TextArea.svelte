@@ -92,9 +92,9 @@
         outline: none;
     }
 
-    
+
     textarea::-webkit-scrollbar{
-       width: .5rem;
+        width: .5rem;
     }
 
     textarea::-webkit-scrollbar-track{
@@ -106,7 +106,6 @@
         border-radius: 10px;
         transition: background 400ms ease;
         cursor: pointer;
-
     }
 
     textarea::-webkit-scrollbar-thumb:hover{

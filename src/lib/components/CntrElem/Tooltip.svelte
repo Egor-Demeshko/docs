@@ -10,7 +10,6 @@
     $: text = $showTooltip.text;
     $: coors = $showTooltip.coors;
     $: if (coors){
-        console.log("tooltip", coors);
         updateCors(coors);
     } else {
         setFalse();

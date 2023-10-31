@@ -23,8 +23,6 @@
     let input;
     const dispatch = createEventDispatcher();
     
-
-    $: console.log("content: ", content);
     $: if(content != undefined || content != null){
         let displayChangedObj = {};
         if(data_type === "integer"){

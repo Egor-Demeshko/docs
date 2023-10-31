@@ -24,17 +24,13 @@
         let {clientX, clientY} = e;
         let x, y;
         setElementHoverLike(id);
-        if(!description) return;
-        y = clientY;
-        x = clientX;
-        console.log({targetY, clientY});
-        if(targetY  > clientY){ 
-            showTooltip.set({show: true, coors: {x, y: y + 20}, text: description, place: "above"});
-        } else {
-            showTooltip.set({show: true, coors: {x, y: y - 40}, text: description, place: "above"});
-        }
 
-        
+        if(!description) return;
+        y = targetY;
+        x = clientX;
+       // console.log({targetY, clientY});
+
+        showTooltip.set({show: true, coors: {x, y: y - 40}, text: description, place: "above"});   
     }
     
     /*описывает removehover сосотояние на элементе в текстовом редакторе.*/
