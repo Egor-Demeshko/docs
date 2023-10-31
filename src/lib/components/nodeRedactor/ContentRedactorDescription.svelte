@@ -1,7 +1,7 @@
 <script>
-    import Toggle from "$lib/components/nodeRedactor/Toggle.svelte";
+
     import { storeForSimpleTexts } from "$lib/scripts/stores";
-	import { getContext } from "svelte";
+
     
    let display = "description";
     export let placeholder = "Описание будет отбражаться в анкете";

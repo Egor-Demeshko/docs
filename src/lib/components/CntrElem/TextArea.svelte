@@ -43,7 +43,6 @@
 
 <div class="input_wrapper">
     <textarea {placeholder} {id} {name} {required} {pattern} {type} {value}
-    {rows}
     on:focus={focusIn}
     on:blur={focusOut}
     on:change={changeHandle}
@@ -93,8 +92,25 @@
         outline: none;
     }
 
-
+    
     textarea::-webkit-scrollbar{
+       width: .5rem;
+    }
+
+    textarea::-webkit-scrollbar-track{
         display: none;
     }
+
+    textarea::-webkit-scrollbar-thumb {
+        background-color: var(--gray-blue); 
+        border-radius: 10px;
+        transition: background 400ms ease;
+        cursor: pointer;
+
+    }
+
+    textarea::-webkit-scrollbar-thumb:hover{
+        background-color: var(--middle-blue);
+    }
+
 </style>

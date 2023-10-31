@@ -2,6 +2,7 @@
     import { fly } from "svelte/transition";
     import { nodes } from "$lib/scripts/stores";
     import { getContext } from "svelte";
+    import { showTooltip } from "$lib/scripts/stores";
 
     import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate.js";
     import { setElementActive, setElementInactive, setElementHoverLike, removeElementHoverLike }
@@ -30,6 +31,8 @@
 
     let options = data.options;
     let derivedOptions = [];
+    let description = data.description;
+    let hoverBackground = false;
     
     for(let i = 0; i < options.length; i++){
         if( options[i] === data.content ){
@@ -46,50 +49,6 @@
     }
 
     $:no_events = (derivedOptions[0]?.text) ? false : true;
-
-    /**
-     * получаем отдельно опшинс, text
-     * создаем обьект
-     * туда опшинс, text  и булевое selected.
-     * первое по-умолчанию selected
-     * 
-     */
-
-
-
-    /*
-    $: if(id){
-        //по name получаем имя поля, которое считаем в data.
-        //а затем по нему считаем значение этого поля из даты.
-        let activeOption = '';
-        for(let i = 0; i < $nodes.length; i++){
-            if($nodes[i]["id"] !== id) continue;
-
-            activeOption = $nodes[i][name];
-            break;
-        }
-
-        //теперь из стора опций для дропдауна, делаем нашу опцию активной.
-        options.update( (options) => {
-            for(let i = 0; i < options.length; i++){
-
-                /** при старте программы, есть значения по умолчанию, если
-                 * убрать эту проверку, то далее они будут перезаписаны на false
-                *//*
-                if(!activeOption) return options;
-                
-                if(options[i]["value"] !== activeOption ){
-                    options[i].selected = false;
-                    continue;
-                };
-
-                options[i].selected = true;
-            }
-
-            return options;
-        });
-    }*/
-
 
     //$: console.log("[DropDown]: options state:  ", $options);
 
@@ -167,11 +126,28 @@
         setElementInactive(data.id);
     }
 
-    function elementPointerEnter(){
+    function elementPointerEnter(e){
+        hoverBackground = true;
+        const target = e.target;
+        let {x: targetX, y: targetY} = target.getBoundingClientRect();
+        targetY += 50;
+        let {clientX, clientY} = e;
+        let x, y;
         setElementHoverLike(data.id);
+        if(!description) return;
+        y = clientY;
+        x = clientX;
+        console.log({targetY, clientY});
+        if(targetY  > clientY){ 
+            showTooltip.set({show: true, coors: {x, y: y + 20}, text: description, place: "above"});
+        } else {
+            showTooltip.set({show: true, coors: {x, y: y - 40}, text: description, place: "above"});
+        }
     }
 
     function elementPointerLeave(){
+        hoverBackground = false;
+        showTooltip.set({show: false});
         removeElementHoverLike(data.id);
     }
     
@@ -183,6 +159,7 @@
 
 
 <div class="wrapper"
+class:hoverBackground
 on:pointerenter={elementPointerEnter}
 on:pointerleave={elementPointerLeave}
 >
@@ -258,8 +235,15 @@ on:pointerleave={elementPointerLeave}
     .wrapper{
         display: flex;
         gap: 1rem;
-        padding: 1rem 0;
+        padding: .5rem;
         align-items: center;
+        transition: background 400ms ease;
+        border-radius: 8px;
+    }
+
+
+    .wrapper.hoverBackground{
+        background-color: var(--faded-light-blue);
     }
 
 

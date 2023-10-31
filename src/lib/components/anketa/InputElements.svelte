@@ -18,11 +18,12 @@
             <AnketaInput id={data.id} 
             name={data.name}
             content={data.content}
-            data_type={data.data_type}/>
+            data_type={data.data_type}
+            description={data.description}/>
         {:else if data.node_type === "select" && data.view_type === "radiobutton"}
             <SelectInput id={data.id} {data}/>
         {:else if data.node_type === "select" && data.view_type === "drop_list"}
-            <AnketaDropdown id={data.id} {data} />
+            <AnketaDropdown {data} />
         {:else if data.node_type === "checkbox"}
             <AnketaCheckbox id={data.id} {data}/>
         {/if}

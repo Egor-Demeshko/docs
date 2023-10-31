@@ -72,7 +72,7 @@
 
 
     svg{
-        width: .8rem;
+        width: .85rem;
         height: .5rem;
     }
 

@@ -25,7 +25,7 @@
     
 
     $: console.log("content: ", content);
-    $: if(content){
+    $: if(content != undefined || content != null){
         let displayChangedObj = {};
         if(data_type === "integer"){
             if(!isNaN(+content)){
@@ -41,11 +41,13 @@
         displayChangedObj = null;
     }
 
-    $: if(description){
+    $: if(description != undefined || description != null){
         let displayChangedObj = {};
-        displayChangedObj["description"] = description;
-        displayChangedObj["id"] = id;
-        dispatch("data-changed", displayChangedObj);
+        if(description || description === ''){
+            displayChangedObj["description"] = description.trim();
+            displayChangedObj["id"] = id;
+            dispatch("data-changed", displayChangedObj);
+        }
         displayChangedObj = null;
     }
 
@@ -62,6 +64,17 @@
         validity,
         display
     });*/
+
+
+    /*function change(e){
+        let value = e.target.value;
+        let displayChangedObj = {};
+        displayChangedObj["description"] = value;
+        displayChangedObj["id"] = id;
+        dispatch("data-changed", displayChangedObj);
+        displayChangedObj = null;
+    }*/
+
 
     /**проверяем поля ошибок*/
     function isCurrentField(){
@@ -89,7 +102,7 @@
     }
 
     
-    function blurTextArea(){
+    function blurTextArea(e){
         
         let elements = $storeForSimpleTexts;
         for(let i = 0; i < elements.length; i++){
@@ -100,6 +113,7 @@
         }
         
         elements = null;
+        //change(e);
     }
 </script>
 

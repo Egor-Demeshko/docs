@@ -1,5 +1,4 @@
 <script>
-    export let id;
     export let data_type = null;
 
     $: isText = (data_type === "string") ? true : false;
@@ -21,7 +20,7 @@
 
 
 <label tabindex="0" role="button" on:keypress={keypress}>
-    <input {id} type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} checked={ (isText) ? false : true}
+    <input type="checkbox" name="data_type" value={ (isText) ? "string" : "integer"} checked={ (isText) ? false : true}
     on:click={clickHandle}
     tabindex="-1">
     <div class="toggle__element" tabindex="-1">

@@ -8,11 +8,16 @@
 
     let {content, name, id, parent_id, description} = data;
     const controller = getContext("controller");
+    /**@description управляет изменением цвета, когда курсор заходит на элемент.
+     * иметирует ховер
+    */
+    let hoverBackground = false;
 
     
     
     /*описывает hover сосотояние на элементе в текстовом редакторе.*/
     function setHoverLike(e){
+        hoverBackground = true;
         const target = e.target;
         let {x: targetX, y: targetY} = target.getBoundingClientRect();
         targetY += 50;
@@ -34,6 +39,7 @@
     
     /*описывает removehover сосотояние на элементе в текстовом редакторе.*/
     function removeHoverLike(){
+        hoverBackground = false;
         removeElementHoverLike(id);
         showTooltip.set({show: false});
     }
@@ -63,7 +69,8 @@
 
 <div class="wrapper" 
 on:pointerenter={setHoverLike}
-on:pointerleave={removeHoverLike}>
+on:pointerleave={removeHoverLike}
+class:hoverBackground>
     
     <label class="name" for={id}>{name}</label>
     
@@ -89,8 +96,14 @@ on:pointerleave={removeHoverLike}>
     .wrapper{
         display: flex;
         gap: 1.5rem;
-        padding: 1rem 0;
+        padding: .5rem;
         align-items: center;
+        transition: background 400ms ease;
+        border-radius: 8px;
+    }
+
+    .wrapper.hoverBackground{
+        background-color: var(--faded-light-blue);
     }
 
     .name{

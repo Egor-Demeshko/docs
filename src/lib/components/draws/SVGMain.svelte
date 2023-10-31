@@ -54,7 +54,7 @@ $: console.log("~~~~TEST LINES~~~~,", {lines});
 
 <div class="svg_wrapper">
     
-    <svg id="playground" {width} {height} viewBox={`0 0 ${width} ${height}`} use:svgLoaded>
+    <svg id="playground" {width} {height} use:svgLoaded>
         <PresentationLine />
         {#key linesLength}
             <g id=lines>

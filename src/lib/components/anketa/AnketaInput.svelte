@@ -1,5 +1,6 @@
 <script>
     import TextArea from "$lib/components/CntrElem/TextArea.svelte";
+    import { showTooltip } from "$lib/scripts/stores";
     import { setElementHoverLike, removeElementHoverLike} from "$lib/scripts/docElements/controllers/ElementsSideFocusBlurProcess.js"
     
     /*обьект данных из графа, конкретный для инпута*/
@@ -7,15 +8,38 @@
     export let name;
     export let content;
     export let data_type;
+    export let description;
+
+    /**@description управляет изменением цвета, когда курсор заходит на элемент.
+     * иметирует ховер
+    */
+    let hoverBackground = false;
+
 
 
     /*описывает hover сосотояние на элементе в текстовом редакторе.*/
-    function setHoverLike(){
+    function setHoverLike(e){
+        hoverBackground = true;
+        const target = e.target;
+        let {x: targetX, y: targetY} = target.getBoundingClientRect();
+        console.log({targetY, target});
+        targetY += 50;
+        let {clientX, clientY} = e;
+        let x, y;
         setElementHoverLike(id);
+        if(!description) return;
+        y = targetY;
+        x = clientX;
+       // console.log({targetY, clientY});
+
+        showTooltip.set({show: true, coors: {x, y: y - 40}, text: description, place: "above"});
     }
+
 
     /*описывает removehover сосотояние на элементе в текстовом редакторе.*/
     function removeHoverLike(){
+        hoverBackground = false;
+        showTooltip.set({show: false});
         removeElementHoverLike(id);
     }
 </script>
@@ -24,7 +48,8 @@
 
 <div class="input_anketa"
 on:pointerenter={setHoverLike}
-on:pointerleave={removeHoverLike}>
+on:pointerleave={removeHoverLike}
+class:hoverBackground>
     <div class="input_anketa__name">
         <span>{name}</span>
     </div>
@@ -52,6 +77,13 @@ on:pointerleave={removeHoverLike}>
         display: flex;
         gap: 1rem;
         align-items: center;
+        padding: .5rem;
+        border-radius: 8px;
+        transition: background 400ms ease;
+    }
+
+    .input_anketa.hoverBackground{
+        background-color: var(--faded-light-blue);
     }
 
     .input_anketa__name{
