@@ -56,6 +56,7 @@
         anketaGraphController.set(null);
         documents.set(null);
         projectName.set(null);
+        storeForSimpleTexts.set(null);
     })
 
 

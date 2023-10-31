@@ -75,6 +75,7 @@ export default class DocumentsWithSimpleText extends Documents{
         if(simplTexts === null || simplTexts === undefined) return;
 
         simplTexts.forEach( (docElement) => {
+            debugger;
             docElement.setNoDisplay(docElement.id);
         })
 
