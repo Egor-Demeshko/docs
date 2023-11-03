@@ -2,7 +2,7 @@
     import DocumentsWithSimpleText from "$lib/scripts/controllers/documents/DocumentsWithSimpleTexts";
 	import saveDeleteService from "$lib/scripts/utils/saveDelete/document/saveDeleteService";
     import DocWriter  from "$lib/components/DocWriter.svelte";
-    import { nodes, documents, anketaGraphController, docxController, projectName } from "$lib/scripts/stores";
+    import { nodes, documents, anketaGraphController, docxController, projectName, storeForSimpleTexts } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import TabsWithoutEvents from "$lib/components/Tabs/TabsWithoutEvents.svelte";
