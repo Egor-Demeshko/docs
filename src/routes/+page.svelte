@@ -5,9 +5,17 @@
     import AccountRegistration from "$lib/components/CntrElem/AccountRegistration.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
 
+    export let data;
+    let {registrate} = data; 
+
     let logIn_open = false;
     let registration_open = false;
     let keep_open = false;
+
+    if(registrate === true){
+        keep_open = true;
+        setTimeout( () => {registration_open = true; keep_open = false}, 500);
+    }
 
     function logIn(){
         keep_open = true;
