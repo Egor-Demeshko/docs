@@ -8,11 +8,12 @@ const storage = new Storage();
 export default async function processDemoCreation(){
     const local = window.localStorage;
     const data = local.getItem("chain");
+    const demo = local.getItem("chain_demo");
 
     /**проверяем есть ли уже токены в localStorage*/
     if(data){
         let baseToken = data.split('.')[1];
-        let {session, demo, exp} = JSON.parse(atob(baseToken));
+        let {session, exp} = JSON.parse(atob(baseToken));
 
         if(session && !demo){
             goto("/projects");
@@ -22,10 +23,11 @@ export default async function processDemoCreation(){
             /**проверяем не истек ли токен*/
             if(exp && (dateNow - exp) >= 0){
                 storage.delete();
+                goto("/");
             } else {
-                let response = await Demo.updateDemo();
+                goto("/projects");
             }
-            goto("/");
+            
         }   
     } else {
         /**если никаких токенов нет, то */
