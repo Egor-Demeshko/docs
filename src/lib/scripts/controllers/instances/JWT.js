@@ -1,4 +1,5 @@
 import Storage from "$lib/scripts/controllers/instances/Storage.js";
+import { goto } from "$app/navigation"; 
 
 export default class JWT{
     #saveService;
@@ -96,7 +97,7 @@ export default class JWT{
             let result = await this.processTokens();
             if(result) return this.#saveService.getToken("jwt");
         } else {
-            throw new Error("НЕТ АКТИВНОЙ СЕССИИ");
+            goto("/");
         }
     }
 }

@@ -1,8 +1,22 @@
 <script>
+    import { PUBLIC_DEMO } from "$env/static/public";
     import LogoAndName from "$lib/components/LogoAndName.svelte";
     import Button2 from "$lib/components/CntrElem/Button2.svelte";
     import AccountButton from "$lib/components/CntrElem/AccountButton.svelte";
+    import Timing from "$lib/components/Timing.svelte";
     import {onNavigate} from "$app/navigation";
+	import { onMount } from "svelte";
+
+    let demo = false;
+
+    onMount( () => {
+        const local = window.localStorage;
+        if(local.getItem(PUBLIC_DEMO)){
+            demo = true;
+        }
+
+        return () => demo = false;
+    });
 
     onNavigate( (navigation) => {
         if(!document.startViewTransition) return;
@@ -24,26 +38,31 @@
 </div>
 
 <div class="header_right">
+    {#if demo}
+        <Timing/>
+    {/if}
     <div class="icon">
         <AccountButton />
     </div>
-    <Button2
-    on:click={() => {
-        let url = new URL(window.location.origin + "/contact");
-        window.open(url, "_blank")
-    }}
-    --bg="transparent"
-    --color="var(--white-blue)"
-    --border="2px solid var(--white-blue)"
-    --font-size=".875rem"
-    --padding=".25rem 1.25rem .15rem"
-    --bg-hover="var(--gray-blue)"
-    --color-hover="var(--white-blue)"
-    --border-hover="2px solid var(--white-blue)"
-    --focus-border="2px solid var(--orange)"
-    --focus-outline="none"
-    name={"Поддержка"}
-    />
+    <div class="button">
+        <Button2
+        on:click={() => {
+            let url = new URL(window.location.origin + "/contact");
+            window.open(url, "_blank")
+        }}
+        --bg="transparent"
+        --color="var(--white-blue)"
+        --border="2px solid var(--white-blue)"
+        --font-size=".875rem"
+        --padding=".25rem 1.25rem .15rem"
+        --bg-hover="var(--gray-blue)"
+        --color-hover="var(--white-blue)"
+        --border-hover="2px solid var(--white-blue)"
+        --focus-border="2px solid var(--orange)"
+        --focus-outline="none"
+        name={"Поддержка"}
+        />
+    </div>
 </div>          
 
 
@@ -79,6 +98,10 @@
     display: flex;
     gap: .5rem;
     align-items: center;
+}
+
+.button{
+    flex: 0 0 110px;
 }
 
 @media print{

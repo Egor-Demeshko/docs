@@ -35,7 +35,7 @@ export default class DataService{
         this.#service.delete();
     }
 
-    addDemo(){
-        this.#service.addDemo();
+    addDemo(timeToEnd){
+        this.#service.addDemo(timeToEnd);
     }
 }

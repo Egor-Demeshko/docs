@@ -32,8 +32,6 @@
 </script>
 
 
-
-
     <section class:registration_open class:logIn_open class:keep_open>
         <div class="heading">
             <svg>

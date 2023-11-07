@@ -41,6 +41,10 @@
 
 </script>
 
+<svelte:head>
+    <script src="//code.jivo.ru/widget/2pSXquVqvE" async></script>
+</svelte:head>
+
 <main>
     {#if !loaded}
         <div class="spinner_wrapper">

@@ -20,13 +20,14 @@ export default class Demo{
         user_id*/
         let {success, data: {
             jwt,
-            refresh
+            refresh,
+            expiration_delta
         }, details } = await HTTPDemo.createDemo();
         /**насамом деле, расшифровываем и сохраняем exp данные */
         if(success){
             this.JWT.decodeJWT(jwt);
             this.JWT.saveToken({jwt, refresh});
-            this.saveData.addDemo();
+            this.saveData.addDemo(Math.floor(Date.now() / 1000) + expiration_delta);
             return true;
         } else {
             throw new Error("Ошибка обработки запроса: ", details?.message);
