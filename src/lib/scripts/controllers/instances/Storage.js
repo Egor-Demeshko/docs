@@ -1,5 +1,5 @@
 import { PUBLIC_CHAIN } from "$env/static/public";  
-import { PUBLIC_REFRESH } from "$env/static/public"; 
+import { PUBLIC_REFRESH, PUBLIC_DEMO } from "$env/static/public"; 
 
 export default class Storage{
     static instance;
@@ -55,13 +55,14 @@ export default class Storage{
 
     delete(){
         const local = window.localStorage;
-
+        debugger;
         local.removeItem(PUBLIC_CHAIN);
+        local.removeItem(PUBLIC_DEMO);
     }
 
     addDemo(){
         const local = window.localStorage;
 
-        local.setItem("chain_demo", "true");
+        local.setItem( PUBLIC_DEMO, "true" );
     }
 }

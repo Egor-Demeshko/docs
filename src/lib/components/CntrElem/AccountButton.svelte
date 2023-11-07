@@ -1,5 +1,5 @@
 <script>
-    import {PUBLIC_REFRESH, PUBLIC_CHAIN} from "$env/static/public";
+    import {PUBLIC_REFRESH, PUBLIC_CHAIN, PUBLIC_DEMO} from "$env/static/public";
     import { cubicInOut } from 'svelte/easing';
     import { fade } from "svelte/transition";
     import { goto } from "$app/navigation";
@@ -50,6 +50,7 @@
                 const localStorage = window.localStorage;
                 localStorage.removeItem(PUBLIC_REFRESH);
                 localStorage.removeItem(PUBLIC_CHAIN);
+                localStorage.removeItem(PUBLIC_DEMO);
                 goto("/");
             }
         } catch (error) {
