@@ -83,7 +83,7 @@ export default class JWT{
             }
         }
 
-       //return arr;
+        //return arr;
     }
 
     /**@description определяет есть ли токен и/или получает его из локальной памяти*/

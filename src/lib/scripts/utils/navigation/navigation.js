@@ -1,4 +1,6 @@
 import DataService from "$lib/scripts/controllers/instances/DataServise.js";
+/**определяем руты */
+const paths = ["/", "/projects", "/anketa", "/contact", "/redactor"];
 
 /**
  * @param none
@@ -8,6 +10,8 @@ import DataService from "$lib/scripts/controllers/instances/DataServise.js";
  * будет работать на корневом layout и на каждой странице основного потока*/
 export async function shouldRedirected(controller){
     const currentPath = window.location.pathname;
+    
+    if(!paths.includes(currentPath)) return {redirect: false, path: ""};
 
     /**если аксесс токен есть, проверить сессию, если надо обновить ее*/
     if(DataService.isToken()){

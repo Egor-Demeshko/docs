@@ -34,4 +34,8 @@ export default class DataService{
     delete(){
         this.#service.delete();
     }
+
+    addDemo(){
+        this.#service.addDemo();
+    }
 }

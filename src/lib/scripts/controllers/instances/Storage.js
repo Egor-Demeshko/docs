@@ -58,4 +58,10 @@ export default class Storage{
 
         local.removeItem(PUBLIC_CHAIN);
     }
+
+    addDemo(){
+        const local = window.localStorage;
+
+        local.setItem("chain_demo", "true");
+    }
 }

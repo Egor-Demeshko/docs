@@ -124,10 +124,14 @@
     /*правильное добавление gap*/
     $: if(!showRight && projectElement){
         setTimeout(() => {
-            projectElement.style.gap = "0";
+            if(projectElement.style){
+                projectElement.style.gap = "0";
+            }
         }, 350);
     } else if(showRight) {
-        projectElement.style.gap = "1.5rem";
+        if(projectElement.style){
+            projectElement.style.gap = "1.5rem";
+        }
     }
 
     onMount( async () => {

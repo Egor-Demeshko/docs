@@ -106,7 +106,7 @@ export function processSelection(callerId){
              * NodeValue выдается как текст. приходится приводить все к одним символам
              */
             let clearedNodeValue = removeSpecSymbol(anchorNode.nodeValue.trim(), specText);
-            debugger;
+            
             index = parentHtml.indexOf( clearedNodeValue );
         } else if(anchorNode.tagName === "P" && startIndex === 0 && endIndex === 0){
             index = 0;
