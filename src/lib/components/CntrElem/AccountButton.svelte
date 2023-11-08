@@ -1,5 +1,5 @@
 <script>
-    import {PUBLIC_REFRESH, PUBLIC_CHAIN, PUBLIC_DEMO} from "$env/static/public";
+    import {PUBLIC_REFRESH, PUBLIC_CHAIN, PUBLIC_DEMO, PUBLIC_TIMETOEND} from "$env/static/public";
     import { cubicInOut } from 'svelte/easing';
     import { fade } from "svelte/transition";
     import { goto } from "$app/navigation";
