@@ -109,7 +109,7 @@
     }
     
     .logo{
-        fill: var(--gray-blue);
+        fill: var(--white-blue);
     }
 
     .document_name{
@@ -121,7 +121,7 @@
 
     .document_name span{
         font-size: 1.125rem;
-        line-height: 1.125rem;
+        line-height: .9;
         margin: 0;
         font-weight: 500;
         outline: none;
@@ -134,7 +134,7 @@
 
     .status{
         font-size: 1rem;
-        line-height: 100%;
+        line-height: .9;
         font-style: italic;
         color: var(--faded-gray-blue);
     }
