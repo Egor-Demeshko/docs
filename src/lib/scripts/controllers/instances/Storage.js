@@ -57,6 +57,12 @@ export default class Storage{
         const local = window.localStorage;
 
         local.removeItem(PUBLIC_CHAIN);
+        // ВОТ ТУТ ИДЕТ УДАЛЕНИЕ ТОКЕНА. ПЕРЕСМОТЕРТЬ В DEMO.js
+    }
+
+    deleteDemo(){
+        const local = window.localStorage;
+        
         local.removeItem(PUBLIC_DEMO);
     }
 

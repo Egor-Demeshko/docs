@@ -476,7 +476,7 @@ async function secondStepOnParentConnect(e){
 
 
 async function secondStepOnChildConnect(e){
-  
+    console.log("WORKING");
     childConnection.update( (connectObj) => {
       connectObj.end = id;
       console.log('[BOX]: {secondStep}, setting end id. received object', connectObj)
@@ -484,17 +484,19 @@ async function secondStepOnChildConnect(e){
     });
     
     let store = $childConnection;
+    childConnection.set(false);
     
     /**перед тем как обновить данные в самом приложении, отправляем данные на сервер
     * connectObj.start айди блока в котором необходимо установить parent_id
     */
-    let {success} = await controller.update({
+    controller.saveNourgent({
             node_id: store.end, 
             field_name: "parent_id", 
-            field_value: store.start
+            field_data: store.start
           });
 
-    childConnection.set(false);
+    let {success} = await controller.sendDataInQueue();
+
 
     if(!success)return;
 

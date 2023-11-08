@@ -35,14 +35,23 @@
 </script>
 
 <div>
-    <span>Времени осталось, </span>
-    <span>{`${hour}:${minutes}:${seconds}`}</span>
+    <span>Демо-режим,</span>
+    <span class="time">{` ${(hour < 10) ? "0" + hour : hour}:${(minutes < 10) ? "0" + minutes : minutes}:${(seconds < 10) ? "0" + seconds : seconds}`}</span>
 </div>
 
 
 <style>
     div{
         display: inline-block;
+        position: absolute;
+        right: calc(100% + 1rem);
+        top: 50%;
+        transform: translateY(-50%);
+        width: 11rem;
+    }
+
+    .time{
+        font-size: .875rem;
     }
 </style>
 

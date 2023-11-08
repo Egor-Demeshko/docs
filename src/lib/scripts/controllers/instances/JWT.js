@@ -1,4 +1,5 @@
 import Storage from "$lib/scripts/controllers/instances/Storage.js";
+import {PUBLIC_DEMO} from "$env/static/public";
 import { goto } from "$app/navigation"; 
 
 export default class JWT{
@@ -84,6 +85,10 @@ export default class JWT{
             }
         }
 
+        let {demo} = arr[1];
+        if(demo){
+            //this.#saveDemoSign();
+        }
         //return arr;
     }
 
@@ -99,5 +104,9 @@ export default class JWT{
         } else {
             goto("/");
         }
+    }
+
+    #saveDemoSign(){
+        window.localStorage.setItem(PUBLIC_DEMO, "true");
     }
 }

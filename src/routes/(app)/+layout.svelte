@@ -54,7 +54,7 @@
         --color="var(--white-blue)"
         --border="2px solid var(--white-blue)"
         --font-size=".875rem"
-        --padding=".25rem 1.25rem .15rem"
+        --padding=".25rem 1rem .15rem"
         --bg-hover="var(--gray-blue)"
         --color-hover="var(--white-blue)"
         --border-hover="2px solid var(--white-blue)"
@@ -96,6 +96,7 @@
     right: 1.5rem;
     z-index: 20;
     display: flex;
+    justify-content: end;
     gap: .5rem;
     align-items: center;
 }
