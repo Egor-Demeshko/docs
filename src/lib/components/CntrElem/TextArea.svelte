@@ -43,6 +43,7 @@
 
 <div class="input_wrapper">
     <textarea {placeholder} {id} {name} {required} {pattern} {type} {value}
+    {rows}
     on:focus={focusIn}
     on:blur={focusOut}
     on:change={changeHandle}

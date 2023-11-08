@@ -51,6 +51,7 @@
                 localStorage.removeItem(PUBLIC_REFRESH);
                 localStorage.removeItem(PUBLIC_CHAIN);
                 localStorage.removeItem(PUBLIC_DEMO);
+                localStorage.removeItem(PUBLIC_TIMETOEND);
                 goto("/");
             }
         } catch (error) {

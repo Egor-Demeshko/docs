@@ -19,7 +19,6 @@ export default async function validation(data, options){
         }
     }
     
-
     //делать очистку строки на name, content, description, trigger
     //само поле validity имеет status и errors [{[data.field.name], [message]}]
 

@@ -140,7 +140,7 @@
     } catch {
       console.log('[BOX]: no root to draw');
     }
-/*
+/*  
     document.addEventListener("parent_connection", () => processNewParentConnection());
     document.addEventListener("bottom_connection", () => processBottomConnection());
     document.addEventListener("remove_answer", () => removeAnswer());*/
@@ -428,7 +428,19 @@ async function secondStepOnParentConnect(e){
 
   let {success} = await controller.sendDataInQueue();
 
-  if(!success)return;
+  if(!success){
+      document.dispatchEvent( new CustomEvent("error", {detail: {
+        err_data: [
+            {
+                blockId: 0,
+                message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных, он красный!",
+                err_id: 1002,
+                err_type: "emergency"
+            }
+          ]  
+        }}));
+      return;
+  }
   
 
   nodes.update( (nodes) => {
@@ -497,8 +509,19 @@ async function secondStepOnChildConnect(e){
 
     let {success} = await controller.sendDataInQueue();
 
-
-    if(!success)return;
+    if(!success){
+        document.dispatchEvent( new CustomEvent("error", {detail: {
+                      err_data: [
+                          {
+                              blockId: 0,
+                              message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных, он красный!",
+                              err_id: 1002,
+                              err_type: "emergency"
+                          }
+                      ]
+                  }}));
+        return;
+    }
 
 
     /**обновляем данные в графе nodes*/

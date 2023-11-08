@@ -194,6 +194,8 @@ export default class Node extends NodeLocalOperations{
 
 
     async sendDataInQueue(){
+        /**@description результат запроса к api */
+        let result;
         saving.set(true);
         if(this.#updateQueue.length > 0){
             let project_id = this.#project_id;
@@ -207,18 +209,31 @@ export default class Node extends NodeLocalOperations{
                 }
             });
 
-            console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
-            let result = await this.#client.update(token, dataToSend);
+            //console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
+            try{
+                result = await this.#client.update(token, dataToSend);
+            } catch(e){
+                document.dispatchEvent( new CustomEvent("error", {detail: {
+                    err_data: [
+                        {
+                            blockId: 0,
+                            message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных, он красный!",
+                            err_id: 1002,
+                            err_type: "emergency"
+                        }
+                    ]
+                }}));
+            }
             console.log("[NODE]: {sendDataInQueue} result: ", result);
             saving.set(false);
             if(result.success){
                 this.clearQueue();
                 
                 this.isUpdateNeeded(result.data.nodes);
-                return result;
-            }
+            } 
         }
         saving.set(false);
+        return result;
     }
 
 

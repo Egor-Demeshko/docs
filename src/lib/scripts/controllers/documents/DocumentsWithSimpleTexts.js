@@ -96,7 +96,9 @@ export default class DocumentsWithSimpleText extends Documents{
     subscribeForNodesUpated(){
         this.#unsubscribe = nodes.subscribe( (newGraph) => {
             /**почему-то получили новый граф, применяем обновления видимости*/
-            this.updateDocElementsVisibility( newGraph );
+            if(window.location.pathname === "/anketa"){
+                this.updateDocElementsVisibility( newGraph );
+            }
         });
     }
 
