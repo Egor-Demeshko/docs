@@ -13,7 +13,7 @@
 </script>
 
 <div>
-    {#each $nodes.filter( node => node.node_type !== "text") as data}
+    {#each $nodes.filter( node => node.node_type !== "text") as data, i (data.id)}
         {#if data.node_type === "text" || data.node_type === "entry"}
             <AnketaInput id={data.id} 
             name={data.name}

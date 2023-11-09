@@ -329,6 +329,7 @@ export default class Documents{
         let arr = this.#docs;
         let html = await getHtml();
         //console.log("[Documents]: gained html", html);
+        if(html === false || html === null || html === undefined) return;
         html = sanitizeHTML(html);
 
         for (let i = 0; i < arr.length; i++) {

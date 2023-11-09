@@ -189,6 +189,8 @@ export default class Node extends NodeLocalOperations{
 
     async setFirstFocus(){
         let node = document.querySelector('.box_wrapper');
+        if(!node || !node instanceof HTMLElement) return;
+
         node.focus();
     }
 

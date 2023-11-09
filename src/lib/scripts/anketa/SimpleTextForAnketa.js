@@ -194,10 +194,12 @@ export default class SimpleTextForAnketa {
 
 
     deleteElement(){
-        
-        this.#domLinks.forEach( function deleteElement(element){
-            element.remove();
-        } );
+        if(this.#domLinks){
+            this.#domLinks.forEach( function deleteElement(element){
+                element.remove();
+            } );
+            
+        }
         
         this.#domLinks = null;
     }

@@ -54,6 +54,7 @@
 
 <style>
     .input_wrapper{
+        display: flex;
         position: relative;
         width: 100%;
     }

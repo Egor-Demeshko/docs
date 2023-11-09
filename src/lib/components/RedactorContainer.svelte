@@ -42,6 +42,7 @@
 </script>
 
 <svelte:window on:unload={saveHtml}></svelte:window>
+<svelte:document on:document_updated={saveHtml}></svelte:document>
 
 
 

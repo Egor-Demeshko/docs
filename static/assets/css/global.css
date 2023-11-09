@@ -13,3 +13,13 @@
 :root{
     --padding: 0.6rem 1.25rem;
 }
+
+/*убираем jivo с сайта при печати*/
+@media print{
+    #jivo-iframe-container, 
+    jdiv,
+    .globalClass_f856{
+        display: none !important; 
+
+    }
+}

@@ -13,6 +13,8 @@
     async function startPrintingProcess(){
         /**фсинхронно чтобы обновиться внутреннее состояние редактора, до того как пойдет на печать*/
         let html = await getHtml();
+        if(html === undefined || html === false || html === null) return;
+
         wrapper.classList.add("show");
         page.innerHTML = html;
 

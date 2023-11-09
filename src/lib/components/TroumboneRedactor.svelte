@@ -177,7 +177,6 @@
         console.log('{renderEditor} starting');
         editor = window.jQuery(container).trumbowyg('html', html);
         console.log('{renderEditor} after html implementint, document id: ', activeDocumentId);
-
     }
 
 

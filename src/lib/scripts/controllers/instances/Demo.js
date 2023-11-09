@@ -2,6 +2,7 @@ import HTTPDemo from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPDemo.js";
 import JWT from "$lib/scripts/controllers/instances/JWT.js";
 import DataServise from "$lib/scripts/controllers/instances/DataServise.js";
 import HTTPrefresher from "$lib/scripts/utils/dataSendReceive/HTTP/HTTPrefresher.js";
+import goto from "$app/navigation";
 
 /**@description класс для управления создание и апдейтом демо токенов */
 export default class Demo{
@@ -31,6 +32,7 @@ export default class Demo{
             return true;
         } else {
             throw new Error("Ошибка обработки запроса: ", details?.message);
+            goto("/");
         }
 
     }

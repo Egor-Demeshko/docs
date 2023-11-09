@@ -70,7 +70,7 @@ $: console.log("~~~~TEST LINES~~~~,", {lines});
         <g id="nodes">
             {#each allNodes as node, i}
                 
-                <Box {node} {i}/>
+                <Box {node}/>
                 
             {/each}        
         </g>

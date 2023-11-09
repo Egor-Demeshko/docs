@@ -7,6 +7,7 @@ export async function deleteNode(id, controller){
     
     deleteLines(id);
 
+    //удаляем из стора классов которые управленияют элементами в тексте
     storeForSimpleTexts.update( (jsClasses) => {
         return jsClasses.filter( (element) => {
                
@@ -15,6 +16,10 @@ export async function deleteNode(id, controller){
             return false;
         });
     });
+
+    //событие для нотификации того что изменился документ. <RedactorContainer />
+    //делает обработку события. 
+    document.dispatchEvent( new CustomEvent("document_updated"));
     
     /**для уставноки фокуса на первом элементе */
     let setted = false;

@@ -24,17 +24,18 @@ export default class HTTPrefresher extends HTTPBaseServise{
             
             let {success, data, details} = result;
 
-            console.log("[HTTPLOGIN]: after request: ", {result});
+            console.log("[HTTPREFRESHER]: after request: ", {result});
             if(success){
 
                 return  {jwt: data.jwt, refresh: data.refresh}; 
             } else {
                 let errors = '';
                 details.forEach( (err) => errors += `${err.message} \n`);
-                throw new Error(errors);
+                console.error(errors);
             }
 
-        } catch(e){
+        } catch(e) {
+            console.log("[HTTPREFRESHER]: CATCH BLOCK ", e.message);
             document.dispatchEvent( new CustomEvent("error", {detail: {
                 err_data: [
                     {
@@ -71,9 +72,8 @@ export default class HTTPrefresher extends HTTPBaseServise{
             return result;
 
         } catch(e){
-            console.log('[Ошибка получения данных]: нет ответа от сервера.', e.message);
+            console.error('[Ошибка получения данных]: нет ответа от сервера.', e.message);
+            return result;
         }
-        
-        console.log("[HTTPRefresher]  POST DATA: ", result);
     }
 }

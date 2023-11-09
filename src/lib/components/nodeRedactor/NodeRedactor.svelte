@@ -68,7 +68,6 @@
 
 
             messageWasShown = false;
-            
             trigger = false;
             closing_animation = true;
             
@@ -102,6 +101,8 @@
                 //console.log("[NodeRedactor]: {$NODES} DATA STATUS", data);
                 keyChange = !keyChange;
                 const id = data?.id;
+
+                if(nodes.length === 0) data = null;
 
                 for( let i = 0; i < nodes.length; i++){
                     if( nodes[i].id === id){
@@ -355,7 +356,11 @@ bind:this={form}>
                 
             {/if}
         </div>
-    {:else if trigger && !data}
+    {:else if (trigger && !data)}
+        <div>
+            <h3>Выбирете блок</h3>
+        </div>
+    {:else if $nodes.length === 0 && trigger}
         <div>
             <h3>Выбирете блок</h3>
         </div>

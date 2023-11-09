@@ -103,6 +103,8 @@
     function blurTextArea(e){
         
         let elements = $storeForSimpleTexts;
+        if(elements === undefined || elements === null) return;
+        
         for(let i = 0; i < elements.length; i++){
             if(elements[i]["id"] !== id) continue;
             elements[i].setInactive(id);

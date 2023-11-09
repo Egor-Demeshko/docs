@@ -45,6 +45,7 @@ export default class NodeConsistencyValidation{
          * отправляем сообщение, возращаем булеан результат
          */
         const globalNodes = get( nodes );
+        if(globalNodes.length === 0) return true;
         /**ссылка на узел который запоминается в момент смены узла и не изменяет от взаимодествия с узлом */
         const localNode = this.#activeNodeData;
         const fields = this.#vitalFields;

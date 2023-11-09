@@ -79,6 +79,7 @@ async function tryRefresh(controller){
         return await controller.refreshSession();     
         } catch(e) {
             console.log("[main]: не удалось обновить сессию", e.message);
+            
         }
         //TODO сделать кнопку обновления сессии
 }

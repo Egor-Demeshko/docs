@@ -110,7 +110,8 @@
   }
   /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
   nodes.subscribe( (allBlocksValues) => {
-      
+    if(allBlocksValues === undefined || allBlocksValues === null) return;
+
     allBlocksValues.forEach( ( obj )=> {
       if(obj.id !== id) return;
        /* console.log("[BOX]: nodes.subsdcrive obj.x: ", obj.x);
@@ -290,19 +291,12 @@ function focusIn(e){
 
 function focusOut(){
 
-    //console.log("[BOX.FOCUSOUT]: block id, delete: ", id);
+    if($storeForSimpleTexts){
+      $storeForSimpleTexts.forEach( (elObj) => {
+          elObj.setInactive(id);
+      });
+    }
 
-    /*activeBlocks.update( ( set ) => {
-        set.delete(id);
-        return set;
-    });*/
-    //blockClickedId.set(id);
-
-    $storeForSimpleTexts.forEach( (elObj) => {
-        elObj.setInactive(id);
-    });
-
-    /**/
     setTimeout( () => showButtons = false, 200);
 }
 
