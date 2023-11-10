@@ -77,9 +77,9 @@
                 --font-size=".875rem"
                 setFocus={cancelFocus}/>
             </div>
-            <svg class="icon" on:click={closeModal}>
+            <!--<svg class="icon" on:click={closeModal}>
                 <use href="/assets/icons/all.svg#plus"></use>
-            </svg>
+            </svg>-->
         </div>    
     </div>
 {/if}

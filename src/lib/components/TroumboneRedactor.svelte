@@ -210,7 +210,7 @@
     {/if}
 
     {#if tryAgain}
-        <ModalTryAgain on:click={populateSimpleTexts}/>
+       <!-- <ModalTryAgain on:click={populateSimpleTexts}/>-->
     {/if}
 
     {#if spinner}

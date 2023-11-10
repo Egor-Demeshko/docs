@@ -7,10 +7,11 @@
     export let data;
 
     let {content, name, id, parent_id, description} = data;
+    /**это класс AnkeetaGraphController'*/
     const controller = getContext("controller");
+    
     /**@description управляет изменением цвета, когда курсор заходит на элемент.
-     * иметирует ховер
-    */
+     * иметирует ховер*/
     let hoverBackground = false;
 
     

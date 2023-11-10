@@ -1,5 +1,6 @@
 <script>
-    import { activeTabId, tabsQuantity, documents, showTooltip, modalFieldsStore} from "$lib/scripts/stores";
+    import { activeTabId, tabsQuantity, documents,nodes} from "$lib/scripts/stores";
+    import { get } from "svelte/store";
     export let name = "Имя";
     export let active = false;
     export let tabId;
@@ -36,6 +37,8 @@
             //console.log("[TAB]: handle click");
             return docs;
         });
+        
+        $documents.updateDocElementsVisibility( get(nodes) );
     }
 
 </script>
