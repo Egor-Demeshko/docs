@@ -1,10 +1,12 @@
 import sanitizeHTML from "$lib/scripts/utils/sanitizeHTML.js";
 import { storeForSimpleTexts, docRoot, documents, nodes } from "$lib/scripts/stores";
+import SimpleText from "$lib/scripts/docElements/simpleText";
 import { addExcitingNodeToRedator } from "$lib/scripts/controllers/nodes/processStores/addNodesStore.js";
 import { get } from "svelte/store";
 import { makeReconnect, showError } from "$lib/scripts/utils/nodes/nodeToTextService.js";
 
 const STARTSPECSYMBOL = "ƈ";
+let activeNode = null;
 
 
 /**функция добавляет разметку узла в текст, 
@@ -104,17 +106,19 @@ export function processSelection(callerId){
     parentHtml = parentHtml.replaceAll(STARTSPECSYMBOL, "");
     parentElement.innerHTML = parentHtml;
 
-    afterProcessing(docClassController, root);
+   afterProcessing(docClassController, root);
 }
 
 
 function afterProcessing(docController, root){
     //удаляем подстветку текстового поля
     addExcitingNodeToRedator.set({status: false});
+
     docController.setDocumentUpdated();
     docController.saveHtmlState();
     makeReconnect(root);
     setCaret(root);
+    activeNode = null;
 }
 
 
@@ -150,13 +154,13 @@ function setCaret(parentElement){
     } else {
         range.setStartAfter(elem);
     }
-
-
+    
+    
     range.collapse();
 
     sel.removeAllRanges();
     sel.addRange(range);
-
+    
     elem.removeAttribute("range");
 }
 
@@ -193,6 +197,8 @@ function searchForTheSameParent(firstElement, secondElement){
     showError("Не удалось установить связи с родителем.", "emergency", callerId);
     return false;
 }
+
+
 
 /**функиця находит какой node элемент идет раньше. Надо перебрать всех дочерние узлы у sameParent
  * вернуть узел который идет раньше
@@ -238,6 +244,7 @@ function checkNodeActivity(callerId){
 
     for(let i = 0; i < nodesArr.length; i++){
         if(nodesArr[i].id === callerId){
+            activeNode = {...nodesArr[i]};
             return nodesArr[i].active;
         }
     }

@@ -17,7 +17,7 @@ export default async function createNewBlock(whatBlockToCreate, controller){
     let {y} = getCors();
     y = Math.floor(y);
 
-    let newTextElement = new SimpleText({id, name: "", content: defaultName});
+    let newTextElement = new SimpleText({id, name: defaultName, content: defaultName});
 
     let newBlock = {
         id,
