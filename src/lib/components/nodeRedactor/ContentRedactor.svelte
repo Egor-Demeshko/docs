@@ -13,9 +13,9 @@
     export let node_type;
     export let id = '';
     export let validity;
-    export let content;
+    export let content = null;
     export let description;
-    export let data_type;
+    export let data_type = null;
 
 
     let valid = '';
@@ -131,14 +131,14 @@
         <!-- У некоторых типов блока в поле ввода основного контента есть toggle. чтобы текст не перекрывался тоглом
         там где он есть сделан больший паддинг справа. это регулируется классом -->
         {#if display === "content"}
-            <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
+            <textarea {placeholder} name={display} {required} {pattern} autocomplete="off" {rows}
             bind:value={content}
             class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
             on:focus={focusTextArea}
             on:blur={blurTextArea}
             ></textarea>
         {:else}
-            <textarea {placeholder} {id} name={display} {required} {pattern} autocomplete="off" {rows}
+            <textarea {placeholder} name={display} {required} {pattern} autocomplete="off" {rows}
             bind:value={description}
             class={ (node_type === "checkbox" || node_type === "select") ? "normal_padding" : "big_padding" }
             on:focus={focusTextArea}

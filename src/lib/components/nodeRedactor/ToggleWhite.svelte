@@ -32,7 +32,7 @@
 
 <label tabindex="0" role="button" on:keypress={keypress}>
     <span>Отображать элементы в анкете...</span>
-    <input {id} type="checkbox" name="view_type" 
+    <input type="checkbox" name="view_type" 
     value={ (view_type === "radiobutton") ? false : true}
     checked={ (view_type === "radiobutton") ? false : true}
         on:click={clickHandle}

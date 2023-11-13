@@ -28,7 +28,7 @@
 
 <label tabindex="0" role="button" on:keypress={keypress}>
     <span>Значение по умолчанию</span>
-    <input name="is_nodename_default" type="checkbox" bind:checked={isChecked} tabindex="-1">
+    <input name="checkbox" type="checkbox" bind:checked={isChecked} tabindex="-1">
     <div class="icon">
         {#if isChecked}
             <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">

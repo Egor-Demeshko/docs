@@ -76,7 +76,7 @@
 
 <div class="input_wrapper" class:not_valid>
 
-    <input {placeholder} {id} {name} {required} {pattern} {type} {value} {autocomplete}
+    <input {placeholder} {name} {required} {pattern} {type} {value} {autocomplete}
     class:not_valid
     on:blur={blurHandler}
     on:input={changeHandle}

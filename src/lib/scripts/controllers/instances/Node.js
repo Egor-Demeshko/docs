@@ -230,8 +230,9 @@ export default class Node extends NodeLocalOperations{
             saving.set(false);
             if(result.success){
                 this.clearQueue();
-                
-                this.isUpdateNeeded(result.data.nodes);
+                if(result?.data){
+                    this.isUpdateNeeded(result.data.nodes);
+                }
             } 
         }
         saving.set(false);
@@ -332,14 +333,17 @@ export default class Node extends NodeLocalOperations{
                 let result = await this.sendDataInQueue();
                     if(result.success){
                         //установить в активных датах новые данные
-                        const nodes = result.data.nodes;
-
-                        //сохраняем обновленные данные для активного блока, 
-                        //для нормализационных проверок
-                        for(let [receivedId, data] of Object.entries(nodes)){
-                            if(receivedId !== id) continue;
-                            this.setActiveNode({id, ...data});
+                        if(result?.data){
+                            const nodes = result.data.nodes;
+                            
+                            //сохраняем обновленные данные для активного блока, 
+                            //для нормализационных проверок
+                            for(let [receivedId, data] of Object.entries(nodes)){
+                                if(receivedId !== id) continue;
+                                this.setActiveNode({id, ...data});
+                            }
                         }
+
                     }
             }
         } 

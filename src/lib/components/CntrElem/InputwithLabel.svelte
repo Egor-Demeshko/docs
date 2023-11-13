@@ -51,10 +51,10 @@
         </div>
 
         {#if type === "text"}
-            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} {value}
+            <input {placeholder} {name} {required} {pattern} {value}
             type = "text" on:input={inputHandle}>
         {:else if type === "number"}
-            <input {placeholder} {id} name={`id:${id}`} {required} {pattern} {value}
+            <input {placeholder} {name} {required} {pattern} {value}
             type = "tel" on:input={inputHandle}>
         {/if}
     </div>

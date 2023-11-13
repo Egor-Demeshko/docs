@@ -176,7 +176,6 @@
     function renderEditor(){
         console.log('{renderEditor} starting');
         editor = window.jQuery(container).trumbowyg('html', html);
-        console.log('{renderEditor} after html implementint, document id: ', activeDocumentId);
     }
 
 
@@ -219,7 +218,7 @@
         </div>
     {/if}
 
-    <RedactorContainer bind:container {activeDocumentId}/>
+    <RedactorContainer bind:container/>
    
 </div>
 

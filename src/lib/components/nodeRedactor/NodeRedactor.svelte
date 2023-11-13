@@ -288,7 +288,8 @@ class:trigger
 class:closing_animation
 class:not_valid
 on:pointerleave|stopPropagation={saveChanges}
-bind:this={form}>
+bind:this={form}
+name="node_redactor">
     
     <div class="arrow__position">
         <Arrow bind:open={open} on:arrow_clicked={arrowClicked}/>

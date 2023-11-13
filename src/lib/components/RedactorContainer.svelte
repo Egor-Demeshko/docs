@@ -1,10 +1,11 @@
 <script>
-    export let container;
+    
     import { beforeNavigate } from "$app/navigation";
     import { documents } from "$lib/scripts/stores";
 	import { onMount } from "svelte";
     import { get } from "svelte/store";
     import {initBreakers, deleteBreakers} from '$lib/scripts/utils/redactor/LineBreakers/LineBreaker.js';
+    export let container;
     
     const docClass = get(documents);
 
