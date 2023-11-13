@@ -1,5 +1,6 @@
 <script>
 	import SearchInput from "$lib/components/CntrElem/SearchInput.svelte";
+
 </script>
 
 <div class="controll">
@@ -8,7 +9,7 @@
     </div>
 
     <div class="controll__right">
-        <SearchInput />
+        <SearchInput/>
     </div>  
 </div>
 

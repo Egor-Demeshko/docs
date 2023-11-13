@@ -1,9 +1,19 @@
 <script>
 	import SearchInput from "$lib/components/CntrElem/SearchInput.svelte";
+    import {onMount} from "svelte";
+
+
+    let whereToSearch;
+    let MarkOfElementsToSearchFor = ".box_wrapper";
+    let sideElementsToBeHidden = ["[data-line]"];
+
+    onMount( () => {
+        whereToSearch = document.querySelector(".svg_wrapper");
+    });
 </script>
 
 <div class="controll">
-    <SearchInput />
+    <SearchInput {whereToSearch} {MarkOfElementsToSearchFor} {sideElementsToBeHidden}/>
 </div>
 
 <style>

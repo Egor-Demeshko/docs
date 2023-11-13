@@ -238,7 +238,7 @@ function pointerLeave(){
 </script>
 
 <!--   -->
-<g use:drawLine >
+<g use:drawLine data-line>
     <defs>
         <!-- A marker to be used as an arrowhead -->
         <marker
