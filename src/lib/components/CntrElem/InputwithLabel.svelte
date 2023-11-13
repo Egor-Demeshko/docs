@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { nodeController } from "$lib/scripts/stores";
 
     export let id = "id";
     export let placeholder = "Введите данные";
@@ -12,7 +13,6 @@
     export let name;
 
     $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false; 
-    $: console.log("[INPUTWITHLABEL]: input value: ", value);
 
     let dispatch = createEventDispatcher();
 
@@ -20,7 +20,7 @@
         let data = validity.err_data;
 
         for(let i=0; i < data.length; i++){
-            if(data[i]?.field_name === name) return true;
+            if(data[i]?.field === name) return true;
         }
 
         return false;
@@ -29,10 +29,11 @@
 
     function inputHandle({target}){
         ///console.log('[__TEST__ INPUT WITH LABEL]: target.value: ', target.value);
+        let valueFromInput = target.value;
         if(name === "name"){
-            dispatch("data-changed", {id, name: target.value});
+            dispatch("data-changed", {id, name: valueFromInput});
         } else {
-            value = target.value;
+            value = $nodeController.tryToForceTypeToInteger(valueFromInput);
         }
     }
 

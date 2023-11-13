@@ -31,6 +31,8 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
         });
 
     } else if(fieldsToUpdate) {
+        //{condition: 'lt'}
+
 
         nodes.update( (nodesData) => {
     
@@ -38,6 +40,18 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
                 let node = nodesData[i];
                 if(node["id"] !== id) continue;
                 if(node["id"] === id){
+
+
+                    if(Object.hasOwn(fieldsToUpdate, "condition")){
+                        if(fieldsToUpdate.condition === "lt" ||
+                                fieldsToUpdate.condition === "gt" ||
+                                fieldsToUpdate.condition === "gte" ||
+                                fieldsToUpdate.condition === "lte"
+                            ){
+                                tryForceTriggerToNumber(node);
+                            }
+                    }
+
                     
                     for(let [fieldName, value] of Object.entries(fieldsToUpdate)){
                         /**есть ли ключ в node, например, может options отсутствовать*/
@@ -65,5 +79,14 @@ export default function syncDataInNodesStore(id, fieldName, value, fieldsToUpdat
             return nodesData;
         });
 
+    }
+}
+
+/**функция пытается привести поле trigger данных к числу, дабы нормально на сервак послать */
+function tryForceTriggerToNumber(node){
+    if(node?.trigger && typeof node.trigger === "string"){
+        if(!isNaN(Number(node.trigger))){
+            node.trigger = Number(node.trigger);
+        }
     }
 }

@@ -9,6 +9,10 @@
     export let isWithIcon = true;
     export let buildTypeid = 'none';
     export let id = '';
+    export let validity = null;
+
+
+    $: not_valid = (validity?.status === "invalid" && isCurrentField()) ? true : false;
 
     const controller = getContext("controller");
 
@@ -63,6 +67,16 @@
     //$: console.log("[DropDown]: options state:  ", $options);
 
 
+    function isCurrentField(){
+        let data = validity.err_data;
+        for(let i=0; i < data.length; i++){
+            if(data[i]?.field === name) return true;
+        }
+
+        return false;
+    }
+
+
     function handleClick(){
         //console.log("[DropDown] click event target: ", e.target);
         isOpened = !isOpened;
@@ -86,7 +100,6 @@
     function changeHandle(e){
         let target = e.target;
         let type = target.value;  //значение выбранной опции
-        
 
         options.update( (array) => {
             array.forEach( (elem) => {
@@ -147,7 +160,10 @@
 <div class="dropdown" on:change={changeHandle}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-    <div class="main_view" on:click={handleClick} on:keydown={handleKeyPressed} role="button" tabindex="0">
+    <div class="main_view" on:click={handleClick} on:keydown={handleKeyPressed} 
+    role="button" 
+    tabindex="0"
+    class:not_valid>
 
         {#each $options as {text, value, selected}}
             {#if selected}
@@ -217,7 +233,12 @@
         align-items: center;
         position: relative;
         z-index: 4;
-        transition: background 400ms ease;
+        transition: background 400ms ease, border 400ms ease;
+    }
+
+
+    .main_view.not_valid{
+        border-color: var(--pumpkin);
     }
 
 

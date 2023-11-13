@@ -49,7 +49,10 @@
 
 
     <div class="line">
-        <DropDown {id} buildTypeid={forId} isWithIcon={false} name="condition" options={compareOptions}
+        <DropDown {id} buildTypeid={forId} isWithIcon={false} 
+        name="condition" 
+        options={compareOptions}
+        validity={validity}
         --padding=".125rem 1.8rem .125rem 1rem"
         --padding-options=".125rem 1rem"
         --border="2px solid var(--light-blue)"

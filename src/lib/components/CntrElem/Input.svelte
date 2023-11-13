@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { nodeController } from "$lib/scripts/stores";
 
     export let id = "login";
     export let type = "text";
@@ -10,7 +11,6 @@
     export let name = '';
     export let autocomplete = "on";
     export let validity;
-    import syncDataInNodesStores from "$lib/scripts/controllers/syncDataInNodesStores.js";
 
     let valid = '';
     let invalid = '';
@@ -68,8 +68,9 @@
 
 
     function changeHandle(e){
-        dispatch("data-changed", {id, [name]: e.target.value});
-        //syncDataInNodesStores(id, name, e.target.value);
+        let value = e.target.value;
+        value = $nodeController.tryToForceTypeToInteger(value);
+        dispatch("data-changed", {id, [name]: value});
     }
 </script> 
 

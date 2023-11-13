@@ -128,5 +128,14 @@ export default class Normolize extends NodeConsistencyValidation{
     forceContentToBeInt(obj){
         obj.content = +obj.content;
     }
+
+    tryToForceTypeToInteger(value){
+        if(value.length === 0) return value;
+        if(!isNaN(Number(value))){
+            return Number(value);
+        }
+
+        return value;
+    }
 }
 

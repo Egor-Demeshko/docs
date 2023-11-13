@@ -179,6 +179,22 @@ export default class Documents{
         }
     }
 
+    /**проверяем, есть ли уже документ с таким же названием */
+    isReapetedName(name){
+        /**удаляем, если есть расширение файла, так с FilePicker приходят
+         * названия с расширением*/
+        let nameToCheck = name.replace(/\.\w{3,4}/g, "");
+        let arr = this.#docs;
+        if(nameToCheck.length === 0) return false;
+
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if(element.name === nameToCheck) return true;
+        }
+
+        return false;
+    }
+
 
     initDocument(){
         let arr = this.#docs;
@@ -432,20 +448,45 @@ export default class Documents{
         saving.set(true);
         formData.append("project_id", this.#projectId);
 
-        let {success, data:{html, id, name}} = await this.#saveDeleteService.sendFile(formData);
-        //TODO если ок, то вероятно надо отсюда сохранять html в визуализацию, и отправлять на сервер.
-        //вероянто надо прогрнать через стандартную процедуру которую делаем на page. 
-        //тоесть создание элементов, зачистка html. посмотрим что в ответе будет
-        /**приходят в data: {html, id, name}  */
+        /**сервер не принимает файлы с именем которое уже есть у другого файла, с одинаковым названием */
+        if(this.isReapetedName( formData.get("file")?.name) ){
+            saving.set(false);
 
-        if(success){
-            this.normolizeNewDocument(id, name, html);
-            /**дергаем стор чтобы обновить отображение */
-            documents.update( (docs) => docs);
-            this.#callSubscribes();
-        }
-        saving.set(false);
-        return success;
+            document.dispatchEvent( new CustomEvent('error', {
+                detail: {
+                    err_data: [{
+                        message: "Документ с таким именем уже существует. Измените имя у существущего документа в проекте или файле на загрузку", 
+                        err_id: 1001, 
+                        err_type: "emergency",
+                        blockId: 0
+                    }]
+                }
+            }));
+
+            return false;
+        } 
+
+        try{
+            let {success, data:{html, id, name}} = await this.#saveDeleteService.sendFile(formData);
+            
+            //TODO если ок, то вероятно надо отсюда сохранять html в визуализацию, и отправлять на сервер.
+            //вероянто надо прогрнать через стандартную процедуру которую делаем на page. 
+            //тоесть создание элементов, зачистка html. посмотрим что в ответе будет
+            /**приходят в data: {html, id, name}  */
+    
+            if(success){
+                this.normolizeNewDocument(id, name, html);
+                /**дергаем стор чтобы обновить отображение */
+                documents.update( (docs) => docs);
+                this.#callSubscribes();
+            }
+
+            saving.set(false);
+            return success;
+        } catch {
+            console.error( "[ОШИБКА ПРИ ОТПРАВКЕ ФАЙЛА]" );
+            return false;
+        }        
     }
 
 

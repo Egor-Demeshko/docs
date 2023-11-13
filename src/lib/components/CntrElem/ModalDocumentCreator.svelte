@@ -49,9 +49,7 @@
     }*/
 
 
-    async function change(e){
-        console.log("[ModalDocumentCreator]: change ", e.target);
-        
+    async function change(e){      
         const input = e.target;
         const formData = new FormData(form);
         if(!formData.has("file")) return;

@@ -1,6 +1,7 @@
 import { nodes } from "$lib/scripts/stores";
 import validateSiblingsWithoutMessage from "$lib/scripts/utils/validation/validateSiblingsWithoutMessage";
 
+const integerFunctions = ["lt", "lte", "gt", "gte"];
 
 /** @description функция представляет общий конвеер валидации
  * @param {Object} data - Объект, который содержит данн. Обязательное
@@ -15,7 +16,7 @@ export default async function validation(data, options){
             status: "valid",
             err_data: [],
             blockId: null,
-            err_type: "emergency"
+            err_type: ""
         }
     }
     
@@ -40,7 +41,7 @@ export default async function validation(data, options){
                 status: "invalid",
                 err_data: [ ...data.validity.err_data, {
                     blockId: data.id,
-                    field_name: key,
+                    field: key,
                     message: "Поле обязательно для заполнения!",
                     err_id: 800,
                     err_type: "emergency"
@@ -69,7 +70,6 @@ export default async function validation(data, options){
         }
     }
 
-
    /* - установление связи: если заполнены 3 компонета (condition, trigger и родительский content), стоит проверить,
 чтобы trigger текущего узла и content родительского были одного типа. Также стоит проверить соответствует ли тип данных оператору 
 в текущем узле (подробнее в "Разрешенные типы данных для операторов сравнения")*/
@@ -84,12 +84,12 @@ export default async function validation(data, options){
         //проверить чтобы было число-число или строка строка
         // определенному опоератору могут соотвествовать только строка-строка
         //console.log("[validation]: {trigger} start");
-        if(!data.trigger && !data.parent_id) break trigger;
+        if(data.trigger === undefined || data.trigger === null || data.trigger === "") break trigger;
+        if(!data.parent_id) break trigger;
         
-        
-        if(data.trigger && data.condition && !data.parent_id){
+        /*if(data.trigger && data.condition && !data.parent_id){
            // console.log("[validation]: {trigger} NO PARENT BLOCK");
-            data.validity = {
+            data.validity = {trigger
                 status: "invalid",
                 err_data: [...data.validity.err_data, {
                     field: "trigger",
@@ -100,18 +100,18 @@ export default async function validation(data, options){
                 }
                 ],
             }
-        }
+        }*/
 
         //if(data.id === "2eb0d071-726f-46ad-8905-1f1528eda152")
-        if(data.trigger && data.condition){
+        if((data.trigger || data.trigger === false) && data.condition){
             let condition = data.condition;
             //;
 
             //console.log("[validation]: {trigger} wrong type for CONDITION");
 
-            if(condition === "gt" || condition === "lt" || condition === "gte" || condition === "lte"){
+            if(integerFunctions.includes(condition)){
                 
-                if(isNaN(+data.trigger)) data.validity = {
+                if(data.trigger === false ||isNaN(+data.trigger)) data.validity = {
                                             status: "invalid",
                                             err_data: [...data.validity.err_data, {
                                                 field: "trigger",
@@ -121,7 +121,7 @@ export default async function validation(data, options){
                                                 err_type: "emergency"
                                             }
                                             ],
-                                        }
+                }
             }
         }
 
@@ -159,7 +159,7 @@ export default async function validation(data, options){
                                 status: "invalid",
                                 err_data: [...data.validity.err_data, {
                                     field: "trigger",
-                                    message: "Родительский блок должен иметь запись вида <true> (активно) или <false> (пассивно)",
+                                    message: "Родительский блок должен быть чекбоксом и содержать <true> (активно) или <false> (пассивно)",
                                     blockId: data.id,
                                     err_id: 806,
                                     err_type: "emergency"
@@ -184,7 +184,10 @@ export default async function validation(data, options){
 
                         }
 
-                        if(data.condition && isNaN(+parentData.content) !== isNaN(+data.trigger) ){
+                        
+                        if(parentData.node_type !== "select" 
+                        && data.condition 
+                        && isNaN(+parentData.content) !== isNaN(+data.trigger) ){
                             //console.log("[validation]: {trigger} wrong type for PARENT AND CHILD");
 
                             data.validity = {
@@ -198,9 +201,46 @@ export default async function validation(data, options){
                                 }
                                 ],
                             }
+
+                            break;
                         }
 
-                    break;
+                        /**блок options работает только со строкой. 
+                         * если родитель options, то дочерний блок не может использовать цифровые условия
+                         * типа "lt", "gt", "lte", "gte"
+                         */
+                        if( data.condition 
+                            && integerFunctions.includes(data.condition)
+                            && parentData.options 
+                            && parentData.options.length > 0){
+                            data.validity = {
+                                status: "invalid",
+                                err_data: [...data.validity.err_data, {
+                                    field: "condition",
+                                    message: "Родительский блок options, работает только со строкой. Дочерний блок может использовать только равно / неравно",
+                                    blockId: data.id,
+                                    err_id: 805,
+                                    err_type: "emergency"
+                                }
+                                ],
+                            }
+                        } else if(data.condition 
+                            && parentData.options 
+                            && parentData.options.length > 0 
+                            && typeof data.trigger === "number"){
+                                data.validity = {
+                                    status: "invalid",
+                                    err_data: [...data.validity.err_data, {
+                                        field: "condition",
+                                        message: "Блок типа options(текущий родитель) работает только с строковыми данными. При вводе числа для сравнения, оно оценивается как число",
+                                        blockId: data.id,
+                                        err_id: 805,
+                                        err_type: "emergency"
+                                    }
+                                    ],
+                                }   
+                        }
+
                 }
 
                 return nodes;

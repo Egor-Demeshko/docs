@@ -403,7 +403,7 @@ bind:this={form}>
 
 
     .trigger{
-        padding: 2rem 1.5rem 2rem 2rem;
+        padding: 2rem 1.5rem 2rem;
     }
 
 

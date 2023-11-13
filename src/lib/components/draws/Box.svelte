@@ -278,7 +278,6 @@ function focusIn(e){
     });*/
     blockClickedId.set(id);
 
-
     $storeForSimpleTexts.forEach( (elObj) => {
         //console.log("[BOX]: trying to set active");
         elObj.setActive(id);
@@ -427,7 +426,7 @@ async function secondStepOnParentConnect(e){
         err_data: [
             {
                 blockId: 0,
-                message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных, он красный!",
+                message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных!",
                 err_id: 1002,
                 err_type: "emergency"
             }
@@ -508,7 +507,7 @@ async function secondStepOnChildConnect(e){
                       err_data: [
                           {
                               blockId: 0,
-                              message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных, он красный!",
+                              message: "Не удалось сохранить блоки! Возможно один из блоков содержит неверный формат данных!",
                               err_id: 1002,
                               err_type: "emergency"
                           }
