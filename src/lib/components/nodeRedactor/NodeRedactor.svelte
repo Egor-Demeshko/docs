@@ -208,8 +208,14 @@
         if(data.id === detail.id){
             for (const key of Object.keys(detail)) {
                 if(key === "id") continue;
+
                 data[key] = detail[key];
                 if(key === "name" || key === "content"){
+                    /**обновлении имени блока для BOX.svelte*/
+                    document.dispatchEvent( new CustomEvent("name_update", {detail: {
+                        id: detail.id,
+                        name: detail.name}
+                    } ));
                     elementsDataUpdate(data);
                 }
             }

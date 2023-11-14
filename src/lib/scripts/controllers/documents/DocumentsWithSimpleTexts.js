@@ -66,6 +66,15 @@ export default class DocumentsWithSimpleText extends Documents{
             arrayToStore.push(simpleText);
         }
         storeForSimpleTexts.set(arrayToStore);
+
+    }
+
+    async populateSimpleTextsOnTabChange(){
+        /**включается загулшка на редакторе, спиннер */
+        document.dispatchEvent( new CustomEvent("spinner", {detail: "redactor"}));
+        await this.populateSimpleTexts();
+        /**отлюкчается заглушка на редакторе */
+        document.dispatchEvent( new CustomEvent("spinner", {detail: "redactor"}));
     }
 
 
@@ -92,6 +101,7 @@ export default class DocumentsWithSimpleText extends Documents{
             }
         }
     }
+
 
     subscribeForNodesUpated(){
         this.#unsubscribe = nodes.subscribe( (newGraph) => {

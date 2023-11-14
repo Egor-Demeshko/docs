@@ -106,6 +106,7 @@
   /**функция из модуля для изменения имени блока*/
   changeName = function changeName(newId, newName){
       if(newId !== id) return;
+      debugger;
       name = newName;
   }
   /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
@@ -545,12 +546,18 @@ function startDelete(e){
   if(e.key === "Delete"){
     deleteFlow(id, controller);
   }
+}
 
+
+function changeNameFromEvent({detail}){
+  if(id === detail.id) name = detail.name;
 }
 
 
 </script>
 
+
+<svelte:document on:name_update={ changeNameFromEvent }></svelte:document>
 
 
 

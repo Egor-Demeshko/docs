@@ -38,7 +38,7 @@
             return docs;
         });
         
-        $documents.updateDocElementsVisibility( get(nodes) );
+        $documents.populateSimpleTextsOnTabChange( );
     }
 
 </script>
