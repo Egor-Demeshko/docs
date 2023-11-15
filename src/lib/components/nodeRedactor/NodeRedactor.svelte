@@ -4,14 +4,14 @@
 	import Compare from "./Compare.svelte";
 	import ContentRedactor from "./ContentRedactor.svelte";
     import FieldTypePicker from "./FieldTypePicker.svelte";
-    import { storeForSimpleTexts, nodeOptions, blockClickedId, nodes, documents } from "$lib/scripts/stores";
-    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     import CheckBoxWithLabel from "./CheckBoxWithLabel.svelte";
 	import ToggleWhite from "./ToggleWhite.svelte";
     import List from "./List.svelte";
+    import {changeNameStore} from "$lib/components/draws/Box.svelte";
+    import { storeForSimpleTexts, nodeOptions, blockClickedId, nodes, documents } from "$lib/scripts/stores";
+    import elementsDataUpdate from "$lib/scripts/controllers/elementsDataUpdate";
     import validation from "$lib/scripts/utils/validation/validation";
 	import { getContext, onMount} from "svelte";
-    import { changeName } from "$lib/components/draws/Box.svelte";
 
     let trigger = false;
     let closing_animation = false;
@@ -20,7 +20,6 @@
     let open = false;
     let not_valid = false;
     let keyChange = true;
-    let blockName = '';
     /**
      * @description используется для отображения сообщения о том, что блок не может быть сохранен
      * показывается однокартное сообщение
@@ -118,10 +117,6 @@
         //console.log("[NodeRedactor]: BEFORE {validation} check data", data);
         validation(data);
         //console.log("[NodeRedactor]: AFTER {validation} check data", data);
-        if(data.name !== blockName) {
-            changeName(data.id, data.name);
-            blockName = data.name;
-        };
 
         not_valid = false;
     }
@@ -211,11 +206,10 @@
 
                 data[key] = detail[key];
                 if(key === "name" || key === "content"){
-                    /**обновлении имени блока для BOX.svelte*/
-                    document.dispatchEvent( new CustomEvent("name_update", {detail: {
-                        id: detail.id,
-                        name: detail.name}
-                    } ));
+                    if(key === "name"){
+                        /**обновлении имени блока для BOX.svelte*/
+                        changeNameStore.set({id: detail.id, name: detail.name});
+                    }
                     elementsDataUpdate(data);
                 }
             }
@@ -235,18 +229,7 @@
         //console.log("[nodeRedactor]: POINTERLEAVE");
         //сохранить состояние в nodes 
         //и обьекта в текущем режиме.
-        
         if(data && data?.id){
-            /*nodes.update( (allNodes) => {
-                for(let i = 0; i < allNodes.length; i++){
-                    if(allNodes[i]["id"] === data.id){
-                        allNodes[i] = data;
-                        break;
-                    }
-                }
-
-                return allNodes;
-            });*/
             controller.saveDataBeforeChange(data.id, {...data});
         }
     }

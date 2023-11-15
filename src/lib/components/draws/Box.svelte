@@ -1,5 +1,5 @@
 <script context="module">
-    export let changeName;
+  export let changeNameStore = writable({id: null, name: null});
 </script>
 
 
@@ -14,6 +14,7 @@
   import BoxPoint from "./BoxPoint.svelte";
   import BoxButtons from "./BoxButtons.svelte";
   import deleteFlow from "$lib/scripts/utils/nodes/deleteFlowForBox.js";
+  import {writable} from "svelte/store";
 
   const controller = getContext("controller");
 
@@ -103,12 +104,7 @@
   $: box_inactive = (active) ? "" : "box_inactive";
   $: not_valid = (validity?.status === "invalid") ? true : false; 
 
-  /**функция из модуля для изменения имени блока*/
-  changeName = function changeName(newId, newName){
-      if(newId !== id) return;
-      debugger;
-      name = newName;
-  }
+
   /** обновляются данные блока и связанные визуализации, при взаимодействии с другими частями блока*/
   nodes.subscribe( (allBlocksValues) => {
     if(allBlocksValues === undefined || allBlocksValues === null) return;
@@ -133,6 +129,15 @@
 
     });
 
+  });
+
+
+  changeNameStore.subscribe( (obj) => {
+    if(!obj.id) return;
+
+    if(obj.id === id){
+      name = obj.name;
+    }
   });
 
 
@@ -548,18 +553,7 @@ function startDelete(e){
   }
 }
 
-
-function changeNameFromEvent({detail}){
-  if(id === detail.id) name = detail.name;
-}
-
-
 </script>
-
-
-<svelte:document on:name_update={ changeNameFromEvent }></svelte:document>
-
-
 
 <!-- bind:this={boxRootElement} -->
 <!-- bind:this={boxElement} -->

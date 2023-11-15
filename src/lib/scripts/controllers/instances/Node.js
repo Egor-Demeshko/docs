@@ -211,7 +211,7 @@ export default class Node extends NodeLocalOperations{
                 }
             });
 
-            //console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", dataToSend);
+            console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", JSON.stringify(dataToSend));
             try{
                 result = await this.#client.update(token, dataToSend);
             } catch(e){
@@ -331,6 +331,7 @@ export default class Node extends NodeLocalOperations{
                 delete urgentData.length;
                 this.saveNourgentAsObj(id, {...urgentData});
                 let result = await this.sendDataInQueue();
+
                     if(result.success){
                         //установить в активных датах новые данные
                         if(result?.data){
