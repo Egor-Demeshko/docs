@@ -1,5 +1,6 @@
 import { nodes } from "$lib/scripts/stores";
 import validateSiblingsWithoutMessage from "$lib/scripts/utils/validation/validateSiblingsWithoutMessage";
+import {changeValidityStore} from "$lib/components/draws/Box.svelte";
 
 const integerFunctions = ["lt", "lte", "gt", "gte"];
 
@@ -55,7 +56,9 @@ export default async function validation(data, options){
         
         //определить что ввели,  
         let whatIn = +data.content;
-        if(isNaN(whatIn) && data.data_type === "integer"){
+        if(data.content !== undefined 
+            && data.content !== ""
+            && isNaN(whatIn) && data.data_type === "integer"){
             data.validity = {
                 status: "invalid",
                 err_data: [...data.validity.err_data, {
@@ -259,5 +262,5 @@ export default async function validation(data, options){
         }));
     }
 
-    return  /**возращаем data с измененным поле validity, а может даже не возращаем. */;
+    changeValidityStore.set({id: data.id, validity: data.validity});
 }

@@ -126,7 +126,7 @@
 
     .element{
         flex: 1;
-        width: 100%;
+        width: 50%;
         position: relative;
     }
 

@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from "svelte";
-    import { PUBLIC_CHAIN, PUBLIC_TIMETOEND } from "$env/static/public";
+    import { PUBLIC_TIMETOEND } from "$env/static/public";
     let timeLeft = 0;
     $: hour = 0;
     $: minutes = 0;

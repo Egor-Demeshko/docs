@@ -28,8 +28,8 @@
 
         
         if(!$userStore){
+            debugger;
             console.log("[layout.svelte]: userstore: ", $userStore);
-
             userStore.set( new User({save: "local"}) );
             window.location = window.location.origin;
         }

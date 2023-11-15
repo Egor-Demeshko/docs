@@ -13,6 +13,8 @@
         const local = window.localStorage;
         if(local.getItem(PUBLIC_DEMO)){
             demo = true;
+        } else {
+            demo = false;
         }
 
         return () => demo = false;

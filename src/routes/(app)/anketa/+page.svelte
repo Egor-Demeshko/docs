@@ -4,6 +4,7 @@
     import DocWriter  from "$lib/components/DocWriter.svelte";
     import { nodes, documents, anketaGraphController, docxController, projectName, storeForSimpleTexts } from "$lib/scripts/stores";
     import createMassive from "$lib/scripts/createMassive";
+    import sortByTime from "$lib/scripts/utils/nodes/sortByTime.js";
 	import TopControllBar from "$lib/components/TopControllBar.svelte";
 	import TabsWithoutEvents from "$lib/components/Tabs/TabsWithoutEvents.svelte";
     import Tooltip from "$lib/components/CntrElem/Tooltip.svelte";
@@ -20,10 +21,9 @@
     export let data;
     let graph;
     let load = true;
-    
     let {templates, project_id, project_name, active_nodes} = data;
     graph = active_nodes;
-    graph = createMassive(graph);
+    graph = sortByTime(createMassive(graph));
 
     /**если tempaltes нет(т.е. нет документов, грузим на редакторе кода заглушку)*/
     if(!templates || templates?.length === 0){
@@ -63,7 +63,7 @@
     function updateGraph(data){
         if(data.active_nodes){
             console.log('[page]: {updateGraph}: in if active nodes: ', data.active_nodes);
-            graph = createMassive(data.active_nodes);
+            graph = sortByTime(createMassive(data.active_nodes));
         }
     }
 

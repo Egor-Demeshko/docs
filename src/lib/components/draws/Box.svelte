@@ -1,5 +1,6 @@
 <script context="module">
   export let changeNameStore = writable({id: null, name: null});
+  export let changeValidityStore = writable({id: null, validity: null});
 </script>
 
 
@@ -40,6 +41,7 @@
     trigger = "",
     validity
   } = node;
+
   /****/
   $: pointUp = (parent) ? false : true; // отображать ли кнопку подключения связи вниху
   let pointDown = true;  // отображать ли кнопку подключения связи вверху
@@ -90,6 +92,14 @@
   }
 
 
+  changeValidityStore.subscribe(({id: idFromEvent, validity: validityFromEvent}) => {
+    if(!idFromEvent) return;
+    if(id === idFromEvent && validityFromEvent){
+      validity = validityFromEvent;
+    }
+  });
+
+
   /**ссылка на этот элемент Box в Dom*/
   $: isBlockChoosen = ($blockClickedId === id)? "isBlockChoosen" : ""; 
   $: hoverLike = ($activeBlocks.has(id)) ? "isBlockChoosen" : "";
@@ -97,9 +107,7 @@
   /**определяем какого вида границу блока рисовать. зависит от наличия условия триггера и condition в data <= $nodes
   */
   $: gotConditions = (condition && !(trigger === undefined || trigger === '' || trigger === null)) ? true : false;
-  //$: console.log("[Box]: gotConditions", {condition, gotConditions, trigger});
-  
-  
+  //$: console.log("[Box]: gotConditions", {condition, gotConditions, trigger});  
 /**переопределние класса отображение неактивного блока, если флаг актив false*/
   $: box_inactive = (active) ? "" : "box_inactive";
   $: not_valid = (validity?.status === "invalid") ? true : false; 
@@ -125,15 +133,13 @@
         parent = obj.parent || parent;
         width = obj.width  || width;
         height = obj.height || height;
-        validity = obj.validity || validity;
-
     });
 
   });
 
 
   changeNameStore.subscribe( (obj) => {
-    if(!obj.id) return;
+    if(!obj?.id) return;
 
     if(obj.id === id){
       name = obj.name;

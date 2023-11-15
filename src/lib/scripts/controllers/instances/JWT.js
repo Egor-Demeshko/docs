@@ -16,6 +16,7 @@ export default class JWT{
     /**проверяем свежий ли токен */
     isTokenFresh(){
         let expiredStamp = this.#saveService.getTokenExp();
+        console.log("[JWT]: {isTOKENFRESH}, expiredStamp:", {expiredStamp, datenow: Date.now()});
         if(expiredStamp){
             
             let dateNow = Date.now()/1000;

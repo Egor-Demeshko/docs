@@ -15,7 +15,7 @@
 	import { onDestroy } from "svelte";
 
 let height = 3000;
-let width = "100%";
+let width = 3000;
 
 /** obtain connection with svg element*/
 function svgLoaded(...args){        
