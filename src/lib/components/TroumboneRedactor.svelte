@@ -233,7 +233,7 @@
         height: 100%;
         caret-color: red;
         position: relative;
-        border-radius: 20px 0 0 0;
+        border-radius: 24px 0 0 0;
     }
 
     .editor *{

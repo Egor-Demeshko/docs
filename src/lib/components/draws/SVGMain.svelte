@@ -13,9 +13,22 @@
     import Box from "$lib/components/draws/Box.svelte";
 	import PresentationLine from "$lib/components/draws/PresentationLine.svelte";
 	import { onDestroy } from "svelte";
+    import { tweened } from "svelte/motion";
+    import { get } from "svelte/store";
+    import { sineOut } from "svelte/easing";
 
+let freezed = false;
+
+let animationTime = 150;
 let height = 3000;
 let width = 3000;
+let viewHeight = tweened(3000, {
+    duration: animationTime,
+    easing: (t) => t
+});
+
+let minviewHeight = 1000;
+let maxviewHeight = 8000;
 
 /** obtain connection with svg element*/
 function svgLoaded(...args){        
@@ -28,7 +41,7 @@ function svgLoaded(...args){
     if(svgRoot){
         drawRoot.set(svgRoot);
     } else {
-        console.log("no draw/SVG root");
+        console.error("no draw/SVG root");
     }
 }
 
@@ -49,12 +62,37 @@ $: console.log("~~~~TEST LINES~~~~,", {lines});
         linesStore.set([]);
     });
 
+    /**@description функция меняет маштаб при прокрутке
+     * для изменения маштаба используются значения viewHeight, viewWidth
+     * обработка события wheel происходит только при зажатой клавишем ctrl
+    */
+    function wheel(e){
+        let {deltaY, ctrlKey} = e;
+        if(!ctrlKey) return;
+        if(freezed) {
+            e.preventDefault();
+            return;
+        }
+        e.preventDefault();
+
+        let height = get(viewHeight);
+
+        if(deltaY < 0){
+            freezed = true;
+            viewHeight.set(Math.floor(Math.max(deltaY * 5 + height, minviewHeight)));
+        } else if (deltaY > 0){
+            freezed = true;
+            viewHeight.set(Math.floor(Math.min(deltaY * 5 + height, maxviewHeight)));
+        }
+        setTimeout( () => freezed = false, animationTime);
+    }
+
 </script>
 
 
-<div class="svg_wrapper">
+<div class="svg_wrapper" on:wheel={wheel}>
     
-    <svg id="playground" {width} {height} use:svgLoaded>
+    <svg id="playground" {width} {height} viewbox="0 0 {$viewHeight} {$viewHeight}" use:svgLoaded>
         <PresentationLine />
         {#key linesLength}
             <g id=lines>
