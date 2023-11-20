@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from "svelte";
-    import { saving, projectsStore, projectName } from "$lib/scripts/stores";
+    import { saving, projectsStore, projectName, nodeController } from "$lib/scripts/stores";
     import { goto } from "$app/navigation";
     import { afterNavigate} from "$app/navigation";
     import { PUBLIC_SITEORIGIN } from "$env/static/public";
@@ -78,7 +78,16 @@
         let path = window.location.pathname;
 
         if(path === "/projects"){
-            window.location = new URL( PUBLIC_SITEORIGIN )
+            window.location = new URL( PUBLIC_SITEORIGIN );
+        } else if(path === "/redactor" && $nodeController){
+        /**в контроллере могут быть данные поставленные в очередь, для последующей отправки*/
+
+        $nodeController.sendDataInQueue().then( (result) => {
+            if(result && result?.success || result === undefined){
+                goto("/projects");
+            } 
+        });
+
         } else {
             goto("/projects");
         }

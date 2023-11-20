@@ -214,7 +214,14 @@ export default class Node extends NodeLocalOperations{
             console.log("[NODE]: {sendDataInQueue} DATATOBESEND: ", JSON.stringify(dataToSend));
             try{
                 result = await this.#client.update(token, dataToSend);
-            } catch(e){
+                if(result.success){
+                    this.clearQueue();
+                    if(result?.data){
+                        this.isUpdateNeeded(result.data.nodes);
+                    }
+                } 
+            } catch(e) {
+                saving.set(false);
                 document.dispatchEvent( new CustomEvent("error", {detail: {
                     err_data: [
                         {
@@ -225,15 +232,9 @@ export default class Node extends NodeLocalOperations{
                         }
                     ]
                 }}));
+                return false;
             }
-            console.log("[NODE]: {sendDataInQueue} result: ", result);
-            saving.set(false);
-            if(result.success){
-                this.clearQueue();
-                if(result?.data){
-                    this.isUpdateNeeded(result.data.nodes);
-                }
-            } 
+            //console.log("[NODE]: {sendDataInQueue} result: ", result);
         }
         saving.set(false);
         return result;

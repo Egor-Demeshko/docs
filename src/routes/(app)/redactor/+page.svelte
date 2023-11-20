@@ -84,9 +84,8 @@
     });
 
 
-    beforeNavigate(() => {
-        /**в контроллере могут быть данные поставленные в очередь, для последующей отправки*/
-        $nodeController.sendDataInQueue();
+    beforeNavigate( async (navigation) => {
+
     });
     
 </script>
