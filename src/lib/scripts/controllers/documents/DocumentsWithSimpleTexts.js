@@ -32,7 +32,7 @@ export default class DocumentsWithSimpleText extends Documents{
                                 if(result) return  result.nodes;
                                 throw new Error("Не удалось получить данные проекта");
                             });
-
+        
         const arrayToStore = [];
         if(!container) return;
         if(!container.querySelector(`.doc_elements[data-element]`)){
@@ -55,8 +55,9 @@ export default class DocumentsWithSimpleText extends Documents{
             }
         });
 
-        for(let nodeObj of Object.values(nodesList)){
-            const {id, name, content} = nodeObj;
+        for(let [id, nodeObj] of Object.entries(nodesList)){
+            const {name, content} = nodeObj;
+            
             const domLinks = seenIds[id];
 
             if(!domLinks)continue;
